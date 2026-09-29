@@ -21,6 +21,13 @@
     "TR:KANUN:4760"
   ],
   "includes": [],
+  "activity_classes": ["PRODUCTION", "BOTTLING", "PACKAGING", "WAREHOUSING", "DISTRIBUTION", "WHOLESALE",
+                      "RETAIL_SALE", "HORECA_SUPPLY", "ECOMMERCE_SALE", "ADVERTISING", "SPONSORSHIP",
+                      "PROMOTION", "IMPORT", "EXPORT", "PLACING_ON_MARKET"],
+  "facility_classes": ["MANUFACTURING_PLANT", "BOTTLING_PLANT", "WAREHOUSE", "DISTRIBUTION_CENTER", "OFFICE",
+                      "LABORATORY", "HEAD_OFFICE"],
+  "entity_classes": ["PARENT", "HOLDING", "PRODUCER", "BOTTLER", "DISTRIBUTOR", "SALES", "MARKETING",
+                     "IMPORTER", "EXPORTER"],
   "status": "ACTIVE",
   "version": "0.1.0",
   "notes": "Food law, labelling, claims, packaging, advertising, distance sales and excise tax: bind alcoholic and non-alcoholic beverage businesses alike. Included by both beverage packs; never selected on its own."

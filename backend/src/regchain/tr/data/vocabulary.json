@@ -20,8 +20,9 @@
     "TAX": "vergi",
     "ECOMMERCE": "elektronik ticaret"
   },
-  "entity_classes": {
+    "entity_classes": {
     "HOLDING": "grup şirketi / holding",
+    "PARENT": "ana şirket",
     "PRODUCER": "üretici",
     "BOTTLER": "dolum yapan işletme",
     "IMPORTER": "ithalatçı",
@@ -31,10 +32,17 @@
     "RETAILER": "perakendeci",
     "ON_PREMISE_OPERATOR": "yerinde tüketim / sunum işletmesi",
     "ONLINE_SELLER": "internet üzerinden satıcı",
-    "BRAND_OWNER": "marka sahibi"
+    "BRAND_OWNER": "marka sahibi",
+    "SALES": "satış şirketi",
+    "MARKETING": "pazarlama şirketi"
   },
   "activity_classes": {
     "PRODUCTION": "üretim",
+    "BREWING": "bira üretimi",
+    "PACKAGING": "ambalajlama",
+    "HORECA_SUPPLY": "otel / restoran / kafe tedariki",
+    "EVENTS": "etkinlik",
+    "DIGITAL_MARKETING": "dijital pazarlama",
     "BOTTLING": "dolum ve ambalajlama",
     "WATER_EXTRACTION": "kaynak suyu çıkarma",
     "IMPORT": "ithalat",
@@ -62,6 +70,9 @@
     "WAREHOUSE": "depo",
     "DISTRIBUTION_CENTER": "dağıtım merkezi",
     "HEAD_OFFICE": "merkez ofis",
+    "OFFICE": "ofis",
+    "LABORATORY": "laboratuvar",
+    "MANUFACTURING_PLANT": "üretim tesisi",
     "RETAIL_OUTLET": "satış noktası"
   },
   "license_classes": {
@@ -76,10 +87,16 @@
   },
   "product_classes": {
     "BEER": {"label_tr": "bira", "alcohol": "ALCOHOLIC"},
+    "LOW_ALCOHOL_BEER": {"label_tr": "düşük alkollü bira", "alcohol": "ALCOHOLIC"},
+    "MALT_BEVERAGE": {"label_tr": "malt içeceği", "alcohol": "ALCOHOLIC"},
+    "OTHER_ALCOHOLIC_BEVERAGE": {"label_tr": "diğer alkollü içki", "alcohol": "ALCOHOLIC"},
     "WINE": {"label_tr": "şarap", "alcohol": "ALCOHOLIC"},
     "SPIRIT": {"label_tr": "distile alkollü içki", "alcohol": "ALCOHOLIC"},
-    "ALCOHOL_FREE_BEER": {"label_tr": "alkolsüz bira / malt içeceği", "alcohol": "NON_ALCOHOLIC"},
+    "ALCOHOL_FREE_BEER": {"label_tr": "alkolsüz bira", "alcohol": "NON_ALCOHOLIC"},
     "CARBONATED_SOFT_DRINK": {"label_tr": "gazlı alkolsüz içecek", "alcohol": "NON_ALCOHOLIC"},
+    "FRUIT_DRINK": {"label_tr": "meyveli içecek", "alcohol": "NON_ALCOHOLIC"},
+    "SYRUP": {"label_tr": "şurup / konsantre şurup", "alcohol": "NON_ALCOHOLIC"},
+    "CONCENTRATE": {"label_tr": "konsantre", "alcohol": "NON_ALCOHOLIC"},
     "STILL_SOFT_DRINK": {"label_tr": "gazsız alkolsüz içecek", "alcohol": "NON_ALCOHOLIC"},
     "JUICE_NECTAR": {"label_tr": "meyve suyu / nektar", "alcohol": "NON_ALCOHOLIC"},
     "ICED_TEA": {"label_tr": "soğuk çay", "alcohol": "NON_ALCOHOLIC"},
@@ -94,6 +111,7 @@
     "ADDED_CAFFEINE": "kafein eklenmiş",
     "ADDED_SUGAR": "şeker eklenmiş",
     "SWEETENER": "tatlandırıcı içerir",
+    "ZERO_SUGAR_CLAIM": "şekersiz / sıfır şeker beyanı",
     "RETURNABLE_PACKAGING": "depozitolu / iade edilebilir ambalaj",
     "GLASS_PACKAGING": "cam ambalaj",
     "PET_PACKAGING": "PET ambalaj",

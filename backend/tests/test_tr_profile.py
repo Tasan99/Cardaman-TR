@@ -91,6 +91,27 @@ class ProfileStructureTests(unittest.TestCase):
         self.assertEqual(product_alcohol(profile.product('P-BEER'), VOCABULARY), 'ALCOHOLIC')
         self.assertEqual(product_alcohol(profile.product('P-WATER'), VOCABULARY), 'NON_ALCOHOLIC')
 
+    def test_a_low_alcohol_class_without_abv_is_unknown_not_alcoholic_by_name(self):
+        data = sample()
+        data['products'].append({'product_id': 'P-LOW', 'name': 'Düşük alkollü bira', 'product_class': 'LOW_ALCOHOL_BEER'})
+        data['legal_entities'][0]['product_ids'].append('P-LOW')
+        profile = load_profile(data, VOCABULARY)
+        self.assertEqual(product_alcohol(profile.product('P-LOW'), VOCABULARY), 'UNKNOWN')
+        data['products'][-1]['attributes'] = {'abv_percent': {'value': 0.5, 'status': 'STATED'}}
+        self.assertEqual(product_alcohol(load_profile(data, VOCABULARY).product('P-LOW'), VOCABULARY), 'ALCOHOLIC')
+        data['products'][-1]['attributes'] = {'abv_percent': {'value': 0, 'status': 'STATED'}}
+        self.assertEqual(product_alcohol(load_profile(data, VOCABULARY).product('P-LOW'), VOCABULARY), 'NON_ALCOHOLIC')
+
+    def test_entity_and_product_and_facility_facts_do_not_leak(self):
+        profile = load_profile(sample(), VOCABULARY)
+        self.assertEqual(profile.entity('PROD').activity_classes, ['PRODUCTION', 'PLACING_ON_MARKET'])
+        self.assertNotIn('PRODUCTION', profile.entity('SALES').activity_classes)
+        self.assertEqual(profile.facility('F-BREW').product_ids, ['P-BEER'])
+        self.assertNotIn('P-WATER', profile.facility('F-BREW').product_ids)
+        self.assertEqual(profile.product('P-BEER').tags, ['GLASS_PACKAGING'])
+        self.assertEqual(profile.product('P-WATER').tags, [])
+        self.assertNotEqual(profile.product('P-BEER').tags_complete, profile.product('P-WATER').tags_complete)
+
 
 class LegacyProjectionTests(unittest.TestCase):
     def test_each_legal_entity_projects_to_the_existing_company_schema(self):

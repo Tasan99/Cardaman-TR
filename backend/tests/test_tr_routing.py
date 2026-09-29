@@ -100,6 +100,16 @@ class DimensionTests(unittest.TestCase):
         unknown = profile(lambda d: d['legal_entities'][0]['licenses'][0].update(status='UNKNOWN'))
         self.assertEqual(by_target(evaluate_scope(permit, unknown, REGISTRY))['PROD'].status, 'UNKNOWN')
 
+    def test_a_low_alcohol_product_without_abv_does_not_become_a_mismatch(self):
+        def with_low(d):
+            d['products'].append({'product_id': 'P-LOW', 'name': 'Düşük alkollü', 'product_class': 'LOW_ALCOHOL_BEER'})
+            d['legal_entities'][0]['product_ids'].append('P-LOW')
+        alcohol = by_target(evaluate_scope(scope('PRODUCT', regulation_id='TR:KANUN:4733', alcohol_scope='ALCOHOLIC'),
+                                           profile(with_low), REGISTRY))
+        self.assertEqual(alcohol['P-LOW'].status, 'UNKNOWN')
+        self.assertIn('PROFILE_INCOMPLETE', alcohol['P-LOW'].reason_codes)
+        self.assertEqual(alcohol['P-BEER'].status, 'APPLIES')
+
     def test_a_product_level_duty_follows_the_product_class_and_the_alcohol_category(self):
         alcohol = by_target(evaluate_scope(scope('PRODUCT', regulation_id='TR:KANUN:4733', alcohol_scope='ALCOHOLIC'),
                                            profile(), REGISTRY))

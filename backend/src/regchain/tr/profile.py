@@ -36,6 +36,18 @@ class License(Strict):
     facility_id: str | None = None
 
 
+class AttributeFact(Strict):
+    """One measured or declared product property. UNKNOWN is stored as such; a missing attribute is also UNKNOWN."""
+    value: str | float | bool | None = None
+    status: Literal['STATED', 'UNKNOWN'] = 'UNKNOWN'
+
+    @model_validator(mode='after')
+    def _stated(self):
+        if self.status == 'STATED' and self.value is None:
+            raise ValueError('a STATED attribute needs a value')
+        return self
+
+
 class Product(Strict):
     product_id: str = Field(min_length=1)
     name: str = Field(min_length=1)
@@ -43,6 +55,8 @@ class Product(Strict):
     tags: list[str] = []
     # True when tags lists every attribute a scope could ask about (claims, caffeine, packaging).
     tags_complete: bool = False
+    # Typed facts (abv_percent, caffeine_mg_per_l, ...). A missing key is UNKNOWN, never NO.
+    attributes: dict[str, AttributeFact] = {}
 
 
 class Facility(Strict):
@@ -217,7 +231,18 @@ def load_pilot_profiles(vocab: Vocabulary, directory: Path = PILOT_PROFILES) -> 
     return out
 
 
+# Classes whose alcoholic/non-alcoholic reading depends on a stated ABV, not on the class name alone.
+ABV_DEPENDENT = frozenset({'LOW_ALCOHOL_BEER', 'MALT_BEVERAGE'})
+
+
 def product_alcohol(product: Product, vocab: Vocabulary) -> str:
+    """ALCOHOLIC, NON_ALCOHOLIC or UNKNOWN. A stated ABV of 0 is non-alcoholic; any stated ABV above 0 is
+    alcoholic. A class that is decided only by ABV, without a stated value, stays UNKNOWN."""
+    abv = product.attributes.get('abv_percent')
+    if abv is not None and abv.status == 'STATED' and isinstance(abv.value, (int, float)):
+        return 'NON_ALCOHOLIC' if float(abv.value) == 0 else 'ALCOHOLIC'
+    if product.product_class in ABV_DEPENDENT:
+        return 'UNKNOWN'
     return vocab.alcohol_of(product.product_class)
 
 

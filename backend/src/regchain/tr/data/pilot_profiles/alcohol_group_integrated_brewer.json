@@ -13,7 +13,7 @@
      "licenses": [], "sales_channels": [], "profile_complete": true},
     {"entity_id": "ALC-INT-BREWING", "name": "Temsili Bira Üretim A.Ş. (sentetik)", "entity_classes": ["PRODUCER"],
      "activity_classes": ["PRODUCTION", "BOTTLING", "PLACING_ON_MARKET", "WAREHOUSING"],
-     "product_ids": ["ALC-INT-LAGER", "ALC-INT-DARK", "ALC-INT-AF"],
+     "product_ids": ["ALC-INT-LAGER", "ALC-INT-DARK", "ALC-INT-LOW", "ALC-INT-AF"],
      "licenses": [
        {"license_class": "ALCOHOL_PRODUCTION_PERMIT", "status": "HELD", "facility_id": "ALC-INT-BREWERY-1"},
        {"license_class": "ALCOHOL_PRODUCTION_PERMIT", "status": "HELD", "facility_id": "ALC-INT-BREWERY-2"},
@@ -28,7 +28,7 @@
     {"entity_id": "ALC-INT-DISTRIBUTION", "name": "Temsili Bira Dağıtım ve Pazarlama A.Ş. (sentetik)",
      "entity_classes": ["DISTRIBUTOR", "WHOLESALER"],
      "activity_classes": ["DISTRIBUTION", "WAREHOUSING", "WHOLESALE", "PROMOTION"],
-     "product_ids": ["ALC-INT-LAGER", "ALC-INT-DARK", "ALC-INT-AF"],
+     "product_ids": ["ALC-INT-LAGER", "ALC-INT-DARK", "ALC-INT-LOW", "ALC-INT-AF"],
      "licenses": [{"license_class": "ALCOHOL_WHOLESALE_PERMIT", "status": "HELD"}],
      "sales_channels": ["WHOLESALE_TRADE", "TRADITIONAL_RETAIL", "MODERN_RETAIL", "ON_PREMISE"], "profile_complete": true},
     {"entity_id": "ALC-INT-EXPORT", "name": "Temsili Bira Dış Ticaret A.Ş. (sentetik)", "entity_classes": ["EXPORTER"],
@@ -37,7 +37,7 @@
   ],
   "facilities": [
     {"facility_id": "ALC-INT-BREWERY-1", "name": "Bira fabrikası 1", "entity_id": "ALC-INT-BREWING", "facility_classes": ["BREWERY"],
-     "activity_classes": ["PRODUCTION", "BOTTLING"], "product_ids": ["ALC-INT-LAGER", "ALC-INT-DARK", "ALC-INT-AF"],
+     "activity_classes": ["PRODUCTION", "BOTTLING"], "product_ids": ["ALC-INT-LAGER", "ALC-INT-DARK", "ALC-INT-LOW", "ALC-INT-AF"],
      "activities_complete": true},
     {"facility_id": "ALC-INT-BREWERY-2", "name": "Bira fabrikası 2", "entity_id": "ALC-INT-BREWING", "facility_classes": ["BREWERY"],
      "activity_classes": ["PRODUCTION", "BOTTLING"], "product_ids": ["ALC-INT-LAGER"], "activities_complete": true},
@@ -45,7 +45,7 @@
      "activity_classes": ["PRODUCTION"], "product_ids": [], "activities_complete": true},
     {"facility_id": "ALC-INT-DC", "name": "Bölge dağıtım merkezi", "entity_id": "ALC-INT-DISTRIBUTION",
      "facility_classes": ["DISTRIBUTION_CENTER"], "activity_classes": ["WAREHOUSING", "DISTRIBUTION"],
-     "product_ids": ["ALC-INT-LAGER", "ALC-INT-DARK", "ALC-INT-AF"], "activities_complete": true},
+     "product_ids": ["ALC-INT-LAGER", "ALC-INT-DARK", "ALC-INT-LOW", "ALC-INT-AF"], "activities_complete": true},
     {"facility_id": "ALC-INT-HQ", "name": "Genel merkez", "entity_id": "ALC-INT-HOLDING", "facility_classes": ["HEAD_OFFICE"],
      "activity_classes": [], "product_ids": [], "activities_complete": true}
   ],
@@ -54,6 +54,8 @@
      "tags": ["GLASS_PACKAGING", "CAN_PACKAGING", "RETURNABLE_PACKAGING"], "tags_complete": true},
     {"product_id": "ALC-INT-DARK", "name": "Temsili koyu bira", "product_class": "BEER", "tags": ["GLASS_PACKAGING"],
      "tags_complete": true},
+    {"product_id": "ALC-INT-LOW", "name": "Temsili düşük alkollü bira", "product_class": "LOW_ALCOHOL_BEER",
+     "tags": ["CAN_PACKAGING"], "tags_complete": true, "attributes": {"abv_percent": {"value": 1.2, "status": "STATED"}}},
     {"product_id": "ALC-INT-AF", "name": "Temsili alkolsüz bira", "product_class": "ALCOHOL_FREE_BEER",
      "tags": ["CAN_PACKAGING"], "tags_complete": true}
   ],

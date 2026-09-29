@@ -123,7 +123,7 @@ class AlcoholSalesContrastTests(unittest.TestCase):
     def test_a_seller_of_alcoholic_and_alcohol_free_beer_is_partially_in_scope(self):
         decision = targets(INTEGRATED, 'ALC_SALES_PRESENTATION')['ALC-INT-DISTRIBUTION']
         self.assertEqual(decision.status, 'PARTIAL')
-        self.assertEqual(set(decision.applies_to_products), {'ALC-INT-LAGER', 'ALC-INT-DARK'})
+        self.assertEqual(set(decision.applies_to_products), {'ALC-INT-LAGER', 'ALC-INT-DARK', 'ALC-INT-LOW'})
 
     def test_online_sale_is_a_distance_sale_for_both_but_an_alcohol_online_sale_only_for_alcohol(self):
         self.assertEqual(targets(BOTTLER, 'DISTANCE_SALES')['NONALC-ONLINE'].status, 'APPLIES')
@@ -153,9 +153,17 @@ class ProductContrastTests(unittest.TestCase):
         self.assertIn('PRODUCT_MISMATCH', beer['ALC-INT-LAGER'].reason_codes)
         self.assertEqual(rolled(INTEGRATED, 'PACKAGED_WATER_PRODUCT')[('GROUP', 'GRP-ALC-INT')].status, 'DOES_NOT_APPLY')
 
+    def test_low_alcohol_beer_follows_stated_abv_not_the_class_name_alone(self):
+        from regchain.tr.profile import product_alcohol
+        self.assertEqual(product_alcohol(INTEGRATED.product('ALC-INT-LOW'), REGISTRY.vocabulary), 'ALCOHOLIC')
+        self.assertEqual(product_alcohol(INTEGRATED.product('ALC-INT-AF'), REGISTRY.vocabulary), 'NON_ALCOHOLIC')
+        self.assertEqual(targets(INTEGRATED, 'ALC_LABEL_WARNINGS')['ALC-INT-LOW'].status, 'APPLIES')
+        self.assertEqual(targets(INTEGRATED, 'ALC_LABEL_WARNINGS')['ALC-INT-AF'].status, 'DOES_NOT_APPLY')
+
     def test_the_alcohol_label_rule_covers_alcoholic_products_and_skips_the_alcohol_free_beer(self):
         decisions = targets(INTEGRATED, 'ALC_LABEL_WARNINGS')
-        self.assertEqual(status(decisions), {'ALC-INT-LAGER': 'APPLIES', 'ALC-INT-DARK': 'APPLIES', 'ALC-INT-AF': 'DOES_NOT_APPLY'})
+        self.assertEqual(status(decisions), {'ALC-INT-LAGER': 'APPLIES', 'ALC-INT-DARK': 'APPLIES', 'ALC-INT-LOW': 'APPLIES',
+                                             'ALC-INT-AF': 'DOES_NOT_APPLY'})
         self.assertEqual(status(targets(IMPORTER, 'ALC_LABEL_WARNINGS')),
                          {p.product_id: 'APPLIES' for p in IMPORTER.products})
 
@@ -182,7 +190,8 @@ class FacilityContrastTests(unittest.TestCase):
     def test_the_alcohol_facility_rule_reads_the_brewery_and_what_it_brews(self):
         decisions = targets(INTEGRATED, 'ALC_PRODUCTION_FACILITY')
         self.assertEqual(decisions['ALC-INT-BREWERY-1'].status, 'PARTIAL')
-        self.assertEqual(set(decisions['ALC-INT-BREWERY-1'].applies_to_products), {'ALC-INT-LAGER', 'ALC-INT-DARK'})
+        self.assertEqual(set(decisions['ALC-INT-BREWERY-1'].applies_to_products),
+                         {'ALC-INT-LAGER', 'ALC-INT-DARK', 'ALC-INT-LOW'})
         self.assertEqual(decisions['ALC-INT-BREWERY-2'].status, 'APPLIES')
         self.assertEqual(decisions['ALC-INT-MALTING'].status, 'DOES_NOT_APPLY')
         entity = rolled(INTEGRATED, 'ALC_PRODUCTION_FACILITY')

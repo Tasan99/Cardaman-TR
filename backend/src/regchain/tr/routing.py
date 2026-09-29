@@ -20,7 +20,7 @@ from ..pilot.applicability import gate
 from ..pilot.schema import Strict
 from .core import ObligationScope
 from .packs import Registry
-from .profile import EnterpriseProfile, Fact
+from .profile import EnterpriseProfile, Fact, product_alcohol
 
 Status = Literal['APPLIES', 'PARTIAL', 'DOES_NOT_APPLY', 'UNKNOWN']
 Selection = Literal['SELECTED', 'NOT_SELECTED', 'UNKNOWN']
@@ -42,6 +42,15 @@ class PackSelection(Strict):
     license_classes: list[str] = []
 
 
+class DecisionAudit(Strict):
+    """The four stages a reviewer can ask about. Routing fills `final` from the rule gates; a later
+    model step fills raw / parsed / validator without overwriting final."""
+    raw: dict | None = None
+    parsed: dict | None = None
+    validator: dict | None = None
+    final: dict = {}
+
+
 class Decision(Strict):
     scope_id: str
     regulation_id: str
@@ -59,6 +68,8 @@ class Decision(Strict):
     basis: Literal['PACK_METADATA', 'EXTRACTED']
     provision_ref: str | None = None
     provision_status: Literal['RESOLVED', 'UNRESOLVED']
+    review_required: bool = False
+    audit: DecisionAudit = DecisionAudit()
 
 
 class Resolution(Strict):
@@ -67,6 +78,8 @@ class Resolution(Strict):
     decisions: list[Decision]
     rollups: list[Decision]
     out_of_scope: list[Decision] = []
+    authority_notes: list[str] = []
+    review_required: bool = False
 
 
 # -- pack selection --------------------------------------------------------------------------------
@@ -170,11 +183,14 @@ def _product_fact(scope: ObligationScope, product, registry: Registry) -> tuple[
             no.append('PRODUCT_ATTRIBUTE_MISMATCH')
     if scope.alcohol_scope != 'ANY':
         alcoholic = scope.alcohol_scope == 'ALCOHOLIC'
-        category = registry.vocabulary.alcohol_of(product.product_class)
+        category = product_alcohol(product, registry.vocabulary)
         stem = 'ALCOHOL_SCOPE' if alcoholic else 'NON_ALCOHOL_SCOPE'
-        fact = 'YES' if category == scope.alcohol_scope else 'NO'
+        fact = 'YES' if category == scope.alcohol_scope else ('UNKNOWN' if category == 'UNKNOWN' else 'NO')
         facts.append(fact)
-        (yes if fact == 'YES' else no).append(f'{stem}_MATCH' if fact == 'YES' else f'{stem}_MISMATCH')
+        if fact == 'YES':
+            yes.append(f'{stem}_MATCH')
+        elif fact == 'NO':
+            no.append(f'{stem}_MISMATCH')
     if 'NO' in facts:
         return 'NO', no
     if 'UNKNOWN' in facts:
@@ -241,9 +257,17 @@ def _decision(scope: ObligationScope, registry: Registry, *, reasons, packs=(), 
     reasons = list(dict.fromkeys(reasons))
     if binding != 'BINDING':
         reasons.append('GUIDANCE_ONLY')
+    review = 'GUIDANCE_CONFLICT' in reasons
+    audit = DecisionAudit(final={'status': fields.get('status'), 'reason_codes': reasons,
+                                 'gates': fields.get('gates') or [],
+                                 'source': {'regulation_id': scope.regulation_id, 'binding_status': binding,
+                                            'provision_ref': scope.provision_ref, 'provision_status': scope.provision_status},
+                                 'target': {'level': fields.get('level'), 'target_id': fields.get('target_id'),
+                                            'entity_id': fields.get('entity_id')}})
     return Decision(scope_id=scope.scope_id, regulation_id=scope.regulation_id, packs=list(packs), reason_codes=reasons,
                     binding_status=binding, creates_obligation=binding == 'BINDING', basis=scope.origin,
-                    provision_ref=scope.provision_ref, provision_status=scope.provision_status, **fields)
+                    provision_ref=scope.provision_ref, provision_status=scope.provision_status,
+                    review_required=review, audit=audit, **fields)
 
 
 def evaluate_scope(scope: ObligationScope, profile: EnterpriseProfile, registry: Registry, packs=()) -> list[Decision]:
@@ -333,5 +357,38 @@ def resolve(profile: EnterpriseProfile, registry: Registry, include_unselected: 
                 out_of_scope.append(_decision(scope, registry, packs=[selection.pack_id], level='GROUP',
                                               target_id=profile.group.group_id, status='DOES_NOT_APPLY',
                                               reasons=['PACK_NOT_SELECTED']))
+    notes = authority_notes(registry, selections)
+    flagged = [d.model_copy(update={'reason_codes': d.reason_codes + ['GUIDANCE_CONFLICT'], 'review_required': True})
+               for d in guidance_conflicts(decisions, registry)]
+    if flagged:
+        by_key = {(d.scope_id, d.target_id): d for d in flagged}
+        decisions = [by_key.get((d.scope_id, d.target_id), d) for d in decisions]
+        notes.append('GUIDANCE_CONFLICT')
     return Resolution(profile_id=profile.profile_id, selections=selections, decisions=decisions, rollups=rollups,
-                      out_of_scope=out_of_scope)
+                      out_of_scope=out_of_scope, authority_notes=notes, review_required=bool(flagged))
+
+
+def authority_notes(registry: Registry, selections: list[PackSelection]) -> list[str]:
+    """What this run did not evaluate. Precedent is prepared in the schema but not enabled on MVP packs."""
+    notes = []
+    enabled = {layer for s in selections for layer in registry.pack(s.pack_id).source_layers}
+    if 'DECISION_PRECEDENT' not in enabled:
+        notes.append('DECISION_PRECEDENT_NOT_EVALUATED')
+    return notes
+
+
+def guidance_conflicts(decisions: list[Decision], registry: Registry) -> list[Decision]:
+    """Guidance that APPLIES where the binding text it interprets DOES_NOT_APPLY on the same target."""
+    by_reg = {}
+    for decision in decisions:
+        by_reg.setdefault((decision.regulation_id, decision.target_id), []).append(decision)
+    out = []
+    for decision in decisions:
+        if decision.binding_status == 'BINDING' or decision.status != 'APPLIES':
+            continue
+        for target in registry.regulations[decision.regulation_id].interprets:
+            for binding in by_reg.get((target, decision.target_id), ()):
+                if binding.status == 'DOES_NOT_APPLY':
+                    out.append(decision)
+                    break
+    return out
