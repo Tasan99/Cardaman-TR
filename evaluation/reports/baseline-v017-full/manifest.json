@@ -1,0 +1,146 @@
+{
+  "format": "cardaman-evaluation-manifest-v1",
+  "created_at": "2026-09-23T18:11:24.673219+00:00",
+  "cardaman_version": "0.17.0",
+  "git_commit": "not-a-git-repository",
+  "source_tree_sha256": "5c2af1f123ccb876dc1402d21deac8c4455e8b37e46a534f2a9ecba1f30d555d",
+  "dataset": {
+    "id": "tr-aml-v1",
+    "version": "1.0.0",
+    "cases": 30,
+    "sha256": "d574e03962106971c8b3ba1243ee910ea39d40c4321031c746d80d4090f3ba6e"
+  },
+  "mode": {
+    "provider": "ollama",
+    "retrieval": "hybrid",
+    "reranker": false,
+    "reranker_status": {
+      "status": "off"
+    },
+    "cases": [
+      "C01",
+      "C02",
+      "C03",
+      "C04",
+      "C05",
+      "C06",
+      "C07",
+      "C08",
+      "C09",
+      "C10",
+      "C11",
+      "C12",
+      "C13",
+      "C14",
+      "C15",
+      "C16",
+      "C17",
+      "C18",
+      "C19",
+      "C20",
+      "C21",
+      "C22",
+      "C23",
+      "C24",
+      "C25",
+      "C26",
+      "C27",
+      "C28",
+      "C29",
+      "C30"
+    ],
+    "overrides": {}
+  },
+  "models": {
+    "extraction": "qwen3:4b",
+    "extraction_digest": "359d7dd4bcdab3d86b87d73ac27966f4dbb9f5efdfcc75d34a8764a09474fae7",
+    "judge": "qwen3:8b",
+    "judge_digest": "500a1f067a9f782620b40bee6f7b0c89e17ae61f686b92c24933e4ca4b2b8b41",
+    "judge_thinking": "on",
+    "embedding": "bge-m3:latest",
+    "embedding_digest": "7907646426070047a77226ac3e684fbbe8410524f7b4a74d02837e43f2146bab",
+    "reranker": "off"
+  },
+  "versions": {
+    "pilot": "conc-pilot-v1",
+    "pilot_prompt_hash": "f252b099b1274fba754bce9c7da71fd102f47757a2b6928160ef95ac3a2674a3",
+    "extraction_prompt_hash": "0d952a07d912b4ba3a08b8575fc223ebf182c0fc0699cac137b326f25d85c66f",
+    "prompts": {
+      "extraction.primary": {
+        "version": "v3",
+        "sha256": "7afebb06d9bddf54ed124c8a5197d1b6f9169fc5dd0c7eb4051c89ea60db7c3e"
+      },
+      "extraction.context": {
+        "version": "v3",
+        "sha256": "7c311d746ab2c8d378858079f7f9cec21c51e874a93b174a31a66b44aa0a07d1"
+      },
+      "extraction.turkish": {
+        "version": "v2",
+        "sha256": "81d61df0c7e86c5dcaec8f03e5d8a9ec665d88ec22d953ac38f739459b843657"
+      },
+      "extraction.review": {
+        "version": "v3",
+        "sha256": "53cd2e431ca4e851eb5482b8778038bba5bf0bba272bca38da13fdc1b4b1c8ef"
+      },
+      "judge.scope": {
+        "version": "v4-siblings",
+        "sha256": "838eb11f0e57a9959d042ff0137537cc880ac7610982774f9dce7d4d0727ce4a"
+      },
+      "judge.conflict": {
+        "version": "v3-strict",
+        "sha256": "bc38ff2d1d138673943900836c4c3c168e88f9c92b1e31ab0a7c8b1b9523c985"
+      },
+      "judge.conflict_confirm": {
+        "version": "v1",
+        "sha256": "6cb81048ac4083f647b3b534815fd4b34d476a5dc255248f10fa2e7295817d83"
+      },
+      "judge.support": {
+        "version": "v2",
+        "sha256": "fcee6270bf22c07a94ea204ccaf6989ed84a91a100bebbdbebb46836678127cb"
+      },
+      "enrich": {
+        "version": "v1",
+        "sha256": "15bcb3c00c38a2ca0a99670422d8cbc5bc95306369058625a82cc54d35d47123"
+      },
+      "ask": {
+        "version": "v2",
+        "sha256": "6f7b9032ad125bd9c4787d742d742a2a872a48136b657558ea77293ecd2bd645"
+      },
+      "draft": {
+        "version": "v1",
+        "sha256": "296d635dbfea94dec4d58a2334d19a1ee52ab704fadaade2ae28fdee88092bb5"
+      }
+    },
+    "contract": "compact-action-v1",
+    "retriever": "scoped-context-v3",
+    "policy_retrieval": "hybrid-rrf-v1",
+    "reranker": "cross-encoder-v1",
+    "fca_parser": "fca-parser-v4",
+    "mevzuat_parser": "mevzuat-parser-v3",
+    "policy_reader": "pilot-policy-v3"
+  },
+  "environment": {
+    "LLM_MODEL": "qwen3:4b",
+    "LLM_MODEL_DIGEST": "359d7dd4bcdab3d86b87d73ac27966f4dbb9f5efdfcc75d34a8764a09474fae7",
+    "LLM_THINKING": "off",
+    "LLM_TIMEOUT_SECONDS": "900",
+    "EMBED_MODEL": "bge-m3:latest",
+    "EMBED_MODEL_DIGEST": "7907646426070047a77226ac3e684fbbe8410524f7b4a74d02837e43f2146bab",
+    "JUDGE_MODEL": "qwen3:8b",
+    "JUDGE_MODEL_DIGEST": "500a1f067a9f782620b40bee6f7b0c89e17ae61f686b92c24933e4ca4b2b8b41",
+    "JUDGE_THINKING": "on",
+    "JUDGE_TIMEOUT_SECONDS": "900",
+    "JUDGE_NUM_PREDICT": "",
+    "RERANK_MODEL": "",
+    "RERANK_DEVICE": "",
+    "EVIDENCE_MIN_SIMILARITY": "",
+    "AI_CACHE_DIR": "",
+    "OLLAMA_BASE_URL": "http://localhost:11434"
+  },
+  "platform": {
+    "python": "3.14.3",
+    "system": "Windows",
+    "machine": "AMD64"
+  },
+  "manifest_sha256": "77d976b9f0f30611478a23cc700050f37cef6e75f5c5f6f50536f13c7d0ee401"
+}

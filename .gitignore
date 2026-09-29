@@ -1,0 +1,47 @@
+.env
+.env.*
+!.env.example
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+node_modules/
+.next/
+data/
+*.egg-info/
+
+# Built locally by scripts/Build-Launcher.ps1 (Cardaman.old.exe: the build a still-open window runs)
+Cardaman*.exe
+Cardamon.pdf
+
+# Evaluation run outputs (manifests, packets, reports of local runs)
+evaluation/runs/
+
+# Model binaries and local model stores
+*.gguf
+*.safetensors
+*.onnx
+*.pt
+*.pth
+*.ckpt
+.ollama/
+
+# Caches and transient output
+.cache/
+.mypy_cache/
+.ruff_cache/
+**/response-cache/
+**/ai-cache/
+*.tmp
+*.bak
+*.log
+**/ai-raw.jsonl
+**/ai-calls.jsonl
+
+# Keys and credentials (the public CA certificate used by ingestion is required)
+*.key
+*.p12
+*.pfx
+id_rsa*
+*.pem
+!backend/src/regchain/ingestion/certs/*.pem

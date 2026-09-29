@@ -1,0 +1,17 @@
+{
+  "format": "cardaman-frozen-baseline-v1",
+  "frozen_at": "2026-09-24T12:14:19.897111+00:00",
+  "source_run": "C:\\Users\\tasan\\AppData\\Local\\Temp\\claude\\C--Users-tasan-OneDrive-Masa-st--Cardaman\\e6854f9b-1c16-4949-9e6b-0c96dd0541d8\\scratchpad\\oldrun\\20260923-181124-ollama-4b-8b-ollama",
+  "files": {
+    "manifest.json": "554dd090737db3ae64d00b2e0e78526c164b830db06ba684f736d680cf3ebbf8",
+    "metrics.json": "d4b4c5762e273faf42f72fd2e893fd3c2ffe589d768e879f88214c61ab7d361c",
+    "report.md": "5359ecc133ab1787c8d8f68929359e7488ed6cf00ab1ea1c2fb729c7d612f619",
+    "results.json": "4134ae950222912542d8f0d00b43f70eb173674a79882e6b9091508621c38bcf",
+    "results.rescored.json": "3f22ef9f4ce00288ed8f2f42d323510022f6ca40fc2d82ad6a5f3057a4c9b780",
+    "rescore.json": "8234d9e3e10b6b48d9528e960a4e60a519cd49d68e152db7684b6cb473008f99",
+    "errors.json": "57f2b0f14999313cf65004afc7c3c1ed33e4c7d09376587adbafb3cea46041ed",
+    "errors.md": "8a1b37c5876c8e36531a4114f2927121c4e68caca15dc33e08c619b52447b349",
+    "baseline.json": "b2bd2cbe27ebad82f27973ca5573e8e017e525548e37d316c015e9912ddaa25a",
+    "baseline.md": "7c59bb76b2b744a2747bc8045942d39c03a1038c623013b1e72b2802001931de"
+  }
+}

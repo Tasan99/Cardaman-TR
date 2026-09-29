@@ -1,0 +1,8 @@
+{
+  "at": "2026-09-24T10:56:57.228410+00:00",
+  "cases_rescored": 30,
+  "dataset_path": "..\\evaluation\\datasets\\tr-aml-v1.json",
+  "dataset_sha256": "562f1094772f9907b0e59254d13a7393c5a408b9c9096678928124c7fb1e4392",
+  "dataset_sha256_at_run": "d574e03962106971c8b3ba1243ee910ea39d40c4321031c746d80d4090f3ba6e",
+  "dataset_cases": 30
+}

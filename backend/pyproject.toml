@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools>=75,<81"]
+build-backend = "setuptools.build_meta"
+[project]
+name = "regchain"
+version = "0.19.0.dev0"
+requires-python = ">=3.12"
+dependencies = ["fastapi>=0.115,<1", "uvicorn>=0.34,<1", "psycopg[binary]>=3.2,<4", "pydantic>=2.10,<3", "beautifulsoup4>=4.13,<5", "pypdf[crypto]>=6,<7", "pdfplumber>=0.11,<0.12", "httpx>=0.28,<1"]
+[project.optional-dependencies]
+test = ["httpx>=0.28,<1"]
+[tool.setuptools.packages.find]
+where = ["src"]
+[tool.setuptools.package-data]
+"regchain.pilot" = ["workspace_ui.html"]

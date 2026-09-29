@@ -1,0 +1,572 @@
+{
+  "applicability": {
+    "n": 92,
+    "accuracy": 0.7609,
+    "per_class": {
+      "APPLIES": {
+        "precision": 0.9091,
+        "recall": 0.9434,
+        "f1": 0.9259,
+        "tp": 50,
+        "fp": 5,
+        "fn": 3,
+        "support": 53
+      },
+      "DOES_NOT_APPLY": {
+        "precision": 0.85,
+        "recall": 0.5152,
+        "f1": 0.6415,
+        "tp": 17,
+        "fp": 3,
+        "fn": 16,
+        "support": 33
+      },
+      "UNKNOWN": {
+        "precision": 0.1765,
+        "recall": 0.5,
+        "f1": 0.2609,
+        "tp": 3,
+        "fp": 14,
+        "fn": 3,
+        "support": 6
+      }
+    },
+    "macro": {
+      "precision": 0.6452,
+      "recall": 0.6529,
+      "f1": 0.6094
+    },
+    "confusion": {
+      "APPLIES": {
+        "APPLIES": 50,
+        "DOES_NOT_APPLY": 0,
+        "UNKNOWN": 3,
+        "OTHER": 0
+      },
+      "DOES_NOT_APPLY": {
+        "APPLIES": 5,
+        "DOES_NOT_APPLY": 17,
+        "UNKNOWN": 11,
+        "OTHER": 0
+      },
+      "UNKNOWN": {
+        "APPLIES": 0,
+        "DOES_NOT_APPLY": 3,
+        "UNKNOWN": 3,
+        "OTHER": 0
+      }
+    },
+    "positive_class": "APPLIES",
+    "precision": 0.9091,
+    "recall": 0.9434,
+    "f1": 0.9259
+  },
+  "coverage": {
+    "n": 43,
+    "accuracy": 0.7442,
+    "per_class": {
+      "COVERS_TEXT": {
+        "precision": 1.0,
+        "recall": 0.7273,
+        "f1": 0.8421,
+        "tp": 16,
+        "fp": 0,
+        "fn": 6,
+        "support": 22
+      },
+      "PARTIAL": {
+        "precision": 0.1667,
+        "recall": 0.3333,
+        "f1": 0.2222,
+        "tp": 1,
+        "fp": 5,
+        "fn": 2,
+        "support": 3
+      },
+      "CONFLICT": {
+        "precision": 0.8889,
+        "recall": 0.8,
+        "f1": 0.8421,
+        "tp": 8,
+        "fp": 1,
+        "fn": 2,
+        "support": 10
+      },
+      "NO_EVIDENCE": {
+        "precision": 0.6364,
+        "recall": 0.875,
+        "f1": 0.7369,
+        "tp": 7,
+        "fp": 4,
+        "fn": 1,
+        "support": 8
+      },
+      "UNKNOWN": {
+        "precision": 0.0,
+        "recall": null,
+        "f1": null,
+        "tp": 0,
+        "fp": 1,
+        "fn": 0,
+        "support": 0
+      }
+    },
+    "macro": {
+      "precision": 0.673,
+      "recall": 0.6839,
+      "f1": 0.6608
+    },
+    "confusion": {
+      "COVERS_TEXT": {
+        "COVERS_TEXT": 16,
+        "PARTIAL": 4,
+        "CONFLICT": 1,
+        "NO_EVIDENCE": 0,
+        "UNKNOWN": 1,
+        "OTHER": 0
+      },
+      "PARTIAL": {
+        "COVERS_TEXT": 0,
+        "PARTIAL": 1,
+        "CONFLICT": 0,
+        "NO_EVIDENCE": 2,
+        "UNKNOWN": 0,
+        "OTHER": 0
+      },
+      "CONFLICT": {
+        "COVERS_TEXT": 0,
+        "PARTIAL": 0,
+        "CONFLICT": 8,
+        "NO_EVIDENCE": 2,
+        "UNKNOWN": 0,
+        "OTHER": 0
+      },
+      "NO_EVIDENCE": {
+        "COVERS_TEXT": 0,
+        "PARTIAL": 1,
+        "CONFLICT": 0,
+        "NO_EVIDENCE": 7,
+        "UNKNOWN": 0,
+        "OTHER": 0
+      },
+      "UNKNOWN": {
+        "COVERS_TEXT": 0,
+        "PARTIAL": 0,
+        "CONFLICT": 0,
+        "NO_EVIDENCE": 0,
+        "UNKNOWN": 0,
+        "OTHER": 0
+      }
+    },
+    "not_assessed_expected": 13,
+    "not_assessed_correct": 13
+  },
+  "conflict": {
+    "precision": 0.8889,
+    "recall": 0.8,
+    "f1": 0.8421,
+    "tp": 8,
+    "fp": 1,
+    "fn": 2,
+    "tn": 32,
+    "n": 43,
+    "false_positive_rate": 0.0303
+  },
+  "entity_gate": {
+    "n": 26,
+    "expected_excluded": 13,
+    "false_exclusions": 0,
+    "false_inclusions": 0,
+    "false_exclusion_rate": 0.0,
+    "false_inclusion_rate": 0.0
+  },
+  "retrieval": {
+    "n": 36,
+    "recall_at_3": 0.9722,
+    "recall_at_5": 1.0,
+    "recall_at_10": 1.0,
+    "mrr": 0.9375,
+    "evidence_hit_rate": 0.8611
+  },
+  "proposals": {
+    "needed": 39,
+    "produced": 39,
+    "success_rate": 1.0,
+    "drafts_attempted": 39,
+    "schema_validity_rate": 1.0
+  },
+  "reliability": {
+    "judgements": 173,
+    "unknown": 19,
+    "unknown_rate": 0.1098,
+    "calls": 1843,
+    "failures": 1,
+    "model_failure_rate": 0.0005,
+    "timeouts": 0,
+    "timeout_rate": 0.0,
+    "malformed_responses": 20,
+    "malformed_response_rate": 0.0109
+  },
+  "performance": {
+    "cases": 30,
+    "wall_seconds": 11072.0,
+    "model_seconds": 10981.5,
+    "llm_calls": 1843,
+    "prompt_tokens": 650508,
+    "output_tokens": 224226,
+    "cache_hits": 1138,
+    "cache_hit_ratio": 0.6175,
+    "obligations": 93,
+    "seconds_per_obligation": 119.054,
+    "calls_by_task": {
+      "extraction": 152,
+      "extraction.repair": 74,
+      "extraction.review": 93,
+      "enrich": 93,
+      "judge.applicability": 60,
+      "judge.contradicts": 607,
+      "judge.supports": 705,
+      "judge.conflict_confirm": 19,
+      "draft": 40
+    },
+    "slowest_cases": [
+      {
+        "case_id": "C03",
+        "wall_seconds": 1500.4
+      },
+      {
+        "case_id": "C02",
+        "wall_seconds": 1352.2
+      },
+      {
+        "case_id": "C11",
+        "wall_seconds": 903.4
+      },
+      {
+        "case_id": "C04",
+        "wall_seconds": 796.6
+      },
+      {
+        "case_id": "C28",
+        "wall_seconds": 766.5
+      }
+    ]
+  },
+  "extraction": {
+    "expected_required": 91,
+    "found_required": 90,
+    "recall": 0.989,
+    "predicted": 93,
+    "matched": 92,
+    "unexpected": 1,
+    "precision": 0.9892
+  },
+  "errors": [],
+  "mismatches": [
+    {
+      "kind": "coverage_mismatch",
+      "where": "C02 md.6(1)",
+      "expected": "COVERS_TEXT",
+      "predicted": "UNKNOWN"
+    },
+    {
+      "kind": "applicability_false_negative",
+      "where": "C03 md.8(1)",
+      "expected": "APPLIES",
+      "predicted": "UNKNOWN"
+    },
+    {
+      "kind": "applicability_false_negative",
+      "where": "C03 md.8(3)",
+      "expected": "APPLIES",
+      "predicted": "UNKNOWN"
+    },
+    {
+      "kind": "applicability_false_negative",
+      "where": "C03 md.8(5)",
+      "expected": "APPLIES",
+      "predicted": "UNKNOWN"
+    },
+    {
+      "kind": "applicability_mismatch",
+      "where": "C04 md.5(2)",
+      "expected": "DOES_NOT_APPLY",
+      "predicted": "UNKNOWN"
+    },
+    {
+      "kind": "applicability_mismatch",
+      "where": "C04 md.5(3)",
+      "expected": "DOES_NOT_APPLY",
+      "predicted": "UNKNOWN"
+    },
+    {
+      "kind": "applicability_mismatch",
+      "where": "C04 md.28(2)",
+      "expected": "DOES_NOT_APPLY",
+      "predicted": "UNKNOWN"
+    },
+    {
+      "kind": "applicability_mismatch",
+      "where": "C05 md.46(1)",
+      "expected": "DOES_NOT_APPLY",
+      "predicted": "UNKNOWN"
+    },
+    {
+      "kind": "applicability_false_positive",
+      "where": "C06 md.5(2)",
+      "expected": "DOES_NOT_APPLY",
+      "predicted": "APPLIES"
+    },
+    {
+      "kind": "applicability_false_positive",
+      "where": "C06 md.5(3)",
+      "expected": "DOES_NOT_APPLY",
+      "predicted": "APPLIES"
+    },
+    {
+      "kind": "applicability_false_positive",
+      "where": "C06 md.8(1)",
+      "expected": "DOES_NOT_APPLY",
+      "predicted": "APPLIES"
+    },
+    {
+      "kind": "applicability_false_positive",
+      "where": "C06 md.8(3)",
+      "expected": "DOES_NOT_APPLY",
+      "predicted": "APPLIES"
+    },
+    {
+      "kind": "applicability_false_positive",
+      "where": "C06 md.8(5)",
+      "expected": "DOES_NOT_APPLY",
+      "predicted": "APPLIES"
+    },
+    {
+      "kind": "applicability_mismatch",
+      "where": "C07 md.5(2)",
+      "expected": "DOES_NOT_APPLY",
+      "predicted": "UNKNOWN"
+    },
+    {
+      "kind": "applicability_mismatch",
+      "where": "C07 md.5(3)",
+      "expected": "DOES_NOT_APPLY",
+      "predicted": "UNKNOWN"
+    },
+    {
+      "kind": "applicability_mismatch",
+      "where": "C07 md.28(2)",
+      "expected": "DOES_NOT_APPLY",
+      "predicted": "UNKNOWN"
+    },
+    {
+      "kind": "coverage_mismatch",
+      "where": "C08 md.6(1)",
+      "expected": "COVERS_TEXT",
+      "predicted": "PARTIAL"
+    },
+    {
+      "kind": "coverage_mismatch",
+      "where": "C09 md.7(1)",
+      "expected": "COVERS_TEXT",
+      "predicted": "PARTIAL"
+    },
+    {
+      "kind": "coverage_mismatch",
+      "where": "C11 md.46(1)",
+      "expected": "COVERS_TEXT",
+      "predicted": "PARTIAL"
+    },
+    {
+      "kind": "coverage_mismatch",
+      "where": "C12 md.5(2)",
+      "expected": "PARTIAL",
+      "predicted": "NO_EVIDENCE"
+    },
+    {
+      "kind": "coverage_mismatch",
+      "where": "C12 md.46(1)",
+      "expected": "PARTIAL",
+      "predicted": "NO_EVIDENCE"
+    },
+    {
+      "kind": "coverage_mismatch",
+      "where": "C13 md.5(2)",
+      "expected": "CONFLICT",
+      "predicted": "NO_EVIDENCE"
+    },
+    {
+      "kind": "conflict_false_negative",
+      "where": "C13 md.5(2)"
+    },
+    {
+      "kind": "coverage_mismatch",
+      "where": "C14 md.26(2)",
+      "expected": "COVERS_TEXT",
+      "predicted": "CONFLICT"
+    },
+    {
+      "kind": "conflict_false_positive",
+      "where": "C14 md.26(2)"
+    },
+    {
+      "kind": "coverage_mismatch",
+      "where": "C15 md.5(2)",
+      "expected": "NO_EVIDENCE",
+      "predicted": "PARTIAL"
+    },
+    {
+      "kind": "coverage_mismatch",
+      "where": "C23 md.20(2)",
+      "expected": "COVERS_TEXT",
+      "predicted": "PARTIAL"
+    },
+    {
+      "kind": "applicability_mismatch",
+      "where": "C24 md.20(1)",
+      "expected": "DOES_NOT_APPLY",
+      "predicted": "UNKNOWN"
+    },
+    {
+      "kind": "applicability_mismatch",
+      "where": "C24 md.20(2)",
+      "expected": "DOES_NOT_APPLY",
+      "predicted": "UNKNOWN"
+    },
+    {
+      "kind": "applicability_mismatch",
+      "where": "C25 md.8(1)",
+      "expected": "UNKNOWN",
+      "predicted": "DOES_NOT_APPLY"
+    },
+    {
+      "kind": "applicability_mismatch",
+      "where": "C25 md.8(3)",
+      "expected": "UNKNOWN",
+      "predicted": "DOES_NOT_APPLY"
+    },
+    {
+      "kind": "applicability_mismatch",
+      "where": "C25 md.8(5)",
+      "expected": "UNKNOWN",
+      "predicted": "DOES_NOT_APPLY"
+    },
+    {
+      "kind": "extraction_miss",
+      "where": "C26 md.27(3)",
+      "expected": [
+        "bir arada"
+      ]
+    },
+    {
+      "kind": "applicability_mismatch",
+      "where": "C28 md.42(1)",
+      "expected": "DOES_NOT_APPLY",
+      "predicted": "UNKNOWN"
+    },
+    {
+      "kind": "applicability_mismatch",
+      "where": "C28 md.42(3)",
+      "expected": "DOES_NOT_APPLY",
+      "predicted": "UNKNOWN"
+    },
+    {
+      "kind": "unexpected_candidate",
+      "where": "C28 md.42(2)",
+      "predicted": "asgari aşağıdaki bilgilerin yer alması zorunludur"
+    },
+    {
+      "kind": "coverage_mismatch",
+      "where": "C30 md.5(2)",
+      "expected": "CONFLICT",
+      "predicted": "NO_EVIDENCE"
+    },
+    {
+      "kind": "conflict_false_negative",
+      "where": "C30 md.5(2)"
+    }
+  ],
+  "usage": {
+    "calls": 1843,
+    "failures": 1,
+    "cache_hits": 1138,
+    "prompt_tokens": 650508,
+    "output_tokens": 224226,
+    "elapsed_ms": 10981463,
+    "by_task": {
+      "extraction": {
+        "calls": 152,
+        "failures": 0,
+        "cache_hits": 123,
+        "prompt_tokens": 79920,
+        "output_tokens": 4297,
+        "elapsed_ms": 149216
+      },
+      "extraction.repair": {
+        "calls": 74,
+        "failures": 0,
+        "cache_hits": 62,
+        "prompt_tokens": 33119,
+        "output_tokens": 2204,
+        "elapsed_ms": 58519
+      },
+      "extraction.review": {
+        "calls": 93,
+        "failures": 0,
+        "cache_hits": 74,
+        "prompt_tokens": 28195,
+        "output_tokens": 304,
+        "elapsed_ms": 24798
+      },
+      "enrich": {
+        "calls": 93,
+        "failures": 0,
+        "cache_hits": 74,
+        "prompt_tokens": 10150,
+        "output_tokens": 945,
+        "elapsed_ms": 90515
+      },
+      "judge.applicability": {
+        "calls": 60,
+        "failures": 0,
+        "cache_hits": 20,
+        "prompt_tokens": 164633,
+        "output_tokens": 43609,
+        "elapsed_ms": 2560718
+      },
+      "judge.contradicts": {
+        "calls": 607,
+        "failures": 0,
+        "cache_hits": 347,
+        "prompt_tokens": 155012,
+        "output_tokens": 124081,
+        "elapsed_ms": 5475847
+      },
+      "judge.supports": {
+        "calls": 705,
+        "failures": 1,
+        "cache_hits": 408,
+        "prompt_tokens": 165528,
+        "output_tokens": 39094,
+        "elapsed_ms": 2176656
+      },
+      "judge.conflict_confirm": {
+        "calls": 19,
+        "failures": 0,
+        "cache_hits": 10,
+        "prompt_tokens": 6828,
+        "output_tokens": 6845,
+        "elapsed_ms": 302025
+      },
+      "draft": {
+        "calls": 40,
+        "failures": 0,
+        "cache_hits": 20,
+        "prompt_tokens": 7123,
+        "output_tokens": 2847,
+        "elapsed_ms": 143169
+      }
+    }
+  },
+  "completed_cases": 30
+}
