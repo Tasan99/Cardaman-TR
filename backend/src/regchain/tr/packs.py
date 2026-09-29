@@ -22,6 +22,7 @@ from typing import Literal
 
 from pydantic import Field, ValidationError
 
+from .. import sector
 from ..pilot.schema import Strict
 from .core import (MVP_LAYERS, SECOND_PHASE_LAYERS, TAG_FIELDS, VOCABULARY_OF, AlcoholScope, BindingStatus, ObligationScope,
                    RegulationMeta, Vocabulary)
@@ -38,9 +39,12 @@ class RegistryError(ValueError):
 
 
 def pack_roots() -> list[Path]:
-    """The built-in root, then each installed root by entry-point name. An entry point names a path
-    (or a callable returning one)."""
+    """The built-in root, then the roots of the packs registered with regchain.sector, then each installed
+    root by entry-point name. An entry point names a path (or a callable returning one)."""
     roots = [DATA]
+    for root in sector.data_roots():
+        if root not in roots:
+            roots.append(root)
     for point in sorted(entry_points(group=ENTRY_POINT_GROUP), key=lambda p: p.name):
         value = point.load()
         roots.append(Path(value() if callable(value) else value).resolve())

@@ -20,6 +20,9 @@ import re
 from regchain.extraction.quantities import compare, parse_quantities, period_phrases
 from regchain.extraction.structure import KEEPING, duty_quantities
 from .policies import fold
+from ..sector import knowledge as sector_knowledge
+
+SECTOR = sector_knowledge()
 
 L = 'a-zçğıöşüâîû'
 NB = r'(?<![%s])' % L
@@ -325,15 +328,7 @@ def screen_protected(text: str) -> str:
 # against "... muhafaza etmek ve ... ibraz etmek" shared 0.176 of the duty's stems, because "saklanır" and
 # "muhafaza" are different words for keeping, and the fast reading's IRRELEVANT was never re-asked. A word
 # that begins with one of these counts as its act; everything else stays a five-letter stem.
-ACTS = {'@keep': ('sakla', 'muhafaz', 'arşiv', 'retain', 'retent', 'keep', 'kept', 'store', 'storing', 'storage'),
-        '@report': ('bildir', 'ilet', 'rapor', 'report', 'notif'),
-        '@identify': ('tespit', 'teyit', 'doğrula', 'kimlik', 'identif', 'verif'),
-        '@submit': ('ibraz', 'sunul', 'sunmak', 'sunar', 'submit'),
-        '@monitor': ('izlen', 'izlem', 'takip', 'monitor'),
-        '@destroy': ('imha', 'silin', 'silme', 'destroy', 'delet'),
-        '@provide': ('verme', 'veril', 'verir', 'provid', 'furnish'),
-        # v0.19 round 5 (I02 md. 4(2), I05 aa232c): "paylaşılmaz" restates "açıklayamazlar"; one act, disclosing.
-        '@disclose': ('açıkla', 'ifşa', 'paylaş', 'bilgilendir', 'disclos', 'reveal', 'tipping', 'inform')}
+ACTS = dict(SECTOR.acts)
 PASSAGE_MIN_STEMS = 3
 ACT_OF = sorted(((root, act) for act, roots in ACTS.items() for root in roots), key=lambda pair: -len(pair[0]))
 
@@ -454,8 +449,7 @@ def strong(signals) -> list[dict]:
 # A duty and a policy sentence are therefore compared as role records (who acts, in which role and direction, to
 # whom, which act, with which polarity), all read deterministically from the wording. Nothing here decides that a
 # passage supports a duty; it names a mismatch that makes a claim (or a favourable reading) about another duty.
-INSTITUTION = (r'(?:kripto\s+varlık\s+hizmet\s+sağlayıcı|hizmet\s+sağlayıcı|finansal\s+kuruluş|ödeme\s+kuruluş|elektronik\s+para\s+kuruluş|'
-               r'kuruluş|banka|payment\s+service\s+providers?|service\s+providers?|psps?|institutions?|providers?|firms?|banks?)')
+INSTITUTION = SECTOR.institution_pattern
 _EVERY = r'(?:(?:tüm|bütün|her|diğer|the|all|any|an?)\s+)?'
 _REST = r'(?P<rest>%s*)' % W
 ROLE_PHRASES = (
@@ -474,14 +468,9 @@ ROLE_WORDS = {'SENDING': 'sending institution', 'RECEIVING': 'receiving institut
 OBLIGED = re.compile(NB + r'(?:yükümlü\w*|' + INSTITUTION + r'\w*|şirket\w*|we|our)' + NA)
 CUSTOMER = re.compile(NB + r'(?:müşteri\w*|customers?|clients?)' + NA)
 # Customer groups: a duty written for one of them and a passage for another are about different customers (C03 md. 8(1)).
-GROUPS = {'dernek': r'dernek\w*|associations?', 'vakıf': r'vakı?f\w*|foundations?', 'sendika': r'sendika\w*|trade\s+unions?',
-          'tüzel': r'tüzel\s+kişi\w*|legal\s+(?:persons?|entit\w*)|corporate\w*|kurumsal\w*',
-          'gerçek': r'gerçek\s+kişi\w*|natural\s+persons?|individuals?|bireysel\w*',
-          'sicil': r'ticaret\s+sicil\w*', 'kamu': r'kamu\s+kurum\w*|public\s+bod\w*', 'yabancı': r'yabancı\w*|foreign\w*',
-          'pep': r'siyasi\s+nüfuz\w*|politically\s+exposed'}
+GROUPS = dict(SECTOR.groups)
 GROUP = {name: re.compile(NB + '(?:' + pattern + ')' + NA) for name, pattern in GROUPS.items()}
-AUTHORITY = re.compile(NB + r"(?:masak\w*|mali\s+suçları\s+araştırma\s+kurulu\s+başkanlı\w*|başkanlı\w*|otorite\w*|yetkililer\w*|"
-                       r"yetkili\s+merci\w*|savcılı\w*|authorit\w*|regulators?|fca|fiu)" + NA)
+AUTHORITY = re.compile(NB + SECTOR.authority_pattern + NA)
 THIRD_PARTY = re.compile(NB + r'(?:kimse(?:ye|yle|ler\w*)|müşteri\w*(?:ye|ya|lere|lara|yle|yla)|taraf\w*(?:lara|lere)|tarafına|'
                          r'üçüncü\s+kişi\w*|anyone|anybody|third\s+part\w*|the\s+customer)' + NA)
 # A customer's own act: a declaration or undertaking the customer gives ("müşteriden ... beyan alınır").

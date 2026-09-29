@@ -37,7 +37,8 @@ class PackSelectionTests(unittest.TestCase):
 
     def test_a_group_with_an_alcoholic_and_a_non_alcoholic_product_selects_both_packs(self):
         selected = self.selections(profile())
-        self.assertEqual(set(selected), {'BEVERAGE_ALCOHOL_TR', 'BEVERAGE_NON_ALCOHOL_TR'})
+        self.assertEqual({p for p, s in selected.items() if s.status == 'SELECTED'},
+                         {'BEVERAGE_ALCOHOL_TR', 'BEVERAGE_NON_ALCOHOL_TR'})
         self.assertEqual(selected['BEVERAGE_ALCOHOL_TR'].status, 'SELECTED')
         self.assertEqual(selected['BEVERAGE_ALCOHOL_TR'].product_ids, ['P-BEER'])
         self.assertIn('ALCOHOL_SCOPE_MATCH', selected['BEVERAGE_ALCOHOL_TR'].reason_codes)

@@ -1,0 +1,39 @@
+{
+  "format": "cardaman-tr-scopes/1",
+  "note": "Topic-level AML scopes from pack metadata (origin PACK_METADATA, provision UNRESOLVED). They route a duty to the kind of target it lands on; the article is attached when the text is ingested.",
+  "scopes": [
+    {
+      "scope_id": "AML_OBLIGED_PARTY",
+      "regulation_id": "TR:YONETMELIK:TEDBIRLER_200713012",
+      "topic": "OBLIGED_PARTY",
+      "description_tr": "Yönetmeliğin yükümlü listesinde sayılan kişi ve kuruluşlara ilişkin kapsam.",
+      "level": "LEGAL_ENTITY", "provision_ref": null, "provision_status": "UNRESOLVED",
+      "entity_classes": ["BANK", "PAYMENT_INSTITUTION", "EMONEY_INSTITUTION", "INSURANCE_UNDERTAKING", "BROKER",
+                         "EXCHANGE_OFFICE", "CRYPTO_PROVIDER", "FINANCIAL_INSTITUTION", "DNFBP"]
+    },
+    {
+      "scope_id": "AML_CUSTOMER_IDENTIFICATION",
+      "regulation_id": "TR:YONETMELIK:TEDBIRLER_200713012",
+      "topic": "CUSTOMER_IDENTIFICATION",
+      "description_tr": "Kimlik tespiti ve müşterinin tanınması yükümlülükleri.",
+      "level": "LEGAL_ENTITY", "provision_ref": null, "provision_status": "UNRESOLVED",
+      "activity_classes": ["CUSTOMER_IDENTIFICATION", "CUSTOMER_DUE_DILIGENCE"]
+    },
+    {
+      "scope_id": "AML_SUSPICIOUS_TRANSACTION_REPORTING",
+      "regulation_id": "TR:KANUN:5549",
+      "topic": "SUSPICIOUS_TRANSACTION_REPORTING",
+      "description_tr": "Şüpheli işlemlerin Başkanlığa bildirilmesi yükümlülüğü.",
+      "level": "LEGAL_ENTITY", "provision_ref": null, "provision_status": "UNRESOLVED",
+      "activity_classes": ["SUSPICIOUS_TRANSACTION_REPORTING"]
+    },
+    {
+      "scope_id": "AML_RECORD_KEEPING",
+      "regulation_id": "TR:KANUN:5549",
+      "topic": "RECORD_KEEPING",
+      "description_tr": "Kayıtların saklanması ve yetkili mercilere ibrazı.",
+      "level": "LEGAL_ENTITY", "provision_ref": null, "provision_status": "UNRESOLVED",
+      "activity_classes": ["RECORD_KEEPING"]
+    }
+  ]
+}

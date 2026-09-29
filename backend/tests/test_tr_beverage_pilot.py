@@ -66,7 +66,8 @@ class PilotFixtureTests(unittest.TestCase):
 
 class PackSelectionContrastTests(unittest.TestCase):
     def selections(self, profile):
-        return {s.pack_id: s.status for s in resolve(profile, REGISTRY).selections}
+        return {s.pack_id: s.status for s in resolve(profile, REGISTRY).selections
+                if s.pack_id in ('BEVERAGE_ALCOHOL_TR', 'BEVERAGE_NON_ALCOHOL_TR')}
 
     def test_the_integrated_brewer_with_an_alcohol_free_line_falls_under_both_packs(self):
         self.assertEqual(self.selections(INTEGRATED), {'BEVERAGE_ALCOHOL_TR': 'SELECTED', 'BEVERAGE_NON_ALCOHOL_TR': 'SELECTED'})

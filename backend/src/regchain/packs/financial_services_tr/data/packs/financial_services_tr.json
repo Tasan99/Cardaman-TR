@@ -1,0 +1,23 @@
+{
+  "format": "cardaman-tr-pack/1",
+  "pack_id": "FINANCIAL_SERVICES_TR",
+  "kind": "PACK",
+  "title": "Finansal hizmetler / AML paketi (TR)",
+  "jurisdiction": "TR",
+  "sector": "FINANCIAL_SERVICES",
+  "subsector": "AML",
+  "alcohol_scope": "ANY",
+  "regulators": ["TBMM", "MASAK", "BDDK", "SPK", "TCMB", "SEDDK"],
+  "regulation_ids": ["TR:KANUN:5549", "TR:YONETMELIK:TEDBIRLER_200713012"],
+  "includes": [],
+  "entity_classes": ["BANK", "PAYMENT_INSTITUTION", "EMONEY_INSTITUTION", "INSURANCE_UNDERTAKING", "BROKER",
+                     "EXCHANGE_OFFICE", "CRYPTO_PROVIDER", "FINANCIAL_INSTITUTION", "DNFBP"],
+  "activity_classes": ["CUSTOMER_IDENTIFICATION", "CUSTOMER_DUE_DILIGENCE", "SUSPICIOUS_TRANSACTION_REPORTING",
+                       "RECORD_KEEPING", "ONGOING_MONITORING", "TIPPING_OFF_PROHIBITION"],
+  "license_classes": ["BANKING_LICENSE", "PAYMENT_INSTITUTION_LICENSE", "EMONEY_LICENSE", "CAPITAL_MARKETS_LICENSE",
+                      "INSURANCE_LICENSE", "CRYPTO_LICENSE"],
+  "source_layers": ["BINDING", "OFFICIAL_GUIDANCE"],
+  "status": "ACTIVE",
+  "version": "0.1.0",
+  "notes": "The sector knowledge the existing AML analysis was measured on (Kanun 5549, Tedbirler Yönetmeliği). Selected for a company that holds a financial-services licence of this pack. Board decisions are a second-phase layer."
+}

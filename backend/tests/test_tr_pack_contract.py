@@ -44,9 +44,12 @@ class DiscoveryTests(unittest.TestCase):
             'product_classes': ['BAKERY'], 'facility_classes': ['BAKERY_PLANT'], 'status': 'ACTIVE', 'version': '0.1.0'})
         return self.root
 
-    def test_the_builtin_root_comes_first_and_alone_without_installed_packs(self):
+    def test_the_builtin_root_comes_first_and_registered_sector_roots_are_added(self):
         self.assertEqual(pack_roots()[0], DATA)
-        self.assertEqual({p.pack_id for p in REGISTRY.packs}, {p.pack_id for p in Registry.load(DATA).packs})
+        builtin = {p.pack_id for p in Registry.load(DATA).packs}
+        discovered = {p.pack_id for p in REGISTRY.packs}
+        self.assertTrue(builtin <= discovered)
+        self.assertGreaterEqual(len(pack_roots()), 2)
 
     def test_a_second_root_adds_a_pack_that_reuses_a_shared_module_without_touching_core(self):
         registry = Registry.discover([DATA, self.food_root()])
@@ -107,8 +110,11 @@ class BoundaryTests(unittest.TestCase):
             self.assertIsNone(re.search(r'regchain\.tr\b|from \.\.?tr\b|from \.\.tr\.', text), path.name)
 
     def test_no_core_code_names_a_pack_or_module(self):
+        """Only a pack's own package and the compatibility layer (regchain.compat, which registers the default) may name it."""
         ids = [p.pack_id for p in REGISTRY.packs]
         for path in SRC.rglob('*.py'):
+            if path.relative_to(SRC).parts[0] == 'packs' or path == SRC / 'compat.py':
+                continue
             text = path.read_text(encoding='utf-8')
             for pack_id in ids:
                 self.assertNotIn(pack_id, text, f'{pack_id} in {path.relative_to(SRC)}')

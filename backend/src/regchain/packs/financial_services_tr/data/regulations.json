@@ -1,0 +1,26 @@
+{
+  "format": "cardaman-tr-regulations/1",
+  "note": "AML / financial-services catalogue. Titles and numbers are recorded as commonly cited; every entry stays UNVERIFIED until its mevzuat.gov.tr record is fetched. These entries name the sources the engine was measured against; they do not recreate lost gold labels.",
+  "regulations": [
+    {
+      "regulation_id": "TR:KANUN:5549",
+      "title": "5549 sayılı Suç Gelirlerinin Aklanmasının Önlenmesi Hakkında Kanun",
+      "jurisdiction": "TR", "regulator": "TBMM", "regulation_type": "KANUN", "binding_status": "BINDING",
+      "number": "5549", "effective_date": null, "effective_status": "UNKNOWN", "metadata_status": "UNVERIFIED",
+      "verification_note": "Current consolidated text, Resmî Gazete date and article numbering are to be confirmed from mevzuat.gov.tr.",
+      "sector_tags": ["FINANCIAL_SERVICES", "AML", "CFT"],
+      "entity_tags": ["BANK", "PAYMENT_INSTITUTION", "FINANCIAL_INSTITUTION", "DNFBP"],
+      "activity_tags": ["CUSTOMER_IDENTIFICATION", "SUSPICIOUS_TRANSACTION_REPORTING", "RECORD_KEEPING", "TIPPING_OFF_PROHIBITION"]
+    },
+    {
+      "regulation_id": "TR:YONETMELIK:TEDBIRLER_200713012",
+      "title": "Suç Gelirlerinin Aklanmasının ve Terörün Finansmanının Önlenmesine Dair Tedbirler Hakkında Yönetmelik",
+      "jurisdiction": "TR", "regulator": "MASAK", "regulation_type": "YONETMELIK", "binding_status": "BINDING",
+      "number": "200713012", "effective_date": null, "effective_status": "UNKNOWN", "metadata_status": "UNVERIFIED",
+      "verification_note": "Mevzuat number 200713012 is the commonly cited identity of the Tedbirler Yönetmeliği; the current consolidated text and Resmî Gazete record are to be fetched.",
+      "sector_tags": ["FINANCIAL_SERVICES", "AML", "CFT"],
+      "entity_tags": ["BANK", "PAYMENT_INSTITUTION", "EMONEY_INSTITUTION", "FINANCIAL_INSTITUTION", "DNFBP"],
+      "activity_tags": ["CUSTOMER_IDENTIFICATION", "CUSTOMER_DUE_DILIGENCE", "SUSPICIOUS_TRANSACTION_REPORTING", "RECORD_KEEPING", "ONGOING_MONITORING"]
+    }
+  ]
+}

@@ -25,79 +25,31 @@ from dataclasses import dataclass, field
 
 from regchain.ingestion.mevzuat import article_heading
 from .policies import fold
+from ..sector import knowledge as sector_knowledge
+
+SECTOR = sector_knowledge()
 
 # The party the clause is about (identified, transacted with). Order matters: a specific
 # reading ("yabancı dernek") suppresses the general word inside it; "tüzel kişi" is not read
 # inside "tüzel kişiliği olmayan".
-COUNTERPARTIES = (
-    ('FOREIGN_ASSOCIATION_BRANCH', r'yabancı (?:dernek|vakıf)'),
-    ('ASSOCIATION', r'\bdernek'),
-    ('FOUNDATION', r'\bvak[ıi]f'),
-    ('UNION', r'\bsendika|\bkonfederasyon'),
-    ('POLITICAL_PARTY', r'siyas[iî] parti'),
-    ('UNINCORPORATED', r'tüzel kişiliği olmayan|\bapartman|site veya iş han'),
-    ('PUBLIC_BODY', r'\bkamu kurum'),
-    ('NON_RESIDENT', r'yurt dışında yerleşik|\bnon-resident'),
-    ('CORRESPONDENT', r'\bmuhabir|\bcorrespondent bank'),
-    # v0.19: "gerçek ve tüzel kişiler" names both (Tedbirler md. 25(1)); "tüzel kişiliği olmayan" is not a legal entity,
-    # but it no longer hides one named beside it ("gerçek ve tüzel kişiler, tüzel kişiliği olmayan teşekküller").
-    ('INDIVIDUAL', r'\bgerçek kişi|\bgerçek (?:ve|veya|ya da) tüzel kişi|\bretail client|\bconsumers?\b|\bindividuals?\b'),
-    ('LEGAL_ENTITY', r'ticaret siciline kayıtlı|\btüzel kişi(?!liği olmayan)|\bşirketler|\bşirketin|\bcompan(?:y|ies)\b|\bcorporate client'),
-)
-SUPPRESSES = {'FOREIGN_ASSOCIATION_BRANCH': {'ASSOCIATION', 'FOUNDATION'}, 'NON_RESIDENT': set(), 'CORRESPONDENT': set()}
+COUNTERPARTIES = tuple(SECTOR.counterparties)
+SUPPRESSES = {key: set(value) for key, value in SECTOR.suppresses.items()}
 # Who must act. GENERIC ("yükümlüler", "a firm") restricts nothing.
-OBLIGED = (
-    ('FOREIGN_HQ_OBLIGED', r'merkezi yurt dışında'),
-    ('BANK', r'\bbankalar\b|\bbanka\b|\bbanks?\b'),
-    ('PAYMENT_INSTITUTION', r'ödeme kuruluş|payment institution'),
-    ('EMONEY_INSTITUTION', r'elektronik para kuruluş|e-?money institution'),
-    ('INSURANCE', r'sigorta şirket|sigorta ve emeklilik|\binsurers?\b'),
-    ('BROKER', r'aracı kurum|portföy yönetim|\binvestment firms?\b'),
-    ('EXCHANGE_OFFICE', r'yetkili müessese|döviz büro'),
-    # v0.19 generic categories (applicability.GENERIC_CATEGORIES); membership is the taxonomy's (applicability.membership).
-    ('DNFBP_GENERIC', r'finansal olmayan belirli iş ve meslek|designated non-financial business|\bdnfbps?\b'),
-    ('FINANCIAL_GENERIC', r'finansal kuruluş|financial institution'),
-    ('GENERIC', r'\byükümlü|\bfirms?\b'),
-)
+OBLIGED = tuple(SECTOR.obliged)
 # Who must act, not which kind: a restriction on top of the kinds a clause names ("Merkezi yurt dışında bulunan
 # bankaların ..."), so it must match as well. The kinds and categories a subject names are alternatives.
-QUALIFIERS = {'FOREIGN_HQ_OBLIGED'}
+QUALIFIERS = set(SECTOR.qualifiers)
 # Customer families as a profile states them ("bireysel müşteriler, KOBİ'ler, üye işyerleri").
-CUSTOMER_FAMILIES = (
-    ('ANY', r'\btüm müşteri|\bher tür müşteri|\bbütün müşteri|\ball customers|\ball clients'),
-    ('INDIVIDUAL', r'\bbireysel|\bgerçek kişi|\btüketici|\bindividual|\bretail|\bconsumer|\bborrowers?\b|\bşahıs'),
-    ('BUSINESS', r'\bkobi|\bşirket|\bişletme|\büye işyer|\bkurumsal|\bticari|\btacir|\besnaf|\bcompan(?:y|ies)|\bmerchant|\bsmes?\b|\bbusiness|\bcorporate'),
-    ('LEGAL_ENTITY_GENERIC', r'\btüzel kişi|\blegal entit'),
-    ('ASSOCIATION', r'\bdernek|\bassociation'),
-    ('FOUNDATION', r'\bvak[ıi]f|\bfoundation'),
-    ('UNION', r'\bsendika|\bkonfederasyon|\btrade union'),
-    ('POLITICAL_PARTY', r'siyas[iî] parti|political part'),
-    ('PUBLIC_BODY', r'\bkamu|\bpublic bod|\bpublic sector'),
-    ('NON_RESIDENT', r'yurt dışı|\byabancı|\bnon-resident'),
-    ('CORRESPONDENT', r'\bmuhabir|\bfinansal kuruluş|\bbanka|\bfinancial institution'),
-    ('UNINCORPORATED', r'tüzel kişiliği olmayan|\bapartman|\bsite yönetim'),
-)
+CUSTOMER_FAMILIES = tuple(SECTOR.customer_families)
 # Which customer families satisfy a clause's counterparty; a family not listed here leaves it undetermined.
-SATISFIES = {
-    'INDIVIDUAL': {'INDIVIDUAL'}, 'LEGAL_ENTITY': {'BUSINESS', 'LEGAL_ENTITY_GENERIC', 'ASSOCIATION', 'FOUNDATION', 'PUBLIC_BODY'},
-    'ASSOCIATION': {'ASSOCIATION'}, 'FOUNDATION': {'FOUNDATION'}, 'UNION': {'UNION'}, 'POLITICAL_PARTY': {'POLITICAL_PARTY'},
-    'PUBLIC_BODY': {'PUBLIC_BODY'}, 'UNINCORPORATED': {'UNINCORPORATED'}, 'FOREIGN_ASSOCIATION_BRANCH': {'ASSOCIATION', 'FOUNDATION'},
-    'NON_RESIDENT': {'NON_RESIDENT'}, 'CORRESPONDENT': {'CORRESPONDENT'}}
+SATISFIES = {key: set(value) for key, value in SECTOR.satisfies.items()}
 # A bare "legal entities" customer base may include these; it never proves their absence.
-COVERED_BY_GENERIC_LEGAL = {'ASSOCIATION', 'FOUNDATION', 'UNION', 'POLITICAL_PARTY', 'PUBLIC_BODY', 'FOREIGN_ASSOCIATION_BRANCH', 'UNINCORPORATED'}
+COVERED_BY_GENERIC_LEGAL = set(SECTOR.covered_by_generic_legal)
 # Residency and correspondent relationships are rarely stated; their absence is not a mismatch.
-NEVER_MISMATCH = {'NON_RESIDENT', 'CORRESPONDENT'}
+NEVER_MISMATCH = set(SECTOR.never_mismatch)
 LEADING_NOTE = re.compile(r'^\s*(?:\(\d+\)\s*)?(?:\((?:Ek|Değişik|Mülga|Yeniden düzenleme)[^()]*\)\s*)*')
 CLAUSE_HEAD = re.compile(r'^(.{0,220}?)(?:[;:]|kimlik tespitinde|kimlik tespiti|\bmust\b|\bshall\b|zorundadır|yükümlüdür|$)', re.S)
-TURKISH_LABELS = {'FOREIGN_ASSOCIATION_BRANCH': 'yabancı dernek/vakıf şube ve temsilciliği', 'ASSOCIATION': 'dernek', 'FOUNDATION': 'vakıf',
-                  'UNION': 'sendika/konfederasyon', 'POLITICAL_PARTY': 'siyasi parti', 'UNINCORPORATED': 'tüzel kişiliği olmayan teşekkül',
-                  'PUBLIC_BODY': 'kamu kurumu', 'NON_RESIDENT': 'yurt dışında yerleşik', 'CORRESPONDENT': 'muhabir kuruluş',
-                  'INDIVIDUAL': 'gerçek kişi', 'LEGAL_ENTITY': 'ticaret siciline kayıtlı tüzel kişi / şirket',
-                  'FOREIGN_HQ_OBLIGED': 'merkezi yurt dışında bulunan yükümlü', 'BANK': 'banka', 'PAYMENT_INSTITUTION': 'ödeme kuruluşu',
-                  'EMONEY_INSTITUTION': 'elektronik para kuruluşu', 'INSURANCE': 'sigorta şirketi', 'BROKER': 'aracı kurum',
-                  'EXCHANGE_OFFICE': 'yetkili müessese', 'FINANCIAL_GENERIC': 'finansal kuruluş',
-                  'DNFBP_GENERIC': 'finansal olmayan belirli iş ve meslekler', 'GENERIC': 'yükümlü (genel)',
-                  'BUSINESS': 'işletme / KOBİ / üye işyeri', 'LEGAL_ENTITY_GENERIC': 'tüzel kişi (genel)', 'ANY': 'tüm müşteriler'}
+TURKISH_LABELS = dict(SECTOR.entity_labels)
 
 # v0.19: a duty addressed to everyone. Kanun 5549 md. 7(1) and Tedbirler md. 31(1) open with who must give
 # information: "Kamu kurum ve kuruluşları, gerçek ve tüzel kişiler ile tüzel kişiliği olmayan kuruluşlar".

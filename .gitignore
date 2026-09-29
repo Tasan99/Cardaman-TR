@@ -10,6 +10,7 @@ node_modules/
 data/
 # Package data shipped with the code (pack catalogue, scopes, synthetic pilot profiles)
 !backend/src/regchain/tr/data/
+!backend/src/regchain/packs/*/data/
 *.egg-info/
 
 # Built locally by scripts/Build-Launcher.ps1 (Cardaman.old.exe: the build a still-open window runs)

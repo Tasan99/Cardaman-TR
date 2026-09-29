@@ -43,6 +43,11 @@ from .scope_integrity import completeness
 from .definitions import parse as parse_definitions
 from .entities import COVERED_BY_GENERIC_LEGAL, OBLIGED as CLAUSE_OBLIGED, addressee_words, obliged_verdict, universal_covering
 from .policies import fold
+from ..sector import knowledge as sector_knowledge
+
+# The sector pack's tables (regchain.sector): obliged-party kinds, regulator names, finance words. Read once, at
+# import, exactly as the module constants they replace were built.
+SECTOR = sector_knowledge()
 
 ASCII = str.maketrans('çğıöşüâîû', 'cgiosuaiu')
 
@@ -62,65 +67,11 @@ def rx(pattern: str):
 # side is matched against the profile. Measured on Tedbirler md. 4(1): every one of the 29
 # items a–z maps to at least one kind. Order matters where one kind's words contain another's
 # ("tasarruf finansman şirketi" is savings finance, not finance/factoring).
-CATEGORIES = tuple((key, label, rx(listed), rx(company)) for key, label, listed, company in (
-    ('BANK', 'banka', r'\bbanka(?:lar|ların|lara|ları|lardan|larca)?\b(?!\s+(?:dışında|kart))|\bbankacılık',
-     r'\bbanka\b|\bbankası\b|\bbankacılık|\bmevduat|katılım bank|\bbank\b|\bbanking\b'),
-    ('CARD_ISSUER', 'kart çıkaran kuruluş', r'kartı düzenleme|kart(?:ı)? çıkar', r'kredi kartı düzenle|kart çıkar|kart ihraç|card issu'),
-    ('EXCHANGE_OFFICE', 'yetkili müessese', r'yetkili müessese|döviz büro',
-     r'yetkili müessese|döviz büro|döviz alım satım|kambiyo|\bsarraf|bureau de change|currency exchange'),
-    ('SAVINGS_FINANCE', 'tasarruf finansman şirketi', r'tasarruf finansman', r'tasarruf finansman'),
-    ('FINANCE_FACTORING', 'finansman/faktoring şirketi', r'faktoring|finansman şirket',
-     r'faktoring|(?<!tasarruf )finansman şirket|tüketici finansman'),
-    ('BROKER', 'aracı kurum / portföy yönetim şirketi', r'aracı kurum|portföy yönetim',
-     r'aracı kurum|portföy yönetim|menkul değer|sermaye piyasası|yatırım kuruluş|investment firm|\bbroker'),
-    ('PAYMENT_INSTITUTION', 'ödeme kuruluşu', r'ödeme kuruluş|payment institution',
-     r'ödeme kuruluş|ödeme hizmet|ödeme aracı|sanal pos|para transfer|payment (?:institution|service)|\bpsp\b|money remittance'),
-    ('EMONEY_INSTITUTION', 'elektronik para kuruluşu', r'elektronik para kuruluş|e-?money institution',
-     r'elektronik para|\be-para|\be-?money'),
-    ('INVESTMENT_TRUST', 'yatırım ortaklığı', r'yatırım ortaklık', r'yatırım ortaklığ'),
-    ('INSURANCE', 'sigorta/reasürans/emeklilik şirketi', r'sigorta|reasürans|emeklilik şirket|\binsur',
-     r'\bsigorta|reasürans|emeklilik şirket|\binsur'),
-    ('LEASING', 'finansal kiralama şirketi', r'finansal kiralama', r'finansal kiralama|financial leasing|\bleasing\b'),
-    ('CLEARING_CUSTODY', 'takas/saklama kuruluşu', r'takas ve saklama', r'takas ve saklama|takas kuruluş|merkezi kayıt|\bcustody'),
-    ('BORSA_ISTANBUL', 'Borsa İstanbul', r'borsa istanbul', r'borsa istanbul'),
-    ('POST_CARGO', 'PTT / kargo şirketi', r'posta ve telgraf|kargo', r'\bkargo|\bptt\b|posta ve telgraf|\bkurye|courier'),
-    ('ASSET_MANAGEMENT', 'varlık yönetim şirketi', r'varlık yönetim', r'varlık yönetim'),
-    # v0.19: md. 4(1)(m) "Kıymetli madenler aracı kuruluşları" is a financial institution (md. 3(1)(f)); the
-    # jeweller of md. 4(1)(k) is not. One kind for both put a jeweller among the financial institutions.
-    ('PRECIOUS_METALS_INTERMEDIARY', 'kıymetli madenler aracı kuruluşu', r'kıymetli madenler? aracı kuruluş',
-     r'kıymetli madenler? aracı kuruluş|precious metals? intermediary institution'),
-    ('PRECIOUS_METALS', 'kıymetli maden/taş/mücevher', r'kıymetli maden(?!ler aracı kuruluş)|kıymetli taş|mücevher',
-     r'\bkuyum|mücevher|kıymetli maden|külçe|ziynet|\bsarraf|gümüş|pırlanta|\belmas|\btakı\b|\btakılar|precious metal|jewel|altın alım|'
-     r'altın ticaret'),
-    ('MINT', 'Darphane', r'darphane', r'darphane'),
-    ('REAL_ESTATE', 'taşınmaz alım satımı', r'taşınmaz alım satım',
-     r'\bemlak|gayrimenkul|taşınmaz alım|konut satış|konut proje|daire satış|real estate'),
-    ('VEHICLE_DEALER', 'nakil vasıtası / iş makinesi alım satımı', r'nakil vasıta|iş makine',
-     r'otomotiv|oto galeri|araç alım satım|otomobil ticaret|ikinci el (?:araç|otomobil)|nakil vasıta|iş makine|motosiklet|scooter|'
-     r'traktör|tarım makine|karavan|\bgemi|\byat\b|\btekne|car dealer'),
-    ('ANTIQUES_ART', 'tarihi eser / antika / sanat eseri', r'antika|sanat eseri|tarihi eser',
-     r'antika|sanat eseri|tarihi eser|koleksiyon|sanat galeri|tablo satış|müzayede|art dealer|auction'),
-    ('GAMBLING', 'talih ve bahis oyunları', r'talih ve bahis|milli piyango|spor toto|jokey',
-     r'\bbahis|şans oyun|piyango|spor toto|jokey|at yarış|\biddaa|\bkumar|casino|\bgambling|\bbetting'),
-    ('SPORTS_CLUB', 'spor kulübü', r'spor kulüp', r'kulüb|kulüp|football club|sports club'),
-    ('NOTARY', 'noter', r'\bnoter', r'\bnoter'),
-    ('LAWYER', 'serbest avukat', r'\bavukat', r'\bavukat|hukuk bürosu|law firm'),
-    ('ACCOUNTANT', 'serbest muhasebeci / mali müşavir', r'muhasebeci|mali müşavir',
-     r'\bsmmm\b|\bymm\b|serbest muhasebeci|mali müşavir|muhasebe bürosu|muhasebecilik|accounting firm|\baccountan'),
-    ('AUDITOR', 'bağımsız denetim kuruluşu', r'bağımsız denetim', r'bağımsız denetim|audit firm'),
-    ('CRYPTO', 'kripto varlık hizmet sağlayıcı', r'kripto varlık',
-     r'\bkripto|\bcrypto|dijital varlık|sanal varlık|virtual asset|bitcoin|ethereum'),
-    ('ECOMMERCE', 'elektronik ticaret aracı hizmet sağlayıcı', r'elektronik ticaret', r'elektronik ticaret aracı|pazar ?yeri|marketplace'),
-    ('CASH_IN_TRANSIT', 'para / değerli eşya nakli', r'değerli eşya nakli|para veya değerli',
-     r'para nakli|değerli eşya nakli|nakit taşıma|cash-in-transit'),
-    ('LENDING', 'ödünç para verme', r'ödünç para', r'ödünç para|\blending\b|consumer credit|kredi ver'),
-))
+CATEGORIES = tuple((key, label, rx(listed), rx(company)) for key, label, listed, company in SECTOR.categories)
 LABELS = {key: label for key, label, _, _ in CATEGORIES}
 # A financial business in the wide sense (the catch-all "diğer finansal hizmetler" of Kanun 5549 md. 2(d)).
 # The defined term "finansal kuruluş" is narrower: FINANCIAL_INSTITUTIONS below.
-FINANCIAL = {'BANK', 'CARD_ISSUER', 'EXCHANGE_OFFICE', 'FINANCE_FACTORING', 'BROKER', 'PAYMENT_INSTITUTION', 'EMONEY_INSTITUTION',
-             'INVESTMENT_TRUST', 'INSURANCE', 'LEASING', 'CLEARING_CUSTODY', 'ASSET_MANAGEMENT', 'CRYPTO', 'SAVINGS_FINANCE', 'LENDING',
-             'PRECIOUS_METALS_INTERMEDIARY'}
+FINANCIAL = set(SECTOR.financial)
 
 # v0.19 entity taxonomy: the specific kinds are CATEGORIES; a clause may instead name a generic category of
 # obliged parties. Measured on independent-v1 I07 (a jeweller): Tedbirler md. 25(1) "Finansal kuruluşlar ile
@@ -133,15 +84,13 @@ FINANCIAL = {'BANK', 'CARD_ISSUER', 'EXCHANGE_OFFICE', 'FINANCE_FACTORING', 'BRO
 # definition could rule it in (a jeweller or a notary is not a financial institution, a bank is not a
 # non-financial business); a kind whose place depends on the definition (a car dealer or a sports club and
 # the DNFBPs, an asset manager or a savings finance company and the financial institutions) stays open.
-GENERIC_CATEGORIES = {'FINANCIAL_GENERIC': 'finansal kuruluş', 'DNFBP_GENERIC': 'finansal olmayan belirli iş ve meslekler'}
-FINANCIAL_INSTITUTIONS = frozenset({'BANK', 'CARD_ISSUER', 'EXCHANGE_OFFICE', 'FINANCE_FACTORING', 'BROKER', 'PAYMENT_INSTITUTION',
-                                    'EMONEY_INSTITUTION', 'INVESTMENT_TRUST', 'INSURANCE', 'LEASING', 'CLEARING_CUSTODY',
-                                    'PRECIOUS_METALS_INTERMEDIARY', 'CRYPTO'})
-DNFBP = frozenset({'PRECIOUS_METALS', 'REAL_ESTATE', 'NOTARY', 'LAWYER', 'ACCOUNTANT', 'AUDITOR'})
-PLAINLY_NON_FINANCIAL = DNFBP | {'VEHICLE_DEALER', 'ANTIQUES_ART', 'GAMBLING', 'SPORTS_CLUB', 'ECOMMERCE', 'CASH_IN_TRANSIT', 'MINT'}
+GENERIC_CATEGORIES = dict(SECTOR.generic_categories)
+FINANCIAL_INSTITUTIONS = frozenset(SECTOR.financial_institutions)
+DNFBP = frozenset(SECTOR.dnfbp)
+PLAINLY_NON_FINANCIAL = frozenset(SECTOR.plainly_non_financial)
 STATIC_MEMBERSHIP = {'FINANCIAL_GENERIC': (FINANCIAL_INSTITUTIONS, PLAINLY_NON_FINANCIAL), 'DNFBP_GENERIC': (DNFBP, FINANCIAL_INSTITUTIONS)}
 # The defined terms as a definitions article writes them ("f) Finansal kuruluş: ...").
-DEFINED_TERMS = {'FINANCIAL_GENERIC': rx(r'^finansal kuruluş(?:lar)?$'), 'DNFBP_GENERIC': rx(r'^finansal olmayan belirli iş ve meslek(?:ler)?$')}
+DEFINED_TERMS = {key: rx(pattern) for key, pattern in SECTOR.defined_terms.items()}
 # "(a) ila (h), (m) ve (ü)": a letter or a range of letters of the list the definition refers to.
 LETTER_REF = re.compile(r'\(([a-zçğıöşü])\)(?:\s*(?:ila|-|–)\s*\(([a-zçğıöşü])\))?')
 # "Bu Yönetmeliğin 4 üncü maddesinin birinci fıkrasının ..." (the article and paragraph the letters belong to).
@@ -167,34 +116,25 @@ DENIED_SUFFIX = rx(r'^\w*(?:sız|siz|suz|süz)\b|^\w*\s+dışı\b')
 # A clause ends at punctuation only: "ve", "ile", "and" must not separate a kind from its negation or its object.
 SEGMENT = re.compile(r'[;,.()\n/]')
 # A regulator's name is not the company's kind ("BDDK (Bankacılık Düzenleme ve Denetleme Kurumu) izni").
-REGULATOR = rx(r'bankacılık düzenleme ve denetleme kurumu|sermaye piyasası kurulu|merkez bankası|mali suçları araştırma kurulu|'
-               r'sigortacılık ve özel emeklilik düzenleme|\bbddk\b|\bspk\b|\btcmb\b|\bmasak\b|\bsedddk\b')
+REGULATOR = rx(SECTOR.regulator_pattern)
 # A list item that reaches past its named kinds ("... ve diğer finansal hizmetler alanında faaliyet
 # gösterenler", Kanun 5549 md. 2(d)) cannot rule a company out. Only an item whose own subject is
 # "other ..." counts; "diğer kanun hükümlerine aykırı olmamak" (md. 4(1)(ş)) is a reference to other law.
 CATCH_ALL = rx(r'\b(?:diğer|benzeri)\b[^.;,]{0,60}\b(?:kuruluş|şirket|faaliyet|alanında|hizmet|işletme|meslek)|'
                r'\b(?:other|similar)\b[^.;,]{0,40}\b(?:firms?|institutions?|persons?|services?|business)')
-FINANCIAL_CATCH_ALL = rx(r'diğer finansal|finansal hizmetler alanında|other financial')
+FINANCIAL_CATCH_ALL = rx(SECTOR.financial_catch_all_pattern)
 # An item limited to part of a business ("... saklama hizmeti ile sınırlı olmak üzere Borsa İstanbul",
 # md. 4(1)(y) "... işlemlerle sınırlı olarak orta, büyük veya çok büyük ölçekli ... aracı hizmet
 # sağlayıcılar") is never a clear match: whether the company falls inside the limit is for the model.
 LIMITED = rx(r'sınırlı olmak üzere|sınırlı olarak|ile sınırlı|limited to')
-GENERIC_FINANCE = rx(r'\bfinans|\bfintek|\bfintech|\bfinancial')
+GENERIC_FINANCE = rx(SECTOR.generic_finance_pattern)
 # Words that come near one of the listed kinds without naming it. A profile that uses one is not
 # ruled out by rule: the model decides. Deliberately wide.
-FINANCE_WORDS = rx(r'ödeme|\bpara\b|para transfer|\bkart(?:ı|lar|lı)?\b|\bkredi|finans|fintek|fintech|yatırım|sigorta|döviz|altın|'
-                   r'kripto|cüzdan|\bfon\b|\bfonu|borsa|banka|mevduat|ödünç|kiralama|leasing|faktoring|emlak|gayrimenkul|'
-                   r'taşınmaz|kuyum|mücevher|sarraf|külçe|ziynet|bahis|iddaa|piyango|casino|avukat|hukuk|noter|muhasebe|müşavir|'
-                   r'smmm|ymm|kargo|kurye|antika|müzayede|galeri|otomobil|otomotiv|tekne|\byat\b|menkul|sermaye piyasa|dijital varlık|'
-                   r'satış|ticaret|\balım|bayi|mağaza|kulüp|kulüb|kambiyo|gümüş|pırlanta|elmas|\btakı|koleksiyon|tarihi eser|motosiklet|'
-                   r'traktör|karavan|\bgemi|daire|konut|pazar ?yeri|toto|jokey|yarış|'
-                   r'payment|money|credit|loan|invest|insur|\bbank|exchange|crypto|wallet|remittance|lending|asset|betting|gambling|'
-                   r'\bsale|trade|dealer|club|jewel')
+FINANCE_WORDS = rx(SECTOR.finance_words_pattern)
 # What a profile says the company is when it is plainly not a kind the list obliges. Only the kinds that
 # were measured (associations, foundations, unions, political parties, software houses): a retailer, a
 # builder or a tourism agency may deal in cars, flats, jewellery or foreign currency, which the list obliges.
-NON_OBLIGED = rx(r'\bderne(?:k|ğ)|\bvakıf|\bvakf|\bsendika|konfederasyon|siyasi parti|yazılım|software|bilişim|charity|nonprofit|'
-                 r'non-profit|association|foundation')
+NON_OBLIGED = rx(SECTOR.non_obliged_pattern)
 LIST_HEADING = rx(r'^yükümlü(?:ler)?$')
 LIST_LEAD = rx(r'yükümlü(?:ler)?[,;:]?\s*(?:aşağıda sayılanlar|şunlardır|şunlar)|uygulanmasında yükümlü[,;:]')
 DEFINITION = re.compile(r'(?:^|\s)[a-zçğıöşü]\)\s*yükümlü\s*:\s*', re.I)

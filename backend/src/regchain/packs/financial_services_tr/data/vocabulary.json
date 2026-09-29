@@ -1,0 +1,42 @@
+{
+  "format": "cardaman-tr-vocabulary/1",
+  "regulators": {
+    "MASAK": "Mali Suçları Araştırma Kurulu Başkanlığı",
+    "BDDK": "Bankacılık Düzenleme ve Denetleme Kurumu",
+    "SPK": "Sermaye Piyasası Kurulu",
+    "TCMB": "Türkiye Cumhuriyet Merkez Bankası",
+    "SEDDK": "Sigortacılık ve Özel Emeklilik Düzenleme ve Denetleme Kurumu"
+  },
+  "sector_tags": {
+    "FINANCIAL_SERVICES": "finansal hizmetler",
+    "AML": "suç gelirlerinin aklanmasının önlenmesi",
+    "CFT": "terörizmin finansmanının önlenmesi"
+  },
+  "entity_classes": {
+    "BANK": "banka",
+    "PAYMENT_INSTITUTION": "ödeme kuruluşu",
+    "EMONEY_INSTITUTION": "elektronik para kuruluşu",
+    "INSURANCE_UNDERTAKING": "sigorta / reasürans / emeklilik şirketi",
+    "BROKER": "aracı kurum / portföy yönetim şirketi",
+    "EXCHANGE_OFFICE": "yetkili müessese",
+    "CRYPTO_PROVIDER": "kripto varlık hizmet sağlayıcı",
+    "FINANCIAL_INSTITUTION": "finansal kuruluş",
+    "DNFBP": "finansal olmayan belirli iş ve meslek"
+  },
+  "activity_classes": {
+    "CUSTOMER_IDENTIFICATION": "kimlik tespiti",
+    "CUSTOMER_DUE_DILIGENCE": "müşterinin tanınması",
+    "SUSPICIOUS_TRANSACTION_REPORTING": "şüpheli işlem bildirimi",
+    "RECORD_KEEPING": "kayıt saklama ve ibraz",
+    "ONGOING_MONITORING": "sürekli izleme",
+    "TIPPING_OFF_PROHIBITION": "bildirimde bulunulduğunu açıklama yasağı"
+  },
+  "license_classes": {
+    "BANKING_LICENSE": "bankacılık faaliyet izni",
+    "PAYMENT_INSTITUTION_LICENSE": "ödeme kuruluşu faaliyet izni",
+    "EMONEY_LICENSE": "elektronik para kuruluşu faaliyet izni",
+    "CAPITAL_MARKETS_LICENSE": "sermaye piyasası faaliyet izni",
+    "INSURANCE_LICENSE": "sigortacılık faaliyet izni",
+    "CRYPTO_LICENSE": "kripto varlık hizmet sağlayıcı izni"
+  }
+}

@@ -91,7 +91,7 @@ class CoreMetadataTests(unittest.TestCase):
 class ShippedRegistryTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.registry = Registry.load()
+        cls.registry = Registry.load(DATA)
 
     def test_the_two_beverage_packs_and_the_shared_module_are_registered(self):
         packs = {p.pack_id: p for p in self.registry.packs}
