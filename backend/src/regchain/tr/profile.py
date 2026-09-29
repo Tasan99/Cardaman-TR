@@ -10,12 +10,16 @@ flag; nothing here decides applicability.
 to_company() projects one legal entity to the flat Company the existing engine consumes, so the
 extraction, grounding and policy comparison pipeline runs per legal entity unchanged.
 """
+import json
+from pathlib import Path
 from typing import Literal
 
 from pydantic import Field, ValidationError, model_validator
 
 from ..pilot.schema import Company, Strict
 from .core import Vocabulary
+
+PILOT_PROFILES = Path(__file__).parent / 'data' / 'pilot_profiles'
 
 Fact = Literal['YES', 'NO', 'UNKNOWN']
 LicenseStatus = Literal['HELD', 'APPLIED', 'NOT_HELD', 'UNKNOWN']
@@ -198,6 +202,19 @@ def load_profile(data: dict, vocab: Vocabulary) -> EnterpriseProfile:
     if errors:
         raise ProfileError('; '.join(errors))
     return profile
+
+
+def load_pilot_profiles(vocab: Vocabulary, directory: Path = PILOT_PROFILES) -> dict[str, EnterpriseProfile]:
+    """The representative pilot profiles by representative_type. Every one must be synthetic."""
+    out = {}
+    for path in sorted(directory.glob('*.json')):
+        profile = load_profile(json.loads(path.read_text(encoding='utf-8')), vocab)
+        if not profile.synthetic or not profile.representative_type:
+            raise ProfileError(f'{path.name}: a pilot profile is synthetic and names its representative type')
+        if profile.representative_type in out:
+            raise ProfileError(f'{path.name}: representative type {profile.representative_type} is used twice')
+        out[profile.representative_type] = profile
+    return out
 
 
 def product_alcohol(product: Product, vocab: Vocabulary) -> str:
