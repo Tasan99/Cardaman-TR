@@ -1,9 +1,14 @@
 """Regulation pack registry: sector packs as validated data over the one TR catalogue.
 
-A PACK is selectable for a company (BEVERAGE_ALCOHOL_TR, BEVERAGE_NON_ALCOHOL_TR); a MODULE is
-shared content packs include (TR_FOOD_BEVERAGE_COMMON: food law, labelling, packaging,
-advertising and distance sales that bind every beverage business). Each regulation is owned by
-exactly one pack or module, so shared law is never copied into two packs and cannot drift.
+A PACK is selectable for a company (a sector: alcoholic beverages, non-alcoholic beverages ...);
+a MODULE is shared content packs include (food law, labelling, packaging, advertising, distance
+sales). Each regulation is owned by exactly one pack or module, so shared law is never copied into
+two packs and cannot drift.
+
+Packs live in data roots: the built-in root below, then any root an installed distribution
+registers under the entry-point group cardaman.packs. Every root has the same layout
+(vocabulary.json, regulations.json, scopes.json, packs/*.json, each optional outside the built-in
+root); roots merge into one registry, so a new sector adds a root and never edits the core.
 
 The registry refuses, instead of ignoring: an unknown vocabulary term, a pack naming a
 regulation the catalogue lacks, an alcohol-only scope inside a non-alcohol pack, guidance that
@@ -11,6 +16,7 @@ reads binding text the pack does not carry, and the second-phase DECISION_PRECED
 an active pack.
 """
 import json
+from importlib.metadata import entry_points
 from pathlib import Path
 from typing import Literal
 
@@ -21,11 +27,41 @@ from .core import (MVP_LAYERS, SECOND_PHASE_LAYERS, TAG_FIELDS, VOCABULARY_OF, A
                    RegulationMeta, Vocabulary)
 
 DATA = Path(__file__).resolve().parent / 'data'
+ENTRY_POINT_GROUP = 'cardaman.packs'
 PACK_CLASS_FIELDS = ('product_classes', 'activity_classes', 'facility_classes', 'entity_classes', 'license_classes')
+VOCABULARY_FORMAT = 'cardaman-tr-vocabulary/1'
+VOCABULARY_KINDS = tuple(name for name in Vocabulary.model_fields if name != 'format')
 
 
 class RegistryError(ValueError):
     pass
+
+
+def pack_roots() -> list[Path]:
+    """The built-in root, then each installed root by entry-point name. An entry point names a path
+    (or a callable returning one)."""
+    roots = [DATA]
+    for point in sorted(entry_points(group=ENTRY_POINT_GROUP), key=lambda p: p.name):
+        value = point.load()
+        roots.append(Path(value() if callable(value) else value).resolve())
+    return roots
+
+
+def merge_vocabularies(documents) -> dict:
+    """One vocabulary from several roots. A term two roots define differently is an error, not an override."""
+    merged = {'format': VOCABULARY_FORMAT, **{kind: {} for kind in VOCABULARY_KINDS}}
+    for document in documents:
+        if document.get('format') != VOCABULARY_FORMAT:
+            raise RegistryError(f'vocabulary format {document.get("format")!r} is not {VOCABULARY_FORMAT}')
+        unknown = set(document) - {'format', *VOCABULARY_KINDS}
+        if unknown:
+            raise RegistryError(f'unknown vocabulary kinds {sorted(unknown)}')
+        for kind in VOCABULARY_KINDS:
+            for key, value in (document.get(kind) or {}).items():
+                if key in merged[kind] and merged[kind][key] != value:
+                    raise RegistryError(f'vocabulary {kind}.{key} is defined differently by two pack roots')
+                merged[kind][key] = value
+    return merged
 
 
 class RegulationPack(Strict):
@@ -77,11 +113,25 @@ class Registry:
             raise RegistryError(str(exc)) from exc
 
     @classmethod
-    def load(cls, directory: Path = DATA):
-        directory = Path(directory)
-        return cls.from_data(load_json(directory / 'vocabulary.json'), load_json(directory / 'regulations.json'),
-                             load_json(directory / 'scopes.json'),
-                             [load_json(path) for path in sorted((directory / 'packs').glob('*.json'))])
+    def load(cls, directory: Path | None = None):
+        """One root when a directory is given; every discovered root otherwise."""
+        return cls.discover() if directory is None else cls.discover([directory])
+
+    @classmethod
+    def discover(cls, roots=None):
+        roots = [Path(r) for r in (pack_roots() if roots is None else roots)]
+        vocabularies, regulations, scopes, packs = [], [], [], []
+        for root in roots:
+            if not root.is_dir():
+                raise RegistryError(f'pack root {root} is not a directory')
+            optional = lambda name: load_json(root / name) if (root / name).exists() else None
+            vocabulary, catalogue, scoped = optional('vocabulary.json'), optional('regulations.json'), optional('scopes.json')
+            if vocabulary:
+                vocabularies.append(vocabulary)
+            regulations.extend((catalogue or {}).get('regulations', []))
+            scopes.extend((scoped or {}).get('scopes', []))
+            packs.extend(load_json(path) for path in sorted((root / 'packs').glob('*.json')))
+        return cls.from_data(merge_vocabularies(vocabularies), {'regulations': regulations}, {'scopes': scopes}, packs)
 
     @staticmethod
     def _unique(items, key, what):
