@@ -1,0 +1,110 @@
+{
+  "format": "cardaman-tr-vocabulary/1",
+  "regulators": {
+    "TARIM_ORMAN": "Tarım ve Orman Bakanlığı",
+    "TICARET": "Ticaret Bakanlığı",
+    "SAGLIK": "Sağlık Bakanlığı",
+    "CEVRE_SEHIRCILIK": "Çevre, Şehircilik ve İklim Değişikliği Bakanlığı",
+    "HAZINE_MALIYE": "Hazine ve Maliye Bakanlığı",
+    "TBMM": "Türkiye Büyük Millet Meclisi (kanun koyucu)"
+  },
+  "sector_tags": {
+    "BEVERAGE": "içecek",
+    "FOOD": "gıda",
+    "ALCOHOL": "alkollü içki",
+    "NON_ALCOHOLIC_BEVERAGE": "alkolsüz içecek",
+    "WATER": "ambalajlı su",
+    "CONSUMER": "tüketici",
+    "ADVERTISING": "reklam ve tanıtım",
+    "ENVIRONMENT": "çevre",
+    "TAX": "vergi",
+    "ECOMMERCE": "elektronik ticaret"
+  },
+  "entity_classes": {
+    "HOLDING": "grup şirketi / holding",
+    "PRODUCER": "üretici",
+    "BOTTLER": "dolum yapan işletme",
+    "IMPORTER": "ithalatçı",
+    "EXPORTER": "ihracatçı",
+    "DISTRIBUTOR": "dağıtıcı",
+    "WHOLESALER": "toptancı",
+    "RETAILER": "perakendeci",
+    "ON_PREMISE_OPERATOR": "yerinde tüketim / sunum işletmesi",
+    "ONLINE_SELLER": "internet üzerinden satıcı",
+    "BRAND_OWNER": "marka sahibi"
+  },
+  "activity_classes": {
+    "PRODUCTION": "üretim",
+    "BOTTLING": "dolum ve ambalajlama",
+    "WATER_EXTRACTION": "kaynak suyu çıkarma",
+    "IMPORT": "ithalat",
+    "EXPORT": "ihracat",
+    "PLACING_ON_MARKET": "piyasaya arz",
+    "DISTRIBUTION": "dağıtım",
+    "WAREHOUSING": "depolama",
+    "WHOLESALE": "toptan satış",
+    "RETAIL_SALE": "perakende satış",
+    "ON_PREMISE_SERVICE": "sunum (yerinde tüketim)",
+    "ECOMMERCE_SALE": "internet üzerinden satış",
+    "ADVERTISING": "reklam",
+    "SPONSORSHIP": "sponsorluk",
+    "PROMOTION": "promosyon",
+    "PRODUCT_PROMOTION": "ürün tanıtımı"
+  },
+  "facility_classes": {
+    "BREWERY": "bira üretim tesisi",
+    "MALTING_PLANT": "malt üretim tesisi",
+    "DISTILLERY": "damıtma tesisi",
+    "WINERY": "şarap üretim tesisi",
+    "BOTTLING_PLANT": "içecek dolum tesisi",
+    "WATER_BOTTLING_PLANT": "su dolum tesisi",
+    "WATER_SOURCE": "su kaynağı",
+    "WAREHOUSE": "depo",
+    "DISTRIBUTION_CENTER": "dağıtım merkezi",
+    "HEAD_OFFICE": "merkez ofis",
+    "RETAIL_OUTLET": "satış noktası"
+  },
+  "license_classes": {
+    "ALCOHOL_PRODUCTION_PERMIT": "alkollü içki üretim izni",
+    "ALCOHOL_IMPORT_PERMIT": "alkollü içki ithalat izni",
+    "ALCOHOL_WHOLESALE_PERMIT": "alkollü içki toptan satış izni",
+    "ALCOHOL_RETAIL_PERMIT": "alkollü içki perakende satış / sunum izni",
+    "FOOD_BUSINESS_REGISTRATION": "gıda işletmesi kayıt belgesi",
+    "FOOD_BUSINESS_APPROVAL": "gıda işletmesi onay belgesi",
+    "WATER_SOURCE_PERMIT": "su kaynağı kullanım izni",
+    "ENVIRONMENTAL_PERMIT": "çevre izni"
+  },
+  "product_classes": {
+    "BEER": {"label_tr": "bira", "alcohol": "ALCOHOLIC"},
+    "WINE": {"label_tr": "şarap", "alcohol": "ALCOHOLIC"},
+    "SPIRIT": {"label_tr": "distile alkollü içki", "alcohol": "ALCOHOLIC"},
+    "ALCOHOL_FREE_BEER": {"label_tr": "alkolsüz bira / malt içeceği", "alcohol": "NON_ALCOHOLIC"},
+    "CARBONATED_SOFT_DRINK": {"label_tr": "gazlı alkolsüz içecek", "alcohol": "NON_ALCOHOLIC"},
+    "STILL_SOFT_DRINK": {"label_tr": "gazsız alkolsüz içecek", "alcohol": "NON_ALCOHOLIC"},
+    "JUICE_NECTAR": {"label_tr": "meyve suyu / nektar", "alcohol": "NON_ALCOHOLIC"},
+    "ICED_TEA": {"label_tr": "soğuk çay", "alcohol": "NON_ALCOHOLIC"},
+    "SPORTS_DRINK": {"label_tr": "sporcu içeceği", "alcohol": "NON_ALCOHOLIC"},
+    "ENERGY_DRINK": {"label_tr": "enerji içeceği", "alcohol": "NON_ALCOHOLIC"},
+    "PACKAGED_WATER": {"label_tr": "ambalajlı içme suyu", "alcohol": "NON_ALCOHOLIC"},
+    "NATURAL_MINERAL_WATER": {"label_tr": "doğal mineralli su", "alcohol": "NON_ALCOHOLIC"}
+  },
+  "product_tags": {
+    "HEALTH_CLAIM": "sağlık beyanı taşır",
+    "NUTRITION_CLAIM": "beslenme beyanı taşır",
+    "ADDED_CAFFEINE": "kafein eklenmiş",
+    "ADDED_SUGAR": "şeker eklenmiş",
+    "SWEETENER": "tatlandırıcı içerir",
+    "RETURNABLE_PACKAGING": "depozitolu / iade edilebilir ambalaj",
+    "GLASS_PACKAGING": "cam ambalaj",
+    "PET_PACKAGING": "PET ambalaj",
+    "CAN_PACKAGING": "metal kutu ambalaj"
+  },
+  "sales_channels": {
+    "WHOLESALE_TRADE": "toptan ticaret",
+    "MODERN_RETAIL": "zincir market",
+    "TRADITIONAL_RETAIL": "bakkal / büfe",
+    "ON_PREMISE": "restoran / bar / otel",
+    "ONLINE": "internet",
+    "EXPORT_MARKET": "ihracat"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "format": "cardaman-tr-pack/1",
+  "pack_id": "TR_FOOD_BEVERAGE_COMMON",
+  "kind": "MODULE",
+  "title": "Gıda ve içecek ortak modülü (TR)",
+  "jurisdiction": "TR",
+  "sector": "BEVERAGE",
+  "subsector": "FOOD_BEVERAGE_COMMON",
+  "alcohol_scope": "ANY",
+  "regulators": ["TARIM_ORMAN", "CEVRE_SEHIRCILIK", "TICARET", "HAZINE_MALIYE"],
+  "regulation_ids": [
+    "TR:KANUN:5996",
+    "TR:YONETMELIK:GIDA_ISLETMELERI_KAYIT_ONAY",
+    "TR:YONETMELIK:TGK_ETIKETLEME",
+    "TR:YONETMELIK:TGK_BESLENME_SAGLIK_BEYANLARI",
+    "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+    "TR:KANUN:6502",
+    "TR:YONETMELIK:TICARI_REKLAM",
+    "TR:YONETMELIK:MESAFELI_SOZLESMELER",
+    "TR:KANUN:6563",
+    "TR:KANUN:4760"
+  ],
+  "includes": [],
+  "status": "ACTIVE",
+  "version": "0.1.0",
+  "notes": "Food law, labelling, claims, packaging, advertising, distance sales and excise tax: bind alcoholic and non-alcoholic beverage businesses alike. Included by both beverage packs; never selected on its own."
+}

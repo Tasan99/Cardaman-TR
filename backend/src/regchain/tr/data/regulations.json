@@ -1,0 +1,166 @@
+{
+  "format": "cardaman-tr-regulations/1",
+  "note": "Catalogue of TR sources the beverage packs route to. Titles and numbers are recorded as commonly cited; every entry stays UNVERIFIED until its mevzuat.gov.tr record (number, tertip, Resmî Gazete date, current text) is fetched by the ingestion layer. No effective date is recorded before that.",
+  "regulations": [
+    {
+      "regulation_id": "TR:KANUN:4733",
+      "title": "4733 sayılı Kanun (tütün, tütün mamulleri ve alkollü içkiler piyasasının düzenlenmesi)",
+      "jurisdiction": "TR", "regulator": "TARIM_ORMAN", "regulation_type": "KANUN", "binding_status": "BINDING",
+      "number": "4733", "effective_date": null, "effective_status": "UNKNOWN", "metadata_status": "UNVERIFIED",
+      "verification_note": "Current title, the competent authority after the 2017 reorganisation and the articles on alcohol sales, presentation, advertising and online sales are to be confirmed from the mevzuat.gov.tr text.",
+      "sector_tags": ["BEVERAGE", "ALCOHOL", "ADVERTISING"],
+      "activity_tags": ["PRODUCTION", "IMPORT", "WHOLESALE", "RETAIL_SALE", "ON_PREMISE_SERVICE", "ECOMMERCE_SALE", "ADVERTISING", "SPONSORSHIP", "PROMOTION"],
+      "product_tags": ["BEER", "WINE", "SPIRIT"],
+      "facility_tags": ["BREWERY", "DISTILLERY", "WINERY"]
+    },
+    {
+      "regulation_id": "TR:KANUN:4250",
+      "title": "4250 sayılı İspirto ve İspirtolu İçkiler İnhisarı Kanunu",
+      "jurisdiction": "TR", "regulator": "TARIM_ORMAN", "regulation_type": "KANUN", "binding_status": "BINDING",
+      "number": "4250", "effective_date": null, "effective_status": "UNKNOWN", "metadata_status": "UNVERIFIED",
+      "verification_note": "Which provisions remain in force and which authority applies them are to be confirmed; its scope is marked UNCLEAR until then.",
+      "sector_tags": ["BEVERAGE", "ALCOHOL"],
+      "activity_tags": ["PRODUCTION", "IMPORT"],
+      "product_tags": ["SPIRIT"]
+    },
+    {
+      "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+      "title": "Alkollü İçkilerin Satışına ve Sunumuna İlişkin Usul ve Esaslar Hakkında Yönetmelik",
+      "jurisdiction": "TR", "regulator": "TARIM_ORMAN", "regulation_type": "YONETMELIK", "binding_status": "BINDING",
+      "number": null, "effective_date": null, "effective_status": "UNKNOWN", "metadata_status": "UNVERIFIED",
+      "verification_note": "Mevzuat number, Resmî Gazete date and the current consolidated text are to be fetched.",
+      "sector_tags": ["BEVERAGE", "ALCOHOL"],
+      "entity_tags": ["WHOLESALER", "RETAILER", "ON_PREMISE_OPERATOR"],
+      "activity_tags": ["WHOLESALE", "RETAIL_SALE", "ON_PREMISE_SERVICE"],
+      "product_tags": ["BEER", "WINE", "SPIRIT"]
+    },
+    {
+      "regulation_id": "TR:YONETMELIK:INSANI_TUKETIM_SULAR",
+      "title": "İnsani Tüketim Amaçlı Sular Hakkında Yönetmelik",
+      "jurisdiction": "TR", "regulator": "SAGLIK", "regulation_type": "YONETMELIK", "binding_status": "BINDING",
+      "number": null, "effective_date": null, "effective_status": "UNKNOWN", "metadata_status": "UNVERIFIED",
+      "verification_note": "Mevzuat number, date and the provisions on packaged drinking water and bottling facilities are to be confirmed.",
+      "sector_tags": ["BEVERAGE", "WATER", "FOOD"],
+      "activity_tags": ["WATER_EXTRACTION", "BOTTLING"],
+      "product_tags": ["PACKAGED_WATER"],
+      "facility_tags": ["WATER_BOTTLING_PLANT", "WATER_SOURCE"]
+    },
+    {
+      "regulation_id": "TR:YONETMELIK:DOGAL_MINERALLI_SULAR",
+      "title": "Doğal Mineralli Sular Hakkında Yönetmelik",
+      "jurisdiction": "TR", "regulator": "SAGLIK", "regulation_type": "YONETMELIK", "binding_status": "BINDING",
+      "number": null, "effective_date": null, "effective_status": "UNKNOWN", "metadata_status": "UNVERIFIED",
+      "verification_note": "Mevzuat number, date and current text are to be confirmed.",
+      "sector_tags": ["BEVERAGE", "WATER", "FOOD"],
+      "product_tags": ["NATURAL_MINERAL_WATER"],
+      "facility_tags": ["WATER_BOTTLING_PLANT", "WATER_SOURCE"]
+    },
+    {
+      "regulation_id": "TR:TEBLIG:TGK_ENERJI_ICECEKLERI",
+      "title": "Türk Gıda Kodeksi enerji içecekleri tebliği",
+      "jurisdiction": "TR", "regulator": "TARIM_ORMAN", "regulation_type": "TEBLIG", "binding_status": "BINDING",
+      "number": null, "effective_date": null, "effective_status": "UNKNOWN", "metadata_status": "UNVERIFIED",
+      "verification_note": "Exact title and tebliğ number of the Türk Gıda Kodeksi text on energy drinks are to be confirmed.",
+      "sector_tags": ["BEVERAGE", "NON_ALCOHOLIC_BEVERAGE", "FOOD"],
+      "product_tags": ["ENERGY_DRINK"]
+    },
+    {
+      "regulation_id": "TR:TEBLIG:TGK_MEYVE_SUYU",
+      "title": "Türk Gıda Kodeksi Meyve Suyu ve Benzeri Ürünler Tebliği",
+      "jurisdiction": "TR", "regulator": "TARIM_ORMAN", "regulation_type": "TEBLIG", "binding_status": "BINDING",
+      "number": null, "effective_date": null, "effective_status": "UNKNOWN", "metadata_status": "UNVERIFIED",
+      "verification_note": "Tebliğ number and current text are to be confirmed.",
+      "sector_tags": ["BEVERAGE", "NON_ALCOHOLIC_BEVERAGE", "FOOD"],
+      "product_tags": ["JUICE_NECTAR"]
+    },
+    {
+      "regulation_id": "TR:KANUN:5996",
+      "title": "5996 sayılı Veteriner Hizmetleri, Bitki Sağlığı, Gıda ve Yem Kanunu",
+      "jurisdiction": "TR", "regulator": "TARIM_ORMAN", "regulation_type": "KANUN", "binding_status": "BINDING",
+      "number": "5996", "effective_date": null, "effective_status": "UNKNOWN", "metadata_status": "UNVERIFIED",
+      "verification_note": "Articles on food business operator duties are to be located in the current text.",
+      "sector_tags": ["FOOD", "BEVERAGE"],
+      "activity_tags": ["PRODUCTION", "BOTTLING", "PLACING_ON_MARKET"]
+    },
+    {
+      "regulation_id": "TR:YONETMELIK:GIDA_ISLETMELERI_KAYIT_ONAY",
+      "title": "Gıda İşletmelerinin Kayıt ve Onay İşlemlerine Dair Yönetmelik",
+      "jurisdiction": "TR", "regulator": "TARIM_ORMAN", "regulation_type": "YONETMELIK", "binding_status": "BINDING",
+      "number": null, "effective_date": null, "effective_status": "UNKNOWN", "metadata_status": "UNVERIFIED",
+      "verification_note": "Which beverage facilities need registration and which need approval is to be read from the current text; the pack scope covers production facilities only until then.",
+      "sector_tags": ["FOOD", "BEVERAGE"],
+      "activity_tags": ["PRODUCTION", "BOTTLING"],
+      "facility_tags": ["BREWERY", "MALTING_PLANT", "DISTILLERY", "WINERY", "BOTTLING_PLANT", "WATER_BOTTLING_PLANT"]
+    },
+    {
+      "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+      "title": "Türk Gıda Kodeksi Etiketleme ve Tüketicileri Bilgilendirme Yönetmeliği",
+      "jurisdiction": "TR", "regulator": "TARIM_ORMAN", "regulation_type": "YONETMELIK", "binding_status": "BINDING",
+      "number": null, "effective_date": null, "effective_status": "UNKNOWN", "metadata_status": "UNVERIFIED",
+      "verification_note": "Mevzuat number, date and the exemptions for beverages above an alcohol threshold are to be confirmed.",
+      "sector_tags": ["FOOD", "BEVERAGE", "CONSUMER"]
+    },
+    {
+      "regulation_id": "TR:YONETMELIK:TGK_BESLENME_SAGLIK_BEYANLARI",
+      "title": "Türk Gıda Kodeksi Beslenme ve Sağlık Beyanları Yönetmeliği",
+      "jurisdiction": "TR", "regulator": "TARIM_ORMAN", "regulation_type": "YONETMELIK", "binding_status": "BINDING",
+      "number": null, "effective_date": null, "effective_status": "UNKNOWN", "metadata_status": "UNVERIFIED",
+      "verification_note": "Mevzuat number, date and the rules for claims on alcoholic beverages are to be confirmed.",
+      "sector_tags": ["FOOD", "BEVERAGE", "CONSUMER"]
+    },
+    {
+      "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+      "title": "Ambalaj Atıklarının Kontrolü Yönetmeliği",
+      "jurisdiction": "TR", "regulator": "CEVRE_SEHIRCILIK", "regulation_type": "YONETMELIK", "binding_status": "BINDING",
+      "number": null, "effective_date": null, "effective_status": "UNKNOWN", "metadata_status": "UNVERIFIED",
+      "verification_note": "The version in force and the definition of the party placing packaging on the market are to be confirmed.",
+      "sector_tags": ["ENVIRONMENT", "BEVERAGE"],
+      "activity_tags": ["PRODUCTION", "BOTTLING", "IMPORT", "PLACING_ON_MARKET"]
+    },
+    {
+      "regulation_id": "TR:KANUN:6502",
+      "title": "6502 sayılı Tüketicinin Korunması Hakkında Kanun",
+      "jurisdiction": "TR", "regulator": "TICARET", "regulation_type": "KANUN", "binding_status": "BINDING",
+      "number": "6502", "effective_date": null, "effective_status": "UNKNOWN", "metadata_status": "UNVERIFIED",
+      "verification_note": "Articles on commercial advertising and distance contracts are to be located in the current text.",
+      "sector_tags": ["CONSUMER", "ADVERTISING"],
+      "activity_tags": ["RETAIL_SALE", "ECOMMERCE_SALE", "ADVERTISING"]
+    },
+    {
+      "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+      "title": "Ticari Reklam ve Haksız Ticari Uygulamalar Yönetmeliği",
+      "jurisdiction": "TR", "regulator": "TICARET", "regulation_type": "YONETMELIK", "binding_status": "BINDING",
+      "number": null, "effective_date": null, "effective_status": "UNKNOWN", "metadata_status": "UNVERIFIED",
+      "verification_note": "Mevzuat number, date and current consolidated text are to be fetched.",
+      "sector_tags": ["ADVERTISING", "CONSUMER"],
+      "activity_tags": ["ADVERTISING", "PROMOTION", "PRODUCT_PROMOTION"]
+    },
+    {
+      "regulation_id": "TR:YONETMELIK:MESAFELI_SOZLESMELER",
+      "title": "Mesafeli Sözleşmeler Yönetmeliği",
+      "jurisdiction": "TR", "regulator": "TICARET", "regulation_type": "YONETMELIK", "binding_status": "BINDING",
+      "number": null, "effective_date": null, "effective_status": "UNKNOWN", "metadata_status": "UNVERIFIED",
+      "verification_note": "Mevzuat number, date and current text are to be fetched.",
+      "sector_tags": ["CONSUMER", "ECOMMERCE"],
+      "activity_tags": ["ECOMMERCE_SALE"]
+    },
+    {
+      "regulation_id": "TR:KANUN:6563",
+      "title": "6563 sayılı Elektronik Ticaretin Düzenlenmesi Hakkında Kanun",
+      "jurisdiction": "TR", "regulator": "TICARET", "regulation_type": "KANUN", "binding_status": "BINDING",
+      "number": "6563", "effective_date": null, "effective_status": "UNKNOWN", "metadata_status": "UNVERIFIED",
+      "verification_note": "Catalogued for routing only; no scope is attached until its provisions are read.",
+      "sector_tags": ["ECOMMERCE", "CONSUMER"],
+      "activity_tags": ["ECOMMERCE_SALE"]
+    },
+    {
+      "regulation_id": "TR:KANUN:4760",
+      "title": "4760 sayılı Özel Tüketim Vergisi Kanunu",
+      "jurisdiction": "TR", "regulator": "HAZINE_MALIYE", "regulation_type": "KANUN", "binding_status": "BINDING",
+      "number": "4760", "effective_date": null, "effective_status": "UNKNOWN", "metadata_status": "UNVERIFIED",
+      "verification_note": "Which beverage classes the lists of the Kanun cover, and the link to tax stamp (bandrol) duties, are to be confirmed; its scope is marked UNCLEAR until then.",
+      "sector_tags": ["TAX", "BEVERAGE"],
+      "activity_tags": ["PRODUCTION", "IMPORT"]
+    }
+  ]
+}

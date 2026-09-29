@@ -1,0 +1,31 @@
+{
+  "format": "cardaman-tr-pack/1",
+  "pack_id": "BEVERAGE_NON_ALCOHOL_TR",
+  "kind": "PACK",
+  "title": "Alkolsüz içecek paketi (TR)",
+  "jurisdiction": "TR",
+  "sector": "BEVERAGE",
+  "subsector": "NON_ALCOHOLIC_BEVERAGE",
+  "alcohol_scope": "NON_ALCOHOLIC",
+  "regulators": ["SAGLIK", "TARIM_ORMAN", "CEVRE_SEHIRCILIK", "TICARET", "HAZINE_MALIYE"],
+  "regulation_ids": [
+    "TR:YONETMELIK:INSANI_TUKETIM_SULAR",
+    "TR:YONETMELIK:DOGAL_MINERALLI_SULAR",
+    "TR:TEBLIG:TGK_ENERJI_ICECEKLERI",
+    "TR:TEBLIG:TGK_MEYVE_SUYU"
+  ],
+  "includes": ["TR_FOOD_BEVERAGE_COMMON"],
+  "product_classes": ["ALCOHOL_FREE_BEER", "CARBONATED_SOFT_DRINK", "STILL_SOFT_DRINK", "JUICE_NECTAR", "ICED_TEA",
+                      "SPORTS_DRINK", "ENERGY_DRINK", "PACKAGED_WATER", "NATURAL_MINERAL_WATER"],
+  "activity_classes": ["PRODUCTION", "BOTTLING", "WATER_EXTRACTION", "IMPORT", "EXPORT", "DISTRIBUTION", "WAREHOUSING",
+                       "WHOLESALE", "RETAIL_SALE", "ECOMMERCE_SALE", "ADVERTISING", "SPONSORSHIP", "PROMOTION",
+                       "PRODUCT_PROMOTION", "PLACING_ON_MARKET"],
+  "facility_classes": ["BOTTLING_PLANT", "WATER_BOTTLING_PLANT", "WATER_SOURCE", "WAREHOUSE", "DISTRIBUTION_CENTER"],
+  "entity_classes": ["PRODUCER", "BOTTLER", "IMPORTER", "EXPORTER", "DISTRIBUTOR", "WHOLESALER", "RETAILER", "ONLINE_SELLER",
+                     "BRAND_OWNER"],
+  "license_classes": ["FOOD_BUSINESS_REGISTRATION", "FOOD_BUSINESS_APPROVAL", "WATER_SOURCE_PERMIT", "ENVIRONMENTAL_PERMIT"],
+  "source_layers": ["BINDING", "OFFICIAL_GUIDANCE"],
+  "status": "ACTIVE",
+  "version": "0.1.0",
+  "notes": "Selected for a company that makes, bottles, distributes or sells a non-alcoholic product class (soft drinks, energy drinks, packaged and mineral water, juices, alcohol-free beer)."
+}

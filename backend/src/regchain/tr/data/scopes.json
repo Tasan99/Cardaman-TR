@@ -1,0 +1,119 @@
+{
+  "format": "cardaman-tr-scopes/1",
+  "note": "Topic-level scopes from pack metadata (origin PACK_METADATA, provision UNRESOLVED): they route a duty to the kind of target it lands on. The article and subclause are attached when the text is ingested and its scope extracted (origin EXTRACTED). A scope whose addressee is not yet read is UNCLEAR and always answers UNKNOWN.",
+  "scopes": [
+    {
+      "scope_id": "ALC_ADVERTISING_PROMOTION", "regulation_id": "TR:KANUN:4733", "topic": "ALCOHOL_ADVERTISING",
+      "description_tr": "Alkollü içkilerin reklamı, sponsorluğu, promosyonu ve ürün tanıtımına ilişkin kısıtlar.",
+      "level": "ACTIVITY", "provision_ref": null, "provision_status": "UNRESOLVED", "alcohol_scope": "ALCOHOLIC",
+      "activity_classes": ["ADVERTISING", "SPONSORSHIP", "PROMOTION", "PRODUCT_PROMOTION"]
+    },
+    {
+      "scope_id": "ALC_SALES_PRESENTATION", "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM", "topic": "ALCOHOL_SALES",
+      "description_tr": "Alkollü içkilerin toptan ve perakende satışı ile sunumu: satış noktası, yaş sınırı ve satış koşulları.",
+      "level": "LEGAL_ENTITY", "provision_ref": null, "provision_status": "UNRESOLVED", "alcohol_scope": "ALCOHOLIC",
+      "activity_classes": ["WHOLESALE", "RETAIL_SALE", "ON_PREMISE_SERVICE"]
+    },
+    {
+      "scope_id": "ALC_ONLINE_SALES", "regulation_id": "TR:KANUN:4733", "topic": "ALCOHOL_ECOMMERCE",
+      "description_tr": "Alkollü içkilerin internet üzerinden satışına ilişkin kısıtlar.",
+      "level": "LEGAL_ENTITY", "provision_ref": null, "provision_status": "UNRESOLVED", "alcohol_scope": "ALCOHOLIC",
+      "activity_classes": ["ECOMMERCE_SALE"]
+    },
+    {
+      "scope_id": "ALC_PRODUCTION_FACILITY", "regulation_id": "TR:KANUN:4733", "topic": "ALCOHOL_FACILITY_PERMISSION",
+      "description_tr": "Alkollü içki üretim tesislerine ilişkin izin ve tesis yükümlülükleri.",
+      "level": "FACILITY", "provision_ref": null, "provision_status": "UNRESOLVED", "alcohol_scope": "ALCOHOLIC",
+      "facility_classes": ["BREWERY", "DISTILLERY", "WINERY"], "activity_classes": ["PRODUCTION"]
+    },
+    {
+      "scope_id": "ALC_PERMIT_HOLDER_DUTIES", "regulation_id": "TR:KANUN:4733", "topic": "ALCOHOL_LICENCE",
+      "description_tr": "Alkollü içki üretim, ithalat veya toptan satış izni sahiplerinin yükümlülükleri.",
+      "level": "LEGAL_ENTITY", "provision_ref": null, "provision_status": "UNRESOLVED", "alcohol_scope": "ALCOHOLIC",
+      "license_classes": ["ALCOHOL_PRODUCTION_PERMIT", "ALCOHOL_IMPORT_PERMIT", "ALCOHOL_WHOLESALE_PERMIT"]
+    },
+    {
+      "scope_id": "ALC_LABEL_WARNINGS", "regulation_id": "TR:KANUN:4733", "topic": "ALCOHOL_LABELLING",
+      "description_tr": "Alkollü içki ambalaj ve etiketlerinde uyarı ve bilgi gereklilikleri.",
+      "level": "PRODUCT", "provision_ref": null, "provision_status": "UNRESOLVED", "alcohol_scope": "ALCOHOLIC"
+    },
+    {
+      "scope_id": "ALC_SPIRIT_MONOPOLY", "regulation_id": "TR:KANUN:4250", "topic": "SPIRITS",
+      "description_tr": "İspirto ve ispirtolu içkilere ilişkin hükümler (yürürlükteki kapsam doğrulanacak).",
+      "level": "LEGAL_ENTITY", "provision_ref": null, "provision_status": "UNRESOLVED", "scope_status": "UNCLEAR",
+      "alcohol_scope": "ALCOHOLIC", "activity_classes": ["PRODUCTION", "IMPORT"], "product_classes": ["SPIRIT"]
+    },
+    {
+      "scope_id": "ENERGY_DRINK_PRODUCT", "regulation_id": "TR:TEBLIG:TGK_ENERJI_ICECEKLERI", "topic": "ENERGY_DRINK",
+      "description_tr": "Enerji içeceklerinin bileşim ve etiket gereklilikleri.",
+      "level": "PRODUCT", "provision_ref": null, "provision_status": "UNRESOLVED", "alcohol_scope": "NON_ALCOHOLIC",
+      "product_classes": ["ENERGY_DRINK"]
+    },
+    {
+      "scope_id": "PACKAGED_WATER_PRODUCT", "regulation_id": "TR:YONETMELIK:INSANI_TUKETIM_SULAR", "topic": "PACKAGED_WATER",
+      "description_tr": "Ambalajlı içme sularının nitelik ve etiket gereklilikleri.",
+      "level": "PRODUCT", "provision_ref": null, "provision_status": "UNRESOLVED", "alcohol_scope": "NON_ALCOHOLIC",
+      "product_classes": ["PACKAGED_WATER"]
+    },
+    {
+      "scope_id": "WATER_BOTTLING_FACILITY", "regulation_id": "TR:YONETMELIK:INSANI_TUKETIM_SULAR", "topic": "WATER_FACILITY",
+      "description_tr": "Su kaynağı ve su dolum tesislerine ilişkin izin ve tesis yükümlülükleri.",
+      "level": "FACILITY", "provision_ref": null, "provision_status": "UNRESOLVED", "alcohol_scope": "NON_ALCOHOLIC",
+      "facility_classes": ["WATER_BOTTLING_PLANT", "WATER_SOURCE"], "activity_classes": ["WATER_EXTRACTION", "BOTTLING"]
+    },
+    {
+      "scope_id": "NATURAL_MINERAL_WATER_PRODUCT", "regulation_id": "TR:YONETMELIK:DOGAL_MINERALLI_SULAR", "topic": "MINERAL_WATER",
+      "description_tr": "Doğal mineralli suların nitelik ve etiket gereklilikleri.",
+      "level": "PRODUCT", "provision_ref": null, "provision_status": "UNRESOLVED", "alcohol_scope": "NON_ALCOHOLIC",
+      "product_classes": ["NATURAL_MINERAL_WATER"]
+    },
+    {
+      "scope_id": "JUICE_NECTAR_PRODUCT", "regulation_id": "TR:TEBLIG:TGK_MEYVE_SUYU", "topic": "JUICE",
+      "description_tr": "Meyve suyu ve nektarların bileşim ve etiket gereklilikleri.",
+      "level": "PRODUCT", "provision_ref": null, "provision_status": "UNRESOLVED", "alcohol_scope": "NON_ALCOHOLIC",
+      "product_classes": ["JUICE_NECTAR"]
+    },
+    {
+      "scope_id": "FOOD_PRODUCTION_FACILITY", "regulation_id": "TR:YONETMELIK:GIDA_ISLETMELERI_KAYIT_ONAY", "topic": "FOOD_FACILITY",
+      "description_tr": "Gıda üretim ve dolum tesislerinin kayıt / onay yükümlülükleri.",
+      "level": "FACILITY", "provision_ref": null, "provision_status": "UNRESOLVED",
+      "facility_classes": ["BREWERY", "MALTING_PLANT", "DISTILLERY", "WINERY", "BOTTLING_PLANT", "WATER_BOTTLING_PLANT"],
+      "activity_classes": ["PRODUCTION", "BOTTLING"]
+    },
+    {
+      "scope_id": "FOOD_LABELLING_GENERAL", "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME", "topic": "FOOD_LABELLING",
+      "description_tr": "Gıda etiketleme ve tüketicinin bilgilendirilmesi genel gereklilikleri.",
+      "level": "PRODUCT", "provision_ref": null, "provision_status": "UNRESOLVED"
+    },
+    {
+      "scope_id": "NUTRITION_HEALTH_CLAIMS", "regulation_id": "TR:YONETMELIK:TGK_BESLENME_SAGLIK_BEYANLARI", "topic": "CLAIMS",
+      "description_tr": "Beslenme ve sağlık beyanı taşıyan ürünlere ilişkin gereklilikler.",
+      "level": "PRODUCT", "provision_ref": null, "provision_status": "UNRESOLVED",
+      "product_attributes": ["HEALTH_CLAIM", "NUTRITION_CLAIM"]
+    },
+    {
+      "scope_id": "PACKAGING_WASTE_PLACING_ON_MARKET", "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI", "topic": "PACKAGING_WASTE",
+      "description_tr": "Ambalajlı ürünü piyasaya sürenlerin ambalaj atığı yükümlülükleri.",
+      "level": "LEGAL_ENTITY", "provision_ref": null, "provision_status": "UNRESOLVED",
+      "activity_classes": ["PRODUCTION", "BOTTLING", "IMPORT", "PLACING_ON_MARKET"]
+    },
+    {
+      "scope_id": "COMMERCIAL_ADVERTISING_GENERAL", "regulation_id": "TR:YONETMELIK:TICARI_REKLAM", "topic": "ADVERTISING",
+      "description_tr": "Ticari reklam ve tanıtımın genel ilkeleri.",
+      "level": "ACTIVITY", "provision_ref": null, "provision_status": "UNRESOLVED",
+      "activity_classes": ["ADVERTISING", "PROMOTION", "PRODUCT_PROMOTION"]
+    },
+    {
+      "scope_id": "DISTANCE_SALES", "regulation_id": "TR:YONETMELIK:MESAFELI_SOZLESMELER", "topic": "DISTANCE_SALES",
+      "description_tr": "İnternet üzerinden tüketiciye satışta mesafeli sözleşme yükümlülükleri.",
+      "level": "LEGAL_ENTITY", "provision_ref": null, "provision_status": "UNRESOLVED",
+      "activity_classes": ["ECOMMERCE_SALE"]
+    },
+    {
+      "scope_id": "EXCISE_TAX_BEVERAGES", "regulation_id": "TR:KANUN:4760", "topic": "EXCISE_TAX",
+      "description_tr": "Özel tüketim vergisi kapsamındaki içeceklerin üretimi veya ithalatı (kapsam doğrulanacak).",
+      "level": "LEGAL_ENTITY", "provision_ref": null, "provision_status": "UNRESOLVED", "scope_status": "UNCLEAR",
+      "activity_classes": ["PRODUCTION", "IMPORT"]
+    }
+  ]
+}

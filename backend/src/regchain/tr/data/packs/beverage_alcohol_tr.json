@@ -1,0 +1,29 @@
+{
+  "format": "cardaman-tr-pack/1",
+  "pack_id": "BEVERAGE_ALCOHOL_TR",
+  "kind": "PACK",
+  "title": "Alkollü içecek paketi (TR)",
+  "jurisdiction": "TR",
+  "sector": "BEVERAGE",
+  "subsector": "ALCOHOLIC_BEVERAGE",
+  "alcohol_scope": "ALCOHOLIC",
+  "regulators": ["TARIM_ORMAN", "CEVRE_SEHIRCILIK", "TICARET", "HAZINE_MALIYE"],
+  "regulation_ids": [
+    "TR:KANUN:4733",
+    "TR:KANUN:4250",
+    "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM"
+  ],
+  "includes": ["TR_FOOD_BEVERAGE_COMMON"],
+  "product_classes": ["BEER", "WINE", "SPIRIT"],
+  "activity_classes": ["PRODUCTION", "IMPORT", "EXPORT", "DISTRIBUTION", "WAREHOUSING", "WHOLESALE", "RETAIL_SALE",
+                       "ON_PREMISE_SERVICE", "ECOMMERCE_SALE", "ADVERTISING", "SPONSORSHIP", "PROMOTION", "PRODUCT_PROMOTION"],
+  "facility_classes": ["BREWERY", "MALTING_PLANT", "DISTILLERY", "WINERY", "WAREHOUSE", "DISTRIBUTION_CENTER", "RETAIL_OUTLET"],
+  "entity_classes": ["PRODUCER", "IMPORTER", "EXPORTER", "DISTRIBUTOR", "WHOLESALER", "RETAILER", "ON_PREMISE_OPERATOR",
+                     "BRAND_OWNER"],
+  "license_classes": ["ALCOHOL_PRODUCTION_PERMIT", "ALCOHOL_IMPORT_PERMIT", "ALCOHOL_WHOLESALE_PERMIT", "ALCOHOL_RETAIL_PERMIT",
+                      "FOOD_BUSINESS_REGISTRATION", "FOOD_BUSINESS_APPROVAL"],
+  "source_layers": ["BINDING", "OFFICIAL_GUIDANCE"],
+  "status": "ACTIVE",
+  "version": "0.1.0",
+  "notes": "Selected for a company that makes, imports, distributes, sells, serves or advertises an alcoholic product class. Board decisions (Rekabet, Reklam Kurulu) are a second-phase layer."
+}
