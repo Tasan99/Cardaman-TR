@@ -1,0 +1,72 @@
+{
+  "format": "cardaman-evaluation-dataset-v1",
+  "dataset_id": "BEVERAGE_TR_DEV_V1",
+  "version": "0.1.0",
+  "label_status": "DEVELOPMENT",
+  "note": "Developer-labelled contrast cases on synthetic pilot profiles. INDICATIVE only. Not expert gold. No label is copied from a model.",
+  "tasks": ["APPLICABILITY", "ACTOR_MATCH", "ACTIVITY_MATCH", "PRODUCT_MATCH", "FACILITY_MATCH"],
+  "target_per_task": 100,
+  "cases": [
+    {
+      "case_id": "DEV-ALC-ADS-VS-SOFT",
+      "family": "CROSS_PACK",
+      "task": "APPLICABILITY",
+      "scope_id": "ALC_ADVERTISING_PROMOTION",
+      "pair": [
+        {"profile": "ALCOHOL_GROUP_EFES_TYPE", "expected": "PARTIAL", "note": "group has alcoholic advertising activities and an alcohol-free beer ad"},
+        {"profile": "NON_ALCOHOL_GROUP_COCA_COLA_TYPE", "expected": "DOES_NOT_APPLY", "note": "no alcoholic product"}
+      ]
+    },
+    {
+      "case_id": "DEV-ALC-SALES-VS-SOFT",
+      "family": "CROSS_PACK",
+      "task": "APPLICABILITY",
+      "scope_id": "ALC_SALES_PRESENTATION",
+      "pair": [
+        {"profile": "ALCOHOL_GROUP_TUBORG_TYPE", "target_id": "ALC-IMP-TRADING", "expected": "APPLIES"},
+        {"profile": "NON_ALCOHOL_GROUP_COCA_COLA_TYPE", "expected": "DOES_NOT_APPLY"}
+      ]
+    },
+    {
+      "case_id": "DEV-ENERGY-VS-WATER",
+      "family": "CROSS_PRODUCT",
+      "task": "PRODUCT_MATCH",
+      "scope_id": "ENERGY_DRINK_PRODUCT",
+      "profile": "NON_ALCOHOL_GROUP_COCA_COLA_TYPE",
+      "pair": [
+        {"target_id": "NONALC-ENERGY", "expected": "APPLIES"},
+        {"target_id": "NONALC-WATER", "expected": "DOES_NOT_APPLY"}
+      ]
+    },
+    {
+      "case_id": "DEV-WATER-VS-BEER",
+      "family": "CROSS_PACK",
+      "task": "PRODUCT_MATCH",
+      "scope_id": "PACKAGED_WATER_PRODUCT",
+      "pair": [
+        {"profile": "NON_ALCOHOL_GROUP_COCA_COLA_TYPE", "target_id": "NONALC-WATER", "expected": "APPLIES"},
+        {"profile": "ALCOHOL_GROUP_EFES_TYPE", "target_id": "ALC-INT-LAGER", "expected": "DOES_NOT_APPLY"}
+      ]
+    },
+    {
+      "case_id": "DEV-PACKAGING-BOTH",
+      "family": "HORIZONTAL",
+      "task": "APPLICABILITY",
+      "scope_id": "PACKAGING_WASTE_PLACING_ON_MARKET",
+      "pair": [
+        {"profile": "ALCOHOL_GROUP_EFES_TYPE", "target_id": "ALC-INT-BREWING", "expected": "APPLIES"},
+        {"profile": "NON_ALCOHOL_GROUP_COCA_COLA_TYPE", "target_id": "NONALC-BOTTLING", "expected": "APPLIES"}
+      ]
+    },
+    {
+      "case_id": "DEV-FOOD-LABEL-BOTH",
+      "family": "HORIZONTAL",
+      "task": "APPLICABILITY",
+      "scope_id": "FOOD_LABELLING_GENERAL",
+      "pair": [
+        {"profile": "ALCOHOL_GROUP_EFES_TYPE", "target_id": "ALC-INT-LAGER", "expected": "APPLIES"},
+        {"profile": "NON_ALCOHOL_GROUP_COCA_COLA_TYPE", "target_id": "NONALC-COLA", "expected": "APPLIES"}
+      ]
+    }
+  ]
+}
