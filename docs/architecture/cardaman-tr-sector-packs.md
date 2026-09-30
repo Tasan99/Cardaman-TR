@@ -542,6 +542,8 @@ Corpus: escalation 4.8 / 5.7 / 3.4 % of the obligations (6.2 / 10.0 / 7.7 % of t
 - The clause escalation (nested exception, several parties, cross-reference, unclear addressee, reader disagreement) does not target the rule reader's errors: on HOLDOUT it reached 1 of 7.
 - HOLDOUT is development data since commit 3e36ebf; the next round needs a fresh unseen set, and the validation register and its labels were written by the same developer (blind to results, not to the code).
 - Applicability of horizontal duties rests on the catalogue, not on a company fact (`REGULATION_SCOPE`, 695 of 3235 brewer rows); it is recorded, not verified against the profile.
+- The anchored lower retrieval floor (0.55 with two shared stems) admits far more pairs on the whole corpus than on the labelled cases: escalation rose to 19 / 31 / 25 % of the rows (13.5 / 17.1 / 12.2 % of the obligations), above the 5-15 % target for rows. Three shared stems measured 7/9 gold instead of 8/9 on HOLDOUT with 3 of 550 other pairs; not changed in this round so that the validation set stays scored once. Model time stayed low: 6.9 s per call, 0.95 s per obligation (brewer, 8B without thinking, 370 calls, 40 minutes).
+- A PARTIAL the model reads alone is taken as the coverage (146 brewer rows); measured right on the labelled sets, not at corpus scale.
 - Development labels only; no expert gold.
 
 ---

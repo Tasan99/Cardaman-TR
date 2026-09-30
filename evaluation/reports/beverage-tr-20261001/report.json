@@ -6,7 +6,7 @@
  "code": {
   "frozen_before": "6658175",
   "frozen_after": "3e36ebf",
-  "head": "ef1693d"
+  "head": "426def4"
  },
  "splits": {
   "DEV": "fit (rules were corrected against it)",
@@ -2522,7 +2522,269 @@
    "rules_version": "tr-adjudication-v2"
   }
  },
- "corpus_final_3e36ebf": {},
+ "corpus_final_3e36ebf": {
+  "corpus:pilots": {
+   "tr-bev-pilot-alcohol-integrated": {
+    "rows": 3218,
+    "obligations": 2550,
+    "obligations_with_rows": 1288,
+    "escalated_rows": 616,
+    "escalated_obligations": 344,
+    "escalation_rate_rows": 0.1914,
+    "escalation_rate_obligations": 0.1349,
+    "adjudications": 0,
+    "by_reason": {
+     "POSSIBLE_CONFLICT": 57,
+     "SEMANTIC_PARAPHRASE": 616
+    },
+    "review_required": 33,
+    "decision_review_rows": 10,
+    "decision_review_obligations": 2,
+    "decision_review_rate_rows": 0.0031,
+    "decision_review_reasons": {
+     "ADDRESSEE_UNCLEAR": 10
+    },
+    "proposals": {},
+    "calls_failed": 0,
+    "calls_without_thinking": 0,
+    "escalated_unresolved_rows": 0,
+    "rows_applying_by_regulation_scope": 666,
+    "rows_not_verified": 0,
+    "model_ms": 0,
+    "model_ms_per_obligation": 0.0,
+    "model_ms_per_call": null,
+    "model_ms_per_call_median": null,
+    "model_ms_per_call_max": null,
+    "by_basis": {
+     "RULE_ONLY": 3218
+    },
+    "rules_version": "tr-adjudication-v2"
+   },
+   "tr-bev-pilot-non-alcohol-bottler": {
+    "rows": 3409,
+    "obligations": 2550,
+    "obligations_with_rows": 1311,
+    "escalated_rows": 1065,
+    "escalated_obligations": 435,
+    "escalation_rate_rows": 0.3124,
+    "escalation_rate_obligations": 0.1706,
+    "adjudications": 0,
+    "by_reason": {
+     "POSSIBLE_CONFLICT": 10,
+     "SEMANTIC_PARAPHRASE": 1061
+    },
+    "review_required": 15,
+    "decision_review_rows": 14,
+    "decision_review_obligations": 2,
+    "decision_review_rate_rows": 0.0041,
+    "decision_review_reasons": {
+     "ADDRESSEE_UNCLEAR": 14
+    },
+    "proposals": {},
+    "calls_failed": 0,
+    "calls_without_thinking": 0,
+    "escalated_unresolved_rows": 0,
+    "rows_applying_by_regulation_scope": 929,
+    "rows_not_verified": 0,
+    "model_ms": 0,
+    "model_ms_per_obligation": 0.0,
+    "model_ms_per_call": null,
+    "model_ms_per_call_median": null,
+    "model_ms_per_call_max": null,
+    "by_basis": {
+     "RULE_ONLY": 3409
+    },
+    "rules_version": "tr-adjudication-v2"
+   },
+   "tr-bev-pilot-alcohol-import": {
+    "rows": 2102,
+    "obligations": 2550,
+    "obligations_with_rows": 1187,
+    "escalated_rows": 518,
+    "escalated_obligations": 312,
+    "escalation_rate_rows": 0.2464,
+    "escalation_rate_obligations": 0.1224,
+    "adjudications": 0,
+    "by_reason": {
+     "POSSIBLE_CONFLICT": 13,
+     "SEMANTIC_PARAPHRASE": 518
+    },
+    "review_required": 19,
+    "decision_review_rows": 11,
+    "decision_review_obligations": 5,
+    "decision_review_rate_rows": 0.0052,
+    "decision_review_reasons": {
+     "ADDRESSEE_UNCLEAR": 8,
+     "APPLICABILITY_REVIEW": 3
+    },
+    "proposals": {},
+    "calls_failed": 0,
+    "calls_without_thinking": 0,
+    "escalated_unresolved_rows": 0,
+    "rows_applying_by_regulation_scope": 531,
+    "rows_not_verified": 0,
+    "model_ms": 0,
+    "model_ms_per_obligation": 0.0,
+    "model_ms_per_call": null,
+    "model_ms_per_call_median": null,
+    "model_ms_per_call_max": null,
+    "by_basis": {
+     "RULE_ONLY": 2102
+    },
+    "rules_version": "tr-adjudication-v2"
+   }
+  },
+  "corpus": {
+   "elapsed_s": 385.1
+  },
+  "corpus-adjudicate-quick:pilots": {
+   "tr-bev-pilot-alcohol-integrated": {
+    "rows": 3218,
+    "obligations": 2550,
+    "obligations_with_rows": 1288,
+    "escalated_rows": 616,
+    "escalated_obligations": 344,
+    "escalation_rate_rows": 0.1914,
+    "escalation_rate_obligations": 0.1349,
+    "adjudications": 370,
+    "by_reason": {
+     "POSSIBLE_CONFLICT": 57,
+     "SEMANTIC_PARAPHRASE": 616
+    },
+    "review_required": 315,
+    "decision_review_rows": 292,
+    "decision_review_obligations": 154,
+    "decision_review_rate_rows": 0.0907,
+    "decision_review_reasons": {
+     "ADDRESSEE_UNCLEAR": 10,
+     "MODEL_CONFLICT_UNCONFIRMED": 227,
+     "MODEL_PROPOSES_COVERED": 60
+    },
+    "proposals": {
+     "NO_EVIDENCE->CONFLICT": 223,
+     "NO_EVIDENCE->COVERS_TEXT": 59,
+     "PARTIAL->CONFLICT": 4,
+     "PARTIAL->COVERS_TEXT": 1
+    },
+    "calls_failed": 0,
+    "calls_without_thinking": 0,
+    "escalated_unresolved_rows": 0,
+    "rows_applying_by_regulation_scope": 666,
+    "rows_not_verified": 0,
+    "model_ms": 2429498,
+    "model_ms_per_obligation": 952.7,
+    "model_ms_per_call": 6855.9,
+    "model_ms_per_call_median": 5590,
+    "model_ms_per_call_max": 20049,
+    "by_basis": {
+     "BOTH_READINGS": 183,
+     "MODEL_CONFLICT_UNCONFIRMED": 227,
+     "MODEL_PROPOSES_COVERED": 60,
+     "RULE_ONLY": 2602,
+     "SEMANTIC_ADJUDICATED": 146
+    },
+    "rules_version": "tr-adjudication-v2"
+   },
+   "tr-bev-pilot-non-alcohol-bottler": {
+    "rows": 3409,
+    "obligations": 2550,
+    "obligations_with_rows": 1311,
+    "escalated_rows": 1065,
+    "escalated_obligations": 435,
+    "escalation_rate_rows": 0.3124,
+    "escalation_rate_obligations": 0.1706,
+    "adjudications": 473,
+    "by_reason": {
+     "POSSIBLE_CONFLICT": 10,
+     "SEMANTIC_PARAPHRASE": 1061
+    },
+    "review_required": 400,
+    "decision_review_rows": 399,
+    "decision_review_obligations": 165,
+    "decision_review_rate_rows": 0.117,
+    "decision_review_reasons": {
+     "ADDRESSEE_UNCLEAR": 14,
+     "ADJUDICATION_UNRESOLVED": 22,
+     "MODEL_CONFLICT_UNCONFIRMED": 139,
+     "MODEL_PROPOSES_COVERED": 224
+    },
+    "proposals": {
+     "NO_EVIDENCE->CONFLICT": 133,
+     "NO_EVIDENCE->COVERS_TEXT": 220,
+     "NO_EVIDENCE->UNKNOWN": 22,
+     "PARTIAL->CONFLICT": 6,
+     "PARTIAL->COVERS_TEXT": 4
+    },
+    "calls_failed": 0,
+    "calls_without_thinking": 0,
+    "escalated_unresolved_rows": 22,
+    "rows_applying_by_regulation_scope": 929,
+    "rows_not_verified": 0,
+    "model_ms": 2804263,
+    "model_ms_per_obligation": 1099.7,
+    "model_ms_per_call": 5819.8,
+    "model_ms_per_call_median": 4534,
+    "model_ms_per_call_max": 18892,
+    "by_basis": {
+     "BOTH_READINGS": 298,
+     "MODEL_CONFLICT_UNCONFIRMED": 139,
+     "MODEL_PROPOSES_COVERED": 224,
+     "RULE_ONLY": 2366,
+     "SEMANTIC_ADJUDICATED": 382
+    },
+    "rules_version": "tr-adjudication-v2"
+   },
+   "tr-bev-pilot-alcohol-import": {
+    "rows": 2102,
+    "obligations": 2550,
+    "obligations_with_rows": 1187,
+    "escalated_rows": 518,
+    "escalated_obligations": 312,
+    "escalation_rate_rows": 0.2464,
+    "escalation_rate_obligations": 0.1224,
+    "adjudications": 320,
+    "by_reason": {
+     "POSSIBLE_CONFLICT": 13,
+     "SEMANTIC_PARAPHRASE": 518
+    },
+    "review_required": 230,
+    "decision_review_rows": 222,
+    "decision_review_obligations": 143,
+    "decision_review_rate_rows": 0.1056,
+    "decision_review_reasons": {
+     "ADDRESSEE_UNCLEAR": 8,
+     "APPLICABILITY_REVIEW": 3,
+     "MODEL_CONFLICT_UNCONFIRMED": 129,
+     "MODEL_PROPOSES_COVERED": 83
+    },
+    "proposals": {
+     "NO_EVIDENCE->CONFLICT": 129,
+     "NO_EVIDENCE->COVERS_TEXT": 83
+    },
+    "calls_failed": 0,
+    "calls_without_thinking": 0,
+    "escalated_unresolved_rows": 0,
+    "rows_applying_by_regulation_scope": 531,
+    "rows_not_verified": 0,
+    "model_ms": 1773668,
+    "model_ms_per_obligation": 695.6,
+    "model_ms_per_call": 5744.9,
+    "model_ms_per_call_median": 4933,
+    "model_ms_per_call_max": 21768,
+    "by_basis": {
+     "BOTH_READINGS": 129,
+     "MODEL_CONFLICT_UNCONFIRMED": 129,
+     "MODEL_PROPOSES_COVERED": 83,
+     "RULE_ONLY": 1584,
+     "SEMANTIC_ADJUDICATED": 177
+    },
+    "rules_version": "tr-adjudication-v2"
+   }
+  },
+  "corpus-adjudicate-quick": {
+   "elapsed_s": 7378.0
+  }
+ },
  "regression": {
   "suite": "backend/tests (1640 tests)",
   "failures": 242,

@@ -51,6 +51,19 @@ Otomatik karar = incelemeye gitmeyen vaka. İncelemeye giden vaka doğru sayılm
 
 | Pilot | Satır | Eskale satır (önce → sonra) | Eskale yükümlülük | Hakemlik çağrısı | Başarısız çağrı | İnceleme satırı | Katalog kapsamıyla uygulanan | Model süresi toplam | Yükümlülük başına | Çağrı başına (medyan / en uzun) |
 |---|---|---|---|---|---|---|---|---|---|---|
+| tr-bev-pilot-alcohol-integrated (corpus) | 3218 | 202 → 616 (19.1 %) | 344 (13.5 %) | 0 | 0 | 10 | 666 | 0 sn | 0.00 sn | 0.0 / 0.0 sn |
+| tr-bev-pilot-non-alcohol-bottler (corpus) | 3409 | 344 → 1065 (31.2 %) | 435 (17.1 %) | 0 | 0 | 14 | 929 | 0 sn | 0.00 sn | 0.0 / 0.0 sn |
+| tr-bev-pilot-alcohol-import (corpus) | 2102 | 163 → 518 (24.6 %) | 312 (12.2 %) | 0 | 0 | 11 | 531 | 0 sn | 0.00 sn | 0.0 / 0.0 sn |
+| tr-bev-pilot-alcohol-integrated (corpus-adjudicate-quick) | 3218 | 202 → 616 (19.1 %) | 344 (13.5 %) | 370 | 0 | 292 | 666 | 2429 sn | 0.95 sn | 5.6 / 20.0 sn |
+| tr-bev-pilot-non-alcohol-bottler (corpus-adjudicate-quick) | 3409 | 344 → 1065 (31.2 %) | 435 (17.1 %) | 473 | 0 | 399 | 929 | 2804 sn | 1.10 sn | 4.5 / 18.9 sn |
+| tr-bev-pilot-alcohol-import (corpus-adjudicate-quick) | 2102 | 163 → 518 (24.6 %) | 312 (12.2 %) | 320 | 0 | 222 | 531 | 1774 sn | 0.70 sn | 4.9 / 21.8 sn |
+
+
+**Korpus bulguları (3e36ebf):**
+- Gecikme: bira pilotunda 8B quick ile 370 çağrı, toplam 40 dk; çağrı başına 6,9 sn (medyan 5,6; en uzun 20), yükümlülük başına 0,95 sn; başarısız çağrı 0; doğrulanamayan satır 0. Eski motor 167–316 sn/satırdı.
+- Eskalasyon oranı v2 ile 2–3 katına çıktı (satırların %19 / %31 / %25'i; yükümlülüklerin %13,5 / %17,1 / %12,2'si) ve satır bazında %5–15 hedefinin dışına taştı. Sebep: çapalı düşük eşik (sem ≥ 0,55 + 2 ortak kök) korpusta çok daha fazla çift kabul ediyor. Ölçülmüş alternatif: 3 ortak kök (HOLDOUT'ta altın 7/9, diğer çift 3/550). Değiştirilmedi; VALIDATION bir kez ölçülmüş set olarak kalsın diye.
+- 8B quick önerilerinin 223/370'i CONTRADICTED; hiçbiri karar olmadı (inceleme bayrağı). 146 satır modelin tek başına verdiği PARTIAL ile otomatik PARTIALLY_COVERED oldu (SEMANTIC_ADJUDICATED); bu davranış etiketli setlerde doğruydu, korpus ölçeğinde doğrulanmadı.
+- `corpus-adjudicate` (8B thinking) tamamlanmadı; bittiğinde satırları `out/queue.log`'dadır.
 
 ## 6. Regresyon
 
