@@ -11,6 +11,11 @@ changes          the clauses an amendment touched since a date, the duties they 
 ai units         the reading units of some articles (what a model is given)
 ai compare       rule reader against a recorded model reading: agreement, and the layer of every disagreement
 ai evaluate      BEVERAGE_TR_DEV_V2 (developer labels, INDICATIVE): tasks, contrast pairs, wrong results by layer
+ai read          LIVE: put the reading units of --select REGULATION=ARTICLE,ARTICLE to the local extraction model; writes --out
+ai analyze       LIVE: one engine analysis of --entity of --profile against --regulation --article ...; writes --out
+
+The two live actions call the local models the ModelRouter names (LLM_MODEL, JUDGE_MODEL, EMBED_MODEL and their digests in
+the environment, CARDAMAN_MODE=development); one GPU runs them one after another. Everything else reads files only.
 """
 import argparse
 import json
@@ -133,6 +138,25 @@ def _ai(args, store: CorpusStore) -> int:
                 for section in store.sections(args.regulation) if not wanted or section['paragraph_number'] in wanted
                 for u in units_of(section, args.regulation, store.head(args.regulation).version_id)])
         return 0
+    if args.action in ('read', 'analyze'):
+        from ..model_router import ModelRouter
+        from .live import analyze_entity, read_units, scope, select_units
+        if not args.out:
+            raise SystemExit('--out is required')
+        if args.action == 'read':
+            selection = {rid: numbers.split(',') for rid, _, numbers in (item.partition('=') for item in args.select)}
+            units = select_units(selection, registry, store)
+            with scope('tr-corpus-read'):
+                summary = read_units(units, ModelRouter('ollama').extraction_provider(), store, Path(args.out),
+                                     progress=lambda i, n, ref: print(f'{i + 1}/{n} {ref}', file=sys.stderr, flush=True))
+        else:
+            profile = _profile(registry, args.profile)
+            with scope(f'{profile.profile_id}/{args.entity}'):
+                summary = analyze_entity(profile, args.entity, args.regulation, args.article, registry, store, Path(args.out),
+                                         ModelRouter('ollama'), units=not args.whole_articles,
+                                         progress=lambda i, n, label, stage: print(f'{stage} {i + 1}/{n} {label}', file=sys.stderr, flush=True))
+        _print(summary)
+        return 0
     if args.action == 'compare':
         from .extraction import extract_regulation
         header, records = load_readings(args.readings)
@@ -171,7 +195,12 @@ def main(argv=None):
     changes.add_argument('--since', required=True, help='ISO date; amendment notes dated on or after it are read')
     changes.add_argument('--profile')
     ai_parser = commands.add_parser('ai', help='the two readers and the development evaluation')
-    ai_parser.add_argument('action', choices=['units', 'compare', 'evaluate'])
+    ai_parser.add_argument('action', choices=['units', 'compare', 'evaluate', 'read', 'analyze'])
+    ai_parser.add_argument('--select', action='append', default=[], help='read: REGULATION=ARTICLE,ARTICLE; repeat to name several')
+    ai_parser.add_argument('--profile', help='analyze: a pilot profile id')
+    ai_parser.add_argument('--entity', help='analyze: a legal entity of the profile')
+    ai_parser.add_argument('--out', help='read / analyze: the file to write (must not exist)')
+    ai_parser.add_argument('--whole-articles', action='store_true', help='analyze: hand the engine the articles as stored, not their units')
     ai_parser.add_argument('--regulation')
     ai_parser.add_argument('--readings', help='a recorded readings file (live.read_units)')
     ai_parser.add_argument('--engine', action='append', default=[], help='a recorded engine run (live.analyze_entity); repeat to name several')
