@@ -493,10 +493,13 @@ def combine_coverage(rule: str, reasons: list[str], model: str | None) -> tuple[
 
     CONFLICT      the rule comparer's conflicts are element checks (a weaker limit, a violated time window, a permitted
                   prohibited act) and stand alone; a conflict only the model sees is UNKNOWN until a person reads it.
-    PARTIAL       a missing element the rule comparer names stands against a model's COVERS_TEXT; a gap only the model
-                  sees lowers the rule comparer's COVERS_TEXT to PARTIAL, for review.
-    paraphrase    where the rule comparer found nothing or only loose wording, the model's COVERS_TEXT or PARTIAL is
-                  taken, for review: the statement says the duty in words the rules do not match.
+    PARTIAL       a missing element the rule comparer names stands against a model's COVERS_TEXT.
+    paraphrase    where the rule comparer found nothing or only loose wording, the model's COVERS_TEXT is taken, for
+                  review: the statement says the duty in words the rules do not match.
+    model PARTIAL is not evidence by itself. In the unit run on Kanun 4250 md. 6 (20260930-beverage-live-3, 14 duties) the
+                  judge called passages PARTIAL that share only the product ("Alkollü içkiler otomatik satış makineleri
+                  ile satılamaz" under eight other duties) and ended PARTIAL on duties no statement touches. So a PARTIAL
+                  only the model sees changes no coverage: it marks the row for review.
     """
     if model is None:
         return rule, 'RULE_ONLY', rule in ('CONFLICT', 'UNKNOWN')
@@ -509,10 +512,12 @@ def combine_coverage(rule: str, reasons: list[str], model: str | None) -> tuple[
         return 'PARTIAL', 'BOTH_READINGS' if model == 'PARTIAL' else 'RULE_ELEMENT_CHECK', False
     if rule == 'COVERS_TEXT':
         if model == 'PARTIAL':
-            return 'PARTIAL', 'MODEL_FOUND_GAP', True
+            return 'COVERS_TEXT', 'MODEL_SEES_GAP', True
         return 'COVERS_TEXT', 'BOTH_READINGS' if model == 'COVERS_TEXT' else 'RULE_WORDING_MATCH', False
-    if model in ('COVERS_TEXT', 'PARTIAL'):
-        return model, 'MODEL_PARAPHRASE', True
+    if model == 'COVERS_TEXT':
+        return 'COVERS_TEXT', 'MODEL_PARAPHRASE', True
+    if model == 'PARTIAL':
+        return rule, 'BOTH_READINGS' if rule == 'PARTIAL' else 'MODEL_PARTIAL_UNCONFIRMED', rule != 'PARTIAL'
     if rule == 'UNKNOWN' or model == 'UNKNOWN':
         return rule, 'RULE_ONLY', True
     return rule, 'BOTH_READINGS' if rule == model else 'RULE_ONLY', False
@@ -624,7 +629,7 @@ def compare_obligation(obligation: ExtractedObligation, decision, profile: Enter
     rule_coverage, basis, contested = coverage, 'RULE_ONLY', False
     if second is not None:
         coverage, basis, contested = combine_coverage(rule_coverage, coverage_reasons, second.get('coverage'))
-        if basis in ('MODEL_PARAPHRASE', 'MODEL_FOUND_GAP', 'MODEL_CONFLICT_UNCONFIRMED'):
+        if basis in ('MODEL_PARAPHRASE', 'MODEL_CONFLICT_UNCONFIRMED'):
             known = {r.passage_id for r in related}
             related += [r for r in _model_readings(second, register, in_force) if r.passage_id not in known]
             coverage_reasons = sorted(set(coverage_reasons) - {'NO_RELATED_STATEMENT'}) + [basis]

@@ -333,7 +333,10 @@ class SecondReadingTests(unittest.TestCase):
     def test_paraphrase_is_the_models_to_read_and_a_persons_to_confirm(self):
         self.assertEqual(combine_coverage('NO_EVIDENCE', ['NO_RELATED_STATEMENT'], 'COVERS_TEXT'), ('COVERS_TEXT', 'MODEL_PARAPHRASE', True))
         self.assertEqual(combine_coverage('PARTIAL', ['WORDING_PARTLY_MATCHED'], 'COVERS_TEXT'), ('COVERS_TEXT', 'MODEL_PARAPHRASE', True))
-        self.assertEqual(combine_coverage('COVERS_TEXT', ['SUPPORTING_STATEMENT'], 'PARTIAL'), ('PARTIAL', 'MODEL_FOUND_GAP', True))
+        # A PARTIAL only the model sees changes no coverage (its judge calls passages partial that share only the product).
+        self.assertEqual(combine_coverage('COVERS_TEXT', ['SUPPORTING_STATEMENT'], 'PARTIAL'), ('COVERS_TEXT', 'MODEL_SEES_GAP', True))
+        self.assertEqual(combine_coverage('NO_EVIDENCE', ['NO_RELATED_STATEMENT'], 'PARTIAL'), ('NO_EVIDENCE', 'MODEL_PARTIAL_UNCONFIRMED', True))
+        self.assertEqual(combine_coverage('PARTIAL', ['WORDING_PARTLY_MATCHED'], 'PARTIAL'), ('PARTIAL', 'BOTH_READINGS', False))
         self.assertEqual(combine_coverage('COVERS_TEXT', ['SUPPORTING_STATEMENT'], 'NO_EVIDENCE'), ('COVERS_TEXT', 'RULE_WORDING_MATCH', False))
         self.assertEqual(combine_coverage('NO_EVIDENCE', ['NO_RELATED_STATEMENT'], 'NO_EVIDENCE'), ('NO_EVIDENCE', 'BOTH_READINGS', False))
         self.assertEqual(combine_coverage('NO_EVIDENCE', ['NO_RELATED_STATEMENT'], None), ('NO_EVIDENCE', 'RULE_ONLY', False))
