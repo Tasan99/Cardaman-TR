@@ -33,7 +33,7 @@ from ..pilot.schema import Strict
 from .clauses import blank_notes, split_clauses
 from .corpus import CorpusStore
 from .extraction import MARKETING, SALES, ExtractedObligation, governing, predicate_segments
-from .frames import LETTERS, Frame, fold, frame_of
+from .frames import LETTERS, WORD, Frame, _modality, fold, frame_of, lexicon
 from .mapping import Control, DocumentCoverage, DocumentType, EvidenceItem, ObligationMapping, map_obligation
 from .packs import Registry
 from .profile import EnterpriseProfile, PolicyScope, policy_covers, product_alcohol
@@ -41,7 +41,7 @@ from .profile import EnterpriseProfile, PolicyScope, policy_covers, product_alco
 DATA = Path(__file__).resolve().parent / 'data'
 REGISTERS = DATA / 'pilot_policies'
 OWNERSHIP = DATA / 'ownership.json'
-COMPARE_RULES_VERSION = 'tr-compare-rules-v1'
+COMPARE_RULES_VERSION = 'tr-compare-rules-v2'
 Relation = Literal['SUPPORTS', 'PARTIAL', 'CONFLICTS', 'UNRELATED', 'UNCLEAR']
 STATEMENT = re.compile(r'^\s*(\d{1,3})\.\s+(?=\S)')
 SALE_FAMILY = frozenset(SALES)
@@ -209,7 +209,16 @@ def passage_frames(passage: Passage) -> list[Frame]:
             continue
         section = {'text': text, 'printed_label': passage.passage_id, 'heading_path': ['', '', ''], 'quality_flags': [],
                    'lines': [{'kind': 'line', 'start': 0, 'end': len(text)}]}
-        frames += [frame_of(clause, passage.document_id) for clause in split_clauses(section)]
+        for clause in split_clauses(section):
+            frame = frame_of(clause, passage.document_id)
+            if frame.modality is None:
+                # A company writes what it does in the plain present ("... kayıtlıdır ve istenen bilgi ve belgeleri süresinde
+                # verir"). In a regulation an active aorist without an addressee is a description; in a company's own
+                # document it is the rule the company set itself.
+                modality, marker, _ = _modality(fold(blank_notes(frame.text)))
+                if modality == 'MUST':
+                    frame = frame.model_copy(update={'modality': 'MUST', 'marker': f'{marker} (statement)'})
+            frames.append(frame)
     return frames
 
 
@@ -217,7 +226,7 @@ def passage_frames(passage: Passage) -> list[Frame]:
 # "her ne surette olursa olsun" bans the act outright. "hiçbir", "her türlü", "her nevi" quantify the noun next to them:
 # they make the ban absolute only where that noun is the act itself ("hiçbir etkinliğe", "marka ... hiçbir işareti"), not
 # where it is the medium of a qualified act ("Her türlü iletişim aracında ... örtülü reklam yapılması yasaktır").
-ABSOLUTE = re.compile(r'her ne (?:surette|suretle|amaçla|şekilde) olursa olsun')
+ABSOLUTE = re.compile(r'(?:her ne|hangi) (?:surette|suretle|amaçla|şekilde|gerekçeyle|nedenle|sebeple) olursa olsun')
 QUANTIFIER = re.compile(r'(?<![%s])(?:hiçbir|her türlü|her nevi)(?![%s])' % (LETTERS, LETTERS))
 QUANTIFIER_REACH = 30
 
@@ -309,6 +318,149 @@ def _products_compatible(duty: ExtractedObligation, policy: Frame, vocabulary) -
     return True
 
 
+# -- elements a statement has to carry besides the act: list items, label particulars, deadlines ------------------------
+CONJUNCTION = re.compile(r'\s+(ve/veya|veya|ya da|ve|ile)\s+')
+ANY_OF = ('veya', 'ya da', 've/veya')
+LIST_LEAD = re.compile(r'^\s*(?:\(\d{1,2}\)|[%s]{1,2}\))\s*' % LETTERS)
+
+
+def enumerations(text: str) -> list[tuple[list[str], bool, bool]]:
+    """Every list of three or more the clause states, as (head words of the items, whether one of them is enough,
+    whether the list says in what manner the act is done: "... olarak", "... şekilde").
+
+    "... üretiminde, pazarlanmasında, satışında ve açık sunumunda istihdam edilemez", "Belirsiz, yanlış veya yanıltıcı
+    olamaz", "... etiketinde kafein, taurin, glukoronolakton, inositol, aminoasitlerin miktarı ...". A statement that
+    carries two of five is not the duty written down, however close its other words are (found on the DEV cases: the
+    energy-drink label statement with caffeine and taurine was read as covering the list of five)."""
+    folded = fold(LIST_LEAD.sub('', blank_notes(text)))
+    raw = re.split(r'[,;:]', folded)
+    segments = [WORD.findall(part) for part in raw]
+    found = []
+    # a list closed by a conjunction: "A, B ve C ..."
+    for index, part in enumerate(raw):
+        match = CONJUNCTION.search(part)
+        if not match:
+            continue
+        left, right = WORD.findall(part[:match.start()]), WORD.findall(part[match.end():])
+        if not (1 <= len(left) <= 3 and right):
+            continue
+        items = [left[-1], right[0]]
+        before = index - 1
+        # earlier items: a word on its own, or a short phrase whose last word carries the same ending as the item before
+        # the conjunction ("... üretiminde, pazarlanmasında, satışında ve ..."); "Alkollü içkiler, tüketilmek veya ..."
+        # is a subject and a purpose, not a list
+        while before >= 0 and (len(segments[before]) == 1 or (2 <= len(segments[before]) <= 3 and _same_ending(segments[before][-1], left[-1]))):
+            items.insert(0, segments[before][-1])
+            before -= 1
+        if len(items) >= 3:
+            found.append((items, match.group(1) in ANY_OF, bool(re.match(r'\s*(?:%s\s+)?(?:olarak|şekilde|suretiyle)' % right[0], part[match.end():]))))
+    # a list by commas alone: "... kafein, taurin, glukoronolakton, inositol, aminoasitlerin miktarı ..."
+    run = []
+    for index in range(1, len(segments)):
+        if index < len(segments) - 1 and len(segments[index]) == 1:
+            run.append(index)
+            continue
+        if len(run) >= 2 and segments[run[0] - 1] and segments[index] and not CONJUNCTION.search(raw[index]):
+            found.append(([segments[run[0] - 1][-1]] + [segments[i][0] for i in run] + [segments[index][0]], False, False))
+        run = []
+    return found
+
+
+def _same_ending(a: str, b: str) -> bool:
+    """The same suffix under vowel harmony: "üretiminde" and "satışında"."""
+    harmony = str.maketrans('aeıiuüoö', 'AAIIIIAA')
+    return a[-3:].translate(harmony) == b[-3:].translate(harmony)
+
+
+def _stated(word: str, policy_words: set[str]) -> bool:
+    """The word, or one with its body (its first four letters, the endings of Turkish aside), is in the statement."""
+    if len(word) < 5:
+        return word in policy_words or any(other.startswith(word) and len(other) <= len(word) + 4 for other in policy_words)
+    return any(other.startswith(word[:4]) for other in policy_words)
+
+
+def missing_items(frame: Frame, policy: Frame) -> list[str]:
+    """Items of a list the duty states that the statement does not: all of them for a prohibition and for "A, B ve C",
+    none when "A veya B" asks for one and one is there, or when the statement bans the act outright. A list of the
+    parties the clause addresses ("üretenler, ithal edenler ve pazarlayanlar") is no content of the duty."""
+    parties = {word for mention in (*frame.actors, *frame.authorities) for word in WORD.findall(fold(mention.text))}
+    # places, products and the other party have checks of their own; the acts a list names as the circumstances of the
+    # governed act ("üretiminde, pazarlanmasında, satışında ve açık sunumunda istihdam edilemez") do not
+    known = {word for mention in (*frame.places, *frame.products, *frame.counterparties, *frame.facilities)
+             for word in WORD.findall(fold(mention.text))}
+    words = set(WORD.findall(fold(blank_notes(policy.text))))
+    absent = []
+    for items, any_of, manner in enumerations(frame.text):
+        if any(item in parties for item in items):
+            continue
+        items = [item for item in items if item not in known]
+        lacking = [item for item in items if not _stated(item, words)]
+        if any_of and frame.modality == 'MUST' and len(lacking) < len(items):
+            continue
+        # a list of the manners of a banned act ("teşvik, hediye, eşantiyon, promosyon veya bedelsiz olarak ... dağıtamazlar")
+        # is answered by a ban of the act whatever the manner ("hangi gerekçeyle olursa olsun ... verilmez")
+        if frame.modality == 'MUST_NOT' and absolute_ban(policy) and manner:
+            continue
+        # nothing of the list in the statement: it is about something else, and that is the wording check's to say
+        if len(lacking) < len(items):
+            absent += lacking
+    return absent
+
+
+def particulars(text: str) -> set[str]:
+    """The label particulars a text names (lexicon: particulars)."""
+    folded = fold(blank_notes(text))
+    return {entry['id'] for entry in lexicon().data.get('particulars', [])
+            if re.search(r'(?<![%s])(?:%s)' % (LETTERS, entry['pattern']), folded)}
+
+
+LABEL_CONTEXT = re.compile(r'(?<![%s])(?:etiket|ambalaj)' % LETTERS)
+CONDITIONAL_ITEM = re.compile(r'(?<![%s])(?:eğer|halinde|hâlinde|durumunda|takdirde)(?![%s])|[%s]+(?:ysa|yse|rsa|rse|şsa|şse)(?![%s])'
+                              % (LETTERS, LETTERS, LETTERS, LETTERS))
+INFORMATION_LEAD_IN = re.compile(r'bilgi[%s]*[^.:]{0,80}(?:zorunludur|belirtilir|yer alır|bulunur)' % LETTERS)
+
+
+def particular_relation(frame: Frame, policy: Frame) -> list[str] | None:
+    """For a duty that is one item of a list of mandatory label information ("... aşağıdaki bilgilerin belirtilmesi
+    zorunludur: Gıdanın net miktarı."): the particulars the statement leaves out, [] when it states them all, None when
+    the duty is no such item or the statement is not about the label. The item has no verb and few words of its own,
+    so its wording is nothing to go by ("net miktarı" against "net hacmi"); what it names is."""
+    if not frame.marker.endswith('(chapeau)') or not INFORMATION_LEAD_IN.search(fold(frame.chapeau)):
+        return None
+    if CONDITIONAL_ITEM.search(fold(blank_notes(frame.text))):
+        return None                                        # "Eğer gıdanın adı ... atıfta bulunuyorsa, ...": a rule, not a particular
+    wanted = particulars(frame.text)
+    if not wanted or not LABEL_CONTEXT.search(fold(policy.text)):
+        return None
+    offered = particulars(policy.text)
+    if not wanted & offered:
+        return None
+    return [f'PARTICULAR_MISSING:{name}' for name in sorted(wanted - offered)]
+
+
+DAY_OF_MONTH = re.compile(r'ayın\s+(?:en\s+geç\s+)?(\d{1,2})\s*(?:[’\']?\s*[%s]{1,5})?\s*(?:gün[%s]*\s+)?(?:mesai\s+bitimine\s+)?kadar' % (LETTERS, LETTERS))
+COUNT_WORDS = {'bir': 1, 'iki': 2, 'üç': 3, 'dört': 4, 'beş': 5, 'altı': 6, 'yedi': 7, 'sekiz': 8, 'dokuz': 9, 'on': 10, 'on beş': 15,
+               'yirmi': 20, 'otuz': 30, 'kırk beş': 45, 'altmış': 60, 'doksan': 90}
+WITHIN = re.compile(r'(?<![%s])(\d{1,3}|%s)\s+(iş günü|gün|hafta|ay|yıl)\s+(?:içinde|içerisinde)'
+                    % (LETTERS, '|'.join(sorted(COUNT_WORDS, key=len, reverse=True))))
+DAYS_OF = {'iş günü': 1.4, 'gün': 1, 'hafta': 7, 'ay': 30, 'yıl': 365}
+
+
+def deadlines(text: str) -> dict[str, float]:
+    """The time a text gives for its act: {'DAY_OF_MONTH': 20} ("takip eden ayın en geç 20 nci günü ... kadar"),
+    {'WITHIN_DAYS': 90} ("üç ay içerisinde")."""
+    folded = fold(blank_notes(text))
+    out = {}
+    day = DAY_OF_MONTH.search(folded)
+    if day:
+        out['DAY_OF_MONTH'] = float(day.group(1))
+    within = WITHIN.search(folded)
+    if within:
+        count = COUNT_WORDS.get(within.group(1)) or float(within.group(1))
+        out['WITHIN_DAYS'] = count * DAYS_OF[within.group(2)]
+    return out
+
+
 def _minutes(match) -> int:
     return int(match.group(1)) * 60 + int(match.group(2))
 
@@ -329,15 +481,29 @@ def _quantity_relation(duty_q, policy_q) -> str:
 ORDER = {'UNRELATED': 0, 'UNCLEAR': 1, 'PARTIAL': 2, 'SUPPORTS': 3, 'CONFLICTS': 4}
 
 
-def relate(duty: ExtractedObligation, passage: Passage, vocabulary) -> PassageReading:
-    """One policy statement against one duty: the strongest relation any of its sentences has."""
+# A recorded similarity from which a statement the wording rules cannot relate is still read for what would go against
+# the duty (a later deadline). Chosen on the DEV and HOLDOUT cases; it never makes a statement cover anything.
+SEMANTIC_RELEVANCE = 0.70
+
+
+def relate(duty: ExtractedObligation, passage: Passage, vocabulary, similarity: float | None = None) -> PassageReading:
+    """One policy statement against one duty: the strongest relation any of its sentences has. `similarity` is the
+    recorded semantic similarity of the two texts, when a table has it (semantic.SimilarityTable)."""
     frames = passage_frames(passage)
-    best = None
+    best, readings = None, []
     for policy in frames:
-        reading = _relate_frame(duty, policy, vocabulary)
+        reading = _relate_frame(duty, policy, vocabulary, similarity)
+        readings.append(reading)
         if best is None or ORDER[reading[0]] > ORDER[best[0]]:
             best = reading
     relation, reasons, detail = best if best else ('UNRELATED', ['NO_STATEMENT'], {})
+    # "hiçbir mecrada reklam verilmez; tüketiciye dönük tanıtım çalışması yürütülmez": two sentences of one statement
+    # that each ban one of the acts an outright ban names state the ban between them.
+    parts = [r for r in readings if r[0] == 'PARTIAL' and r[1] and all(code.startswith('ACT_MISSING:') for code in r[1])]
+    if relation == 'PARTIAL' and len(parts) >= 2:
+        stated = {act for r in parts for act in r[2].get('acts_stated', [])}
+        if set(parts[0][2].get('duty_acts', [])) <= stated:
+            relation, reasons = 'SUPPORTS', ['ACTS_STATED_ACROSS_SENTENCES']
     # An exception sentence in the same statement ("... bu kuralın dışındadır") narrows a supporting sentence.
     if relation == 'SUPPORTS' and any(f.kind == 'EXCEPTION' for f in frames) and not duty.frame.exceptions:
         relation, reasons = 'PARTIAL', reasons + ['POLICY_ADDS_EXCEPTION']
@@ -345,7 +511,7 @@ def relate(duty: ExtractedObligation, passage: Passage, vocabulary) -> PassageRe
                           relation=relation, reasons=reasons, quote=passage.text, detail=detail)
 
 
-def _relate_frame(duty: ExtractedObligation, policy: Frame, vocabulary):
+def _relate_frame(duty: ExtractedObligation, policy: Frame, vocabulary, similarity: float | None = None):
     frame = duty.frame
     duty_acts = _acts(frame)
     policy_acts = _acts(policy, 'head')
@@ -416,6 +582,24 @@ def _relate_frame(duty: ExtractedObligation, policy: Frame, vocabulary):
         return 'UNRELATED', ['OTHER_CIRCUMSTANCE'], detail
     if not negative_duty and policy.modality == 'MUST_NOT':
         return ('CONFLICTS', ['POLICY_NEGATES_DUTY'], detail) if overlap >= 0.6 else ('UNRELATED', ['OTHER_SUBJECT'], detail)
+    # -- a later deadline is a weaker rule: read on a statement the wording relates, or one a recorded similarity does -----
+    common = len(wanted & offered)
+    due, given = deadlines(frame.text), deadlines(policy.text)
+    late = [kind for kind in due if kind in given and given[kind] > due[kind]]
+    if late and not negative_duty and policy.modality == 'MUST' and common >= 2 \
+            and (overlap >= 0.5 or (similarity is not None and similarity >= SEMANTIC_RELEVANCE)):
+        detail['deadline'] = {'kind': late[0], 'duty': due[late[0]], 'policy': given[late[0]]}
+        return 'CONFLICTS', ['DEADLINE_LATER'], detail
+    # -- an outright ban of the same act(s), whatever its words ------------------------------------------------------------
+    # a qualifier of the statement that the duty does not have narrows it; one the duty has too ("tüketiciye dönük") does not
+    narrower = bool(policy_places - duty_places) or policy.conditions or policy.quantities \
+        or {m.id for m in policy.counterparties} - {m.id for m in frame.counterparties}
+    outright = negative_duty and policy.modality == 'MUST_NOT' and bool(shared) and absolute_ban(frame) \
+        and not (duty_places or duty_minor or windows) and not narrower
+    # the same act on the same other party (a sale to minors, a service to minors) is the same rule, whatever its words
+    same_party = bool(shared) and duty_minor and policy_minor and negative_duty == (policy.modality == 'MUST_NOT')
+    # -- one item of the mandatory label information -----------------------------------------------------------------------
+    particular = particular_relation(frame, policy) if not negative_duty and policy.modality == 'MUST' else None
     # -- aligned polarity: how much of the duty does the statement state? -------------------------------------
     segments = [distinctive(frame, a, b) for a, b in predicate_segments(frame)]
     segments = [seg for seg in segments if seg] or [wanted]
@@ -423,7 +607,6 @@ def _relate_frame(duty: ExtractedObligation, policy: Frame, vocabulary):
     detail['segments'] = [round(v, 2) for v in stated]
     # Relevant: the same measured property; or the same act (or, for a rule that names none, the wording) with enough
     # of the distinctive wording: half of the clause, or most of one predicate of at least three words.
-    common = len(wanted & offered)
     if len(wanted) <= 2:
         carried = common == len(wanted) and common > 0             # "Gıdanın net miktarı.": both words, not one of them
     elif len(wanted) <= 4:
@@ -435,17 +618,32 @@ def _relate_frame(duty: ExtractedObligation, policy: Frame, vocabulary):
         carried = False                                            # a limit without a stated limit of the same unit
     if same_attribute and missing and not detail.get('quantities') and not carried:
         return 'UNRELATED', ['OTHER_SUBJECT'], detail              # the same substance, another rule about it
-    relevant = bool(detail.get('quantities')) or ((bool(shared) or not duty_acts) and carried) or (overlap >= 0.75 and common >= 3)
+    by_element = outright or particular is not None or same_party
+    worded = ((bool(shared) or not duty_acts) and carried) or (overlap >= 0.75 and common >= 3)
+    relevant = bool(detail.get('quantities')) or worded or by_element
     if not relevant:
         return 'UNRELATED', ['OTHER_SUBJECT'], detail
     if duty_minor and not policy_minor:
         return 'UNRELATED', ['OTHER_CIRCUMSTANCE'], detail
     reasons = ['POLICY_OPTIONAL'] if (not negative_duty and policy.modality == 'MAY') else []
-    if any(v < 0.5 for v in stated) and len(stated) > 1 and max(stated) >= 0.5:
+    if outright:
+        # every act the ban names has to be banned; the wording of an outright ban is free
+        detail['acts_stated'] = sorted(shared)
+        missing += [f'ACT_MISSING:{act}' for act in sorted(duty_acts - shared)]
+    elif particular is not None:
+        missing += particular
+    elif same_party and not worded:
+        pass
+    elif any(v < 0.5 for v in stated) and len(stated) > 1 and max(stated) >= 0.5:
         missing.append('PREDICATE_NOT_STATED')
     elif overlap < 0.6 and not detail.get('quantities'):
         # Half of the distinctive wording is a related statement; most of it is the duty written down.
         missing.append('WORDING_PARTLY_MATCHED')
+    if particular is None:
+        missing += [f'ITEM_MISSING:{item}' for item in missing_items(frame, policy)]
+    for kind in due:
+        if kind not in given and not by_element:
+            missing.append(f'DEADLINE_MISSING:{kind}')
     if duty_places - policy_places:
         missing += [f'PLACE_MISSING:{p}' for p in sorted(duty_places - policy_places)] if policy_places else ['PLACES_MISSING']
     if windows and negative_duty:
@@ -466,7 +664,9 @@ def _relate_frame(duty: ExtractedObligation, policy: Frame, vocabulary):
     detail['missing'] = missing
     if missing or reasons:
         return 'PARTIAL', reasons + missing, detail
-    return 'SUPPORTS', ['ACT_AND_POLARITY_MATCH'] + (['LIMIT_SAME_OR_STRICTER'] if detail.get('quantities') else []), detail
+    basis = 'ACT_AND_POLARITY_MATCH' if worded else 'OUTRIGHT_BAN_OF_THE_ACT' if outright \
+        else 'PARTICULAR_STATED' if particular is not None else 'ACT_AND_PARTY_MATCH'
+    return 'SUPPORTS', [basis] + (['LIMIT_SAME_OR_STRICTER'] if detail.get('quantities') else []), detail
 
 
 def coverage_of(readings: list[PassageReading]) -> tuple[str, list[str]]:
@@ -485,7 +685,7 @@ def coverage_of(readings: list[PassageReading]) -> tuple[str, list[str]]:
 
 # What the rule comparer checks element by element; a gap it names this way is not overruled by a model's "covers".
 ELEMENT_GAPS = ('PLACE_MISSING', 'PLACES_MISSING', 'LIMIT_MISSING', 'PREDICATE_NOT_STATED', 'TIME_WINDOW_', 'CONDITION_NARROWER',
-                'POLICY_ADDS_EXCEPTION', 'POLICY_OPTIONAL')
+                'POLICY_ADDS_EXCEPTION', 'POLICY_OPTIONAL', 'ITEM_MISSING', 'ACT_MISSING', 'PARTICULAR_MISSING', 'DEADLINE_MISSING')
 
 
 # Reasons under which the rule comparer has decided nothing: it found no statement, or only loose wording.
@@ -639,12 +839,13 @@ def _model_readings(second: dict, register: Register, in_force: set[str]) -> lis
 
 
 def compare_obligation(obligation: ExtractedObligation, decision, profile: EnterpriseProfile, register: Register,
-                       registry: Registry, second: dict | None = None) -> GapRow:
+                       registry: Registry, second: dict | None = None, similarities=None) -> GapRow:
     """The gap row of one obligation on one target it applies to. `second` is the engine's reading of the same duty
     ({'coverage': word, 'quotes': {'SUPPORTS': [...], 'PARTIAL': [...], 'CONFLICTS': [...]}}, from ai.second_readings)."""
     documents = documents_in_force(register, profile, decision)
     in_force = {d.document_id for d in documents}
-    readings = [relate(obligation, passage, registry.vocabulary) for passage in register.passages if passage.document_id in in_force]
+    readings = [relate(obligation, passage, registry.vocabulary, similarities(passage) if similarities else None)
+                for passage in register.passages if passage.document_id in in_force]
     related = [r for r in readings if r.relation != 'UNRELATED']
     coverage, coverage_reasons = coverage_of(related)
     rule_coverage, basis, contested = coverage, 'RULE_ONLY', False

@@ -39,7 +39,7 @@ from .corpus import CorpusStore
 from .extraction import ExtractedObligation
 from .frames import CITES_PROVISION, fold
 from .packs import Registry
-from .semantic import Candidate, SimilarityTable, candidates, duty_text, frame_text, lead_in, opposes
+from .semantic import Candidate, SimilarityTable, antecedent, candidates, duty_text, frame_text, lead_in, opposes
 
 ADJUDICATION_FORMAT = 'cardaman-tr-adjudications/1'
 ADJUDICATION_RULES_VERSION = 'tr-adjudication-v2'
@@ -50,13 +50,14 @@ RELATION_OF = {'STATES_DUTY': 'SUPPORTS', 'STATES_PART': 'PARTIAL', 'CONTRADICTS
 MAX_STATEMENTS = 4
 PARTY_IDS_IGNORED = {'FIRM', 'WORKPLACE'}
 
-PROMPT_VERSION = 'tr-adjudicate-v2'
+PROMPT_VERSION = 'tr-adjudicate-v3'
 PROMPT = '''You compare ONE duty of a Turkish regulation with numbered statements of a company's internal documents.
 The texts are Turkish. Answer for every statement, in the order given.
 
 Read the duty first and note what it names: the act it requires or forbids, and each product, place, person, medium,
 number, deadline and list item that belongs to that act. "lead_in", when given, only says what the duty's list is
-about: it is context, not part of the duty.
+about: it is context, not part of the duty. "previous_sentence", when given, is what the duty refers back to ("bu
+sınırlama", "bu yükümlülük"): read the duty with it.
 
 relation is exactly one of:
 - STATES_DUTY: a company that follows the statement does everything the duty requires, or refrains from everything it
@@ -110,6 +111,10 @@ class Assessment(Strict):
     review_reasons: list[str] = []
     proposal: str | None = None                       # what the model would have the coverage be, where that is not the coverage
     adjudication_status: str | None = None            # OK, OK_WITHOUT_THINKING ..., FAILED ...: a failed call is never a silent pass
+    # FACTS: the applicability was reached through gates over the company's facts. REGULATION_SCOPE: the clause names no
+    # constraint the profile could answer, and the duty reaches the target because its regulation is in the pilot's
+    # catalogue (a product duty of a horizontal food rule reaches every product). The row says which.
+    applicability_basis: str = 'FACTS'
     disagreement: int = 0
     escalation: Escalation | None = None
     adjudication_key: str | None = None
@@ -138,7 +143,7 @@ def escalate(obligation: ExtractedObligation, rule_coverage: str, rule_reasons: 
     """Why a row goes to the adjudicator, or None. `related` are the rule comparer's readings other than UNRELATED."""
     reasons = []
     loose = rule_coverage == 'NO_EVIDENCE' or (rule_coverage == 'PARTIAL' and set(rule_reasons) <= LOOSE_REASONS)
-    if found and loose:
+    if loose and (found or related):
         reasons.append('SEMANTIC_PARAPHRASE')
     against = [c for c in found if opposes(c, obligation)]
     if rule_coverage != 'CONFLICT' and against:
@@ -162,7 +167,8 @@ def adjudication_key(obligation: ExtractedObligation, passages: list[Passage]) -
 
 def request_payload(obligation: ExtractedObligation, passages: list[Passage]) -> dict:
     frame = obligation.frame
-    return {'duty': {'text': duty_text(obligation), **({'lead_in': lead_in(frame)} if lead_in(frame) else {}), 'kind': frame.kind,
+    return {'duty': {'text': frame_text(frame), **({'lead_in': lead_in(frame)} if lead_in(frame) else {}),
+                     **({'previous_sentence': antecedent(frame)} if antecedent(frame) else {}), 'kind': frame.kind,
                      'exceptions': [e.quote for e in frame.exceptions][:3],
                      'limits': [q.text for q in frame.quantities if q.role == 'LIMIT'][:4]},
             'statements': [{'id': f'S{i + 1}', 'text': p.text} for i, p in enumerate(passages)]}
@@ -334,9 +340,13 @@ def verify(obligation: ExtractedObligation, decision, row, register: Register, s
             problems.append('STATEMENT_NOT_IN_FORCE')
         elif reading.quote and _squash(reading.quote) not in _squash(passage.text):
             problems.append('STATEMENT_QUOTE_NOT_EXACT')
-    if not decision.gates or not decision.reason_codes:
+    if not decision.reason_codes or (not decision.gates and 'NO_CONSTRAINT' not in decision.reason_codes):
         problems.append('APPLICABILITY_WITHOUT_FACTS')
     return sorted(set(problems))
+
+
+def applicability_basis(obligation: ExtractedObligation, decision) -> str:
+    return 'REGULATION_SCOPE' if 'NO_CONSTRAINT' in decision.reason_codes and not decision.gates else 'FACTS'
 
 
 def assess_obligation(obligation: ExtractedObligation, decision, profile, register: Register, registry: Registry,
@@ -345,7 +355,9 @@ def assess_obligation(obligation: ExtractedObligation, decision, profile, regist
     """(gap row, assessment) of one obligation on one target: rules, candidates, escalation, adjudication, decision."""
     in_force = {d.document_id for d in documents_in_force(register, profile, decision)}
     passages = [p for p in register.passages if p.document_id in in_force]
-    readings = [relate(obligation, p, registry.vocabulary) for p in passages]
+    duty = duty_text(obligation)
+    similarity = (lambda passage: table.get(duty, passage.text)) if table is not None else None
+    readings = [relate(obligation, p, registry.vocabulary, similarity(p) if similarity else None) for p in passages]
     related = [r for r in readings if r.relation != 'UNRELATED']
     rule_coverage, rule_reasons = coverage_of(related)
     found = candidates(obligation, passages, registry.vocabulary, table, exclude={r.passage_id for r in related})
@@ -362,7 +374,7 @@ def assess_obligation(obligation: ExtractedObligation, decision, profile, regist
                 if judgement['rule_relation'] in ('SUPPORTS', 'PARTIAL', 'CONFLICTS'):
                     quotes.setdefault(judgement['rule_relation'], []).append(by_id[judgement['passage_id']].text)
             second = {'coverage': model, 'quotes': quotes, 'adjudicated': True}
-    row = compare_obligation(obligation, decision, profile, register, registry, second)
+    row = compare_obligation(obligation, decision, profile, register, registry, second, similarity)
     score = disagreement(rule_coverage, rule_reasons, model)
     # What keeps the row from being an automatic decision. The rules' own conflict is a decision (a person acts on it,
     # nobody has to decide it); a model that contests a rule decision, proposes a coverage or a conflict alone, or was
@@ -379,6 +391,9 @@ def assess_obligation(obligation: ExtractedObligation, decision, profile, regist
         open_points.append('ADJUDICATION_UNRESOLVED')          # no record, a failed call, or no grounded judgement
     if decision.review_required:
         open_points.append('APPLICABILITY_REVIEW')
+    by_scope = applicability_basis(obligation, decision)
+    if by_scope == 'REGULATION_SCOPE' and 'ADDRESSEE_UNCLEAR' in obligation.flags:
+        open_points.append('ADDRESSEE_UNCLEAR')           # reaches the target by default, and the clause does not say whom it binds
     open_points += [f'NOT_VERIFIED:{problem}' for problem in verify(obligation, decision, row, register, store)]
     review = row.review_required or bool(open_points)
     if review != row.review_required:
@@ -387,7 +402,7 @@ def assess_obligation(obligation: ExtractedObligation, decision, profile, regist
     return row, Assessment(provision_ref=obligation.provision_ref, obligation_id=obligation.obligation_id, target_id=decision.target_id,
                            entity_id=decision.entity_id, rule_coverage=rule_coverage, coverage=row.document_coverage,
                            basis=row.coverage_basis, review_required=review, decision='REVIEW_REQUIRED' if open_points else 'AUTO',
-                           review_reasons=open_points, proposal=proposal, adjudication_status=status, disagreement=score,
+                           review_reasons=open_points, proposal=proposal, adjudication_status=status, applicability_basis=by_scope, disagreement=score,
                            escalation=escalation, adjudication_key=key, model_coverage=model, elapsed_ms=elapsed)
 
 
@@ -447,6 +462,8 @@ def statistics(assessments: list[Assessment], obligations: int | None = None) ->
             'calls_failed': sum((a.adjudication_status or '').startswith('FAILED') for a in calls.values()),
             'calls_without_thinking': sum((a.adjudication_status or '').startswith('OK_WITHOUT_THINKING') for a in calls.values()),
             'escalated_unresolved_rows': sum('ADJUDICATION_UNRESOLVED' in a.review_reasons for a in assessments),
+            'rows_applying_by_regulation_scope': sum(a.applicability_basis == 'REGULATION_SCOPE' for a in assessments),
+            'rows_not_verified': sum(any(r.startswith('NOT_VERIFIED') for r in a.review_reasons) for a in assessments),
             'model_ms': total_ms, 'model_ms_per_obligation': round(total_ms / count, 1) if count else None,
             'model_ms_per_call': round(sum(spent) / len(spent), 1) if spent else None,
             'model_ms_per_call_median': spent[len(spent) // 2] if spent else None, 'model_ms_per_call_max': spent[-1] if spent else None,

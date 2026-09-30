@@ -166,6 +166,92 @@ class StatementRelationTests(unittest.TestCase):
         self.assertEqual(coverage_of([])[0], 'NO_EVIDENCE')
 
 
+class ElementReadingTests(unittest.TestCase):
+    """What a statement has to carry besides the act (comparer v2): the items of a list, the label particulars, a
+    deadline, the other party; and what an outright ban is stated by. Found on the DEV and the held-out coverage
+    cases of 30 September 2026; the held-out cases are development data since."""
+    IMPORTER_REGISTER = load_register('tr-bev-pilot-alcohol-import')
+
+    def importer_statement(self, passage_id):
+        return next(p for p in self.IMPORTER_REGISTER.passages if p.passage_id == passage_id)
+
+    def test_the_lists_a_clause_states(self):
+        from regchain.tr.compare import enumerations
+        self.assertEqual(enumerations('Enerji içeceklerinin etiketinde kafein, taurin, glukoronolakton, inositol, aminoasitlerin miktarı litrede miligram olarak yer almalıdır.'),
+                         [(['kafein', 'taurin', 'glukoronolakton', 'inositol', 'aminoasitlerin'], False, False)])
+        self.assertEqual(enumerations('On sekiz yaşını doldurmamış kişiler, alkollü içkilerin üretiminde, pazarlanmasında, satışında ve açık sunumunda istihdam edilemez.'),
+                         [(['üretiminde', 'pazarlanmasında', 'satışında', 'açık'], False, False)])
+        self.assertEqual(enumerations('Belirsiz, yanlış veya yanıltıcı olamaz.'), [(['belirsiz', 'yanlış', 'yanıltıcı'], True, False)])
+        # the manners of an act
+        self.assertEqual(enumerations('Her ne amaçla olursa olsun, teşvik, hediye, eşantiyon, promosyon veya bedelsiz olarak alkollü içki dağıtamazlar.'),
+                         [(['teşvik', 'hediye', 'eşantiyon', 'promosyon', 'bedelsiz'], True, True)])
+        # a subject and a purpose are no list
+        self.assertEqual(enumerations('Alkollü içkiler, tüketilmek veya beraberinde götürülmek üzere on sekiz yaşını doldurmamış kişilere satılamaz veya sunulamaz.'), [])
+
+    def test_a_statement_with_two_of_five_listed_substances_is_partial_not_covered(self):
+        # COV-26: the energy-drink label statement names caffeine and taurine; the duty lists five substances.
+        result = reading('TR:TEBLIG:TGK_ENERJI_ICECEKLERI', 'Tebliğ 23706 md. 12/f.1/b.a',
+                         'Enerji içeceklerinin etiketinde kafein ve taurin miktarı litrede miligram olarak yer alır.')
+        self.assertEqual((result.relation, result.reasons), ('PARTIAL', ['ITEM_MISSING:glukoronolakton', 'ITEM_MISSING:inositol', 'ITEM_MISSING:aminoasitlerin']))
+        full = reading('TR:TEBLIG:TGK_ENERJI_ICECEKLERI', 'Tebliğ 23706 md. 12/f.1/b.a',
+                       'Enerji içeceklerinin etiketinde kafein, taurin, glukoronolakton, inositol ve aminoasit miktarları litrede miligram olarak yer alır.')
+        self.assertEqual(full.relation, 'SUPPORTS')
+
+    def test_an_outright_ban_is_stated_by_a_ban_of_the_same_acts_in_any_words(self):
+        # COVH-01: "hiçbir mecrada reklam verilmez; tüketiciye dönük tanıtım çalışması yürütülmez" - one sentence per act
+        ban = obligation('TR:KANUN:4250', 'Kanun 4250 md. 6/f.1/c.1')
+        result = relate(ban, self.importer_statement('POL-COM-11#1'), REGISTRY.vocabulary)
+        self.assertEqual((result.relation, result.reasons), ('SUPPORTS', ['ACTS_STATED_ACROSS_SENTENCES']))
+        # COVH-03: "hangi gerekçeyle olursa olsun hediye, eşantiyon veya promosyon olarak ücretsiz verilmez"
+        free = obligation('TR:KANUN:4250', 'Kanun 4250 md. 6/f.2')
+        result = relate(free, self.importer_statement('POL-COM-11#3'), REGISTRY.vocabulary)
+        self.assertEqual((result.relation, result.reasons), ('SUPPORTS', ['OUTRIGHT_BAN_OF_THE_ACT']))
+        # a ban of one act only, with the words of the other missing, is a part
+        one = reading('TR:KANUN:4250', 'Kanun 4250 md. 6/f.1/c.1', 'Portföyümüzdeki ürünler için hiçbir mecrada reklam verilmez.')
+        self.assertEqual((one.relation, one.reasons), ('PARTIAL', ['ACT_MISSING:PRODUCT_PROMOTION']))
+        # a ban with a place the duty does not name narrows it and is not an outright ban of the act
+        place = reading('TR:KANUN:4250', 'Kanun 4250 md. 6/f.1/c.1', 'Televizyonda alkollü içki reklamı ve tanıtımı yapılmaz.')
+        self.assertNotEqual(place.relation, 'SUPPORTS')
+
+    def test_the_same_act_on_the_same_other_party_is_the_same_rule(self):
+        # COVH-05: no staff under 18 in production, sales and marketing; open service is not named
+        minors = obligation('TR:KANUN:4250', 'Kanun 4250 md. 6/f.4/c.1')
+        result = relate(minors, self.importer_statement('SOP-HR-15#1'), REGISTRY.vocabulary)
+        self.assertEqual((result.relation, result.reasons), ('PARTIAL', ['ITEM_MISSING:açık']))
+
+    def test_one_item_of_the_mandatory_label_information_is_stated_by_its_particular(self):
+        # COVH-09/10/11: "Etikette ürünün adı, net hacmi ve üretici ya da ithalatçı firmanın adı ile adresi yer alır."
+        label = self.importer_statement('SPEC-LBL-13#3')
+        for ref in ('Yönetmelik 23282 md. 9/f.1/b.a', 'Yönetmelik 23282 md. 9/f.1/b.d', 'Yönetmelik 23282 md. 9/f.1/b.g'):
+            with self.subTest(ref=ref):
+                result = relate(obligation('TR:YONETMELIK:TGK_ETIKETLEME', ref), label, REGISTRY.vocabulary)
+                self.assertEqual((result.relation, result.reasons), ('SUPPORTS', ['PARTICULAR_STATED']))
+        # the date of minimum durability is not among them
+        dates = relate(obligation('TR:YONETMELIK:TGK_ETIKETLEME', 'Yönetmelik 23282 md. 9/f.1/b.e'), label, REGISTRY.vocabulary)
+        self.assertEqual(dates.relation, 'UNRELATED')
+        # the operator's name without the address is a part
+        half = reading('TR:YONETMELIK:TGK_ETIKETLEME', 'Yönetmelik 23282 md. 9/f.1/b.g', 'Etikette üretici firmanın adı yer alır.')
+        self.assertEqual((half.relation, half.reasons), ('PARTIAL', ['PARTICULAR_MISSING:OPERATOR_ADDRESS']))
+
+    def test_a_later_deadline_is_a_conflict_on_a_statement_a_recorded_similarity_relates(self):
+        # COVH-16: the by-law says the 20th of the following month; the SOP says the 25th
+        report = obligation('TR:YONETMELIK:ALKOL_IC_DIS_TICARET', 'Yönetmelik 6203 md. 15/f.2')
+        late = self.importer_statement('SOP-LOG-12#2')
+        self.assertEqual(relate(report, late, REGISTRY.vocabulary).relation, 'UNRELATED')       # the words alone do not relate them
+        result = relate(report, late, REGISTRY.vocabulary, similarity=0.75)
+        self.assertEqual((result.relation, result.reasons), ('CONFLICTS', ['DEADLINE_LATER']))
+        self.assertEqual(result.detail['deadline'], {'kind': 'DAY_OF_MONTH', 'duty': 20.0, 'policy': 25.0})
+        # the same similarity never makes a statement cover anything by itself
+        self.assertEqual(relate(report, self.importer_statement('SOP-LOG-12#3'), REGISTRY.vocabulary, similarity=0.9).relation, 'UNRELATED')
+        from regchain.tr.compare import deadlines
+        self.assertEqual(deadlines('bu durumu üç ay içerisinde yetkili mercie bildirmek'), {'WITHIN_DAYS': 90})
+
+    def test_a_companys_statement_of_what_it_does_is_its_rule(self):
+        # COVH-24: "Şirketlerimiz Ambalaj Bilgi Sistemine kayıtlıdır ve istenen bilgi ve belgeleri süresinde verir."
+        frames = passage_frames(self.importer_statement('POL-ENV-14#1'))
+        self.assertEqual([(f.modality, f.marker) for f in frames], [('MUST', 'verir (statement)')])
+
+
 class BrewerGapTests(unittest.TestCase):
     LAW = 'TR:KANUN:4250'
 

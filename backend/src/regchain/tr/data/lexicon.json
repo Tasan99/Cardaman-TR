@@ -102,5 +102,19 @@
     {"id": "CONSUMER", "pattern": "tüketici[a-zçğıöşü]*|son tüketici[a-zçğıöşü]*"}
   ],
   "exception_markers": "hariç olmak üzere|hariç(?![a-zçğıöşü])|haricinde(?:ki)?|(?:kapsamı|haller|hâller|durumlar|ürünler|bunlar|olanlar|tanımı)[a-zçğıöşü]* dışında(?:ki| kalan)?(?![a-zçğıöşü])|dışındadır|saklı kalmak (?:kaydıyla|üzere)|uygulanmaz|aranmaz|muaf[a-zçğıöşü]*|istisna[a-zçğıöşü]*|zorunlu değildir|kapsamaz|kapsamı dışında[a-zçğıöşü]*",
-  "condition_markers": "halinde|hallerde|hâlinde|durumunda|durumlarda|takdirde|kaydıyla|şartıyla|koşuluyla|amacıyla|için(?![a-zçğıöşü])|üzere(?![a-zçğıöşü])|ise(?![a-zçğıöşü])|itibaren"
+  "condition_markers": "halinde|hallerde|hâlinde|durumunda|durumlarda|takdirde|kaydıyla|şartıyla|koşuluyla|amacıyla|için(?![a-zçğıöşü])|üzere(?![a-zçğıöşü])|ise(?![a-zçğıöşü])|itibaren",
+  "particulars": [
+    {"id": "PRODUCT_NAME", "pattern": "(?:gıdanın|gıda maddesinin|ürünün|malın) ad[ıi]|ürün ad[ıi]"},
+    {"id": "INGREDIENT_LIST", "pattern": "bileşen(?:ler)?(?:in)? listesi|içindekiler"},
+    {"id": "ALLERGENS", "pattern": "alerji[a-zçğıöşü]*|alerjen[a-zçğıöşü]*|intolerans[a-zçğıöşü]*"},
+    {"id": "NET_QUANTITY", "pattern": "net (?:miktar|hacim|hacm|ağırlı|kütle)[a-zçğıöşü]*"},
+    {"id": "DURABILITY_DATE", "pattern": "tavsiye edilen tüketim tarih[a-zçğıöşü]*|son tüketim tarih[a-zçğıöşü]*"},
+    {"id": "STORAGE_CONDITIONS", "pattern": "(?:muhafaza|saklama) (?:şart|koşul)[a-zçğıöşü]*"},
+    {"id": "OPERATOR_NAME", "pattern": "(?:işletmeci|üretici|ithalatçı|firma)[a-zçğıöşü]*(?: [a-zçğıöşü]+){0,5}? (?:ad[ıi]|unvan[ıi])"},
+    {"id": "OPERATOR_ADDRESS", "pattern": "adres[a-zçğıöşü]*"},
+    {"id": "ORIGIN", "pattern": "menşe[a-zçğıöşü]*(?: (?:ülke|yer)[a-zçğıöşü]*)?"},
+    {"id": "INSTRUCTIONS_FOR_USE", "pattern": "kullanım (?:talimat|bilgi)[a-zçğıöşü]*"},
+    {"id": "ALCOHOL_STRENGTH", "pattern": "alkol (?:derece|miktar|oran)[a-zçğıöşü]*"},
+    {"id": "NUTRITION_DECLARATION", "pattern": "beslenme bildirim[a-zçğıöşü]*"}
+  ]
 }

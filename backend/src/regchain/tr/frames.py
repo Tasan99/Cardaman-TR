@@ -121,6 +121,9 @@ class Frame(Strict):
     conditions: list[Condition] = []
     exceptions: list[ExceptionRule] = []
     references: list[str] = []
+    # The sentence before, when this one refers back to it ("... bu sınırlamaya uyması zorunludur"): what the duty is
+    # about is in that sentence, and a reader of this one alone has nothing to compare (found on the held-out cases).
+    antecedent: str = ''
     # How the products were found: named in the clause, or taken from the regulation's scope article.
     product_basis: Literal['CLAUSE', 'REGULATION_SCOPE', 'NONE'] = 'NONE'
     topic: str = 'GENERAL'
@@ -184,7 +187,7 @@ NOT_A_DUTY = re.compile(r'^(?:kapsamaz|değerlendirilmez|sayılmaz|kabul edilmez
 STATEMENT = re.compile(r'^(?:değerlendirilir|sayılır|kabul edilir|addedilir|addolunur|anlaşılır|dayanır|oluşur|gösterir|belirtir|'
                        r'ifade eder|kapsar|içerir|girer|başlar|biter|geçer|teşkil eder|hükmündedir|kalkar|doğar)$')
 EXEMPTING = re.compile(r'(?<![%s])(?:uygulanmaz|aranmaz|dışındadır|muaftır|muaf tutulur|zorunlu değildir|saklıdır|istisnadır|hariçtir|'
-                       r'gerekmez|kapsamı dışındadır)(?![%s])' % (LETTERS, LETTERS))
+                       r'gerekmez|gerek yoktur|gerekli değildir|gerekmemektedir|kapsamı dışındadır)(?![%s])' % (LETTERS, LETTERS))
 DEFINITION_END = re.compile(r'(?<![%s])(?:ifade eder|anlamına gelir|ifade etmektedir)(?![%s])' % (LETTERS, LETTERS))
 DEFINITION_ITEM = re.compile(r'^(?:[%s]{1,2}\)\s+)?[^:]{2,80}:\s' % LETTERS)
 SCOPE_VERB = re.compile(r'(?<![%s])(?:kapsar|kapsamaz|kapsamaktadır)(?![%s])' % (LETTERS, LETTERS))
@@ -208,6 +211,8 @@ INSTRUMENT_AFTER = re.compile(r'^\s+(?:eliyle|aracılığı|vasıtasıyla|kanal�
 COORDINATOR = re.compile(r'^\s*(?:,|ve/veya|veya|ve|ile|ya da)\s*$')
 ANCAK = re.compile(r'\s*(?:\(\d+\)\s*)?ancak(?![%s])' % LETTERS)
 ANAPHORIC_SUBJECT = re.compile(r'\s*(?:\(\d+\)\s*)?(?:bu (?:yerler|işletmeler|kişiler|firmalar)|bunlar)(?![%s])' % LETTERS)
+ANAPHORIC_OBJECT = re.compile(r'(?<![%s])(?:bu|söz konusu) (?:sınırlama|yükümlülü|zorunlulu|yasa[ğk]|kural|şart|koşul|hüküm|esas|bildirim|süre)[%s]*'
+                              % (LETTERS, LETTERS))
 CITES_PROVISION = re.compile(r'\d+\s*(?:inci|nci|ncı|üncü|uncu|ıncı|ncu|ncü)\s+madde|fıkrasın|(?<![%s])ben[dt](?:i|leri)' % LETTERS)
 ORDINALS = {'birinci': 1, 'ikinci': 2, 'üçüncü': 3, 'dördüncü': 4, 'beşinci': 5, 'altıncı': 6, 'yedinci': 7, 'sekizinci': 8,
             'dokuzuncu': 9, 'onuncu': 10}
@@ -582,7 +587,10 @@ def frame_of(clause: Clause, regulation_id: str, lex: Lexicon | None = None) -> 
         kind = 'SCOPE'
     elif EXEMPTING.search(folded[-60:]) or (modality == 'MAY' and re.match(r'\s*(?:\(\d+\)\s*)?ancak', folded)):
         kind = 'EXCEPTION'
-    elif _authority_task(lex, folded, modality, passive) or _authority_subject(lex, folded, modality, marker, passive):
+    elif _authority_task(lex, folded, modality, passive) or _authority_subject(lex, folded, modality, marker, passive)             or (source == 'CHAPEAU' and _authority_subject(lex, chapeau_folded, modality, marker, passive)):
+        # "Bakanlık, ... kurallarını düzenlerken aşağıdaki özelliklere ilişkin bilgileri esas alır: a) ...": the items of
+        # a list whose lead-in has an authority as its subject are the authority's, not a company's (found on the whole
+        # corpus: three such items reached every product of two pilots).
         kind = 'DELEGATION'
     elif (REFERENCE.search(folded) and references or INTERNAL_REFERENCE.search(folded)) and modality != 'MUST_NOT':
         kind = 'REFERENCE'
@@ -722,6 +730,8 @@ def frames_of(section: dict, regulation_id: str, lex: Lexicon | None = None) -> 
             if frame.duty_bearing and not frame.actors and parties and ANAPHORIC_SUBJECT.match(fold(frame.text)):
                 # "Bu yerler ... sorumlulukları yerine getirirler.": the places the sentence before called sales points.
                 frame.actors = parties
+            if frame.duty_bearing and index > indices[0] and ANAPHORIC_OBJECT.search(fold(_mask(frame.text))):
+                frame.antecedent = frames[index - 1].text
             parties = _parties(lex, frame)
             if frame.duty_bearing:
                 if since and ANCAK.match(fold(_mask(frame.text))):

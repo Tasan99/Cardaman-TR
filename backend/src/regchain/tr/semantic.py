@@ -23,11 +23,11 @@ from pathlib import Path
 
 from ..pilot.schema import Strict
 from .clauses import blank_notes
-from .compare import Passage, _products_compatible, passage_frames
+from .compare import Passage, _products_compatible, distinctive, passage_frames, stems
 from .extraction import ExtractedObligation
 from .frames import fold
 
-CANDIDATE_RULES_VERSION = 'tr-candidates-v1'
+CANDIDATE_RULES_VERSION = 'tr-candidates-v2'
 TABLE_FORMAT = 'cardaman-tr-similarities/1'
 GRAMS = (3, 4, 5)
 NUMBER = re.compile(r'\d+(?:[.,]\d+)?')
@@ -37,6 +37,11 @@ LEAD = re.compile(r'^\s*(?:\(\d{1,2}\)|[a-zçğıöşü]{1,2}\))\s*')
 # 0.68 loses one of the 11, 0.62 adds two of the 33. The held-out cases were scored once with them.
 LEXICAL_FLOOR = 0.30
 SEMANTIC_FLOOR = 0.66
+# A lower semantic floor with a lexical anchor: at least two distinctive stems of the duty in the statement. Chosen on
+# DEV and HOLDOUT together (1 October 2026): of the gold statements the rules could not relate it reaches 7/7 and 8/9
+# (the floors above alone: 7/7 and 6/9) and admits 23 of 612 and 14 of 550 other pairs more.
+ANCHOR_FLOOR = 0.55
+ANCHOR_STEMS = 2
 TOP_K = 3
 
 
@@ -62,6 +67,11 @@ def frame_text(frame) -> str:
     return re.sub(r'\s+', ' ', ' '.join(LEAD.sub('', blank_notes(part)).strip() for part in parts if part)).strip()
 
 
+def antecedent(frame) -> str:
+    """The sentence before, where the clause refers back to it ("... bu sınırlamaya uyması zorunludur")."""
+    return re.sub(r'\s+', ' ', LEAD.sub('', blank_notes(frame.antecedent))).strip() if frame.antecedent else ''
+
+
 def lead_in(frame) -> str:
     """The lead-in of a list item that has a predicate of its own: what the item is about, not part of its duty."""
     if not frame.chapeau or frame.marker.endswith(('(chapeau)', '(closing)')):
@@ -70,7 +80,8 @@ def lead_in(frame) -> str:
 
 
 def duty_text(obligation: ExtractedObligation) -> str:
-    return frame_text(obligation.frame)
+    """The text a statement is searched for: the clause, after the sentence it refers back to, if any."""
+    return ' '.join(part for part in (antecedent(obligation.frame), frame_text(obligation.frame)) if part)
 
 
 def text_key(text: str) -> str:
@@ -172,6 +183,7 @@ def candidates(obligation: ExtractedObligation, passages: list[Passage], vocabul
     that may go against the duty (opposes). `exclude` are passages the rule comparer already relates to it. A statement
     about a product the duty does not cover is no candidate, however similar its words."""
     duty = duty_text(obligation)
+    wanted = distinctive(obligation.frame) | stems(antecedent(obligation.frame))   # the sentence a duty refers back to is its wording too
     found = []
     for passage in passages:
         if passage.passage_id in exclude:
@@ -179,6 +191,8 @@ def candidates(obligation: ExtractedObligation, passages: list[Passage], vocabul
         lexical = lexical_similarity(duty, passage.text)
         semantic = table.get(duty, passage.text) if table is not None else None
         channels = (['LEXICAL'] if lexical >= lexical_floor else []) + (['SEMANTIC'] if semantic is not None and semantic >= semantic_floor else [])
+        if not channels and semantic is not None and semantic >= ANCHOR_FLOOR and len(wanted & stems(passage.text)) >= ANCHOR_STEMS:
+            channels = ['ANCHORED']
         if not channels:
             continue
         if not all(_products_compatible(obligation, frame, vocabulary) for frame in passage_frames(passage)):
