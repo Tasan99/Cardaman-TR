@@ -214,7 +214,20 @@ def passage_frames(passage: Passage) -> list[Frame]:
 
 
 # -- element reading ---------------------------------------------------------------------------------
-ABSOLUTE = re.compile(r'her ne (?:surette|suretle|amaçla|şekilde) olursa olsun|(?<![%s])hiçbir(?![%s])|her türlü|her nevi' % (LETTERS, LETTERS))
+# "her ne surette olursa olsun" bans the act outright. "hiçbir", "her türlü", "her nevi" quantify the noun next to them:
+# they make the ban absolute only where that noun is the act itself ("hiçbir etkinliğe", "marka ... hiçbir işareti"), not
+# where it is the medium of a qualified act ("Her türlü iletişim aracında ... örtülü reklam yapılması yasaktır").
+ABSOLUTE = re.compile(r'her ne (?:surette|suretle|amaçla|şekilde) olursa olsun')
+QUANTIFIER = re.compile(r'(?<![%s])(?:hiçbir|her türlü|her nevi)(?![%s])' % (LETTERS, LETTERS))
+QUANTIFIER_REACH = 30
+
+
+def absolute_ban(frame: Frame) -> bool:
+    folded = fold(frame.text)
+    if ABSOLUTE.search(folded):
+        return True
+    acts = [(m.start - frame.start, m.end - frame.start) for m in frame.activities if m.where == 'CLAUSE']
+    return any(a - QUANTIFIER_REACH <= match.start() <= b + QUANTIFIER_REACH for match in QUANTIFIER.finditer(folded) for a, b in acts)
 
 
 def _acts(frame: Frame, subject: str = 'first') -> set[str]:
@@ -385,14 +398,20 @@ def _relate_frame(duty: ExtractedObligation, policy: Frame, vocabulary):
             if shared and ((duty_minor and policy_minor) or (duty_places & policy_places)):
                 return 'CONFLICTS', ['POLICY_PERMITS_PROHIBITED_ACT'], detail
             return 'UNRELATED', ['OTHER_CIRCUMSTANCE'], detail
-        absolute = bool(ABSOLUTE.search(fold(frame.text)))
-        if absolute and (shared or (named and policy.products)):
+        # A statement contradicts a prohibition by permitting the act ("... kullanılabilir") or by making it a duty. A duty
+        # about something else that only names the act ("reklam ve tanıtım çalışmaları ... Hukuk Müşavirliğinin onayına
+        # sunulur", "uyarı mesajları konulur") does neither: for a MUST statement the act has to be what its own predicate
+        # governs. (Found on the whole corpus, outside the labelled cases: 17 rows of the advertising by-law and of the
+        # consumer law were called contradicted by the statement that sends advertisements to legal review.)
+        permits = policy.modality == 'MAY'
+        does = shared if permits else _same_act(duty_acts, _acts(policy, 'none'))
+        if absolute_ban(frame) and (does or (permits and named and policy.products)):
             if any(e.effect == 'PERMITS' and not e.predicate for e in frame.exceptions) and policy.conditions:
                 return 'UNCLEAR', ['POLICY_MAY_FALL_UNDER_EXCEPTION'], detail
             return 'CONFLICTS', ['POLICY_PERMITS_PROHIBITED_ACT'], detail
         # A prohibition with its own qualifiers is contradicted only by a statement that repeats them: the same act and
         # most of the distinctive wording, at least three words of it.
-        if shared and overlap >= 0.6 and len(wanted & offered) >= 3:
+        if does and overlap >= 0.6 and len(wanted & offered) >= 3:
             return 'CONFLICTS', ['POLICY_PERMITS_PROHIBITED_ACT'], detail
         return 'UNRELATED', ['OTHER_CIRCUMSTANCE'], detail
     if not negative_duty and policy.modality == 'MUST_NOT':
@@ -521,7 +540,9 @@ def documents_in_force(register: Register, profile: EnterpriseProfile, decision)
 
 def product_findings(obligation: ExtractedObligation, profile: EnterpriseProfile, product_ids) -> list[ProductFinding]:
     out = []
-    for quantity in (q for q in obligation.frame.quantities if q.role == 'LIMIT' and q.attribute):
+    # Only a limit with a direction can be exceeded: a bare number next to a property ("%100'lük alkol cinsinden") is a
+    # unit of account, not a cap.
+    for quantity in (q for q in obligation.frame.quantities if q.role == 'LIMIT' and q.attribute and q.comparator != 'eq'):
         for product_id in product_ids:
             stated = profile.product(product_id).attributes.get(quantity.attribute)
             if stated is None or stated.status != 'STATED' or isinstance(stated.value, bool):

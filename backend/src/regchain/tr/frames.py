@@ -218,6 +218,7 @@ HEADING_TOPICS = (('etiket', 'LABELLING'), ('işaretle', 'LABELLING'), ('beslenm
 # "... tüketici aşağıdaki sözleşmelerde cayma hakkını kullanamaz:": what the consumer may not do is no duty of a company.
 CONSUMER_RIGHT = re.compile(r'(?<![%s])tüketici(?:ler)?\s[^.;]{0,80}hakkını\s+kullana(?:maz|mazlar)' % LETTERS)
 # "(a) bendinde belirtilen bilgiler ... sunulur": information is given, not served.
+SUBMITTED = re.compile(r'(?<![%s])(?:onayına|görüşüne|incelemesine|bilgisine)\s+sunul' % LETTERS)
 INFORMATION_GIVEN = re.compile(r'(?<![%s])bilgi[%s]*\s[^.;]{0,160}sunul' % (LETTERS, LETTERS))
 CONDITION_SUBJECT = re.compile(r'\s*(?:\(\d+\)\s*)?(?:[%s]+\s+){0,2}(?:şartı|koşulu),?\s[^.;]{0,120}(?<![%s])aranır\s*\.?\s*$' % (LETTERS, LETTERS))
 # Case endings an authority named as the subject of its own task does not carry ("Belediye ..., görüşünü alır").
@@ -635,6 +636,12 @@ def frame_of(clause: Clause, regulation_id: str, lex: Lexicon | None = None) -> 
                        if m.id not in {a.id for a in activities}]
         products += _find(lex.products, chapeau_folded, chapeau, clause.chapeau_start, 'CHAPEAU')
         facilities += _find(lex.facilities, chapeau_folded, chapeau, clause.chapeau_start, 'CHAPEAU')
+    if any(fold(m.text).startswith(('sunul', 'sunum')) for m in activities):
+        # "sunum" and "sunulur" are the serving of a drink only where drinks are what the clause is about: the "sunum ya da
+        # tanımlama" of an advertisement and a text that is "onayına sunulur" are neither.
+        about_products = bool(products) or bool(lex.regulation_scope.search(reading)) or bool(ANAPHORA.search(folded))
+        if not about_products or SUBMITTED.search(folded):
+            activities = [m for m in activities if not fold(m.text).startswith(('sunul', 'sunum'))]
     exceptions = _exceptions(lex, folded, text, base, clause.ref, products, places)
     if clause.chapeau and source != 'CLAUSE':
         # "(1) Bu Yönetmelikteki istisnalar saklı kalmak kaydıyla, aşağıdaki bilgilerin belirtilmesi zorunludur:": the

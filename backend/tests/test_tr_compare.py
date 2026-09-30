@@ -279,6 +279,44 @@ class BottlerGapTests(unittest.TestCase):
                 self.assertEqual(next(p.text for p in BOTTLER_REGISTER.passages if p.passage_id == seen.passage_id), seen.quote)
 
 
+class WholeCorpusTests(unittest.TestCase):
+    """What the comparer said outside the labelled cases when it was run on every stored text (30 September 2026): 44
+    contradicted rows and 4 product nonconformities for the brewer; 17 of the rows (advertising by-law, consumer law) and all 4
+    findings were wrong, and two statements were cited as conflicting that are not (warning sign, warning messages)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.rows = {}
+        for regulation_id in ('TR:KANUN:6502', 'TR:YONETMELIK:TICARI_REKLAM', 'TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM',
+                              'TR:YONETMELIK:ALKOL_TESIS_TEKNIK_SARTLAR'):
+            duties = extract_regulation(regulation_id, REGISTRY, STORE)[1]
+            for item in compare_profile(BREWER, duties, BREWER_REGISTER, REGISTRY, STORE).rows:
+                cls.rows.setdefault(item.provision_ref, []).append(item)
+
+    def test_a_statement_that_sends_advertisements_to_legal_review_permits_no_prohibited_advertisement(self):
+        # "Her türlü iletişim aracında ... örtülü reklam yapılması yasaktır." against "Alkolsüz bira için hazırlanan reklam
+        # ve tanıtım çalışmaları, yayına alınmadan önce Hukuk Müşavirliğinin onayına sunulur."
+        for ref in ('Kanun 6502 md. 61/f.4/c.2', 'Yönetmelik 20435 md. 22/f.1', 'Yönetmelik 20435 md. 27/f.3', 'Yönetmelik 20435 md. 10/f.1',
+                    'Yönetmelik 20435 md. 5/f.1/b.ı'):
+            self.assertTrue(self.rows[ref], ref)
+            self.assertEqual({r.mapping.status for r in self.rows[ref]} & {'CONTRADICTED'}, set(), ref)
+
+    def test_the_marks_of_a_brand_are_not_a_labelling_duty(self):
+        # "... marka, amblem ya da işaretlerini kullanarak destek olamazlar" was matched with "uyarı mesajları konulur"
+        # through the word "işaretlerini" read as marking.
+        sponsoring = self.rows['Yönetmelik 14646 md. 20/f.7']
+        self.assertEqual({r.mapping.status for r in sponsoring}, {'CONTRADICTED'})                  # by the sponsorship statement
+        self.assertEqual({r.passage_id for item in sponsoring for r in item.readings if r.relation == 'CONFLICTS'}, {'POL-MKT-01#2'})
+
+    def test_a_unit_of_account_is_not_a_limit_a_product_exceeds(self):
+        # "Üründeki %100'lük alkol cinsinden 100 litre alkol için en az 25 kg meyve ..." (a fruit liqueur plant project)
+        self.assertEqual([f for rows in self.rows.values() for r in rows for f in r.product_findings if f.result == 'EXCEEDS_LIMIT'], [])
+
+    def test_the_duplicates_of_the_statute_in_its_by_law_are_found_with_it(self):
+        self.assertEqual({r.mapping.status for r in self.rows['Yönetmelik 14646 md. 20/f.4']}, {'CONTRADICTED'})   # free distribution
+        self.assertEqual({r.coverage_reasons[0] for r in self.rows['Yönetmelik 14646 md. 8/f.1/b.d']}, {'TIME_WINDOW_VIOLATED'})
+
+
 class SecondReadingTests(unittest.TestCase):
     """The rule comparer and the engine's judge on the same duty and documents (combine_coverage)."""
 
