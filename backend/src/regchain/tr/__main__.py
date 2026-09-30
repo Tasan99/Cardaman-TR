@@ -4,6 +4,12 @@ corpus refresh   fetch the official text of every catalogued regulation that nam
 corpus status    the stored versions
 corpus verify    what the catalogue or the scopes claim that the stored texts do not support
 corpus apply     write the fields the stored texts support into the catalogue (regulations.json)
+obligations      the clause-level obligations of a stored regulation; with --profile, where each applies
+gaps             obligation -> policy -> control -> evidence -> gap for a pilot profile and its (synthetic) register
+changes          the clauses an amendment touched since a date, the duties they carry and, with --profile, whom they reach
+ai units         the reading units of some articles (what a model is given)
+ai compare       rule reader against a recorded model reading: agreement, and the layer of every disagreement
+ai evaluate      BEVERAGE_TR_DEV_V2 (developer labels, INDICATIVE): tasks, contrast pairs, wrong results by layer
 """
 import argparse
 import json
@@ -55,15 +61,121 @@ def apply_verified(store: CorpusStore, path: Path = DATA / 'regulations.json') -
     return report
 
 
+def _profile(registry: Registry, profile_id: str):
+    from .profile import load_pilot_profiles
+    profiles = {p.profile_id: p for p in load_pilot_profiles(registry.vocabulary).values()}
+    if profile_id not in profiles:
+        raise SystemExit(f'unknown profile {profile_id}; known: {sorted(profiles)}')
+    return profiles[profile_id]
+
+
+def _obligation_row(obligation, decisions=None) -> dict:
+    row = {'ref': obligation.provision_ref, 'kind': obligation.kind, 'topic': obligation.topic, 'addressed_by': obligation.basis,
+           'level': obligation.scope.level, 'activities': obligation.scope.activity_classes, 'entities': obligation.scope.entity_classes,
+           'products': obligation.scope.product_classes or obligation.scope.alcohol_scope,
+           'conditions': [c['quote'] for c in obligation.scope.conditions], 'exceptions': [e['quote'][:120] for e in obligation.scope.exceptions],
+           'flags': obligation.flags, 'text': obligation.text}
+    if decisions is not None:
+        row['applies'] = {d.target_id: {'status': d.status, 'reasons': d.reason_codes} for d in decisions if d.status != 'DOES_NOT_APPLY'}
+    return row
+
+
+def _domain(args, store: CorpusStore) -> int:
+    from .extraction import extract_regulation, route
+    registry = Registry.load()
+    articles = args.article or None
+    if args.command == 'obligations':
+        profile = _profile(registry, args.profile) if args.profile else None
+        _, obligations = extract_regulation(args.regulation, registry, store, articles=articles)
+        _print([_obligation_row(o, route(o, profile, registry, store)[0] if profile else None) for o in obligations])
+        return 0
+    if args.command == 'gaps':
+        from .compare import compare_profile, load_register
+        profile = _profile(registry, args.profile)
+        regulations = args.regulation or [rid for rid in registry.regulations if store.versions(rid)]
+        obligations = [o for rid in regulations for o in extract_regulation(rid, registry, store, articles=articles)[1]]
+        report = compare_profile(profile, obligations, load_register(profile.profile_id), registry, store)
+        rows = [{'ref': r.provision_ref, 'target': r.target_id, 'applicability': r.applicability, 'status': r.mapping.status,
+                 'document_coverage': r.document_coverage, 'reasons': r.coverage_reasons, 'gap': r.gap, 'actions': r.actions,
+                 'products': [f.model_dump(mode='json') for f in r.product_findings if f.result != 'WITHIN_LIMIT'],
+                 'review_required': r.review_required} for r in report.rows if args.all or r.mapping.status != 'COVERED']
+        _print({'profile_id': report.profile_id, 'register_synthetic': report.register_synthetic, 'summary': report.summary, 'rows': rows})
+        return 0
+    if args.command == 'changes':
+        from datetime import date
+        from .change import impact, note_changes
+        record, old, new = note_changes(args.regulation, date.fromisoformat(args.since), registry, store)
+        if args.profile:
+            from .compare import load_register
+            profile = _profile(registry, args.profile)
+            record = impact(record, old, new, profile, registry, store, load_register(profile.profile_id))
+        _print(record.model_dump(mode='json'))
+        return 0
+    raise SystemExit(f'unknown command {args.command}')
+
+
+def _ai(args, store: CorpusStore) -> int:
+    from . import ai, devset
+    from .live import load_readings, units_of
+    registry = Registry.load()
+    if args.action == 'units':
+        wanted = set(args.article)
+        _print([{k: u[k] for k in ('unit_id', 'mode', 'refs', 'start', 'end', 'input')}
+                for section in store.sections(args.regulation) if not wanted or section['paragraph_number'] in wanted
+                for u in units_of(section, args.regulation, store.head(args.regulation).version_id)])
+        return 0
+    if args.action == 'compare':
+        from .extraction import extract_regulation
+        header, records = load_readings(args.readings)
+        regulations = sorted({r['regulation_id'] for r in records})
+        refs = {ref for r in records for ref in r['refs']}
+        frames = [f for rid in regulations for f in extract_regulation(rid, registry, store)[0] if f.ref in refs]
+        readings = ai.compare_readings(frames, records)
+        _print({'runtime': header.get('runtime'), 'summary': ai.reading_summary(readings),
+                'disagreements': [r.model_dump(mode='json') for r in readings if r.diagnosis]})
+        return 0
+    runs = [json.loads(Path(path).read_text(encoding='utf-8')) for path in args.engine]
+    result = devset.evaluate(registry=registry, store=store, readings=load_readings(args.readings)[1] if args.readings else None,
+                             engine_runs=runs)
+    if not args.wrong:
+        result = {k: v for k, v in result.items() if k != 'wrong'}
+    _print(result)
+    return 0
+
+
 def main(argv=None):
-    parser = argparse.ArgumentParser(prog='python -m regchain.tr', description='Cardaman TR: official-source corpus')
+    parser = argparse.ArgumentParser(prog='python -m regchain.tr', description='Cardaman TR: official-source corpus and beverage packs')
     commands = parser.add_subparsers(dest='command', required=True)
     corpus = commands.add_parser('corpus', help='the official-source corpus')
     corpus.add_argument('action', choices=['refresh', 'status', 'verify', 'apply'])
-    corpus.add_argument('--root', default=str(CORPUS), help='corpus directory (default: the packaged corpus)')
     corpus.add_argument('--only', action='append', default=[], help='regulation id; repeat to name several')
+    obligations = commands.add_parser('obligations', help='clause-level obligations of a stored regulation')
+    obligations.add_argument('--regulation', required=True)
+    obligations.add_argument('--profile', help='a pilot profile id: adds where each obligation applies')
+    gaps = commands.add_parser('gaps', help='obligation -> policy -> control -> evidence -> gap for a pilot profile')
+    gaps.add_argument('--profile', required=True)
+    gaps.add_argument('--regulation', action='append', default=[], help='regulation id; repeat to name several (default: every stored text)')
+    gaps.add_argument('--all', action='store_true', help='also list the covered rows')
+    changes = commands.add_parser('changes', help='clauses amended since a date, their duties and whom they reach')
+    changes.add_argument('--regulation', required=True)
+    changes.add_argument('--since', required=True, help='ISO date; amendment notes dated on or after it are read')
+    changes.add_argument('--profile')
+    ai_parser = commands.add_parser('ai', help='the two readers and the development evaluation')
+    ai_parser.add_argument('action', choices=['units', 'compare', 'evaluate'])
+    ai_parser.add_argument('--regulation')
+    ai_parser.add_argument('--readings', help='a recorded readings file (live.read_units)')
+    ai_parser.add_argument('--engine', action='append', default=[], help='a recorded engine run (live.analyze_entity); repeat to name several')
+    ai_parser.add_argument('--wrong', action='store_true', help='evaluate: list every wrong result with its layer')
+    for sub_parser in (corpus, obligations, gaps, changes, ai_parser):
+        sub_parser.add_argument('--root', default=str(CORPUS), help='corpus directory (default: the packaged corpus)')
+    for sub_parser in (obligations, gaps, ai_parser):
+        sub_parser.add_argument('--article', action='append', default=[], help='article number; repeat to name several')
     args = parser.parse_args(argv)
     store = CorpusStore(Path(args.root))
+    if args.command == 'ai':
+        return _ai(args, store)
+    if args.command != 'corpus':
+        return _domain(args, store)
     if args.action == 'refresh':
         catalogue = Registry.load().regulations.values()
         report = refresh(catalogue, store, only=set(args.only) or None)

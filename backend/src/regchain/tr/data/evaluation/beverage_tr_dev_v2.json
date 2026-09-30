@@ -1,0 +1,4627 @@
+{
+ "format": "cardaman-evaluation-dataset-v2",
+ "dataset_id": "BEVERAGE_TR_DEV_V2",
+ "version": "0.2.0",
+ "label_status": "DEVELOPMENT",
+ "labelled_on": "2026-09-30",
+ "note": "Developer labels on the stored official texts and the synthetic pilot profiles and registers. INDICATIVE only: not expert gold, one reader, no adjudication. No label is copied from a model or from the rule reader. Clauses of the DEV split were read while the wording rules were being corrected against them, so a score on DEV measures fit, not accuracy; the HOLDOUT clauses were labelled from the text before any reader was run on them and no rule was changed after they were scored. UNDECIDED marks a clause the developer could not classify; it is scored in no task. Label corrections made after a first scoring are listed under label_changes, with the score before them.",
+ "label_changes": [
+  {
+   "task": "APPLICABILITY",
+   "changed": 11,
+   "from": "APPLIES",
+   "to": "PARTIAL",
+   "score_before": "86 / 97",
+   "why": "entity-level sides whose entity also holds products the duty does not reach (an alcohol-free beer next to the beers, an energy drink next to colas and water): the routing word for that is PARTIAL, as in BEVERAGE_TR_DEV_V1; the developer had written APPLIES. No routing rule was changed for these cases."
+  },
+  {
+   "task": "ADDRESSEE_MATCH",
+   "changed": 2,
+   "why": "a second defensible reading was admitted next to the first (see the two clauses with two addressee labels set in the builder)"
+  },
+  {
+   "task": "OBLIGATION_EXTRACTION",
+   "changed": 1,
+   "why": "Tebliğ 11376 md. 5/f.1/b.a relabelled BOTH: the clause has a duty and a prohibition"
+  }
+ ],
+ "target_per_task": 100,
+ "corpus_versions": {
+  "TR:KANUN:4250": "20260930-609a640503b1",
+  "TR:KANUN:5996": "20260930-f72824ca4517",
+  "TR:KANUN:6502": "20260930-913bb5070a05",
+  "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER": "20260930-af75cffb8bb3",
+  "TR:TEBLIG:TGK_BIRA": "20260930-120006ce15d8",
+  "TR:TEBLIG:TGK_ENERJI_ICECEKLERI": "20260930-85e33626fdc8",
+  "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM": "20260930-07cd0ca24a1f",
+  "TR:YONETMELIK:ALKOL_IC_DIS_TICARET": "20260930-c3d5ba94a7b1",
+  "TR:YONETMELIK:AMBALAJ_ATIKLARI": "20260930-e11acf13abef",
+  "TR:YONETMELIK:GEKAP": "20260930-ea756006c28a",
+  "TR:YONETMELIK:GIDA_HIJYENI": "20260930-aebe05d434a3",
+  "TR:YONETMELIK:INSANI_TUKETIM_SULAR": "20260930-64c5c301da1c",
+  "TR:YONETMELIK:TGK_BESLENME_BEYANLARI": "20260930-db22b9ab0c05",
+  "TR:YONETMELIK:TGK_ETIKETLEME": "20260930-975f2369d7e8",
+  "TR:YONETMELIK:TICARI_REKLAM": "20260930-a21f046fc3a4"
+ },
+ "kinds": {
+  "OBLIGATION": "a positive duty of a company or a requirement on its product or label",
+  "PROHIBITION": "something a company may not do",
+  "BOTH": "one clause that states a duty and a prohibition",
+  "PERMISSION": "what may be done",
+  "EXCEPTION": "an exemption from another provision",
+  "AUTHORITY": "a task or a power of an authority, or a delegation to secondary rules",
+  "STATEMENT": "definition, scope, classification, deeming, or a fragment with no predicate",
+  "REFERENCE": "makes another text or provision applicable; scored in no duty task",
+  "UNDECIDED": "the developer could not decide"
+ },
+ "clauses": [
+  {
+   "ref": "Kanun 4250 md. 6/f.1/c.1",
+   "regulation_id": "TR:KANUN:4250",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY"
+   ],
+   "exception": true
+  },
+  {
+   "ref": "Kanun 4250 md. 6/f.1/c.2",
+   "regulation_id": "TR:KANUN:4250",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY"
+   ],
+   "exception": true
+  },
+  {
+   "ref": "Kanun 4250 md. 6/f.1/c.3",
+   "regulation_id": "TR:KANUN:4250",
+   "split": "DEV",
+   "kind": "PERMISSION"
+  },
+  {
+   "ref": "Kanun 4250 md. 6/f.1/c.4",
+   "regulation_id": "TR:KANUN:4250",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTOR"
+   ],
+   "actors": [
+    "PRODUCER",
+    "IMPORTER"
+   ],
+   "exception": false
+  },
+  {
+   "ref": "Kanun 4250 md. 6/f.1/c.5",
+   "regulation_id": "TR:KANUN:4250",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "exception": true
+  },
+  {
+   "ref": "Kanun 4250 md. 6/f.1/c.6",
+   "regulation_id": "TR:KANUN:4250",
+   "split": "DEV",
+   "kind": "PERMISSION"
+  },
+  {
+   "ref": "Kanun 4250 md. 6/f.1/c.7",
+   "regulation_id": "TR:KANUN:4250",
+   "split": "DEV",
+   "kind": "PROHIBITION"
+  },
+  {
+   "ref": "Kanun 4250 md. 6/f.2",
+   "regulation_id": "TR:KANUN:4250",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTOR"
+   ],
+   "actors": [
+    "PRODUCER",
+    "IMPORTER"
+   ],
+   "exception": false
+  },
+  {
+   "ref": "Kanun 4250 md. 6/f.3",
+   "regulation_id": "TR:KANUN:4250",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY"
+   ],
+   "exception": false
+  },
+  {
+   "ref": "Kanun 4250 md. 6/f.4/c.1",
+   "regulation_id": "TR:KANUN:4250",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY"
+   ],
+   "exception": true
+  },
+  {
+   "ref": "Kanun 4250 md. 6/f.4/c.2",
+   "regulation_id": "TR:KANUN:4250",
+   "split": "DEV",
+   "kind": "EXCEPTION"
+  },
+  {
+   "ref": "Kanun 4250 md. 6/f.5/c.1",
+   "regulation_id": "TR:KANUN:4250",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY"
+   ],
+   "exception": false
+  },
+  {
+   "ref": "Kanun 4250 md. 6/f.5/c.2",
+   "regulation_id": "TR:KANUN:4250",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY"
+   ],
+   "exception": false
+  },
+  {
+   "ref": "Kanun 4250 md. 6/f.5/c.3",
+   "regulation_id": "TR:KANUN:4250",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY"
+   ],
+   "exception": false
+  },
+  {
+   "ref": "Kanun 4250 md. 6/f.6",
+   "regulation_id": "TR:KANUN:4250",
+   "split": "DEV",
+   "kind": "PROHIBITION"
+  },
+  {
+   "ref": "Kanun 4250 md. 6/f.7",
+   "regulation_id": "TR:KANUN:4250",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY"
+   ],
+   "exception": false
+  },
+  {
+   "ref": "Kanun 4250 md. 6/f.8/c.1",
+   "regulation_id": "TR:KANUN:4250",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ],
+   "exception": true
+  },
+  {
+   "ref": "Kanun 4250 md. 6/f.8/c.2",
+   "regulation_id": "TR:KANUN:4250",
+   "split": "DEV",
+   "kind": "PERMISSION"
+  },
+  {
+   "ref": "Kanun 4250 md. 6/f.8/c.3",
+   "regulation_id": "TR:KANUN:4250",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY"
+   ]
+  },
+  {
+   "ref": "Kanun 4250 md. 6/f.8/c.4",
+   "regulation_id": "TR:KANUN:4250",
+   "split": "DEV",
+   "kind": "AUTHORITY"
+  },
+  {
+   "ref": "Kanun 4250 md. 6/f.9/c.1",
+   "regulation_id": "TR:KANUN:4250",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY"
+   ],
+   "exception": true
+  },
+  {
+   "ref": "Kanun 4250 md. 6/f.9/c.2",
+   "regulation_id": "TR:KANUN:4250",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY"
+   ],
+   "exception": true
+  },
+  {
+   "ref": "Kanun 4250 md. 6/f.9/c.3",
+   "regulation_id": "TR:KANUN:4250",
+   "split": "DEV",
+   "kind": "EXCEPTION"
+  },
+  {
+   "ref": "Kanun 4250 md. 6/f.10",
+   "regulation_id": "TR:KANUN:4250",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ],
+   "exception": true
+  },
+  {
+   "ref": "Kanun 4250 md. 6/f.11/c.1",
+   "regulation_id": "TR:KANUN:4250",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY"
+   ],
+   "exception": true
+  },
+  {
+   "ref": "Kanun 4250 md. 6/f.11/c.2",
+   "regulation_id": "TR:KANUN:4250",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY"
+   ],
+   "exception": false
+  },
+  {
+   "ref": "Kanun 4250 md. 9/f.1/c.1",
+   "regulation_id": "TR:KANUN:4250",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTOR",
+    "ACTIVITY"
+   ],
+   "exception": false
+  },
+  {
+   "ref": "Kanun 4250 md. 9/f.1/c.2",
+   "regulation_id": "TR:KANUN:4250",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTOR",
+    "ACTIVITY"
+   ],
+   "exception": false
+  },
+  {
+   "ref": "Kanun 4250 md. 9/f.1/c.3",
+   "regulation_id": "TR:KANUN:4250",
+   "split": "DEV",
+   "kind": "AUTHORITY"
+  },
+  {
+   "ref": "Kanun 4250 md. 9/f.1/c.4",
+   "regulation_id": "TR:KANUN:4250",
+   "split": "DEV",
+   "kind": "AUTHORITY"
+  },
+  {
+   "ref": "Kanun 4250 md. 9/f.2/c.1",
+   "regulation_id": "TR:KANUN:4250",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTIVITY",
+    "FACILITY"
+   ],
+   "exception": true
+  },
+  {
+   "ref": "Kanun 4250 md. 9/f.2/c.2",
+   "regulation_id": "TR:KANUN:4250",
+   "split": "DEV",
+   "kind": "EXCEPTION"
+  },
+  {
+   "ref": "Kanun 4250 md. 9/f.3",
+   "regulation_id": "TR:KANUN:4250",
+   "split": "DEV",
+   "kind": "STATEMENT"
+  },
+  {
+   "ref": "Kanun 4250 md. 9/f.4",
+   "regulation_id": "TR:KANUN:4250",
+   "split": "DEV",
+   "kind": "PERMISSION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 5/f.1/b.a",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 5/f.1/b.b",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTOR",
+    "ACTIVITY"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 5/f.1/b.ç",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTOR",
+    "ACTIVITY"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 5/f.1/b.d",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTOR",
+    "ACTIVITY"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 5/f.1/b.e",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTOR",
+    "ACTIVITY"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 5/f.1/b.f",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 5/f.2",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "STATEMENT"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 6/f.1/b.a/c.1",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTIVITY",
+    "FACILITY"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 6/f.1/b.a/c.2",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTIVITY",
+    "ACTOR"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 6/f.1/b.b",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTOR"
+   ],
+   "actors": [
+    "RETAILER"
+   ],
+   "exception": false
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 6/f.1/b.d/c.1",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTIVITY",
+    "FACILITY"
+   ],
+   "exception": false
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 6/f.1/b.d/c.2",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTIVITY"
+   ],
+   "exception": true
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 6/f.1/b.d/c.3",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTIVITY"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 6/f.1/b.e",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTIVITY",
+    "FACILITY"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 6/f.1/b.f/c.1",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY"
+   ],
+   "exception": false
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 6/f.1/b.f/c.2",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTOR"
+   ],
+   "actors": [
+    "RETAILER"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 6/f.1/b.g/c.1",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTIVITY",
+    "FACILITY"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 6/f.1/b.g/c.2",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "AUTHORITY"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 6/f.1/b.ğ/c.1",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTOR"
+   ],
+   "actors": [
+    "RETAILER"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 6/f.1/b.ğ/c.2",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "STATEMENT"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 6/f.1/b.h",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "PROHIBITION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 6/f.2/c.1",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "PROHIBITION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 6/f.2/c.2",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY"
+   ],
+   "exception": true
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 6/f.2/c.3",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "EXCEPTION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 10/f.1",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY",
+    "FACILITY"
+   ],
+   "exception": false
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 10/f.2",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY"
+   ],
+   "exception": true
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 10/f.3/b.a",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY",
+    "FACILITY"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 10/f.3/b.b",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY",
+    "FACILITY"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 10/f.3/b.c",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY",
+    "FACILITY"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 10/f.3/b.ç",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY",
+    "FACILITY"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 10/f.3/b.d",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY",
+    "FACILITY"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 10/f.4",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "AUTHORITY"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 10/f.5/c.1",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTIVITY",
+    "FACILITY"
+   ],
+   "exception": true
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 10/f.5/c.2",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "STATEMENT"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 10/f.5/c.3",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "EXCEPTION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 10/f.5/c.4",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "PERMISSION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 10/f.5/c.5",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "EXCEPTION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 10/f.6/c.1",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 10/f.6/c.2",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "AUTHORITY"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 10/f.7/c.1",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "PERMISSION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 10/f.7/c.2",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY"
+   ],
+   "exception": false
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 10/f.7/c.3",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "STATEMENT"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 10/f.8/c.1",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "AUTHORITY"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 10/f.8/c.2",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "EXCEPTION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 10/f.8/c.3",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "STATEMENT"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 11/f.1",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY"
+   ],
+   "exception": false
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 11/f.2/c.1",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTOR",
+    "ACTIVITY"
+   ],
+   "actors": [
+    "RETAILER"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 11/f.2/c.2",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTIVITY",
+    "ACTOR"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 11/f.2/c.3",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 11/f.3/c.1",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY"
+   ],
+   "exception": true
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 11/f.3/c.2",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "PERMISSION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 11/f.4/c.1",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "PERMISSION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 11/f.4/c.2",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTIVITY",
+    "ACTOR"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 11/f.4/c.3",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "PERMISSION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 11/f.5/c.1",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY"
+   ],
+   "exception": false
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 11/f.5/c.2",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY"
+   ],
+   "exception": false
+  },
+  {
+   "ref": "Tebliğ 10474 md. 2/f.1/c.1",
+   "regulation_id": "TR:TEBLIG:TGK_BIRA",
+   "split": "DEV",
+   "kind": "STATEMENT"
+  },
+  {
+   "ref": "Tebliğ 10474 md. 2/f.1/c.2",
+   "regulation_id": "TR:TEBLIG:TGK_BIRA",
+   "split": "DEV",
+   "kind": "STATEMENT"
+  },
+  {
+   "ref": "Tebliğ 10474 md. 5/f.1/b.a",
+   "regulation_id": "TR:TEBLIG:TGK_BIRA",
+   "split": "DEV",
+   "kind": "STATEMENT"
+  },
+  {
+   "ref": "Tebliğ 10474 md. 5/f.1/b.b",
+   "regulation_id": "TR:TEBLIG:TGK_BIRA",
+   "split": "DEV",
+   "kind": "STATEMENT"
+  },
+  {
+   "ref": "Tebliğ 10474 md. 5/f.1/b.c",
+   "regulation_id": "TR:TEBLIG:TGK_BIRA",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Tebliğ 10474 md. 5/f.1/b.ç/c.1",
+   "regulation_id": "TR:TEBLIG:TGK_BIRA",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Tebliğ 10474 md. 5/f.1/b.ç/c.2",
+   "regulation_id": "TR:TEBLIG:TGK_BIRA",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Tebliğ 10474 md. 5/f.1/b.d",
+   "regulation_id": "TR:TEBLIG:TGK_BIRA",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Tebliğ 10474 md. 5/f.1/b.e",
+   "regulation_id": "TR:TEBLIG:TGK_BIRA",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Tebliğ 10474 md. 12/f.1/c.1",
+   "regulation_id": "TR:TEBLIG:TGK_BIRA",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Tebliğ 10474 md. 12/f.1/b.a",
+   "regulation_id": "TR:TEBLIG:TGK_BIRA",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Tebliğ 10474 md. 12/f.1/b.b",
+   "regulation_id": "TR:TEBLIG:TGK_BIRA",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Tebliğ 10474 md. 12/f.1/b.c",
+   "regulation_id": "TR:TEBLIG:TGK_BIRA",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Tebliğ 10474 md. 12/f.1/b.d",
+   "regulation_id": "TR:TEBLIG:TGK_BIRA",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Tebliğ 10474 md. 12/f.1/b.e",
+   "regulation_id": "TR:TEBLIG:TGK_BIRA",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ],
+   "exception": true
+  },
+  {
+   "ref": "Tebliğ 10474 md. 12/f.1/b.f",
+   "regulation_id": "TR:TEBLIG:TGK_BIRA",
+   "split": "DEV",
+   "kind": "PERMISSION"
+  },
+  {
+   "ref": "Yönetmelik 6203 md. 9/f.1",
+   "regulation_id": "TR:YONETMELIK:ALKOL_IC_DIS_TICARET",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTOR"
+   ],
+   "actors": [
+    "PRODUCER",
+    "IMPORTER"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 6203 md. 9/f.2",
+   "regulation_id": "TR:YONETMELIK:ALKOL_IC_DIS_TICARET",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTOR"
+   ],
+   "actors": [
+    "PRODUCER",
+    "IMPORTER"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 6203 md. 9/f.3",
+   "regulation_id": "TR:YONETMELIK:ALKOL_IC_DIS_TICARET",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTOR",
+    "PRODUCT"
+   ],
+   "actors": [
+    "PRODUCER",
+    "IMPORTER"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 6203 md. 9/f.4",
+   "regulation_id": "TR:YONETMELIK:ALKOL_IC_DIS_TICARET",
+   "split": "DEV",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 6203 md. 9/f.5",
+   "regulation_id": "TR:YONETMELIK:ALKOL_IC_DIS_TICARET",
+   "split": "DEV",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 6203 md. 15/f.1",
+   "regulation_id": "TR:YONETMELIK:ALKOL_IC_DIS_TICARET",
+   "split": "DEV",
+   "kind": "STATEMENT"
+  },
+  {
+   "ref": "Yönetmelik 6203 md. 15/f.2",
+   "regulation_id": "TR:YONETMELIK:ALKOL_IC_DIS_TICARET",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTOR"
+   ],
+   "actors": [
+    "PRODUCER",
+    "IMPORTER"
+   ]
+  },
+  {
+   "ref": "Tebliğ 23706 md. 2/f.1",
+   "regulation_id": "TR:TEBLIG:TGK_ENERJI_ICECEKLERI",
+   "split": "DEV",
+   "kind": "STATEMENT"
+  },
+  {
+   "ref": "Tebliğ 23706 md. 4/f.1/b.a",
+   "regulation_id": "TR:TEBLIG:TGK_ENERJI_ICECEKLERI",
+   "split": "DEV",
+   "kind": "STATEMENT"
+  },
+  {
+   "ref": "Tebliğ 23706 md. 5/f.1/b.a",
+   "regulation_id": "TR:TEBLIG:TGK_ENERJI_ICECEKLERI",
+   "split": "DEV",
+   "kind": "STATEMENT"
+  },
+  {
+   "ref": "Tebliğ 23706 md. 5/f.1/b.b",
+   "regulation_id": "TR:TEBLIG:TGK_ENERJI_ICECEKLERI",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "PRODUCT"
+   ],
+   "exception": false
+  },
+  {
+   "ref": "Tebliğ 23706 md. 5/f.1/b.c",
+   "regulation_id": "TR:TEBLIG:TGK_ENERJI_ICECEKLERI",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Tebliğ 23706 md. 5/f.1/b.ç/c.1",
+   "regulation_id": "TR:TEBLIG:TGK_ENERJI_ICECEKLERI",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "PRODUCT"
+   ],
+   "exception": true
+  },
+  {
+   "ref": "Tebliğ 23706 md. 5/f.1/b.ç/c.2",
+   "regulation_id": "TR:TEBLIG:TGK_ENERJI_ICECEKLERI",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Tebliğ 23706 md. 5/f.1/b.d",
+   "regulation_id": "TR:TEBLIG:TGK_ENERJI_ICECEKLERI",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "PRODUCT",
+    "ACTIVITY"
+   ],
+   "exception": false
+  },
+  {
+   "ref": "Tebliğ 23706 md. 5/f.1/b.e",
+   "regulation_id": "TR:TEBLIG:TGK_ENERJI_ICECEKLERI",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Tebliğ 23706 md. 5/f.1/b.f",
+   "regulation_id": "TR:TEBLIG:TGK_ENERJI_ICECEKLERI",
+   "split": "DEV",
+   "kind": "PERMISSION"
+  },
+  {
+   "ref": "Tebliğ 23706 md. 5/f.1/b.g",
+   "regulation_id": "TR:TEBLIG:TGK_ENERJI_ICECEKLERI",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Tebliğ 23706 md. 11/f.1",
+   "regulation_id": "TR:TEBLIG:TGK_ENERJI_ICECEKLERI",
+   "split": "DEV",
+   "kind": "REFERENCE"
+  },
+  {
+   "ref": "Tebliğ 23706 md. 11/f.2",
+   "regulation_id": "TR:TEBLIG:TGK_ENERJI_ICECEKLERI",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY"
+   ],
+   "exception": false
+  },
+  {
+   "ref": "Tebliğ 23706 md. 11/f.3",
+   "regulation_id": "TR:TEBLIG:TGK_ENERJI_ICECEKLERI",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY"
+   ],
+   "exception": false
+  },
+  {
+   "ref": "Tebliğ 23706 md. 11/f.4/c.1",
+   "regulation_id": "TR:TEBLIG:TGK_ENERJI_ICECEKLERI",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTIVITY",
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Tebliğ 23706 md. 11/f.4/c.2",
+   "regulation_id": "TR:TEBLIG:TGK_ENERJI_ICECEKLERI",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY"
+   ],
+   "exception": false
+  },
+  {
+   "ref": "Tebliğ 23706 md. 12/f.1/c.1",
+   "regulation_id": "TR:TEBLIG:TGK_ENERJI_ICECEKLERI",
+   "split": "DEV",
+   "kind": "REFERENCE"
+  },
+  {
+   "ref": "Tebliğ 23706 md. 12/f.1/b.a",
+   "regulation_id": "TR:TEBLIG:TGK_ENERJI_ICECEKLERI",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Tebliğ 23706 md. 12/f.1/b.b",
+   "regulation_id": "TR:TEBLIG:TGK_ENERJI_ICECEKLERI",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Tebliğ 23706 md. 12/f.1/b.c",
+   "regulation_id": "TR:TEBLIG:TGK_ENERJI_ICECEKLERI",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Tebliğ 23706 md. 13/f.1/c.1",
+   "regulation_id": "TR:TEBLIG:TGK_ENERJI_ICECEKLERI",
+   "split": "DEV",
+   "kind": "REFERENCE"
+  },
+  {
+   "ref": "Tebliğ 23706 md. 13/f.1/c.2",
+   "regulation_id": "TR:TEBLIG:TGK_ENERJI_ICECEKLERI",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "PRODUCT",
+    "ACTIVITY"
+   ]
+  },
+  {
+   "ref": "Tebliğ 11376 md. 2/f.1/c.1",
+   "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
+   "split": "DEV",
+   "kind": "STATEMENT"
+  },
+  {
+   "ref": "Tebliğ 11376 md. 2/f.1/c.2",
+   "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
+   "split": "DEV",
+   "kind": "STATEMENT"
+  },
+  {
+   "ref": "Tebliğ 11376 md. 5/f.1/b.a",
+   "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
+   "split": "DEV",
+   "kind": "BOTH",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Tebliğ 11376 md. 5/f.1/b.b",
+   "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Tebliğ 11376 md. 5/f.1/b.c",
+   "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ],
+   "exception": false
+  },
+  {
+   "ref": "Tebliğ 11376 md. 5/f.1/b.ç",
+   "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ],
+   "exception": false
+  },
+  {
+   "ref": "Tebliğ 11376 md. 5/f.1/b.d",
+   "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ],
+   "exception": false
+  },
+  {
+   "ref": "Tebliğ 11376 md. 5/f.1/b.e",
+   "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
+   "split": "DEV",
+   "kind": "PERMISSION"
+  },
+  {
+   "ref": "Tebliğ 11376 md. 5/f.1/b.f",
+   "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ],
+   "exception": true
+  },
+  {
+   "ref": "Tebliğ 11376 md. 5/f.1/b.g",
+   "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ],
+   "exception": true
+  },
+  {
+   "ref": "Tebliğ 11376 md. 5/f.1/b.ğ",
+   "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Tebliğ 11376 md. 5/f.1/b.h",
+   "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Tebliğ 11376 md. 5/f.1/b.ı",
+   "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Tebliğ 11376 md. 5/f.1/b.i",
+   "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Tebliğ 11376 md. 5/f.1/b.j",
+   "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Tebliğ 11376 md. 5/f.1/b.k",
+   "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "PRODUCT",
+    "ACTIVITY"
+   ]
+  },
+  {
+   "ref": "Tebliğ 11376 md. 5/f.1/b.l",
+   "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "PRODUCT",
+    "ACTIVITY"
+   ]
+  },
+  {
+   "ref": "Tebliğ 11376 md. 5/f.1/b.m",
+   "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "PRODUCT",
+    "ACTIVITY"
+   ]
+  },
+  {
+   "ref": "Tebliğ 11376 md. 11/f.1/b.a/c.1",
+   "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Tebliğ 11376 md. 11/f.1/b.a/c.2",
+   "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Tebliğ 11376 md. 11/f.1/b.a/c.3",
+   "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Tebliğ 11376 md. 11/f.1/b.b/c.1",
+   "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ],
+   "exception": true
+  },
+  {
+   "ref": "Tebliğ 11376 md. 11/f.1/b.b/c.2",
+   "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
+   "split": "DEV",
+   "kind": "PERMISSION"
+  },
+  {
+   "ref": "Tebliğ 11376 md. 11/f.1/b.b/c.3",
+   "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
+   "split": "DEV",
+   "kind": "PERMISSION"
+  },
+  {
+   "ref": "Tebliğ 11376 md. 11/f.1/b.c",
+   "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
+   "split": "DEV",
+   "kind": "PERMISSION"
+  },
+  {
+   "ref": "Tebliğ 11376 md. 11/f.1/b.ç",
+   "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
+   "split": "DEV",
+   "kind": "PERMISSION"
+  },
+  {
+   "ref": "Tebliğ 11376 md. 11/f.1/b.d",
+   "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Tebliğ 11376 md. 11/f.1/b.e",
+   "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Tebliğ 11376 md. 11/f.1/b.f",
+   "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Tebliğ 11376 md. 11/f.1/b.g",
+   "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
+   "split": "DEV",
+   "kind": "PERMISSION"
+  },
+  {
+   "ref": "Tebliğ 11376 md. 11/f.1/b.ğ",
+   "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Tebliğ 11376 md. 11/f.1/b.h/c.1",
+   "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Tebliğ 11376 md. 11/f.1/b.h/c.2",
+   "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
+   "split": "DEV",
+   "kind": "PERMISSION"
+  },
+  {
+   "ref": "Tebliğ 11376 md. 11/f.1/b.ı",
+   "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Tebliğ 11376 md. 11/f.1/b.i",
+   "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 7510 md. 17/f.1",
+   "regulation_id": "TR:YONETMELIK:INSANI_TUKETIM_SULAR",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTOR",
+    "ACTIVITY"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 7510 md. 17/f.2",
+   "regulation_id": "TR:YONETMELIK:INSANI_TUKETIM_SULAR",
+   "split": "DEV",
+   "kind": "STATEMENT"
+  },
+  {
+   "ref": "Yönetmelik 7510 md. 34/f.1/c.1",
+   "regulation_id": "TR:YONETMELIK:INSANI_TUKETIM_SULAR",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ],
+   "exception": true
+  },
+  {
+   "ref": "Yönetmelik 7510 md. 34/f.1/c.2",
+   "regulation_id": "TR:YONETMELIK:INSANI_TUKETIM_SULAR",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 7510 md. 34/f.1/c.3",
+   "regulation_id": "TR:YONETMELIK:INSANI_TUKETIM_SULAR",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 7510 md. 34/f.1/c.4",
+   "regulation_id": "TR:YONETMELIK:INSANI_TUKETIM_SULAR",
+   "split": "DEV",
+   "kind": "BOTH",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 7510 md. 34/f.1/c.5",
+   "regulation_id": "TR:YONETMELIK:INSANI_TUKETIM_SULAR",
+   "split": "DEV",
+   "kind": "PERMISSION"
+  },
+  {
+   "ref": "Yönetmelik 7510 md. 34/f.1/c.6",
+   "regulation_id": "TR:YONETMELIK:INSANI_TUKETIM_SULAR",
+   "split": "DEV",
+   "kind": "PERMISSION"
+  },
+  {
+   "ref": "Yönetmelik 7510 md. 34/f.2/c.1",
+   "regulation_id": "TR:YONETMELIK:INSANI_TUKETIM_SULAR",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTOR"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 7510 md. 34/f.2/c.2",
+   "regulation_id": "TR:YONETMELIK:INSANI_TUKETIM_SULAR",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ],
+   "exception": true
+  },
+  {
+   "ref": "Yönetmelik 7510 md. 34/f.3/c.1",
+   "regulation_id": "TR:YONETMELIK:INSANI_TUKETIM_SULAR",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "PRODUCT",
+    "ACTIVITY"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 7510 md. 34/f.3/c.2",
+   "regulation_id": "TR:YONETMELIK:INSANI_TUKETIM_SULAR",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTOR"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 7510 md. 34/f.3/c.3",
+   "regulation_id": "TR:YONETMELIK:INSANI_TUKETIM_SULAR",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 7510 md. 34/f.4/b.a",
+   "regulation_id": "TR:YONETMELIK:INSANI_TUKETIM_SULAR",
+   "split": "DEV",
+   "kind": "UNDECIDED"
+  },
+  {
+   "ref": "Yönetmelik 7510 md. 34/f.4/b.b/c.1",
+   "regulation_id": "TR:YONETMELIK:INSANI_TUKETIM_SULAR",
+   "split": "DEV",
+   "kind": "PERMISSION"
+  },
+  {
+   "ref": "Yönetmelik 7510 md. 34/f.4/b.b/c.2",
+   "regulation_id": "TR:YONETMELIK:INSANI_TUKETIM_SULAR",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 7510 md. 34/f.4/b.b/c.3",
+   "regulation_id": "TR:YONETMELIK:INSANI_TUKETIM_SULAR",
+   "split": "DEV",
+   "kind": "AUTHORITY"
+  },
+  {
+   "ref": "Yönetmelik 7510 md. 34/f.4/b.c",
+   "regulation_id": "TR:YONETMELIK:INSANI_TUKETIM_SULAR",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 7510 md. 34/f.5/c.1",
+   "regulation_id": "TR:YONETMELIK:INSANI_TUKETIM_SULAR",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ],
+   "exception": true
+  },
+  {
+   "ref": "Yönetmelik 7510 md. 34/f.5/c.2",
+   "regulation_id": "TR:YONETMELIK:INSANI_TUKETIM_SULAR",
+   "split": "DEV",
+   "kind": "PERMISSION"
+  },
+  {
+   "ref": "Yönetmelik 7510 md. 34/f.6",
+   "regulation_id": "TR:YONETMELIK:INSANI_TUKETIM_SULAR",
+   "split": "DEV",
+   "kind": "EXCEPTION"
+  },
+  {
+   "ref": "Yönetmelik 7510 md. 34/f.7/c.1",
+   "regulation_id": "TR:YONETMELIK:INSANI_TUKETIM_SULAR",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 7510 md. 34/f.7/c.2",
+   "regulation_id": "TR:YONETMELIK:INSANI_TUKETIM_SULAR",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 7510 md. 34/f.8/c.1",
+   "regulation_id": "TR:YONETMELIK:INSANI_TUKETIM_SULAR",
+   "split": "DEV",
+   "kind": "PERMISSION"
+  },
+  {
+   "ref": "Yönetmelik 7510 md. 34/f.8/c.2",
+   "regulation_id": "TR:YONETMELIK:INSANI_TUKETIM_SULAR",
+   "split": "DEV",
+   "kind": "PROHIBITION"
+  },
+  {
+   "ref": "Yönetmelik 7510 md. 34/f.8/c.3",
+   "regulation_id": "TR:YONETMELIK:INSANI_TUKETIM_SULAR",
+   "split": "DEV",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 23282 md. 7/f.1/b.a",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "PRODUCT",
+    "ACTIVITY"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 23282 md. 7/f.1/b.b",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "PRODUCT",
+    "ACTIVITY"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 23282 md. 7/f.1/b.c",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "PRODUCT",
+    "ACTIVITY"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 23282 md. 7/f.1/b.ç",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "PRODUCT",
+    "ACTIVITY"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 23282 md. 7/f.1/b.d",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "PRODUCT",
+    "ACTIVITY"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 23282 md. 7/f.1/b.e",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "PRODUCT",
+    "ACTIVITY"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 23282 md. 7/f.1/b.f",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "PRODUCT",
+    "ACTIVITY"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 23282 md. 7/f.2",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT",
+    "ACTIVITY"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 23282 md. 7/f.3",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "PRODUCT",
+    "ACTIVITY"
+   ],
+   "exception": true
+  },
+  {
+   "ref": "Yönetmelik 23282 md. 7/f.4",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "split": "DEV",
+   "kind": "REFERENCE"
+  },
+  {
+   "ref": "Yönetmelik 23282 md. 9/f.1/b.a",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ],
+   "exception": true
+  },
+  {
+   "ref": "Yönetmelik 23282 md. 9/f.1/b.b",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ],
+   "exception": true
+  },
+  {
+   "ref": "Yönetmelik 23282 md. 9/f.1/b.c",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 23282 md. 9/f.1/b.ç",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 23282 md. 9/f.1/b.d",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 23282 md. 9/f.1/b.e",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 23282 md. 9/f.1/b.f",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 23282 md. 9/f.1/b.g",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 23282 md. 9/f.1/b.ğ",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 23282 md. 9/f.1/b.h",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 23282 md. 9/f.1/b.ı",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 23282 md. 9/f.1/b.i",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ],
+   "exception": true
+  },
+  {
+   "ref": "Yönetmelik 23282 md. 9/f.1/b.j",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ],
+   "exception": true
+  },
+  {
+   "ref": "Yönetmelik 23282 md. 9/f.2/c.1",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 23282 md. 9/f.2/c.2",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "split": "DEV",
+   "kind": "PERMISSION"
+  },
+  {
+   "ref": "Yönetmelik 23282 md. 19/f.1",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 23282 md. 19/f.2/c.1",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 23282 md. 19/f.2/c.2",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 23282 md. 19/f.3",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "split": "DEV",
+   "kind": "EXCEPTION"
+  },
+  {
+   "ref": "Yönetmelik 23282 md. 19/f.4",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "split": "DEV",
+   "kind": "EXCEPTION"
+  },
+  {
+   "ref": "Yönetmelik 38745 md. 10/f.1/b.a",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTOR"
+   ],
+   "actors": [
+    "PRODUCER",
+    "IMPORTER"
+   ],
+   "exception": false
+  },
+  {
+   "ref": "Yönetmelik 38745 md. 10/f.1/b.b",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTOR"
+   ],
+   "actors": [
+    "PRODUCER",
+    "IMPORTER"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 38745 md. 10/f.1/b.c",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTOR"
+   ],
+   "actors": [
+    "PRODUCER",
+    "IMPORTER"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 38745 md. 10/f.1/b.ç",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTOR"
+   ],
+   "actors": [
+    "PRODUCER",
+    "IMPORTER"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 38745 md. 10/f.2/c.1",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTOR"
+   ],
+   "actors": [
+    "PRODUCER",
+    "IMPORTER"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 38745 md. 10/f.2/c.2",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "split": "DEV",
+   "kind": "UNDECIDED"
+  },
+  {
+   "ref": "Yönetmelik 38745 md. 10/f.3/c.1",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTOR"
+   ],
+   "actors": [
+    "PRODUCER",
+    "IMPORTER"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 38745 md. 10/f.3/c.2",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "split": "DEV",
+   "kind": "BOTH",
+   "exception": false
+  },
+  {
+   "ref": "Yönetmelik 38745 md. 10/f.4",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTOR"
+   ],
+   "actors": [
+    "PRODUCER",
+    "IMPORTER"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 38745 md. 10/f.5/b.a",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTOR"
+   ],
+   "actors": [
+    "CONTRACT_SUPPLIER"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 38745 md. 10/f.5/b.b",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTOR"
+   ],
+   "actors": [
+    "CONTRACT_SUPPLIER"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 38745 md. 10/f.5/b.c",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTOR"
+   ],
+   "actors": [
+    "CONTRACT_SUPPLIER"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 38745 md. 10/f.6",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "split": "DEV",
+   "kind": "PERMISSION"
+  },
+  {
+   "ref": "Yönetmelik 38745 md. 11/f.1/b.a",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTOR"
+   ],
+   "actors": [
+    "RETAILER"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 38745 md. 11/f.1/b.b",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTOR"
+   ],
+   "actors": [
+    "RETAILER"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 38745 md. 11/f.1/b.c",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTOR"
+   ],
+   "actors": [
+    "RETAILER"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 38745 md. 11/f.1/b.ç",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTOR"
+   ],
+   "actors": [
+    "RETAILER"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 38745 md. 11/f.2/c.1",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "split": "DEV",
+   "kind": "STATEMENT"
+  },
+  {
+   "ref": "Yönetmelik 38745 md. 11/f.2/c.2",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "split": "DEV",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 38745 md. 11/f.3",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTOR"
+   ],
+   "actors": [
+    "RETAILER"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 38745 md. 11/f.4",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTOR"
+   ],
+   "actors": [
+    "RETAILER"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 38745 md. 11/f.5",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTOR"
+   ],
+   "actors": [
+    "RETAILER"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 38745 md. 15/f.1/c.1",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTOR"
+   ],
+   "actors": [
+    "PRODUCER",
+    "IMPORTER"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 38745 md. 15/f.1/c.2",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "split": "DEV",
+   "kind": "STATEMENT"
+  },
+  {
+   "ref": "Yönetmelik 38745 md. 15/f.2/c.1",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "split": "DEV",
+   "kind": "STATEMENT"
+  },
+  {
+   "ref": "Yönetmelik 38745 md. 15/f.2/c.2",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTOR"
+   ],
+   "actors": [
+    "PRODUCER",
+    "IMPORTER"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 38745 md. 15/f.3/c.1",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "split": "DEV",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 38745 md. 15/f.3/c.2",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "split": "DEV",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 38745 md. 15/f.3/c.3",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "split": "DEV",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 38745 md. 15/f.4/c.1",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "split": "DEV",
+   "kind": "AUTHORITY"
+  },
+  {
+   "ref": "Yönetmelik 38745 md. 15/f.4/c.2",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "split": "DEV",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 34147 md. 8/f.1/b.a",
+   "regulation_id": "TR:YONETMELIK:GEKAP",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTOR"
+   ],
+   "actors": [
+    "PRODUCER",
+    "IMPORTER"
+   ],
+   "exception": false
+  },
+  {
+   "ref": "Yönetmelik 34147 md. 8/f.1/b.b",
+   "regulation_id": "TR:YONETMELIK:GEKAP",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTOR"
+   ],
+   "actors": [
+    "PRODUCER",
+    "IMPORTER"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 34147 md. 8/f.1/b.c",
+   "regulation_id": "TR:YONETMELIK:GEKAP",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTOR"
+   ],
+   "actors": [
+    "PRODUCER",
+    "IMPORTER"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 34147 md. 8/f.1/b.ç",
+   "regulation_id": "TR:YONETMELIK:GEKAP",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTOR"
+   ],
+   "actors": [
+    "PRODUCER",
+    "IMPORTER"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 34147 md. 8/f.1/b.d",
+   "regulation_id": "TR:YONETMELIK:GEKAP",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTOR"
+   ],
+   "actors": [
+    "PRODUCER",
+    "IMPORTER"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 34147 md. 8/f.1/b.e",
+   "regulation_id": "TR:YONETMELIK:GEKAP",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTOR"
+   ],
+   "actors": [
+    "PRODUCER",
+    "IMPORTER"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 34147 md. 8/f.1/b.f",
+   "regulation_id": "TR:YONETMELIK:GEKAP",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTOR"
+   ],
+   "actors": [
+    "PRODUCER",
+    "IMPORTER"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 20435 md. 7/f.1",
+   "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTIVITY"
+   ],
+   "exception": false
+  },
+  {
+   "ref": "Yönetmelik 20435 md. 7/f.2",
+   "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTIVITY"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 20435 md. 7/f.3",
+   "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTIVITY"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 20435 md. 7/f.4",
+   "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 20435 md. 7/f.5/b.a",
+   "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 20435 md. 7/f.5/b.b",
+   "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 20435 md. 7/f.5/b.c",
+   "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 20435 md. 7/f.5/b.ç",
+   "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 20435 md. 7/f.5/b.d",
+   "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 20435 md. 7/f.5/b.e",
+   "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 20435 md. 7/f.5/b.f",
+   "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 20435 md. 7/f.5/b.g",
+   "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 20435 md. 7/f.5/b.ğ",
+   "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 20435 md. 7/f.5/b.h",
+   "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 20435 md. 7/f.6",
+   "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 20435 md. 7/f.7",
+   "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 20435 md. 7/f.8/b.a",
+   "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 20435 md. 7/f.8/b.b",
+   "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 20435 md. 7/f.8/b.c",
+   "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 20435 md. 7/f.8/b.ç",
+   "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 20435 md. 24/A/f.1",
+   "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY"
+   ],
+   "exception": false
+  },
+  {
+   "ref": "Yönetmelik 20435 md. 24/A/f.2/c.1",
+   "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+   "split": "DEV",
+   "kind": "OBLIGATION",
+   "addressee": [
+    "ACTIVITY"
+   ],
+   "exception": false
+  },
+  {
+   "ref": "Yönetmelik 20435 md. 24/A/f.2/c.2",
+   "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+   "split": "DEV",
+   "kind": "AUTHORITY"
+  },
+  {
+   "ref": "Yönetmelik 20435 md. 24/A/f.3",
+   "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 40154 md. 5/f.1",
+   "regulation_id": "TR:YONETMELIK:TGK_BESLENME_BEYANLARI",
+   "split": "DEV",
+   "kind": "PERMISSION"
+  },
+  {
+   "ref": "Yönetmelik 40154 md. 5/f.2/b.a",
+   "regulation_id": "TR:YONETMELIK:TGK_BESLENME_BEYANLARI",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY",
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 40154 md. 5/f.2/b.b",
+   "regulation_id": "TR:YONETMELIK:TGK_BESLENME_BEYANLARI",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY",
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 40154 md. 5/f.2/b.c",
+   "regulation_id": "TR:YONETMELIK:TGK_BESLENME_BEYANLARI",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY",
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 40154 md. 5/f.2/b.ç/c.1",
+   "regulation_id": "TR:YONETMELIK:TGK_BESLENME_BEYANLARI",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY",
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 40154 md. 5/f.2/b.ç/c.2",
+   "regulation_id": "TR:YONETMELIK:TGK_BESLENME_BEYANLARI",
+   "split": "DEV",
+   "kind": "AUTHORITY"
+  },
+  {
+   "ref": "Yönetmelik 40154 md. 5/f.2/b.d",
+   "regulation_id": "TR:YONETMELIK:TGK_BESLENME_BEYANLARI",
+   "split": "DEV",
+   "kind": "PROHIBITION",
+   "addressee": [
+    "ACTIVITY",
+    "PRODUCT"
+   ]
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 16/f.1",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "HOLDOUT",
+   "kind": "PROHIBITION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 16/f.2/b.a",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "HOLDOUT",
+   "kind": "PROHIBITION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 16/f.2/b.b/c.1",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "HOLDOUT",
+   "kind": "PROHIBITION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 16/f.2/b.b/c.2",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "HOLDOUT",
+   "kind": "STATEMENT"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 16/f.2/b.c",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "HOLDOUT",
+   "kind": "PROHIBITION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 16/f.3/c.1",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 16/f.3/c.2",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 16/f.3/c.3",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "HOLDOUT",
+   "kind": "STATEMENT"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 17/f.1/c.1",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 17/f.1/c.2",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 17/f.2/b.a",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 17/f.2/b.b",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "HOLDOUT",
+   "kind": "PROHIBITION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 17/f.2/b.c",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 17/f.2/b.ç/c.1",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 17/f.2/b.ç/c.2",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 17/f.2/b.d",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "HOLDOUT",
+   "kind": "PROHIBITION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 17/f.3/c.1",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 17/f.3/c.2",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 17/f.4/c.1",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "HOLDOUT",
+   "kind": "PROHIBITION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 17/f.4/c.2",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 17/f.4/c.3",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "HOLDOUT",
+   "kind": "PROHIBITION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 17/f.5",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "HOLDOUT",
+   "kind": "PROHIBITION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 17/f.6/c.1",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 17/f.6/c.2",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "HOLDOUT",
+   "kind": "PROHIBITION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 17/f.7",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 17/f.8",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "HOLDOUT",
+   "kind": "PROHIBITION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 22/f.1/c.1",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 22/f.1/c.2",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "HOLDOUT",
+   "kind": "EXCEPTION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 22/f.2/c.1",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 22/f.2/c.2",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 22/f.2/c.3",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "HOLDOUT",
+   "kind": "STATEMENT"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 22/f.3",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "HOLDOUT",
+   "kind": "EXCEPTION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 22/f.4/c.1",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "HOLDOUT",
+   "kind": "PROHIBITION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 22/f.4/c.2",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 22/f.5/b.a",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "HOLDOUT",
+   "kind": "PROHIBITION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 22/f.5/b.b/c.1",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "HOLDOUT",
+   "kind": "PROHIBITION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 22/f.5/b.b/c.2",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "HOLDOUT",
+   "kind": "STATEMENT"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 22/f.5/b.c",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "HOLDOUT",
+   "kind": "PROHIBITION"
+  },
+  {
+   "ref": "Yönetmelik 14646 md. 22/f.6",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "split": "HOLDOUT",
+   "kind": "PERMISSION"
+  },
+  {
+   "ref": "Yönetmelik 23282 md. 8/f.1",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 23282 md. 8/f.2",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 23282 md. 8/f.3",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "split": "HOLDOUT",
+   "kind": "PROHIBITION"
+  },
+  {
+   "ref": "Yönetmelik 23282 md. 8/f.4/c.1",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "split": "HOLDOUT",
+   "kind": "PROHIBITION"
+  },
+  {
+   "ref": "Yönetmelik 23282 md. 8/f.4/c.2",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 23282 md. 8/f.5",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 23282 md. 8/f.6",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 23282 md. 8/f.7/b.a",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 23282 md. 8/f.7/b.b",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 23282 md. 8/f.8/c.1",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 23282 md. 8/f.8/c.2",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "split": "HOLDOUT",
+   "kind": "EXCEPTION"
+  },
+  {
+   "ref": "Yönetmelik 23282 md. 8/f.9",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 23282 md. 12/f.1/b.a",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 23282 md. 12/f.1/b.b",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "split": "HOLDOUT",
+   "kind": "REFERENCE"
+  },
+  {
+   "ref": "Yönetmelik 38745 md. 9/f.1/b.a",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 38745 md. 9/f.1/b.b",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 38745 md. 9/f.1/b.c",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 38745 md. 9/f.1/b.ç",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 38745 md. 9/f.2",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 38745 md. 9/f.3/b.a",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 38745 md. 9/f.3/b.b",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 38745 md. 9/f.4",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "split": "HOLDOUT",
+   "kind": "PERMISSION"
+  },
+  {
+   "ref": "Yönetmelik 38745 md. 16/f.1/c.1",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "split": "HOLDOUT",
+   "kind": "UNDECIDED"
+  },
+  {
+   "ref": "Yönetmelik 38745 md. 16/f.1/c.2",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "split": "HOLDOUT",
+   "kind": "AUTHORITY"
+  },
+  {
+   "ref": "Yönetmelik 38745 md. 16/f.2",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 38745 md. 16/f.3",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 38745 md. 16/f.4",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "split": "HOLDOUT",
+   "kind": "AUTHORITY"
+  },
+  {
+   "ref": "Yönetmelik 15592 md. 5/f.1",
+   "regulation_id": "TR:YONETMELIK:GIDA_HIJYENI",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 15592 md. 6/f.1/b.a",
+   "regulation_id": "TR:YONETMELIK:GIDA_HIJYENI",
+   "split": "HOLDOUT",
+   "kind": "STATEMENT"
+  },
+  {
+   "ref": "Yönetmelik 15592 md. 6/f.1/b.b",
+   "regulation_id": "TR:YONETMELIK:GIDA_HIJYENI",
+   "split": "HOLDOUT",
+   "kind": "UNDECIDED"
+  },
+  {
+   "ref": "Yönetmelik 15592 md. 6/f.1/b.c",
+   "regulation_id": "TR:YONETMELIK:GIDA_HIJYENI",
+   "split": "HOLDOUT",
+   "kind": "UNDECIDED"
+  },
+  {
+   "ref": "Yönetmelik 15592 md. 6/f.1/b.ç",
+   "regulation_id": "TR:YONETMELIK:GIDA_HIJYENI",
+   "split": "HOLDOUT",
+   "kind": "UNDECIDED"
+  },
+  {
+   "ref": "Yönetmelik 15592 md. 6/f.1/b.d",
+   "regulation_id": "TR:YONETMELIK:GIDA_HIJYENI",
+   "split": "HOLDOUT",
+   "kind": "STATEMENT"
+  },
+  {
+   "ref": "Yönetmelik 15592 md. 6/f.1/b.e",
+   "regulation_id": "TR:YONETMELIK:GIDA_HIJYENI",
+   "split": "HOLDOUT",
+   "kind": "UNDECIDED"
+  },
+  {
+   "ref": "Yönetmelik 15592 md. 6/f.1/b.f",
+   "regulation_id": "TR:YONETMELIK:GIDA_HIJYENI",
+   "split": "HOLDOUT",
+   "kind": "UNDECIDED"
+  },
+  {
+   "ref": "Kanun 6502 md. 61/f.1",
+   "regulation_id": "TR:KANUN:6502",
+   "split": "HOLDOUT",
+   "kind": "STATEMENT"
+  },
+  {
+   "ref": "Kanun 6502 md. 61/f.2",
+   "regulation_id": "TR:KANUN:6502",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Kanun 6502 md. 61/f.3",
+   "regulation_id": "TR:KANUN:6502",
+   "split": "HOLDOUT",
+   "kind": "PROHIBITION"
+  },
+  {
+   "ref": "Kanun 6502 md. 61/f.4/c.1",
+   "regulation_id": "TR:KANUN:6502",
+   "split": "HOLDOUT",
+   "kind": "STATEMENT"
+  },
+  {
+   "ref": "Kanun 6502 md. 61/f.4/c.2",
+   "regulation_id": "TR:KANUN:6502",
+   "split": "HOLDOUT",
+   "kind": "PROHIBITION"
+  },
+  {
+   "ref": "Kanun 6502 md. 61/f.5",
+   "regulation_id": "TR:KANUN:6502",
+   "split": "HOLDOUT",
+   "kind": "PERMISSION"
+  },
+  {
+   "ref": "Kanun 6502 md. 61/f.6",
+   "regulation_id": "TR:KANUN:6502",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Kanun 6502 md. 61/f.7",
+   "regulation_id": "TR:KANUN:6502",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Kanun 6502 md. 61/f.8",
+   "regulation_id": "TR:KANUN:6502",
+   "split": "HOLDOUT",
+   "kind": "AUTHORITY"
+  },
+  {
+   "ref": "Yönetmelik 20435 md. 5/f.1/b.a",
+   "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+   "split": "HOLDOUT",
+   "kind": "PROHIBITION"
+  },
+  {
+   "ref": "Yönetmelik 20435 md. 5/f.1/b.b",
+   "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+   "split": "HOLDOUT",
+   "kind": "PROHIBITION"
+  },
+  {
+   "ref": "Yönetmelik 20435 md. 5/f.1/b.c",
+   "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+   "split": "HOLDOUT",
+   "kind": "PROHIBITION"
+  },
+  {
+   "ref": "Yönetmelik 20435 md. 5/f.1/b.ç",
+   "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+   "split": "HOLDOUT",
+   "kind": "PROHIBITION"
+  },
+  {
+   "ref": "Yönetmelik 20435 md. 5/f.1/b.d",
+   "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+   "split": "HOLDOUT",
+   "kind": "PROHIBITION"
+  },
+  {
+   "ref": "Yönetmelik 20435 md. 5/f.1/b.e",
+   "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+   "split": "HOLDOUT",
+   "kind": "PROHIBITION"
+  },
+  {
+   "ref": "Yönetmelik 20435 md. 5/f.1/b.f",
+   "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+   "split": "HOLDOUT",
+   "kind": "PROHIBITION"
+  },
+  {
+   "ref": "Yönetmelik 20435 md. 5/f.1/b.g",
+   "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+   "split": "HOLDOUT",
+   "kind": "PROHIBITION"
+  },
+  {
+   "ref": "Yönetmelik 20435 md. 5/f.1/b.h",
+   "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+   "split": "HOLDOUT",
+   "kind": "PROHIBITION"
+  },
+  {
+   "ref": "Yönetmelik 20435 md. 5/f.1/b.ı",
+   "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+   "split": "HOLDOUT",
+   "kind": "PROHIBITION"
+  },
+  {
+   "ref": "Yönetmelik 20435 md. 9/f.1",
+   "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 20435 md. 9/f.2/c.1",
+   "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 20435 md. 9/f.2/c.2",
+   "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+   "split": "HOLDOUT",
+   "kind": "AUTHORITY"
+  },
+  {
+   "ref": "Yönetmelik 20435 md. 9/f.3",
+   "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 20435 md. 9/f.4",
+   "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Yönetmelik 20435 md. 9/f.5",
+   "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Kanun 5996 md. 22/f.1",
+   "regulation_id": "TR:KANUN:5996",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Kanun 5996 md. 22/f.2/c.1",
+   "regulation_id": "TR:KANUN:5996",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Kanun 5996 md. 22/f.2/c.2",
+   "regulation_id": "TR:KANUN:5996",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Kanun 5996 md. 22/f.3",
+   "regulation_id": "TR:KANUN:5996",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Kanun 5996 md. 22/f.4/c.1",
+   "regulation_id": "TR:KANUN:5996",
+   "split": "HOLDOUT",
+   "kind": "AUTHORITY"
+  },
+  {
+   "ref": "Kanun 5996 md. 22/f.4/c.2",
+   "regulation_id": "TR:KANUN:5996",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Kanun 5996 md. 22/f.4/c.3",
+   "regulation_id": "TR:KANUN:5996",
+   "split": "HOLDOUT",
+   "kind": "PROHIBITION"
+  },
+  {
+   "ref": "Kanun 5996 md. 22/f.5",
+   "regulation_id": "TR:KANUN:5996",
+   "split": "HOLDOUT",
+   "kind": "AUTHORITY"
+  },
+  {
+   "ref": "Kanun 5996 md. 22/f.6/c.1",
+   "regulation_id": "TR:KANUN:5996",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Kanun 5996 md. 22/f.6/c.2",
+   "regulation_id": "TR:KANUN:5996",
+   "split": "HOLDOUT",
+   "kind": "PROHIBITION"
+  },
+  {
+   "ref": "Kanun 5996 md. 22/f.7/c.1",
+   "regulation_id": "TR:KANUN:5996",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Kanun 5996 md. 22/f.7/c.2",
+   "regulation_id": "TR:KANUN:5996",
+   "split": "HOLDOUT",
+   "kind": "AUTHORITY"
+  },
+  {
+   "ref": "Kanun 5996 md. 22/f.7/c.3",
+   "regulation_id": "TR:KANUN:5996",
+   "split": "HOLDOUT",
+   "kind": "AUTHORITY"
+  },
+  {
+   "ref": "Kanun 5996 md. 22/f.8",
+   "regulation_id": "TR:KANUN:5996",
+   "split": "HOLDOUT",
+   "kind": "AUTHORITY"
+  },
+  {
+   "ref": "Kanun 5996 md. 24/f.1",
+   "regulation_id": "TR:KANUN:5996",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Kanun 5996 md. 24/f.2",
+   "regulation_id": "TR:KANUN:5996",
+   "split": "HOLDOUT",
+   "kind": "OBLIGATION"
+  },
+  {
+   "ref": "Kanun 5996 md. 24/f.3",
+   "regulation_id": "TR:KANUN:5996",
+   "split": "HOLDOUT",
+   "kind": "PROHIBITION"
+  },
+  {
+   "ref": "Kanun 5996 md. 24/f.4/c.1",
+   "regulation_id": "TR:KANUN:5996",
+   "split": "HOLDOUT",
+   "kind": "PROHIBITION"
+  },
+  {
+   "ref": "Kanun 5996 md. 24/f.4/c.2",
+   "regulation_id": "TR:KANUN:5996",
+   "split": "HOLDOUT",
+   "kind": "PROHIBITION"
+  },
+  {
+   "ref": "Kanun 5996 md. 24/f.5",
+   "regulation_id": "TR:KANUN:5996",
+   "split": "HOLDOUT",
+   "kind": "AUTHORITY"
+  }
+ ],
+ "applicability": [
+  {
+   "case_id": "APP-01",
+   "family": "PRODUCT_MATCH",
+   "ref": "Kanun 4250 md. 6/f.8/c.1",
+   "regulation_id": "TR:KANUN:4250",
+   "about": "health warnings on the packaging of alcoholic drinks; export products excepted",
+   "sides": [
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-LAGER",
+     "expected": "APPLIES"
+    },
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-LOW",
+     "expected": "APPLIES"
+    },
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-AF",
+     "expected": "DOES_NOT_APPLY"
+    },
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-LAGER-EXPORT",
+     "expected": "DOES_NOT_APPLY"
+    },
+    {
+     "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+     "target_id": "NONALC-COLA",
+     "expected": "DOES_NOT_APPLY"
+    }
+   ]
+  },
+  {
+   "case_id": "APP-02",
+   "family": "PRODUCT_MATCH",
+   "ref": "Kanun 4250 md. 6/f.10",
+   "regulation_id": "TR:KANUN:4250",
+   "about": "label of a drink made by de-alcoholising an alcoholic one",
+   "sides": [
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-AF",
+     "expected": "APPLIES"
+    },
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-LAGER",
+     "expected": "DOES_NOT_APPLY"
+    },
+    {
+     "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+     "target_id": "NONALC-COLA",
+     "expected": "DOES_NOT_APPLY"
+    }
+   ]
+  },
+  {
+   "case_id": "APP-03",
+   "family": "PRODUCT_MATCH",
+   "ref": "Yönetmelik 23282 md. 9/f.1/b.i",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "about": "actual alcoholic strength on the label above 1.2 % vol.",
+   "sides": [
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-LAGER",
+     "expected": "APPLIES"
+    },
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-LOW",
+     "expected": "DOES_NOT_APPLY"
+    },
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-AF",
+     "expected": "DOES_NOT_APPLY"
+    },
+    {
+     "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+     "target_id": "NONALC-COLA",
+     "expected": "DOES_NOT_APPLY"
+    }
+   ]
+  },
+  {
+   "case_id": "APP-04",
+   "family": "EXCEPTION",
+   "ref": "Yönetmelik 23282 md. 9/f.1/b.b",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "about": "list of ingredients; md. 19/4 lifts it above 1.2 % vol.",
+   "sides": [
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-LAGER",
+     "expected": "DOES_NOT_APPLY"
+    },
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-LOW",
+     "expected": "APPLIES"
+    },
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-AF",
+     "expected": "APPLIES"
+    },
+    {
+     "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+     "target_id": "NONALC-COLA",
+     "expected": "APPLIES"
+    }
+   ]
+  },
+  {
+   "case_id": "APP-05",
+   "family": "EXCEPTION",
+   "ref": "Yönetmelik 23282 md. 9/f.1/b.j",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "about": "nutrition declaration; md. 19/4 lifts it above 1.2 % vol.",
+   "sides": [
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-DARK",
+     "expected": "DOES_NOT_APPLY"
+    },
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-AF",
+     "expected": "APPLIES"
+    },
+    {
+     "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+     "target_id": "NONALC-COLA-ZERO",
+     "expected": "APPLIES"
+    }
+   ]
+  },
+  {
+   "case_id": "APP-06",
+   "family": "PRODUCT_MATCH",
+   "ref": "Yönetmelik 23282 md. 9/f.1/b.a",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "about": "name of the food on the label",
+   "sides": [
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-LAGER",
+     "expected": "APPLIES"
+    },
+    {
+     "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+     "target_id": "NONALC-COLA",
+     "expected": "APPLIES"
+    }
+   ]
+  },
+  {
+   "case_id": "APP-07",
+   "family": "PRODUCT_MATCH",
+   "ref": "Tebliğ 23706 md. 5/f.1/b.b",
+   "regulation_id": "TR:TEBLIG:TGK_ENERJI_ICECEKLERI",
+   "about": "caffeine limit of energy drinks",
+   "sides": [
+    {
+     "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+     "target_id": "NONALC-ENERGY",
+     "expected": "APPLIES"
+    },
+    {
+     "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+     "target_id": "NONALC-ENERGY-MAX",
+     "expected": "APPLIES"
+    },
+    {
+     "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+     "target_id": "NONALC-COLA",
+     "expected": "DOES_NOT_APPLY"
+    },
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-LAGER",
+     "expected": "DOES_NOT_APPLY"
+    }
+   ]
+  },
+  {
+   "case_id": "APP-08",
+   "family": "PRODUCT_MATCH",
+   "ref": "Tebliğ 11376 md. 5/f.1/b.c",
+   "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
+   "about": "caffeine limit of the soft drinks the communiqué covers",
+   "sides": [
+    {
+     "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+     "target_id": "NONALC-COLA",
+     "expected": "APPLIES"
+    },
+    {
+     "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+     "target_id": "NONALC-ENERGY",
+     "expected": "DOES_NOT_APPLY"
+    },
+    {
+     "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+     "target_id": "NONALC-WATER",
+     "expected": "DOES_NOT_APPLY"
+    },
+    {
+     "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+     "target_id": "NONALC-JUICE",
+     "expected": "DOES_NOT_APPLY"
+    },
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-LAGER",
+     "expected": "DOES_NOT_APPLY"
+    }
+   ]
+  },
+  {
+   "case_id": "APP-09",
+   "family": "PRODUCT_ATTRIBUTE",
+   "ref": "Tebliğ 11376 md. 11/f.1/b.h/c.1",
+   "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
+   "about": "\"Kafein içerir\" above 1.0 mg/L caffeine",
+   "sides": [
+    {
+     "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+     "target_id": "NONALC-COLA",
+     "expected": "APPLIES"
+    },
+    {
+     "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+     "target_id": "NONALC-COLA-ZERO",
+     "expected": "APPLIES"
+    },
+    {
+     "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+     "target_id": "NONALC-ICED-TEA",
+     "expected": "UNKNOWN"
+    },
+    {
+     "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+     "target_id": "NONALC-WATER",
+     "expected": "DOES_NOT_APPLY"
+    }
+   ]
+  },
+  {
+   "case_id": "APP-10",
+   "family": "PRODUCT_MATCH",
+   "ref": "Yönetmelik 7510 md. 34/f.2/c.2",
+   "regulation_id": "TR:YONETMELIK:INSANI_TUKETIM_SULAR",
+   "about": "name of the water on the cap",
+   "sides": [
+    {
+     "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+     "target_id": "NONALC-WATER",
+     "expected": "APPLIES"
+    },
+    {
+     "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+     "target_id": "NONALC-COLA",
+     "expected": "DOES_NOT_APPLY"
+    },
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-LAGER",
+     "expected": "DOES_NOT_APPLY"
+    }
+   ]
+  },
+  {
+   "case_id": "APP-11",
+   "family": "EXCEPTION",
+   "ref": "Tebliğ 10474 md. 12/f.1/b.e",
+   "regulation_id": "TR:TEBLIG:TGK_BIRA",
+   "about": "alcoholic strength on the label of beers other than alcohol-free beer",
+   "sides": [
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-LAGER",
+     "expected": "APPLIES"
+    },
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-LOW",
+     "expected": "APPLIES"
+    },
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-AF",
+     "expected": "DOES_NOT_APPLY"
+    },
+    {
+     "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+     "target_id": "NONALC-COLA",
+     "expected": "DOES_NOT_APPLY"
+    }
+   ]
+  },
+  {
+   "case_id": "APP-12",
+   "family": "PRODUCT_MATCH",
+   "ref": "Tebliğ 10474 md. 5/f.1/b.c",
+   "regulation_id": "TR:TEBLIG:TGK_BIRA",
+   "about": "carbon dioxide content of beer",
+   "sides": [
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-LAGER",
+     "expected": "APPLIES"
+    },
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-AF",
+     "expected": "APPLIES"
+    },
+    {
+     "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+     "target_id": "NONALC-COLA",
+     "expected": "DOES_NOT_APPLY"
+    }
+   ]
+  },
+  {
+   "case_id": "APP-13",
+   "family": "PRODUCT_MATCH",
+   "ref": "Tebliğ 23706 md. 12/f.1/b.c",
+   "regulation_id": "TR:TEBLIG:TGK_ENERJI_ICECEKLERI",
+   "about": "the 3 mm warning on the label of an energy drink",
+   "sides": [
+    {
+     "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+     "target_id": "NONALC-ENERGY",
+     "expected": "APPLIES"
+    },
+    {
+     "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+     "target_id": "NONALC-COLA",
+     "expected": "DOES_NOT_APPLY"
+    }
+   ]
+  },
+  {
+   "case_id": "APP-14",
+   "family": "ACTIVITY_MATCH",
+   "ref": "Kanun 4250 md. 6/f.1/c.1",
+   "regulation_id": "TR:KANUN:4250",
+   "about": "advertising ban on alcoholic drinks",
+   "sides": [
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-ACT-BEER-ADS",
+     "expected": "APPLIES"
+    },
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-ACT-AF-ADS",
+     "expected": "DOES_NOT_APPLY"
+    },
+    {
+     "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+     "target_id": "NONALC-ACT-COLA-ADS",
+     "expected": "DOES_NOT_APPLY"
+    }
+   ]
+  },
+  {
+   "case_id": "APP-15",
+   "family": "ACTOR_MATCH",
+   "ref": "Kanun 4250 md. 6/f.2",
+   "regulation_id": "TR:KANUN:4250",
+   "about": "producers, importers and marketers may not hand out alcoholic drinks free of charge",
+   "sides": [
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-BREWING",
+     "expected": "PARTIAL"
+    },
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-DISTRIBUTION",
+     "expected": "PARTIAL"
+    },
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-MALT",
+     "expected": "DOES_NOT_APPLY"
+    },
+    {
+     "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+     "target_id": "NONALC-BOTTLING",
+     "expected": "DOES_NOT_APPLY"
+    }
+   ]
+  },
+  {
+   "case_id": "APP-16",
+   "family": "ACTIVITY_MATCH",
+   "ref": "Kanun 4250 md. 6/f.5/c.3",
+   "regulation_id": "TR:KANUN:4250",
+   "about": "no retail sale of alcoholic drinks between 22:00 and 06:00",
+   "sides": [
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-SALES",
+     "expected": "PARTIAL"
+    },
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-BREWING",
+     "expected": "DOES_NOT_APPLY"
+    },
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-DISTRIBUTION",
+     "expected": "DOES_NOT_APPLY"
+    },
+    {
+     "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+     "target_id": "NONALC-ONLINE",
+     "expected": "DOES_NOT_APPLY"
+    }
+   ]
+  },
+  {
+   "case_id": "APP-17",
+   "family": "ACTIVITY_MATCH",
+   "ref": "Kanun 4250 md. 6/f.3",
+   "regulation_id": "TR:KANUN:4250",
+   "about": "no sale or service of alcoholic drinks to persons under eighteen",
+   "sides": [
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-SALES",
+     "expected": "PARTIAL"
+    },
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-HOLDING",
+     "expected": "DOES_NOT_APPLY"
+    },
+    {
+     "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+     "target_id": "NONALC-ONLINE",
+     "expected": "DOES_NOT_APPLY"
+    }
+   ]
+  },
+  {
+   "case_id": "APP-18",
+   "family": "ACTIVITY_MATCH",
+   "ref": "Kanun 4250 md. 6/f.4/c.1",
+   "regulation_id": "TR:KANUN:4250",
+   "about": "no employment of persons under eighteen in making, marketing, selling or serving alcoholic drinks",
+   "sides": [
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-BREWING",
+     "expected": "PARTIAL"
+    },
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-SALES",
+     "expected": "PARTIAL"
+    },
+    {
+     "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+     "target_id": "NONALC-BOTTLING",
+     "expected": "DOES_NOT_APPLY"
+    }
+   ]
+  },
+  {
+   "case_id": "APP-19",
+   "family": "ACTOR_MATCH",
+   "ref": "Yönetmelik 38745 md. 10/f.1/b.ç",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "about": "those who place packaged products on the market register with the packaging information system",
+   "sides": [
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-BREWING",
+     "expected": "APPLIES"
+    },
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-HOLDING",
+     "expected": "DOES_NOT_APPLY"
+    },
+    {
+     "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+     "target_id": "NONALC-BOTTLING",
+     "expected": "APPLIES"
+    },
+    {
+     "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+     "target_id": "NONALC-DISTRIBUTION",
+     "expected": "DOES_NOT_APPLY"
+    },
+    {
+     "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+     "target_id": "NONALC-SALES",
+     "expected": "APPLIES"
+    }
+   ]
+  },
+  {
+   "case_id": "APP-20",
+   "family": "ACTOR_MATCH",
+   "ref": "Yönetmelik 38745 md. 11/f.3",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "about": "sales points take part in the deposit return system",
+   "sides": [
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-SALES",
+     "expected": "APPLIES"
+    },
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-BREWING",
+     "expected": "DOES_NOT_APPLY"
+    },
+    {
+     "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+     "target_id": "NONALC-ONLINE",
+     "expected": "APPLIES"
+    },
+    {
+     "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+     "target_id": "NONALC-BOTTLING",
+     "expected": "DOES_NOT_APPLY"
+    }
+   ]
+  },
+  {
+   "case_id": "APP-21",
+   "family": "ACTOR_MATCH",
+   "ref": "Yönetmelik 38745 md. 10/f.5/b.a",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "about": "contract suppliers of those who place on the market",
+   "sides": [
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-BREWING",
+     "expected": "DOES_NOT_APPLY"
+    },
+    {
+     "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+     "target_id": "NONALC-BOTTLING",
+     "expected": "DOES_NOT_APPLY"
+    }
+   ]
+  },
+  {
+   "case_id": "APP-22",
+   "family": "ACTOR_MATCH",
+   "ref": "Yönetmelik 34147 md. 8/f.1/b.b",
+   "regulation_id": "TR:YONETMELIK:GEKAP",
+   "about": "recovery contribution paid by those who place the products on the domestic market",
+   "sides": [
+    {
+     "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+     "target_id": "NONALC-BOTTLING",
+     "expected": "APPLIES"
+    },
+    {
+     "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+     "target_id": "NONALC-ONLINE",
+     "expected": "DOES_NOT_APPLY"
+    },
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-BREWING",
+     "expected": "APPLIES"
+    },
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-EXPORT",
+     "expected": "UNKNOWN"
+    }
+   ]
+  },
+  {
+   "case_id": "APP-23",
+   "family": "ACTIVITY_MATCH",
+   "ref": "Tebliğ 23706 md. 11/f.2",
+   "regulation_id": "TR:TEBLIG:TGK_ENERJI_ICECEKLERI",
+   "about": "no placing on the market or advertising of energy drinks in sports facilities, school canteens and hospitals",
+   "sides": [
+    {
+     "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+     "target_id": "NONALC-ACT-ENERGY-ONLINE-ADS",
+     "expected": "APPLIES"
+    },
+    {
+     "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+     "target_id": "NONALC-ACT-COLA-ADS",
+     "expected": "DOES_NOT_APPLY"
+    },
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-ACT-BEER-ADS",
+     "expected": "DOES_NOT_APPLY"
+    }
+   ]
+  },
+  {
+   "case_id": "APP-24",
+   "family": "ACTIVITY_MATCH",
+   "ref": "Tebliğ 23706 md. 11/f.3",
+   "regulation_id": "TR:TEBLIG:TGK_ENERJI_ICECEKLERI",
+   "about": "no sale of energy drinks to persons under eighteen",
+   "sides": [
+    {
+     "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+     "target_id": "NONALC-ONLINE",
+     "expected": "PARTIAL"
+    },
+    {
+     "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+     "target_id": "NONALC-BOTTLING",
+     "expected": "DOES_NOT_APPLY"
+    },
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-SALES",
+     "expected": "DOES_NOT_APPLY"
+    }
+   ]
+  },
+  {
+   "case_id": "APP-25",
+   "family": "FACILITY_MATCH",
+   "ref": "Yönetmelik 14646 md. 6/f.1/b.e",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "about": "sales licences displayed inside the workplace",
+   "sides": [
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-SALES",
+     "expected": "PARTIAL"
+    },
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-BREWING",
+     "expected": "DOES_NOT_APPLY"
+    },
+    {
+     "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+     "target_id": "NONALC-ONLINE",
+     "expected": "DOES_NOT_APPLY"
+    }
+   ]
+  },
+  {
+   "case_id": "APP-26",
+   "family": "FACILITY_MATCH",
+   "ref": "Kanun 4250 md. 9/f.2/c.1",
+   "regulation_id": "TR:KANUN:4250",
+   "about": "a hundred metres between the place of sale and schools, dormitories and places of worship",
+   "sides": [
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-SALES",
+     "expected": "PARTIAL"
+    },
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-BREWING",
+     "expected": "DOES_NOT_APPLY"
+    }
+   ]
+  },
+  {
+   "case_id": "APP-27",
+   "family": "ACTOR_MATCH",
+   "ref": "Yönetmelik 7510 md. 17/f.1",
+   "regulation_id": "TR:YONETMELIK:INSANI_TUKETIM_SULAR",
+   "about": "a facility and production permit for those who operate spring and drinking waters",
+   "sides": [
+    {
+     "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+     "target_id": "NONALC-BOTTLING",
+     "expected": "PARTIAL"
+    },
+    {
+     "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+     "target_id": "NONALC-DISTRIBUTION",
+     "expected": "DOES_NOT_APPLY"
+    },
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-BREWING",
+     "expected": "DOES_NOT_APPLY"
+    }
+   ]
+  },
+  {
+   "case_id": "APP-28",
+   "family": "ACTOR_MATCH",
+   "ref": "Yönetmelik 6203 md. 15/f.2",
+   "regulation_id": "TR:YONETMELIK:ALKOL_IC_DIS_TICARET",
+   "about": "monthly sales report of producers and importers of alcoholic drinks",
+   "sides": [
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-BREWING",
+     "expected": "PARTIAL"
+    },
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-SALES",
+     "expected": "DOES_NOT_APPLY"
+    },
+    {
+     "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+     "target_id": "NONALC-BOTTLING",
+     "expected": "DOES_NOT_APPLY"
+    }
+   ]
+  },
+  {
+   "case_id": "APP-29",
+   "family": "ACTIVITY_MATCH",
+   "ref": "Yönetmelik 20435 md. 7/f.1",
+   "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+   "about": "advertisements are truthful and honest, whatever the product",
+   "sides": [
+    {
+     "profile_id": "tr-bev-pilot-alcohol-integrated",
+     "target_id": "ALC-INT-ACT-AF-ADS",
+     "expected": "APPLIES"
+    },
+    {
+     "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+     "target_id": "NONALC-ACT-COLA-ADS",
+     "expected": "APPLIES"
+    }
+   ]
+  }
+ ],
+ "coverage": [
+  {
+   "case_id": "COV-01",
+   "profile_id": "tr-bev-pilot-alcohol-integrated",
+   "target_id": "ALC-INT-ACT-BEER-ADS",
+   "ref": "Kanun 4250 md. 6/f.1/c.1",
+   "regulation_id": "TR:KANUN:4250",
+   "expected": [
+    "COVERED"
+   ],
+   "basis": "POL-MKT-01 st. 1 states the ban"
+  },
+  {
+   "case_id": "COV-02",
+   "profile_id": "tr-bev-pilot-alcohol-integrated",
+   "target_id": "ALC-INT-BREWING",
+   "ref": "Kanun 4250 md. 6/f.1/c.4",
+   "regulation_id": "TR:KANUN:4250",
+   "expected": [
+    "CONTRADICTED"
+   ],
+   "basis": "POL-MKT-01 st. 2 lets brands be used at sponsored concerts and festivals"
+  },
+  {
+   "case_id": "COV-03",
+   "profile_id": "tr-bev-pilot-alcohol-integrated",
+   "target_id": "ALC-INT-BREWING",
+   "ref": "Kanun 4250 md. 6/f.2",
+   "regulation_id": "TR:KANUN:4250",
+   "expected": [
+    "CONTRADICTED"
+   ],
+   "basis": "POL-MKT-01 st. 3 allows free distribution at tastings and openings"
+  },
+  {
+   "case_id": "COV-04",
+   "profile_id": "tr-bev-pilot-alcohol-integrated",
+   "target_id": "ALC-INT-SALES",
+   "ref": "Kanun 4250 md. 6/f.3",
+   "regulation_id": "TR:KANUN:4250",
+   "expected": [
+    "COVERED"
+   ],
+   "basis": "SOP-SALES-02 st. 1"
+  },
+  {
+   "case_id": "COV-05",
+   "profile_id": "tr-bev-pilot-alcohol-integrated",
+   "target_id": "ALC-INT-BREWING",
+   "ref": "Kanun 4250 md. 6/f.4/c.1",
+   "regulation_id": "TR:KANUN:4250",
+   "expected": [
+    "COVERED"
+   ],
+   "basis": "SOP-HR-04 st. 1"
+  },
+  {
+   "case_id": "COV-06",
+   "profile_id": "tr-bev-pilot-alcohol-integrated",
+   "target_id": "ALC-INT-SALES",
+   "ref": "Kanun 4250 md. 6/f.5/c.1",
+   "regulation_id": "TR:KANUN:4250",
+   "expected": [
+    "PARTIALLY_COVERED"
+   ],
+   "basis": "SOP-SALES-02 st. 3 covers vending machines, not games and bets"
+  },
+  {
+   "case_id": "COV-07",
+   "profile_id": "tr-bev-pilot-alcohol-integrated",
+   "target_id": "ALC-INT-SALES",
+   "ref": "Kanun 4250 md. 6/f.5/c.2",
+   "regulation_id": "TR:KANUN:4250",
+   "expected": [
+    "NOT_COVERED"
+   ],
+   "basis": "no statement on sale through press or post"
+  },
+  {
+   "case_id": "COV-08",
+   "profile_id": "tr-bev-pilot-alcohol-integrated",
+   "target_id": "ALC-INT-SALES",
+   "ref": "Kanun 4250 md. 6/f.5/c.3",
+   "regulation_id": "TR:KANUN:4250",
+   "expected": [
+    "CONTRADICTED"
+   ],
+   "basis": "SOP-SALES-02 st. 2 sells until 23:00"
+  },
+  {
+   "case_id": "COV-09",
+   "profile_id": "tr-bev-pilot-alcohol-integrated",
+   "target_id": "ALC-INT-SALES",
+   "ref": "Kanun 4250 md. 6/f.7",
+   "regulation_id": "TR:KANUN:4250",
+   "expected": [
+    "NOT_COVERED"
+   ],
+   "basis": "no statement on display visible from outside"
+  },
+  {
+   "case_id": "COV-10",
+   "profile_id": "tr-bev-pilot-alcohol-integrated",
+   "target_id": "ALC-INT-LAGER",
+   "ref": "Kanun 4250 md. 6/f.8/c.1",
+   "regulation_id": "TR:KANUN:4250",
+   "expected": [
+    "COVERED"
+   ],
+   "basis": "SPEC-LABEL-03 st. 1"
+  },
+  {
+   "case_id": "COV-11",
+   "profile_id": "tr-bev-pilot-alcohol-integrated",
+   "target_id": "ALC-INT-ACT-AF-BRAND",
+   "ref": "Kanun 4250 md. 6/f.9/c.1",
+   "regulation_id": "TR:KANUN:4250",
+   "expected": [
+    "CONTRADICTED"
+   ],
+   "basis": "POL-MKT-01 st. 6 puts the alcoholic brand marks on alcohol-free beer"
+  },
+  {
+   "case_id": "COV-12",
+   "profile_id": "tr-bev-pilot-alcohol-integrated",
+   "target_id": "ALC-INT-AF",
+   "ref": "Kanun 4250 md. 6/f.10",
+   "regulation_id": "TR:KANUN:4250",
+   "expected": [
+    "PARTIALLY_COVERED"
+   ],
+   "basis": "SPEC-LABEL-03 st. 4 says alcohol-free, not the remaining alcohol or its removal"
+  },
+  {
+   "case_id": "COV-13",
+   "profile_id": "tr-bev-pilot-alcohol-integrated",
+   "target_id": "ALC-INT-LAGER",
+   "ref": "Yönetmelik 23282 md. 9/f.1/b.i",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "expected": [
+    "COVERED"
+   ],
+   "basis": "SPEC-LABEL-03 st. 2"
+  },
+  {
+   "case_id": "COV-14",
+   "profile_id": "tr-bev-pilot-alcohol-integrated",
+   "target_id": "ALC-INT-SALES",
+   "ref": "Yönetmelik 14646 md. 6/f.1/b.e",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "expected": [
+    "COVERED"
+   ],
+   "basis": "SOP-SALES-02 st. 4"
+  },
+  {
+   "case_id": "COV-15",
+   "profile_id": "tr-bev-pilot-alcohol-integrated",
+   "target_id": "ALC-INT-SALES",
+   "ref": "Yönetmelik 14646 md. 6/f.1/b.g/c.1",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "expected": [
+    "COVERED",
+    "PARTIALLY_COVERED"
+   ],
+   "basis": "SOP-SALES-02 st. 5 keeps a warning sign; legibility and place are not stated"
+  },
+  {
+   "case_id": "COV-16",
+   "profile_id": "tr-bev-pilot-alcohol-integrated",
+   "target_id": "ALC-INT-SALES",
+   "ref": "Yönetmelik 14646 md. 6/f.1/b.f/c.2",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "expected": [
+    "COVERED"
+   ],
+   "basis": "SOP-SALES-02 st. 1, second half"
+  },
+  {
+   "case_id": "COV-17",
+   "profile_id": "tr-bev-pilot-alcohol-integrated",
+   "target_id": "ALC-INT-BREWING",
+   "ref": "Yönetmelik 38745 md. 10/f.1/b.ç",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "expected": [
+    "PARTIALLY_COVERED"
+   ],
+   "basis": "POL-ENV-05 st. 1 registers with the information system, not with the Agency for deposit packaging"
+  },
+  {
+   "case_id": "COV-18",
+   "profile_id": "tr-bev-pilot-alcohol-integrated",
+   "target_id": "ALC-INT-BREWING",
+   "ref": "Yönetmelik 38745 md. 10/f.1/b.b",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "expected": [
+    "PARTIALLY_COVERED"
+   ],
+   "basis": "POL-ENV-05 st. 2 prefers recoverable packaging; marking is not stated"
+  },
+  {
+   "case_id": "COV-19",
+   "profile_id": "tr-bev-pilot-alcohol-integrated",
+   "target_id": "ALC-INT-BREWING",
+   "ref": "Yönetmelik 34147 md. 8/f.1/b.b",
+   "regulation_id": "TR:YONETMELIK:GEKAP",
+   "expected": [
+    "NOT_COVERED"
+   ],
+   "basis": "no statement on the recovery contribution"
+  },
+  {
+   "case_id": "COV-20",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-ENERGY",
+   "ref": "Tebliğ 23706 md. 5/f.1/b.b",
+   "regulation_id": "TR:TEBLIG:TGK_ENERJI_ICECEKLERI",
+   "expected": [
+    "CONTRADICTED"
+   ],
+   "basis": "SPEC-ENERGY-01 st. 1 allows 320 mg/L"
+  },
+  {
+   "case_id": "COV-21",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-ENERGY",
+   "ref": "Tebliğ 23706 md. 5/f.1/b.c",
+   "regulation_id": "TR:TEBLIG:TGK_ENERJI_ICECEKLERI",
+   "expected": [
+    "PARTIALLY_COVERED"
+   ],
+   "basis": "SPEC-ENERGY-01 st. 2 limits taurine only"
+  },
+  {
+   "case_id": "COV-22",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-ENERGY",
+   "ref": "Tebliğ 23706 md. 5/f.1/b.ç/c.1",
+   "regulation_id": "TR:TEBLIG:TGK_ENERJI_ICECEKLERI",
+   "expected": [
+    "COVERED"
+   ],
+   "basis": "SPEC-ENERGY-01 st. 3"
+  },
+  {
+   "case_id": "COV-23",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-ACT-ENERGY-ONLINE-ADS",
+   "ref": "Tebliğ 23706 md. 11/f.2",
+   "regulation_id": "TR:TEBLIG:TGK_ENERJI_ICECEKLERI",
+   "expected": [
+    "PARTIALLY_COVERED"
+   ],
+   "basis": "POL-MKT-02 st. 1 names school canteens and sports facilities, not hospitals"
+  },
+  {
+   "case_id": "COV-24",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-ONLINE",
+   "ref": "Tebliğ 23706 md. 11/f.3",
+   "regulation_id": "TR:TEBLIG:TGK_ENERJI_ICECEKLERI",
+   "expected": [
+    "COVERED"
+   ],
+   "basis": "POL-MKT-02 st. 2"
+  },
+  {
+   "case_id": "COV-25",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-ACT-ENERGY-ONLINE-ADS",
+   "ref": "Tebliğ 23706 md. 11/f.4/c.2",
+   "regulation_id": "TR:TEBLIG:TGK_ENERJI_ICECEKLERI",
+   "expected": [
+    "NOT_COVERED"
+   ],
+   "basis": "no statement on mass catering places"
+  },
+  {
+   "case_id": "COV-26",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-ENERGY",
+   "ref": "Tebliğ 23706 md. 12/f.1/b.a",
+   "regulation_id": "TR:TEBLIG:TGK_ENERJI_ICECEKLERI",
+   "expected": [
+    "PARTIALLY_COVERED"
+   ],
+   "basis": "SPEC-ENERGY-01 st. 4 states caffeine and taurine only"
+  },
+  {
+   "case_id": "COV-27",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-ENERGY",
+   "ref": "Tebliğ 23706 md. 12/f.1/b.b",
+   "regulation_id": "TR:TEBLIG:TGK_ENERJI_ICECEKLERI",
+   "expected": [
+    "NOT_COVERED",
+    "PARTIALLY_COVERED"
+   ],
+   "basis": "only the short warning of st. 5 is stated"
+  },
+  {
+   "case_id": "COV-28",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-ENERGY",
+   "ref": "Tebliğ 23706 md. 12/f.1/b.c",
+   "regulation_id": "TR:TEBLIG:TGK_ENERJI_ICECEKLERI",
+   "expected": [
+    "COVERED"
+   ],
+   "basis": "SPEC-ENERGY-01 st. 5"
+  },
+  {
+   "case_id": "COV-29",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-COLA",
+   "ref": "Tebliğ 11376 md. 5/f.1/b.c",
+   "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
+   "expected": [
+    "COVERED"
+   ],
+   "basis": "SPEC-LABEL-02 st. 2"
+  },
+  {
+   "case_id": "COV-30",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-COLA",
+   "ref": "Tebliğ 11376 md. 11/f.1/b.h/c.1",
+   "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
+   "expected": [
+    "COVERED"
+   ],
+   "basis": "SPEC-LABEL-02 st. 1"
+  },
+  {
+   "case_id": "COV-31",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-COLA",
+   "ref": "Tebliğ 11376 md. 11/f.1/b.b/c.1",
+   "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
+   "expected": [
+    "COVERED"
+   ],
+   "basis": "SPEC-LABEL-02 st. 3"
+  },
+  {
+   "case_id": "COV-32",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-COLA",
+   "ref": "Yönetmelik 23282 md. 9/f.1/b.a",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "expected": [
+    "COVERED"
+   ],
+   "basis": "SPEC-LABEL-02 st. 4"
+  },
+  {
+   "case_id": "COV-33",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-COLA",
+   "ref": "Yönetmelik 23282 md. 9/f.1/b.b",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "expected": [
+    "COVERED"
+   ],
+   "basis": "SPEC-LABEL-02 st. 4"
+  },
+  {
+   "case_id": "COV-34",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-COLA",
+   "ref": "Yönetmelik 23282 md. 9/f.1/b.d",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "expected": [
+    "COVERED"
+   ],
+   "basis": "SPEC-LABEL-02 st. 4"
+  },
+  {
+   "case_id": "COV-35",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-COLA",
+   "ref": "Yönetmelik 23282 md. 9/f.1/b.e",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "expected": [
+    "COVERED"
+   ],
+   "basis": "SPEC-LABEL-02 st. 4 (son tüketim tarihi)"
+  },
+  {
+   "case_id": "COV-36",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-COLA",
+   "ref": "Yönetmelik 23282 md. 9/f.1/b.g",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "expected": [
+    "COVERED"
+   ],
+   "basis": "SPEC-LABEL-02 st. 4"
+  },
+  {
+   "case_id": "COV-37",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-COLA",
+   "ref": "Yönetmelik 23282 md. 9/f.1/b.h",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "expected": [
+    "NOT_COVERED"
+   ],
+   "basis": "country of origin is not stated"
+  },
+  {
+   "case_id": "COV-38",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-COLA",
+   "ref": "Yönetmelik 23282 md. 9/f.1/b.j",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "expected": [
+    "NOT_COVERED"
+   ],
+   "basis": "nutrition declaration is not stated"
+  },
+  {
+   "case_id": "COV-39",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-BOTTLING",
+   "ref": "Yönetmelik 38745 md. 10/f.1/b.ç",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "expected": [
+    "COVERED"
+   ],
+   "basis": "POL-ENV-03 st. 1"
+  },
+  {
+   "case_id": "COV-40",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-BOTTLING",
+   "ref": "Yönetmelik 34147 md. 8/f.1/b.b",
+   "regulation_id": "TR:YONETMELIK:GEKAP",
+   "expected": [
+    "COVERED"
+   ],
+   "basis": "POL-ENV-03 st. 2"
+  },
+  {
+   "case_id": "COV-41",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-BOTTLING",
+   "ref": "Yönetmelik 34147 md. 8/f.1/b.a",
+   "regulation_id": "TR:YONETMELIK:GEKAP",
+   "expected": [
+    "COVERED",
+    "PARTIALLY_COVERED"
+   ],
+   "basis": "POL-ENV-03 st. 3 records by number and weight; the statutory list is not named"
+  },
+  {
+   "case_id": "COV-42",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-WATER",
+   "ref": "Yönetmelik 7510 md. 34/f.2/c.2",
+   "regulation_id": "TR:YONETMELIK:INSANI_TUKETIM_SULAR",
+   "expected": [
+    "COVERED"
+   ],
+   "basis": "SOP-WATER-04 st. 2"
+  },
+  {
+   "case_id": "COV-43",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-BOTTLING",
+   "ref": "Yönetmelik 7510 md. 17/f.1",
+   "regulation_id": "TR:YONETMELIK:INSANI_TUKETIM_SULAR",
+   "expected": [
+    "COVERED"
+   ],
+   "basis": "SOP-WATER-04 st. 1"
+  },
+  {
+   "case_id": "COV-44",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-ACT-COLA-ADS",
+   "ref": "Yönetmelik 20435 md. 24/A/f.1",
+   "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+   "expected": [
+    "PARTIALLY_COVERED"
+   ],
+   "basis": "POL-MKT-02 st. 5 names television programmes and sugary drinks only"
+  }
+ ]
+}
