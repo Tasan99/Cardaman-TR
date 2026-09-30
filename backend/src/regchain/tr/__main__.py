@@ -107,13 +107,45 @@ def _domain(args, store: CorpusStore) -> int:
             if run['profile_id'] == profile.profile_id:
                 second.setdefault(run['entity_id'], {}).update(
                     second_readings(run, [o for o in obligations if o.regulation_id == run['regulation_id']]))
-        report = compare_profile(profile, obligations, load_register(profile.profile_id), registry, store, second or None)
+        statistics, escalations = None, {}
+        if args.selective:
+            # Rules first; a candidate statement or an open coverage goes to the strong model, which never overrules a rule decision.
+            from .adjudicate import Adjudicator, assess_profile, load_adjudications
+            from .semantic import SimilarityTable, duty_text
+            register = load_register(profile.profile_id)
+            table = SimilarityTable.load(args.similarities) if args.similarities and Path(args.similarities).exists() else SimilarityTable()
+            recorded = load_adjudications(args.adjudications)[1] if args.adjudications and Path(args.adjudications).exists() else {}
+            adjudicator = Adjudicator(recorded=recorded)
+            if args.embed or args.adjudicate:
+                from ..model_router import ModelRouter
+                from ..pilot.engine import quick
+                from .live import scope
+                with scope(f'tr-gaps-{profile.profile_id}'):
+                    router = ModelRouter('ollama')
+                    if args.embed:
+                        applying = [o for o in obligations if any(d.status in ('APPLIES', 'PARTIAL') for d in route(o, profile, registry, store)[0])]
+                        table.add([duty_text(o) for o in applying], [passage.text for passage in register.passages], router.embedder())
+                        if args.similarities:
+                            table.save(args.similarities)
+                    if args.adjudicate:
+                        judge = router.judge_provider()
+                        adjudicator = Adjudicator(quick(judge) if args.quick else judge, args.adjudications, recorded)
+                    report, assessments, statistics = assess_profile(profile, obligations, register, registry, store, table, adjudicator)
+            else:
+                report, assessments, statistics = assess_profile(profile, obligations, register, registry, store, table, adjudicator)
+            escalations = {(a.obligation_id, a.target_id): {'reasons': a.escalation.reasons, 'statements': a.escalation.statements,
+                                                           'disagreement': a.disagreement} for a in assessments if a.escalation is not None}
+        else:
+            report = compare_profile(profile, obligations, load_register(profile.profile_id), registry, store, second or None)
         rows = [{'ref': r.provision_ref, 'target': r.target_id, 'applicability': r.applicability, 'status': r.mapping.status,
                  'document_coverage': r.document_coverage, 'coverage_basis': r.coverage_basis, 'rule_coverage': r.rule_coverage,
                  'model_coverage': r.model_coverage, 'reasons': r.coverage_reasons, 'gap': r.gap, 'actions': r.actions,
                  'products': [f.model_dump(mode='json') for f in r.product_findings if f.result != 'WITHIN_LIMIT'],
-                 'review_required': r.review_required} for r in report.rows if args.all or r.mapping.status != 'COVERED']
-        _print({'profile_id': report.profile_id, 'register_synthetic': report.register_synthetic, 'summary': report.summary, 'rows': rows})
+                 'review_required': r.review_required, **({'escalation': escalations[(r.obligation_id, r.target_id)]}
+                                                          if (r.obligation_id, r.target_id) in escalations else {})}
+                for r in report.rows if args.all or r.mapping.status != 'COVERED']
+        _print({'profile_id': report.profile_id, 'register_synthetic': report.register_synthetic, 'summary': report.summary,
+                **({'selective': statistics} if statistics else {}), 'rows': rows})
         return 0
     if args.command == 'changes':
         from datetime import date
@@ -168,8 +200,14 @@ def _ai(args, store: CorpusStore) -> int:
                 'disagreements': [r.model_dump(mode='json') for r in readings if r.diagnosis]})
         return 0
     runs = [json.loads(Path(path).read_text(encoding='utf-8')) for path in args.engine]
+    table, adjudications = None, None
+    if args.similarities or args.adjudications:
+        from .adjudicate import load_adjudications
+        from .semantic import SimilarityTable
+        table = SimilarityTable.load(args.similarities) if args.similarities else None
+        adjudications = {key: record for path in args.adjudications for key, record in load_adjudications(path)[1].items()}
     result = devset.evaluate(registry=registry, store=store, readings=load_readings(args.readings)[1] if args.readings else None,
-                             engine_runs=runs)
+                             engine_runs=runs, table=table, adjudications=adjudications)
     if not args.wrong:
         result = {k: v for k, v in result.items() if k != 'wrong'}
     _print(result)
@@ -190,6 +228,13 @@ def main(argv=None):
     gaps.add_argument('--regulation', action='append', default=[], help='regulation id; repeat to name several (default: every stored text)')
     gaps.add_argument('--all', action='store_true', help='also list the covered rows')
     gaps.add_argument('--engine', action='append', default=[], help='a recorded engine run to join (live.analyze_entity); repeat to name several')
+    gaps.add_argument('--selective', action='store_true',
+                      help='rules, candidate statements, escalation and the recorded adjudications (adjudicate.py); prints the escalation statistics')
+    gaps.add_argument('--similarities', help='selective: a recorded similarity table (semantic.SimilarityTable); written by --embed')
+    gaps.add_argument('--adjudications', help='selective: a recorded adjudication file to replay; --adjudicate appends to it')
+    gaps.add_argument('--embed', action='store_true', help='selective: compute the similarities with the local embedder (needs the model runtime)')
+    gaps.add_argument('--adjudicate', action='store_true', help='selective: ask the strong local model about the escalated rows')
+    gaps.add_argument('--quick', action='store_true', help='selective: the strong model without thinking')
     changes = commands.add_parser('changes', help='clauses amended since a date, their duties and whom they reach')
     changes.add_argument('--regulation', required=True)
     changes.add_argument('--since', required=True, help='ISO date; amendment notes dated on or after it are read')
@@ -204,6 +249,8 @@ def main(argv=None):
     ai_parser.add_argument('--regulation')
     ai_parser.add_argument('--readings', help='a recorded readings file (live.read_units)')
     ai_parser.add_argument('--engine', action='append', default=[], help='a recorded engine run (live.analyze_entity); repeat to name several')
+    ai_parser.add_argument('--similarities', help='evaluate: a recorded similarity table; scores the selective pipeline')
+    ai_parser.add_argument('--adjudications', action='append', default=[], help='evaluate: a recorded adjudication file; repeat to name several')
     ai_parser.add_argument('--wrong', action='store_true', help='evaluate: list every wrong result with its layer')
     for sub_parser in (corpus, obligations, gaps, changes, ai_parser):
         sub_parser.add_argument('--root', default=str(CORPUS), help='corpus directory (default: the packaged corpus)')

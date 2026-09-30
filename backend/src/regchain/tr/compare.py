@@ -488,8 +488,22 @@ ELEMENT_GAPS = ('PLACE_MISSING', 'PLACES_MISSING', 'LIMIT_MISSING', 'PREDICATE_N
                 'POLICY_ADDS_EXCEPTION', 'POLICY_OPTIONAL')
 
 
-def combine_coverage(rule: str, reasons: list[str], model: str | None) -> tuple[str, str, bool]:
-    """(coverage, basis, review) from the rule comparer's coverage and the engine's for the same duty and documents.
+# Reasons under which the rule comparer has decided nothing: it found no statement, or only loose wording.
+LOOSE_REASONS = frozenset({'NO_RELATED_STATEMENT', 'WORDING_PARTLY_MATCHED'})
+
+
+def combine_coverage(rule: str, reasons: list[str], model: str | None, adjudicated: bool = False) -> tuple[str, str, bool]:
+    """(coverage, basis, review) from the rule comparer's coverage and a model's for the same duty and documents.
+
+    `adjudicated` says the model reading is the selective adjudicator's (adjudicate.py: the strong model on the few
+    statements the candidate search named, every quote checked) and not an engine run over every passage. Where the
+    rule comparer decided nothing, an adjudicated PARTIAL is the coverage (the gap stays open either way), and an
+    adjudicated COVERS_TEXT is a proposal: the coverage stays the rules' and the row waits for a person
+    (MODEL_PROPOSES_COVERED). On the DEV cases the strong model's "states the duty" on a statement the rules could
+    not relate was right four times of six, and a wrong one closes a gap nobody looked at.
+    An engine's reading changes no coverage at all: its fast classifier is the small extraction model, which is no
+    judge here, and on twelve labelled cases its coverage was right once (runs of 30 September 2026). What it sees is
+    kept beside the row for review.
 
     CONFLICT      the rule comparer's conflicts are element checks (a weaker limit, a violated time window, a permitted
                   prohibited act) and stand alone. A conflict only the model sees keeps the rule comparer's coverage and
@@ -498,8 +512,9 @@ def combine_coverage(rule: str, reasons: list[str], model: str | None) -> tuple[
                   rules also found) and three not (a tasting permission against a display rule, "etil alkol ilave
                   edilmez" against a label warning, campus sampling against a ban in school canteens).
     PARTIAL       a missing element the rule comparer names stands against a model's COVERS_TEXT.
-    paraphrase    where the rule comparer found nothing or only loose wording, the model's COVERS_TEXT is taken, for
-                  review: the statement says the duty in words the rules do not match.
+    paraphrase    where the rule comparer found nothing or only loose wording, the adjudicator's COVERS_TEXT is kept
+                  beside the row as a proposal with the statement it quoted; nothing a model says alone becomes
+                  COVERED or CONTRADICTED. The engine's is a note.
     model PARTIAL is not evidence by itself. In the unit run on Kanun 4250 md. 6 (20260930-beverage-live-3, 14 duties) the
                   judge called passages PARTIAL that share only the product ("Alkollü içkiler otomatik satış makineleri
                   ile satılamaz" under eight other duties) and ended PARTIAL on duties no statement touches. So a PARTIAL
@@ -519,8 +534,10 @@ def combine_coverage(rule: str, reasons: list[str], model: str | None) -> tuple[
             return 'COVERS_TEXT', 'MODEL_SEES_GAP', True
         return 'COVERS_TEXT', 'BOTH_READINGS' if model == 'COVERS_TEXT' else 'RULE_WORDING_MATCH', False
     if model == 'COVERS_TEXT':
-        return 'COVERS_TEXT', 'MODEL_PARAPHRASE', True
+        return rule, 'MODEL_PROPOSES_COVERED' if adjudicated else 'MODEL_PARAPHRASE_UNCONFIRMED', True
     if model == 'PARTIAL':
+        if adjudicated and rule == 'NO_EVIDENCE':
+            return 'PARTIAL', 'SEMANTIC_ADJUDICATED', False
         return rule, 'BOTH_READINGS' if rule == 'PARTIAL' else 'MODEL_PARTIAL_UNCONFIRMED', rule != 'PARTIAL'
     if rule == 'UNKNOWN' or model == 'UNKNOWN':
         return rule, 'RULE_ONLY', True
@@ -632,11 +649,12 @@ def compare_obligation(obligation: ExtractedObligation, decision, profile: Enter
     coverage, coverage_reasons = coverage_of(related)
     rule_coverage, basis, contested = coverage, 'RULE_ONLY', False
     if second is not None:
-        coverage, basis, contested = combine_coverage(rule_coverage, coverage_reasons, second.get('coverage'))
-        if basis in ('MODEL_PARAPHRASE', 'MODEL_CONFLICT_UNCONFIRMED'):
+        coverage, basis, contested = combine_coverage(rule_coverage, coverage_reasons, second.get('coverage'), bool(second.get('adjudicated')))
+        if basis in ('MODEL_PARAPHRASE_UNCONFIRMED', 'MODEL_PROPOSES_COVERED', 'SEMANTIC_ADJUDICATED', 'MODEL_CONFLICT_UNCONFIRMED'):
             known = {r.passage_id for r in related}
             related += [r for r in _model_readings(second, register, in_force) if r.passage_id not in known]
-            coverage_reasons = sorted(set(coverage_reasons) - {'NO_RELATED_STATEMENT'}) + [basis]
+            kept = set(coverage_reasons) - ({'NO_RELATED_STATEMENT'} if coverage != rule_coverage or basis == 'MODEL_CONFLICT_UNCONFIRMED' else set())
+            coverage_reasons = sorted(kept) + [basis]
     decisive = {'CONFLICT': 'CONFLICTS', 'COVERS_TEXT': 'SUPPORTS', 'PARTIAL': 'PARTIAL', 'UNKNOWN': 'UNCLEAR'}.get(coverage)
     covering = sorted({r.document_id for r in related if r.relation == decisive}) if decisive else []
     controls = [c for c in register.controls if set(c.documents) & set(covering) and (not c.topics or obligation.topic in c.topics)]

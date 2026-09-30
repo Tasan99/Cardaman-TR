@@ -336,9 +336,24 @@ class SecondReadingTests(unittest.TestCase):
         self.assertEqual((joined.document_coverage, joined.model_coverage, joined.review_required), ('PARTIAL', 'CONFLICT', True))
         self.assertIn(('POL-MKT-02#3', 'CONFLICTS', ['MODEL_READING']), [(r.passage_id, r.relation, r.reasons) for r in joined.readings])
 
-    def test_paraphrase_is_the_models_to_read_and_a_persons_to_confirm(self):
-        self.assertEqual(combine_coverage('NO_EVIDENCE', ['NO_RELATED_STATEMENT'], 'COVERS_TEXT'), ('COVERS_TEXT', 'MODEL_PARAPHRASE', True))
-        self.assertEqual(combine_coverage('PARTIAL', ['WORDING_PARTLY_MATCHED'], 'COVERS_TEXT'), ('COVERS_TEXT', 'MODEL_PARAPHRASE', True))
+    def test_paraphrase_is_the_adjudicators_to_read_and_a_persons_to_confirm(self):
+        # the engine (its fast classifier is the small extraction model) changes no coverage: what it sees is a note for review
+        self.assertEqual(combine_coverage('NO_EVIDENCE', ['NO_RELATED_STATEMENT'], 'COVERS_TEXT'), ('NO_EVIDENCE', 'MODEL_PARAPHRASE_UNCONFIRMED', True))
+        self.assertEqual(combine_coverage('PARTIAL', ['WORDING_PARTLY_MATCHED'], 'COVERS_TEXT'), ('PARTIAL', 'MODEL_PARAPHRASE_UNCONFIRMED', True))
+        # the selective adjudicator (the strong model, quotes checked) proposes: nothing a model says alone becomes COVERED
+        self.assertEqual(combine_coverage('NO_EVIDENCE', ['NO_RELATED_STATEMENT'], 'COVERS_TEXT', adjudicated=True),
+                         ('NO_EVIDENCE', 'MODEL_PROPOSES_COVERED', True))
+        self.assertEqual(combine_coverage('PARTIAL', ['WORDING_PARTLY_MATCHED'], 'COVERS_TEXT', adjudicated=True),
+                         ('PARTIAL', 'MODEL_PROPOSES_COVERED', True))
+        # a PARTIAL it reads where the rules found nothing is taken: the gap stays open either way
+        self.assertEqual(combine_coverage('NO_EVIDENCE', ['NO_RELATED_STATEMENT'], 'PARTIAL', adjudicated=True),
+                         ('PARTIAL', 'SEMANTIC_ADJUDICATED', False))
+        # ... and never what the rules decided
+        self.assertEqual(combine_coverage('PARTIAL', ['PLACE_MISSING:HEALTH_FACILITY'], 'COVERS_TEXT', adjudicated=True),
+                         ('PARTIAL', 'RULE_ELEMENT_CHECK', False))
+        self.assertEqual(combine_coverage('COVERS_TEXT', ['SUPPORTING_STATEMENT'], 'CONFLICT', adjudicated=True),
+                         ('COVERS_TEXT', 'MODEL_CONFLICT_UNCONFIRMED', True))
+        self.assertEqual(combine_coverage('CONFLICT', ['LIMIT_WEAKER'], 'COVERS_TEXT', adjudicated=True), ('CONFLICT', 'RULE_ELEMENT_CHECK', True))
         # A PARTIAL only the model sees changes no coverage (its judge calls passages partial that share only the product).
         self.assertEqual(combine_coverage('COVERS_TEXT', ['SUPPORTING_STATEMENT'], 'PARTIAL'), ('COVERS_TEXT', 'MODEL_SEES_GAP', True))
         self.assertEqual(combine_coverage('NO_EVIDENCE', ['NO_RELATED_STATEMENT'], 'PARTIAL'), ('NO_EVIDENCE', 'MODEL_PARTIAL_UNCONFIRMED', True))
@@ -354,13 +369,23 @@ class SecondReadingTests(unittest.TestCase):
         alone = row(*args)
         self.assertEqual((alone.document_coverage, alone.coverage_basis, alone.mapping.status), ('NO_EVIDENCE', 'RULE_ONLY', 'NOT_COVERED'))
         quote = '4. Satış belgesi, satış noktasının içinde tüketicilerin görebileceği bir yere asılır.'
-        joined = row(*args, second={'coverage': 'COVERS_TEXT', 'quotes': {'SUPPORTS': [quote]}})
+        engine = row(*args, second={'coverage': 'COVERS_TEXT', 'quotes': {'SUPPORTS': [quote]}})
+        # the engine saw the statement: the row keeps the rules' word and carries the statement for a person
+        self.assertEqual((engine.document_coverage, engine.model_coverage, engine.coverage_basis, engine.review_required, engine.mapping.status),
+                         ('NO_EVIDENCE', 'COVERS_TEXT', 'MODEL_PARAPHRASE_UNCONFIRMED', True, 'NOT_COVERED'))
+        self.assertEqual([(r.passage_id, r.reasons) for r in engine.readings if r.relation == 'SUPPORTS'], [('SOP-SALES-02#4', ['MODEL_READING'])])
+        self.assertIn('NO_RELATED_STATEMENT', engine.coverage_reasons)
+        joined = row(*args, second={'coverage': 'COVERS_TEXT', 'quotes': {'SUPPORTS': [quote]}, 'adjudicated': True})
+        # the adjudicator's "covered" is a proposal too: the statement is on the row, the status waits for a person
         self.assertEqual((joined.document_coverage, joined.rule_coverage, joined.model_coverage, joined.coverage_basis),
-                         ('COVERS_TEXT', 'NO_EVIDENCE', 'COVERS_TEXT', 'MODEL_PARAPHRASE'))
+                         ('NO_EVIDENCE', 'NO_EVIDENCE', 'COVERS_TEXT', 'MODEL_PROPOSES_COVERED'))
         self.assertTrue(joined.review_required)
-        self.assertEqual(joined.mapping.document_ids, ['SOP-SALES-02'])
         self.assertEqual([(r.passage_id, r.reasons) for r in joined.readings if r.relation == 'SUPPORTS'], [('SOP-SALES-02#4', ['MODEL_READING'])])
-        self.assertNotEqual(joined.mapping.status, 'NOT_COVERED')
+        self.assertEqual(joined.mapping.status, 'NOT_COVERED')
+        partial = row(*args, second={'coverage': 'PARTIAL', 'quotes': {'PARTIAL': [quote]}, 'adjudicated': True})
+        self.assertEqual((partial.document_coverage, partial.coverage_basis, partial.mapping.document_ids),
+                         ('PARTIAL', 'SEMANTIC_ADJUDICATED', ['SOP-SALES-02']))
+        self.assertNotIn('NO_RELATED_STATEMENT', partial.coverage_reasons)
 
     def test_a_profile_report_joins_each_row_with_the_reading_made_for_its_own_entity(self):
         selected = extract_regulation('TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM', REGISTRY, STORE, articles=['6'])[1]
@@ -370,7 +395,7 @@ class SecondReadingTests(unittest.TestCase):
         licence = [r for r in report.rows if r.provision_ref == 'Yönetmelik 14646 md. 6/f.1/b.e']
         # the wholesaler's row of the same duty has no reading of its own and stays with the rule comparer
         self.assertEqual({(r.entity_id, r.coverage_basis) for r in licence},
-                         {('ALC-INT-SALES', 'MODEL_PARAPHRASE'), ('ALC-INT-DISTRIBUTION', 'RULE_ONLY')})
+                         {('ALC-INT-SALES', 'MODEL_PARAPHRASE_UNCONFIRMED'), ('ALC-INT-DISTRIBUTION', 'RULE_ONLY')})
         self.assertTrue(all(r.coverage_basis == 'RULE_ONLY' for r in report.rows if r.provision_ref != 'Yönetmelik 14646 md. 6/f.1/b.e'))
 
 
