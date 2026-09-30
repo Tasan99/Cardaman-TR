@@ -68,9 +68,21 @@ class ClauseTaskTests(unittest.TestCase):
         report = task('clauses', 'OBLIGATION_EXTRACTION/rule', 'HOLDOUT')
         self.assertEqual(report['n'], 112)
         self.assertGreaterEqual(report['accuracy'], 0.93)
-        misses = [w for w in RESULT['wrong'] if w.get('split') == 'HOLDOUT']
+        misses = [w for w in RESULT['wrong'] if w.get('split') == 'HOLDOUT' and w['task'] == 'OBLIGATION_EXTRACTION']
         self.assertLessEqual(len(misses), 7)
         self.assertEqual({w['layer'] for w in misses}, {'VALIDATOR_PIPELINE'})     # a rule reader's miss is a wording rule's
+
+    def test_the_holdout_addressee_and_exception_labels_are_scored_as_first_measured(self):
+        # Labelled from the text before the rule reader's scope output on these clauses was looked at: 55 of 61 and 21 of
+        # 27. Five of the six exception misses are clauses of Yönetmelik 14646 md. 22, where the reader attaches the
+        # exemption of md. 22/3 to the article's duties and the label says the clause states none: a disputed label, kept.
+        addressee = task('clauses', 'ADDRESSEE_MATCH/rule', 'HOLDOUT')
+        exception = task('clauses', 'EXCEPTION_DETECTION/rule', 'HOLDOUT')
+        self.assertEqual((addressee['n'], exception['n']), (61, 27))
+        self.assertGreaterEqual(addressee['accuracy'], 0.90)
+        self.assertGreaterEqual(exception['accuracy'], 0.77)
+        scope = [w for w in RESULT['wrong'] if w.get('split') == 'HOLDOUT' and w['task'] in ('ADDRESSEE_MATCH', 'EXCEPTION_DETECTION')]
+        self.assertLessEqual({w['layer'] for w in scope}, {'SCOPE', 'VALIDATOR_PIPELINE'})
 
     def test_applicability_and_its_contrast_pairs(self):
         report = task('applicability', 'APPLICABILITY/rule')

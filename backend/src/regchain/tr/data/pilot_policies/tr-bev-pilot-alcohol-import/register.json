@@ -1,0 +1,34 @@
+{
+  "format": "cardaman-tr-policy-register/1",
+  "profile_id": "tr-bev-pilot-alcohol-import",
+  "synthetic": true,
+  "disclaimer": "Sentetik test kaydı: temsili bira ve ithal içki grubunun iç politika, prosedür, kontrol ve kanıt kayıtlarını örnekler. Cümleleri mevzuat metnini tekrar etmeden, bir şirketin kendi sözleriyle yazılmıştır (BEVERAGE_TR_DEV_V2 kapsama HOLDOUT seti). Gerçek bir şirketin belgesi, kontrolü veya kanıtı değildir.",
+  "period": "2026-Q3",
+  "documents": [
+    {"document_id": "POL-COM-11", "type": "POLICY", "title": "Ticari İletişim Esasları", "owner_department": "MARKETING", "version": "2.1",
+     "file": "documents/POL-COM-11-ticari-iletisim.md",
+     "scope": {"policy_id": "POL-COM-11", "owner_level": "GROUP"}},
+    {"document_id": "SOP-LOG-12", "type": "SOP", "title": "Dağıtım ve Bayi Yönetimi Prosedürü", "owner_department": "SALES", "version": "3.4",
+     "file": "documents/SOP-LOG-12-dagitim-bayi.md",
+     "scope": {"policy_id": "SOP-LOG-12", "owner_level": "LEGAL_ENTITY", "entity_id": "ALC-IMP-TRADING"}},
+    {"document_id": "SPEC-LBL-13", "type": "SPECIFICATION", "title": "Etiket Uygunluk Şartnamesi", "owner_department": "QUALITY", "version": "1.8",
+     "file": "documents/SPEC-LBL-13-etiket-uygunluk.md",
+     "scope": {"policy_id": "SPEC-LBL-13", "owner_level": "GROUP"}},
+    {"document_id": "POL-ENV-14", "type": "POLICY", "title": "Ambalaj Sorumluluğu Politikası", "owner_department": "ENVIRONMENT", "version": "1.0",
+     "file": "documents/POL-ENV-14-ambalaj-sorumlulugu.md",
+     "scope": {"policy_id": "POL-ENV-14", "owner_level": "GROUP", "activity_classes": ["PRODUCTION", "BOTTLING", "IMPORT", "PLACING_ON_MARKET"]}},
+    {"document_id": "SOP-HR-15", "type": "SOP", "title": "İstihdam Esasları", "owner_department": "HR", "version": "2.0",
+     "file": "documents/SOP-HR-15-istihdam.md",
+     "scope": {"policy_id": "SOP-HR-15", "owner_level": "GROUP"}}
+  ],
+  "controls": [
+    {"control_id": "CTL-LBL-RELEASE", "description": "Etiketin baskı öncesi mevzuat uyum onayı", "owner_department": "QUALITY",
+     "documents": ["SPEC-LBL-13"], "evidence_types": ["APPROVED_LABEL_ARTWORK"], "topics": ["LABELLING"]},
+    {"control_id": "CTL-DEALER-LICENCE", "description": "Sevk öncesi bayi satış belgesi geçerlilik kontrolü", "owner_department": "SALES",
+     "documents": ["SOP-LOG-12"], "evidence_types": ["DEALER_LICENCE_CHECK"], "topics": ["MARKET_PLACEMENT", "LICENSING", "SALE", "LOGISTICS"]}
+  ],
+  "evidence": [
+    {"evidence_id": "EV-LBL-2026Q3", "control_id": "CTL-LBL-RELEASE", "evidence_type": "APPROVED_LABEL_ARTWORK", "period": "2026-Q3", "in_period": true},
+    {"evidence_id": "EV-DEALER-2026Q3", "control_id": "CTL-DEALER-LICENCE", "evidence_type": "DEALER_LICENCE_CHECK", "period": "2026-Q3", "in_period": true}
+  ]
+}

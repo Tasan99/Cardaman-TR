@@ -10,7 +10,14 @@ Tasks
   EXCEPTION_DETECTION     whether the duty carries an exception
   APPLICABILITY           the routed status of an extracted obligation on a named target of a synthetic profile
   POLICY_COVERAGE         COVERED / PARTIALLY_COVERED / NOT_COVERED / CONTRADICTED / UNKNOWN on a named target, for the rule
-                          comparer and for the rows of a recorded engine run
+                          comparer, for the rows of a recorded engine run, and for the selective pipeline (adjudicate.py)
+
+The coverage cases have two splits as well: DEV (registers that repeat the regulation's wording; the comparison rules
+were written on them) and HOLDOUT (a register in a company's own words, labelled before the paraphrase work began).
+
+The selective pipeline is not measured by accuracy alone (score_pipeline): what the rules decide without a model, how
+often a case is escalated, how right the escalated cases end, how often a contradiction is claimed that is none, how
+often an answer is given where the label is UNKNOWN, and the model time per case.
 """
 import json
 from collections import Counter
@@ -18,6 +25,7 @@ from pathlib import Path
 
 from ..evaluation.tasks import DEVELOPMENT, pair_consistency, task_report, unsupported_reasons
 from . import ai
+from .adjudicate import Adjudicator, ClauseAdjudicator, assess_obligation, clause_escalation, clause_verdict
 from .compare import compare_obligation, load_register
 from .corpus import CorpusStore
 from .extraction import extract_regulation, route
@@ -220,7 +228,7 @@ def _word(rows) -> str:
     return next((w for w in ('CONTRADICTED', 'UNKNOWN', 'NOT_COVERED', 'PARTIALLY_COVERED', 'COVERED') if w in words), 'NO_ROW')
 
 
-def score_coverage(dataset: dict, readers: Readers, profiles: dict, engine_runs: list[dict] = ()) -> dict:
+def score_coverage(dataset: dict, readers: Readers, profiles: dict, engine_runs: list[dict] = (), split: str | None = None) -> dict:
     """Policy coverage of the rule comparer on every labelled case; of each recorded engine run on the cases whose clause
     that run analysed for the labelled profile; and, on those same cases, of the two readings joined
     (compare.combine_coverage) next to the rule comparer alone.
@@ -239,7 +247,7 @@ def score_coverage(dataset: dict, readers: Readers, profiles: dict, engine_runs:
         entity = profile.entity(run['entity_id'])
         own = {run['entity_id'], *entity.product_ids, *(a.activity_id for a in profile.activities if a.entity_id == run['entity_id'])}
         joined.append((ai.engine_rows(run, obligations), articles, own, ai.second_readings(run, obligations)))
-    for case in dataset['coverage']:
+    for case in (c for c in dataset['coverage'] if split is None or c.get('split', 'DEV') == split):
         profile = profiles[case['profile_id']]
         register = registers.setdefault(profile.profile_id, load_register(profile.profile_id))
         gap = _gap_rows(readers, case['ref'], profile, register, case['target_id'])
@@ -287,9 +295,180 @@ def score_coverage(dataset: dict, readers: Readers, profiles: dict, engine_runs:
     return {'tasks': tasks, 'wrong': wrong}
 
 
+def score_clause_pipeline(dataset: dict, readers: Readers, records: list[dict] | None = None, adjudications: dict | None = None,
+                          split: str | None = None, adjudicator: ClauseAdjudicator | None = None) -> dict:
+    """Clause reading as a selective pipeline on one split: the rule reader decides the kind of every clause; a clause is
+    escalated when the extraction model's recorded reading contests it or the duty is hard to read (several exceptions
+    or parties, a cross-reference, no addressee); the strong model's answer never changes the kind, it marks the clause
+    for review where it differs. The numbers say how many of the rule reader's errors that review would catch."""
+    adjudicator = adjudicator or ClauseAdjudicator(recorded=adjudications or {})
+    clauses = [c for c in dataset['clauses'] if (split is None or c['split'] == split) and c['kind'] not in ('UNDECIDED', 'REFERENCE')]
+    support = {r.ref: r.support for r in ai.compare_readings([readers.frames[c['ref']] for c in clauses], records)} if records else {}
+    cases = []
+    for clause in clauses:
+        frame = readers.frames[clause['ref']]
+        rule = ai.rule_duty(frame)
+        expected, predicted = _duty_row(clause['kind'], rule)
+        reasons = clause_escalation(frame, readers.obligations.get(clause['ref'], []), support.get(clause['ref']))
+        record = adjudicator(frame, reasons) if reasons else None
+        verdict = clause_verdict('BOTH' if clause['kind'] == 'BOTH' and rule != 'NONE' else rule, record)
+        model = verdict['model']
+        cases.append({'ref': clause['ref'], 'expected': expected, 'rule': predicted, 'right': expected == predicted, 'reasons': reasons,
+                      'support': support.get(clause['ref']), 'adjudicated': record is not None, 'model': model,
+                      'model_right': None if record is None else _duty_row(clause['kind'], model or 'NONE')[0] == (_duty_row(clause['kind'], model or 'NONE')[1] if model else 'UNGROUNDED'),
+                      'review': verdict['review'], 'model_ms': (record or {}).get('elapsed_ms', 0)})
+    share = lambda part, whole: round(part / whole, 4) if whole else None
+    n = len(cases)
+    escalated = [c for c in cases if c['reasons']]
+    adjudicated = [c for c in cases if c['adjudicated']]
+    errors = [c for c in cases if not c['right']]
+    flagged = [c for c in cases if c['review']]
+    reasons = Counter(r for c in escalated for r in c['reasons'])
+    metrics = {'n': n, 'deterministic_accuracy': share(sum(c['right'] for c in cases), n),
+               'escalated': len(escalated), 'escalation_rate': share(len(escalated), n), 'adjudicated': len(adjudicated),
+               'by_reason': dict(sorted(reasons.items())),
+               'deterministic_accuracy_on_escalated': share(sum(c['right'] for c in escalated), len(escalated)),
+               'model_accuracy_on_adjudicated': share(sum(bool(c['model_right']) for c in adjudicated), len(adjudicated)),
+               'rule_errors': len(errors), 'rule_errors_escalated': sum(bool(c['reasons']) for c in errors),
+               'rule_errors_flagged': sum(c['review'] for c in errors),
+               'review_required': len(flagged), 'review_rate': share(len(flagged), n),
+               'review_precision': share(sum(not c['right'] for c in flagged), len(flagged)),
+               'wrong_not_flagged': sum(not c['right'] and not c['review'] for c in cases),
+               'model_ms': sum(c['model_ms'] for c in cases), 'model_ms_per_clause': round(sum(c['model_ms'] for c in cases) / n, 1) if n else None}
+    return {'split': split or 'ALL', 'metrics': metrics, 'cases': cases}
+
+
+def pipeline_metrics(cases: list[dict]) -> dict:
+    """The numbers the selective pipeline is judged by. cases: [{'expected': [words], 'rule', 'final', 'review',
+    'proposal', 'escalated', 'adjudicated', 'model_ms', 'status'}].
+
+    Three things are kept apart. The automatic decisions: cases no open point keeps from being decided (the rules'
+    word, or a PARTIAL the adjudicator filled in); only these can be right or wrong as decisions. The cases sent to a
+    person (REVIEW_REQUIRED): they are not answers and count as neither - `strict_accuracy` is the automatic right
+    answers over every case. The model's proposals: what the adjudicator said on the cases it read, scored on their
+    own, whatever became of them."""
+    def share(part, whole):
+        return round(part / whole, 4) if whole else None
+
+    right = lambda case, key: case[key] in case['expected']
+    # A word that claims more than any label allows ("covered" where a part is missing, "partial" where nothing is
+    # stated): the error that closes a gap nobody looked at.
+    rank = {'NOT_COVERED': 0, 'PARTIALLY_COVERED': 1, 'COVERED': 2}
+    over = lambda case, key: case[key] in rank and all(e in rank for e in case['expected']) and rank[case[key]] > max(rank[e] for e in case['expected'])
+    n = len(cases)
+    auto = [c for c in cases if not c['review']]
+    review = [c for c in cases if c['review']]
+    escalated = [c for c in cases if c['escalated']]
+    adjudicated = [c for c in cases if c['adjudicated']]
+    proposed = [c for c in adjudicated if c['proposal'] not in (None, 'UNKNOWN')]
+    rule_errors = [c for c in cases if not right(c, 'rule')]
+    unknown = [c for c in cases if c['expected'] == ['UNKNOWN']]
+    calls = [c for c in adjudicated if c['model_ms']]
+    model_ms = sum(c['model_ms'] for c in cases)
+    return {'n': n,
+            'rules_only_correct': sum(right(c, 'rule') for c in cases), 'rules_only_accuracy': share(sum(right(c, 'rule') for c in cases), n),
+            # automatic decisions
+            'auto_decided': len(auto), 'auto_correct': sum(right(c, 'final') for c in auto),
+            'auto_wrong': sum(not right(c, 'final') for c in auto), 'auto_accuracy': share(sum(right(c, 'final') for c in auto), len(auto)),
+            'strict_accuracy': share(sum(right(c, 'final') for c in auto), n),
+            'auto_false_covered': sum(c['final'] == 'COVERED' and 'COVERED' not in c['expected'] for c in auto),
+            'auto_false_contradicted': sum(c['final'] == 'CONTRADICTED' and 'CONTRADICTED' not in c['expected'] for c in auto),
+            'auto_overclaimed': sum(over(c, 'final') for c in auto),
+            'auto_missed_contradictions': sum('CONTRADICTED' in c['expected'] and c['final'] != 'CONTRADICTED' for c in auto),
+            # sent to a person
+            'review_required': len(review), 'review_rate': share(len(review), n),
+            'review_cases_the_rules_had_wrong': sum(not right(c, 'rule') for c in review),
+            'review_cases_the_rules_had_right': sum(right(c, 'rule') for c in review),
+            # the model's proposals, on their own
+            'adjudicated': len(adjudicated), 'model_answers': len(proposed),
+            'model_correct': sum(right(c, 'proposal') for c in proposed), 'model_accuracy': share(sum(right(c, 'proposal') for c in proposed), len(proposed)),
+            'model_false_covered': sum(c['proposal'] == 'COVERED' and 'COVERED' not in c['expected'] for c in proposed),
+            'model_false_contradicted': sum(c['proposal'] == 'CONTRADICTED' and 'CONTRADICTED' not in c['expected'] for c in proposed),
+            'model_no_usable_answer': sum(not c['proposal'] or c['proposal'] == 'UNKNOWN' for c in adjudicated),
+            'calls_failed': sum(any(s.startswith('FAILED') for s in c['status']) for c in adjudicated),
+            'calls_without_thinking': sum(any(s.startswith('OK_WITHOUT_THINKING') for s in c['status']) for c in adjudicated),
+            # what the escalation saw and what it let pass
+            'escalated': len(escalated), 'escalation_rate': share(len(escalated), n),
+            'rule_errors': len(rule_errors), 'rule_errors_escalated': sum(c['escalated'] for c in rule_errors),
+            'rule_errors_not_escalated': sum(not c['escalated'] for c in rule_errors),
+            'contradictions_labelled': sum('CONTRADICTED' in c['expected'] for c in cases),
+            'unknown_labelled': len(unknown), 'unknown_overclaimed': sum(c['final'] != 'UNKNOWN' and not c['review'] for c in unknown),
+            'model_ms': model_ms, 'model_ms_per_case': round(model_ms / n, 1) if n else None,
+            'model_ms_per_adjudicated_case': round(model_ms / len(calls), 1) if calls else None,
+            'model_ms_max': max((c['model_ms'] for c in calls), default=None)}
+
+
+def score_pipeline(dataset: dict, readers: Readers, profiles: dict, table=None, adjudications: dict | None = None,
+                   split: str | None = None, adjudicator: Adjudicator | None = None) -> dict:
+    """The selective pipeline on the labelled coverage cases of one split: rules, candidates (from a recorded similarity
+    table), escalation, and the adjudications of a recorded run (none: the escalated cases keep the rules' word).
+    Nothing is asked of a model here unless a live `adjudicator` is handed in (a run: live.py); the model time is the
+    time the record holds."""
+    adjudicator = adjudicator or Adjudicator(recorded=adjudications or {})
+    adjudications = adjudicator.recorded
+    registers, cases, wrong, rows = {}, [], [], []
+    for case in (c for c in dataset['coverage'] if split is None or c.get('split', 'DEV') == split):
+        profile = profiles[case['profile_id']]
+        register = registers.setdefault(profile.profile_id, load_register(profile.profile_id))
+        found = []
+        for obligation in readers.obligations.get(case['ref'], []):
+            decisions, _ = route(obligation, profile, readers.registry, readers.store)
+            for decision in decisions:
+                if decision.status in ('APPLIES', 'PARTIAL') and (decision.target_id == case['target_id'] or decision.entity_id == case['target_id']
+                                                                 or case['target_id'] in decision.applies_to_products):
+                    found.append(assess_obligation(obligation, decision, profile, register, readers.registry, table, adjudicator,
+                                                   store=readers.store))
+        final = _word([row for row, _ in found])
+        rule_words = [ai.COVERAGE_WORDS[a.rule_coverage] for _, a in found]
+        rule = next((w for w in ('CONTRADICTED', 'UNKNOWN', 'NOT_COVERED', 'PARTIALLY_COVERED', 'COVERED') if w in rule_words), 'NO_ROW')
+        keys = {a.adjudication_key for _, a in found if a.adjudication_key}
+        model_words = [ai.COVERAGE_WORDS[a.model_coverage] for _, a in found if a.model_coverage]
+        proposal = next((w for w in ('CONTRADICTED', 'UNKNOWN', 'NOT_COVERED', 'PARTIALLY_COVERED', 'COVERED') if w in model_words), None)
+        item = {'case_id': case['case_id'], 'ref': case['ref'], 'target_id': case['target_id'], 'expected': case['expected'], 'rule': rule,
+                'final': final, 'escalated': any(a.escalation is not None for _, a in found), 'adjudicated': bool(keys),
+                'reasons': sorted({r for _, a in found if a.escalation for r in a.escalation.reasons}),
+                'basis': sorted({a.basis for _, a in found}), 'review': any(a.decision == 'REVIEW_REQUIRED' for _, a in found),
+                'review_reasons': sorted({r for _, a in found for r in a.review_reasons}), 'proposal': proposal,
+                'status': sorted({a.adjudication_status for _, a in found if a.adjudication_status}),
+                'model': sorted({a.model_coverage for _, a in found if a.model_coverage}),
+                'candidates': sorted({c.passage_id for _, a in found if a.escalation for c in a.escalation.candidates}),
+                'model_ms': sum((adjudications or {}).get(k, {}).get('elapsed_ms', 0) for k in keys)}
+        cases.append(item)
+        expected = final if final in case['expected'] else case['expected'][0]
+        rows.append((expected, final))
+        if final != expected:
+            wrong.append(_wrong('POLICY_COVERAGE', 'pipeline', f"{case['case_id']} {case['ref']} @ {case['target_id']}", expected, final,
+                                _diagnose_pipeline(item, found, adjudications or {})))
+    return {'split': split or 'ALL', 'metrics': pipeline_metrics(cases), 'cases': cases, 'wrong': wrong,
+            'tasks': {'POLICY_COVERAGE/pipeline': _report('POLICY_COVERAGE', rows, COVERAGE_LABELS, dataset)}}
+
+
+def _diagnose_pipeline(item: dict, found: list, adjudications: dict) -> ai.Diagnosis:
+    """The layer of a wrong pipeline result."""
+    detail = f"rules {item['rule']}, model {item['model'] or 'not asked'}, candidates {item['candidates']}, reasons {item['reasons']}"
+    if not found:
+        return ai.Diagnosis(layer='SCOPE', code='NOT_ROUTED_TO_TARGET', stage='routing', detail='the obligation does not apply on the labelled target')
+    judgements = [j for _, a in found if a.adjudication_key for j in adjudications.get(a.adjudication_key, {}).get('judgements', [])]
+    if item['final'] == 'NOT_COVERED' and not item['escalated']:
+        return ai.Diagnosis(layer='RETRIEVAL', code='NO_CANDIDATE', stage='candidates',
+                            detail='no statement passed a similarity floor, so nothing was read: ' + detail)
+    if item['escalated'] and not item['adjudicated']:
+        return ai.Diagnosis(layer='VALIDATOR_PIPELINE', code='ESCALATED_NOT_ADJUDICATED', stage='adjudication', detail=detail)
+    if any(not j['grounded'] and j['relation'] not in (None, 'UNRELATED') for j in judgements):
+        return ai.Diagnosis(layer='GROUNDING', code='QUOTE_NOT_IN_STATEMENT', stage='adjudication', detail=detail)
+    if 'CONTRADICTED' in item['expected'] and 'CONFLICT' in item['model']:
+        return ai.Diagnosis(layer='VALIDATOR_PIPELINE', code='CONFLICT_HELD_FOR_REVIEW', stage='decision',
+                            detail='the model saw the conflict; by rule a conflict only the model sees changes no decision: ' + detail)
+    if item['final'] != item['rule'] or item['model']:
+        return ai.Diagnosis(layer='MODEL', code='ADJUDICATION_WRONG', stage='adjudication', detail=detail)
+    return ai.Diagnosis(layer='VALIDATOR_PIPELINE', code='RULE_DECISION_WRONG', stage='comparison', detail=detail)
+
+
 def evaluate(dataset: dict | None = None, registry: Registry | None = None, store: CorpusStore | None = None,
-             readings: list[dict] | None = None, engine_runs: list[dict] = ()) -> dict:
-    """Every task of the dataset, the DEV and HOLDOUT splits apart for the clause tasks, and every wrong result with its layer."""
+             readings: list[dict] | None = None, engine_runs: list[dict] = (), table=None, adjudications: dict | None = None) -> dict:
+    """Every task of the dataset, the DEV and HOLDOUT splits apart, and every wrong result with its layer. `table` is a
+    recorded similarity table and `adjudications` the records of an adjudication run: with them the selective pipeline
+    is scored on the coverage cases next to the rule comparer."""
     from .profile import load_pilot_profiles
     dataset = dataset or load()
     readers = Readers(dataset, registry, store)
@@ -297,14 +476,21 @@ def evaluate(dataset: dict | None = None, registry: Registry | None = None, stor
     dev = score_clauses(dataset, readers, readings, 'DEV')
     holdout = score_clauses(dataset, readers, readings, 'HOLDOUT')
     applicability = score_applicability(dataset, readers, profiles)
-    coverage = score_coverage(dataset, readers, profiles, engine_runs)
+    coverage = score_coverage(dataset, readers, profiles, engine_runs, 'DEV')
+    coverage_holdout = score_coverage(dataset, readers, profiles, (), 'HOLDOUT')
+    pipeline = {split: score_pipeline(dataset, readers, profiles, table, adjudications, split) for split in ('DEV', 'HOLDOUT')} \
+        if table is not None or adjudications is not None else {}
     wrong = [dict(w, split='DEV') for w in dev['wrong']] + [dict(w, split='HOLDOUT') for w in holdout['wrong']] \
-        + applicability['wrong'] + coverage['wrong']
+        + applicability['wrong'] + [dict(w, split='DEV') for w in coverage['wrong']] \
+        + [dict(w, split='HOLDOUT') for w in coverage_holdout['wrong']] \
+        + [dict(w, split=split) for split, result in pipeline.items() for w in result['wrong']]
     layers = Counter((w['reader'].split(':')[0], w['layer']) for w in wrong)
     return {'dataset_id': dataset['dataset_id'], 'version': dataset['version'], 'label_status': dataset['label_status'], 'claim': 'INDICATIVE',
             'clauses': {'DEV': {k: v for k, v in dev.items() if k != 'wrong'}, 'HOLDOUT': {k: v for k, v in holdout.items() if k != 'wrong'}},
             'applicability': {k: v for k, v in applicability.items() if k != 'wrong'},
             'coverage': {k: v for k, v in coverage.items() if k != 'wrong'},
+            'coverage_holdout': {k: v for k, v in coverage_holdout.items() if k != 'wrong'},
+            'pipeline': {split: {k: v for k, v in result.items() if k != 'wrong'} for split, result in pipeline.items()},
             'wrong': wrong,
             'wrong_by_layer': {reader: {layer: layers.get((reader, layer), 0) for layer in ai.LAYERS}
                                for reader in sorted({r for r, _ in layers})}}
