@@ -74,14 +74,26 @@
       "verification_note": "Title, Mevzuat Bilgi Sistemi identifiers, Resmî Gazete date and issue and the text hash were checked against the text fetched from mevzuat.gov.tr on 2026-09-30 (51 articles, 26 repealed). Annex tables and footnotes are not parsed; the effective date is not derived (staged or non-standard entry into force).",
       "sector_tags": [
         "BEVERAGE",
-        "ALCOHOL"
+        "ALCOHOL",
+        "ADVERTISING"
       ],
       "activity_tags": [
         "PRODUCTION",
-        "IMPORT"
+        "IMPORT",
+        "WHOLESALE",
+        "RETAIL_SALE",
+        "ON_PREMISE_SERVICE",
+        "ADVERTISING",
+        "SPONSORSHIP",
+        "PROMOTION"
       ],
       "product_tags": [
-        "SPIRIT"
+        "BEER",
+        "LOW_ALCOHOL_BEER",
+        "MALT_BEVERAGE",
+        "WINE",
+        "SPIRIT",
+        "OTHER_ALCOHOLIC_BEVERAGE"
       ],
       "source_ref": {
         "adapter": "mevzuat",
