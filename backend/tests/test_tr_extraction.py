@@ -136,9 +136,20 @@ class ScopeDerivationTests(unittest.TestCase):
     def test_a_clause_the_rules_cannot_address_is_unclear_not_guessed(self):
         tv = obligation('TR:KANUN:4250', 'Kanun 4250 md. 6/f.1/c.7')       # series and films on television
         self.assertEqual((tv.basis, tv.scope.scope_status), ('UNCLEAR', 'UNCLEAR'))
-        derived = obligation('TR:KANUN:4250', 'Kanun 4250 md. 6/f.10')     # de-alcoholised drinks: both sides named
-        self.assertEqual(derived.scope.scope_status, 'UNCLEAR')
-        self.assertIn('PRODUCT_SCOPE_MIXED', derived.flags)
+        brands = obligation('TR:KANUN:4250', 'Kanun 4250 md. 6/f.9/c.1')   # brand signs of alcoholic and of other drinks: both sides
+        self.assertEqual((brands.scope.alcohol_scope, brands.scope.product_classes), ('ANY', []))
+
+    def test_a_drink_made_from_an_alcoholic_one_is_the_product_not_both_categories(self):
+        # "alkollü içki kategorisindeki ürünlerin işlenmesi sonucunda, elde edilen alkolsüz içkilerde; ... yazılır": the
+        # clause names the alcoholic category as what the product is made from. The lexicon maps the phrase to the one
+        # de-alcoholised class of the vocabulary (a developer's mapping, flagged in the lexicon note).
+        derived = obligation('TR:KANUN:4250', 'Kanun 4250 md. 6/f.10')
+        self.assertEqual((derived.basis, derived.scope.level, derived.scope.product_classes), ('PRODUCT_PROPERTY', 'PRODUCT', ['ALCOHOL_FREE_BEER']))
+        self.assertNotIn('PRODUCT_SCOPE_MIXED', derived.flags)
+        decisions = routed('TR:KANUN:4250', 'Kanun 4250 md. 6/f.10', INTEGRATED)
+        self.assertEqual((decisions['ALC-INT-AF'].status, decisions['ALC-INT-LAGER'].status), ('APPLIES', 'DOES_NOT_APPLY'))
+        by_law = obligation('TR:YONETMELIK:ALKOL_IC_DIS_TICARET', 'Yönetmelik 6203 md. 13/f.13/c.1')
+        self.assertEqual(by_law.scope.product_classes, ['ALCOHOL_FREE_BEER'])
 
 
 class RoutingContrastTests(unittest.TestCase):
@@ -215,9 +226,8 @@ class RoutingContrastTests(unittest.TestCase):
         self.assertEqual((placing['NONALC-BOTTLING'].status, placing['NONALC-DISTRIBUTION'].status), ('PARTIAL', 'DOES_NOT_APPLY'))
 
     def test_an_unclear_clause_answers_unknown_on_every_target(self):
-        for ref in ('Kanun 4250 md. 6/f.1/c.7', 'Kanun 4250 md. 6/f.10'):
-            decisions = routed('TR:KANUN:4250', ref, INTEGRATED)
-            self.assertEqual({(d.status, tuple(d.reason_codes)) for d in decisions.values()}, {('UNKNOWN', ('REGULATORY_SCOPE_UNCLEAR',))})
+        decisions = routed('TR:KANUN:4250', 'Kanun 4250 md. 6/f.1/c.7', INTEGRATED)
+        self.assertEqual({(d.status, tuple(d.reason_codes)) for d in decisions.values()}, {('UNKNOWN', ('REGULATORY_SCOPE_UNCLEAR',))})
 
     def test_a_completeness_flip_turns_a_no_into_unknown_never_the_reverse(self):
         data = INTEGRATED.model_dump()

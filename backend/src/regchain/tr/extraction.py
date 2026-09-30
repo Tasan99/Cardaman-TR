@@ -27,7 +27,7 @@ from ..evidence import digest
 from ..pilot.schema import Strict
 from .core import ObligationScope, RegulationMeta
 from .corpus import CorpusStore
-from .frames import (ABILITY_NEGATIVE, AORIST_NEGATIVE, LETTERS, MUST_WORDS, NECESSITATIVE, NEGATIVE_NECESSITATIVE, Frame, Mention,
+from .frames import (article_label, ABILITY_NEGATIVE, AORIST_NEGATIVE, LETTERS, MUST_WORDS, NECESSITATIVE, NEGATIVE_NECESSITATIVE, Frame, Mention,
                      fold, regulation_frames, _mask, _predicate)
 from .packs import Registry
 
@@ -46,6 +46,8 @@ CONNECTOR = re.compile(r'^\s*(?:,|;|ve\b|veya\b|ile\b|ya da\b|/)\s*(?:\S+\s+){0,
 LOCATIVE = re.compile(r'(?:[nl][dt][ae]|[dt][ae])(?:ki)?$')
 LOCATIVE_AFTER = re.compile(r'^\s+(?:alan|yer|nokta|ünite)[%s]*[dt][ae]' % LETTERS)
 PARTICIPLE_AFTER = re.compile(r'^\s+(?:edilen|eden|olan|yapılan|yapan)(?![%s])' % LETTERS)
+# "İmal ve son kullanma tarihi ... yazılır": the date of an act is a thing on the label, not the act.
+DATE_AFTER = re.compile(r'^\s+(?:ve son (?:kullanma|tüketim)\s+)?tarih')
 VERB = re.compile(r'[%s]+' % LETTERS)
 PRODUCTION_SITES = ('BREWERY', 'DISTILLERY', 'WINERY', 'MALTING_PLANT', 'BOTTLING_PLANT', 'WATER_BOTTLING_PLANT', 'WATER_SOURCE',
                     'MANUFACTURING_PLANT')
@@ -139,7 +141,7 @@ def _adjunct(frame: Frame, folded: str, mention: Mention) -> bool:
     if mention.id == 'ECOMMERCE_SALE':
         return False                                     # "bilgi toplumu hizmetleri ... vasıtasıyla": the channel is the act
     return bool(LOCATIVE.search(word.split()[-1]) or LOCATIVE_AFTER.match(folded[b:b + 24]) or PARTICIPLE_AFTER.match(folded[b:b + 12])
-                or word.endswith(('ilen', 'ılan', 'ulan', 'ülen')))
+                or DATE_AFTER.match(folded[b:b + 28]) or word.endswith(('ilen', 'ılan', 'ulan', 'ülen')))
 
 
 def governing(frame: Frame, subject: str = 'first') -> list[Mention]:
@@ -313,13 +315,26 @@ def scopes_of(frame: Frame, regulation: RegulationScope, registry: Registry, ver
                     'GOVERNING_ACTIVITY', flags + extra + ['ADDRESSEE_FROM_CATALOGUE_TAGS'])
         return (dict(base, level='LEGAL_ENTITY', scope_status='UNCLEAR'), 'UNCLEAR', 'UNCLEAR', flags + extra)
 
-    if actors:
+    # "işletmeci", "işleticilerce", "... işletmek isteyenler": the operator a by-law is written for. Who that is, the text's
+    # own scope says (its catalogue activities); the word itself names no activity.
+    operators = [a for a in frame.actors if a.id == 'OPERATOR' and (a.where == 'CHAPEAU' or not list_item)]
+    distance = [q for q in frame.quantities if q.attribute == 'distance_m']
+    sold_at = [m for m in frame.activities if m.where == 'CLAUSE' and m.id in SALES]
+    if not actors and operators and regulation.activity_classes:
+        out.append((dict(base, level='LEGAL_ENTITY', activity_classes=list(regulation.activity_classes)), 'ACTOR', 'ACTOR_EXPLICIT',
+                    flags + ['ACTOR_IS_REGULATION_PARTY']))
+    elif not actors and distance and sold_at:
+        # "... perakende veya açık olarak satışının yapıldığı yerler ile ... arasında ... en az yüz metre mesafenin bulunması
+        # zorunludur": a rule about where a sale is made binds whoever sells there; a distance is no property of a product.
+        out.append((dict(base, level='LEGAL_ENTITY', activity_classes=_classes(sold_at, registry, frame)), 'SALES', 'GOVERNING_ACTIVITY',
+                    flags + ['ADDRESSEE_IMPLICIT', 'PLACE_OF_ACTIVITY']))
+    elif actors:
         activity = list(dict.fromkeys(c for a in actors for c in a.classes if c in vocabulary.activity_classes))
         # A party that is defined by what it is, not by an activity of the vocabulary (a packaging producer, a contract
         # supplier): the entity class decides.
         entity = [] if activity else list(dict.fromkeys(c for a in actors for c in a.entities if c in vocabulary.entity_classes))
         out.append((dict(base, level='LEGAL_ENTITY', activity_classes=activity, entity_classes=entity), 'ACTOR', 'ACTOR_EXPLICIT', flags))
-    elif frame.actors and not list_item:
+    elif any(a.id != 'OPERATOR' for a in frame.actors) and not list_item:
         out.append(fallback(['ACTOR_UNMAPPED']))
     else:
         for name, found in groups:
@@ -338,7 +353,7 @@ def scopes_of(frame: Frame, regulation: RegulationScope, registry: Registry, ver
                 out.append((dict(base, level='LEGAL_ENTITY', activity_classes=_classes(context, registry)), name,
                             'GOVERNING_ACTIVITY', flags + ['ADDRESSEE_IMPLICIT']))
         if not out:
-            limited = any(q.role == 'LIMIT' for q in frame.quantities)
+            limited = any(q.role == 'LIMIT' and q.attribute != 'distance_m' for q in frame.quantities)
             if sites and frame.topic in ('LICENSING', 'PRODUCTION', 'HYGIENE', 'GENERAL'):
                 out.append((dict(base, level='FACILITY', facility_classes=sites), 'FACILITY', 'FACILITY', flags))
             elif mixed:
@@ -417,11 +432,24 @@ def ground(obligation: ExtractedObligation, store: CorpusStore) -> dict:
     for condition in frame.conditions:
         if text[condition.start:condition.end] != condition.quote:
             checks.append({'element': 'condition', 'ok': False})
+    texts = {label: text}
+
+    def article(ref: str) -> str:
+        # An exception may sit in another article ("... 9 uncu maddenin birinci fıkrasının (b) ve (j) bentlerinde ...
+        # zorunlu değildir" in md. 19): its quote is checked against the article it is quoted from.
+        other = article_label(ref) if ref else label
+        if other not in texts:
+            try:
+                texts[other] = store.section(obligation.regulation_id, other, obligation.version_id)['text']
+            except (KeyError, ValueError):
+                texts[other] = ''
+        return texts[other]
+
     for rule in frame.exceptions:
-        if text[rule.start:rule.end] != rule.quote:
+        if article(rule.source_ref)[rule.start:rule.end] != rule.quote:
             checks.append({'element': 'exception', 'ok': False})
     for item in (*obligation.scope.conditions, *obligation.scope.exceptions):
-        if item.get('quote') and item['quote'] not in text:
+        if item.get('quote') and item['quote'] not in article(item.get('source_ref', '')):
             checks.append({'element': 'scope quote', 'ok': False})
     return {'grounded': all(c['ok'] for c in checks), 'checks': checks, 'rules': [frame.rules_version, obligation.rules_version]}
 

@@ -2,6 +2,7 @@
   "format": "cardaman-tr-lexicon/1",
   "note": "Turkish surface forms of the beverage packs' vocabulary, as regular expressions over folded text (Turkish lower case, one character per character). A pattern matches a stem; suffixes are left open with [a-zçğıöşü]*. Longer matches win over shorter ones that overlap them. Every entry was written against wording found in the stored official texts; none is a legal definition.",
   "actors": [
+    {"id": "CONTRACT_SUPPLIER", "pattern": "fason üretim yapan tedarikçi(?:ler)?", "activities": [], "entities": ["CONTRACT_SUPPLIER"]},
     {"id": "PRODUCER", "pattern": "üretici(?:ler)?(?![a-zçğıöşü]*(?: tütün))|üreten(?:ler)?|imal eden(?:ler)?|üretim yapan(?:lar)?|üretmek isteyen(?:ler)?", "activities": ["PRODUCTION", "BREWING", "BOTTLING"], "entities": ["PRODUCER", "BOTTLER"]},
     {"id": "IMPORTER", "pattern": "ithalatçı(?:lar)?|ithal eden(?:ler)?|ithalat yapan(?:lar)?", "activities": ["IMPORT"], "entities": ["IMPORTER"]},
     {"id": "EXPORTER", "pattern": "ihracatçı(?:lar)?|ihraç eden(?:ler)?", "activities": ["EXPORT"], "entities": ["EXPORTER"]},
@@ -9,7 +10,7 @@
     {"id": "WHOLESALER", "pattern": "toptan satıcı(?:lar)?", "activities": ["WHOLESALE"], "entities": ["WHOLESALER"]},
     {"id": "RETAILER", "pattern": "perakende satıcı(?:lar)?|münhasır satıcı(?:lar)?", "activities": ["RETAIL_SALE"], "entities": ["RETAILER"]},
     {"id": "ON_PREMISE_SELLER", "pattern": "açık alkollü içki satıcı(?:sı|ları)", "activities": ["ON_PREMISE_SERVICE"], "entities": ["ON_PREMISE_OPERATOR"]},
-    {"id": "SELLER", "pattern": "(?:yetkili |belgeli )?satıcı(?:lar)?|satan(?:lar)?|satış yapan(?:lar)?|satmak isteyen(?:ler)?", "activities": ["WHOLESALE", "RETAIL_SALE", "ON_PREMISE_SERVICE", "ECOMMERCE_SALE"], "entities": ["WHOLESALER", "RETAILER", "ON_PREMISE_OPERATOR", "ONLINE_SELLER", "SALES"]},
+    {"id": "SELLER", "pattern": "(?:yetkili |belgeli )?satıcı(?:lar)?|satan(?:lar)?|satış yapan(?:lar)?|satmak isteyen(?:ler)?|satış belgesi almak isteyen(?:ler)?", "activities": ["WHOLESALE", "RETAIL_SALE", "ON_PREMISE_SERVICE", "ECOMMERCE_SALE"], "entities": ["WHOLESALER", "RETAILER", "ON_PREMISE_OPERATOR", "ONLINE_SELLER", "SALES"]},
     {"id": "SALES_POINT", "pattern": "satış nokta(?:sı|ları)", "activities": ["RETAIL_SALE", "WHOLESALE", "ECOMMERCE_SALE"], "entities": ["RETAILER", "WHOLESALER", "ONLINE_SELLER"]},
     {"id": "PLACER_ON_MARKET", "pattern": "piyasaya süren(?:ler)?(?: işletmeler)?|piyasaya arz eden(?:ler)?", "activities": ["PLACING_ON_MARKET", "PRODUCTION", "BOTTLING", "IMPORT"], "entities": ["PRODUCER", "BOTTLER", "IMPORTER"]},
     {"id": "PACKAGING_PRODUCER", "pattern": "ambalaj üretici(?:si|leri)", "activities": [], "entities": ["PACKAGING_PRODUCER"]},
@@ -19,12 +20,13 @@
     {"id": "SELLER_OR_PROVIDER", "pattern": "satıcı (?:veya|ve|ya da) sağlayıcı(?:lar)?|satıcı/sağlayıcı", "activities": ["ECOMMERCE_SALE", "RETAIL_SALE"], "entities": ["ONLINE_SELLER", "RETAILER"]},
     {"id": "DISTRIBUTOR", "pattern": "dağıtıcı(?:lar)?|dağıtım yapan(?:lar)?", "activities": ["DISTRIBUTION"], "entities": ["DISTRIBUTOR"]},
     {"id": "WORKPLACE", "pattern": "işyerleri|iş yerleri|işletmeler", "activities": [], "entities": []},
-    {"id": "FIRM", "pattern": "firmalar|üretici firmalar|ithalatçı firmalar", "activities": [], "entities": []}
+    {"id": "FIRM", "pattern": "firmalar", "activities": [], "entities": []},
+    {"id": "OPERATOR", "pattern": "işletmeci(?:ler)?|işletici(?:ler)?|işletmek isteyen(?:ler)?", "activities": [], "entities": [], "note": "the party the text is written for: its addressee is read from the catalogue activities of the regulation"}
   ],
   "authorities": [
     "bakanlık(?:ça|ca)?", "bakanlığ[a-zçğıöşü]*", "bakan(?:ı)?(?![a-zçğıöşü])", "kurum(?:ca|u|un)?(?![a-zçğıöşü])", "kurul(?:ca|u)?(?![a-zçğıöşü])", "ajans(?:ça|ın|tan|a)?(?![a-zçğıöşü])",
     "il müdürlü[a-zçğıöşü]*", "genel müdürlü[a-zçğıöşü]*", "cumhurbaşkan[a-zçğıöşü]*", "mülki amir[a-zçğıöşü]*", "belediye[a-zçğıöşü]*", "kolluk[a-zçğıöşü]*",
-    "yetkili merci[a-zçğıöşü]*", "yetkili makam[a-zçğıöşü]*", "inhisarlar idaresi[a-zçğıöşü]*", "idare(?:ce|si|nin)(?![a-zçğıöşü])", "reklam kurulu[a-zçğıöşü]*", "tütün ve alkol piyasası düzenleme kurumu[a-zçğıöşü]*"
+    "yetkili merci[a-zçğıöşü]*", "yetkili makam[a-zçğıöşü]*", "inhisarlar idaresi[a-zçğıöşü]*", "idare(?:ce|si|nin)(?![a-zçğıöşü])", "reklam kurulu[a-zçğıöşü]*", "valili[kğ][a-zçğıöşü]*", "il özel idaresi[a-zçğıöşü]*", "tütün ve alkol piyasası düzenleme kurumu[a-zçğıöşü]*"
   ],
   "activities": [
     {"class": "ADVERTISING", "pattern": "reklam[a-zçğıöşü]*"},
@@ -53,6 +55,7 @@
   "sale_activities": ["WHOLESALE", "RETAIL_SALE", "ON_PREMISE_SERVICE", "ECOMMERCE_SALE"],
   "products": [
     {"id": "TOBACCO", "pattern": "tütün mamul[a-zçğıöşü]*|tütün ürün[a-zçğıöşü]*|nargilelik[a-zçğıöşü ]*|sigara[a-zçğıöşü]*|makaron[a-zçğıöşü]*|tütün(?![a-zçğıöşü])", "classes": [], "alcohol": "ANY", "out_of_scope": true},
+    {"id": "DEALCOHOLISED_BEVERAGE", "pattern": "alkollü içki kategorisindeki ürünlerin işlenmesi sonucunda,? elde edilen alkolsüz (?:içki|içecek)[a-zçğıöşü]*", "classes": ["ALCOHOL_FREE_BEER"], "alcohol": "ANY", "note": "a drink made by processing an alcoholic one; ALCOHOL_FREE_BEER is the only such class of the vocabulary"},
     {"id": "ALCOHOLIC_BEVERAGE", "pattern": "alkollü içki[a-zçğıöşü]*|alkollü içecek[a-zçğıöşü]*|ispirtolu içki[a-zçğıöşü]*", "classes": [], "alcohol": "ALCOHOLIC"},
     {"id": "ALCOHOL_FREE_BEER", "pattern": "alkolsüz bira[a-zçğıöşü]*", "classes": ["ALCOHOL_FREE_BEER"], "alcohol": "ANY"},
     {"id": "LOW_ALCOHOL_BEER", "pattern": "düşük alkollü bira[a-zçğıöşü]*", "classes": ["LOW_ALCOHOL_BEER"], "alcohol": "ANY"},

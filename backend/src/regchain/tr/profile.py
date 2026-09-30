@@ -253,6 +253,21 @@ def _stated(values: list[str], complete: bool):
     return values if values or complete else None
 
 
+# Who buys from a legal entity, read from what it is: the engine's Company has one list for it.
+CONSUMER_FACING = {'RETAILER': 'tüketiciler (perakende satış)', 'ON_PREMISE_OPERATOR': 'tüketiciler (yerinde tüketim / sunum)',
+                   'ONLINE_SELLER': 'tüketiciler (internet üzerinden satış)'}
+
+
+def customers_of(entity: LegalEntity, vocab: Vocabulary) -> list[str] | None:
+    """The entity's customers as the legacy Company states them: consumers where the entity sells to them itself, and
+    the trade behind each sales channel it states. None (not stated) only when the entity's profile is incomplete and
+    nothing can be read; a complete entity with no channel sells to no one outside the group, and says so with []."""
+    found = [text for cls, text in CONSUMER_FACING.items() if cls in entity.entity_classes]
+    found += [f'{vocab.label("sales_channels", c)} kanalındaki ticari alıcılar' for c in entity.sales_channels
+              if not (c == 'ONLINE' and 'ONLINE_SELLER' in entity.entity_classes)]
+    return _stated(found, entity.profile_complete)
+
+
 def to_company(profile: EnterpriseProfile, entity_id: str, vocab: Vocabulary) -> Company:
     entity = profile.entity(entity_id)
     products = [f'{p.name} ({vocab.label("product_classes", p.product_class)})'
@@ -265,7 +280,7 @@ def to_company(profile: EnterpriseProfile, entity_id: str, vocab: Vocabulary) ->
         licences=_stated([vocab.label('license_classes', l.license_class) for l in entity.licenses if l.status == 'HELD'],
                          entity.profile_complete),
         products=_stated(products, profile.products_complete),
-        customer_types=None,
+        customer_types=customers_of(entity, vocab),
         description=f'{entity.name}: {classes or "sınıfı belirtilmemiş"} ({profile.group.name} grubu).')
 
 

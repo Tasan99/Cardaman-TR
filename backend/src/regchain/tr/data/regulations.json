@@ -376,6 +376,10 @@
         "WATER",
         "FOOD"
       ],
+      "activity_tags": [
+        "WATER_EXTRACTION",
+        "BOTTLING"
+      ],
       "product_tags": [
         "NATURAL_MINERAL_WATER"
       ],

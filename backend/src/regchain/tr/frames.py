@@ -194,7 +194,35 @@ REFERENCED_TEXT = re.compile(r'((?:[A-ZÇĞİÖŞÜ][%s]+,? (?:(?:ve|ile|veya) )
                              % (LETTERS, LETTERS, LETTERS, LETTERS))
 DELEGATION_VERB = re.compile(r'(?<![%s])(?:belirlenir|belirlenebilir|düzenlenir|yönetilir|yayımlanır|ilan edilir|tespit edilir|karar verilir|'
                              r'verilebilir|verilir|yapılır|yapılabilir|denetlenir|yürütülür|alınır|değerlendirilir|bildirilir|iptal edilir|'
-                             r'yetkilidir|sorumlu ve yetkilidir|görevlidir)(?![%s])' % (LETTERS, LETTERS))
+                             r'onaylanır|yetkilidir|sorumlu ve yetkilidir|görevlidir)(?![%s])' % (LETTERS, LETTERS))
+# "Mesafe şartı, satış belgesinin verildiği tarih itibarıyla aranır.": when a condition stated elsewhere is assessed
+# (CONDITION_SUBJECT below; "... aynı renkte olma şartı aranır" states the condition itself and stays a duty).
+# "Bira hacmen alkol miktarlarına göre dörde ayrılır:": a classification, whatever its passive aorist looks like.
+CLASSIFICATION = re.compile(r'(?<![%s])göre\s+(?:[%s]+\s+){0,3}ayrılır' % (LETTERS, LETTERS))
+# "Bu maddenin birinci, ikinci ve üçüncü fıkralarında yer alan hükümler; ... için de uygulanır.": where a rule of the
+# same text reaches, not a further duty.
+INTERNAL_REFERENCE = re.compile(r'bu (?:madde|fıkra|bölüm|yönetmeli|tebliğ|kanun)[%s]*[^.]{0,160}hükümler[%s]*;?[^.]{0,260}uygulanır\s*\.?\s*$'
+                                % (LETTERS, LETTERS))
+# A noun a verb acts through, not the one who acts: "dağıtıcılar ve/veya toptan satıcılar eliyle yürütürler".
+INSTRUMENT_AFTER = re.compile(r'^\s+(?:eliyle|aracılığı|vasıtasıyla|kanalıyla)')
+COORDINATOR = re.compile(r'^\s*(?:,|ve/veya|veya|ve|ile|ya da)\s*$')
+ANCAK = re.compile(r'\s*(?:\(\d+\)\s*)?ancak(?![%s])' % LETTERS)
+ANAPHORIC_SUBJECT = re.compile(r'\s*(?:\(\d+\)\s*)?(?:bu (?:yerler|işletmeler|kişiler|firmalar)|bunlar)(?![%s])' % LETTERS)
+CITES_PROVISION = re.compile(r'\d+\s*(?:inci|nci|ncı|üncü|uncu|ıncı|ncu|ncü)\s+madde|fıkrasın|(?<![%s])ben[dt](?:i|leri)' % LETTERS)
+ORDINALS = {'birinci': 1, 'ikinci': 2, 'üçüncü': 3, 'dördüncü': 4, 'beşinci': 5, 'altıncı': 6, 'yedinci': 7, 'sekizinci': 8,
+            'dokuzuncu': 9, 'onuncu': 10}
+CITED_BENTS = re.compile(r'(\d+)\s*(?:inci|nci|ncı|üncü|uncu|ıncı|ncu|ncü)\s+madde(?:nin|sinin)\s+(%s)\s+fıkrasının\s+(?:sadece\s+)?'
+                         r'((?:\([%s]\)(?:\s*,\s*|\s+ve\s+)?)+)\s*ben[dt]' % ('|'.join(ORDINALS), LETTERS))
+HEADING_TOPICS = (('etiket', 'LABELLING'), ('işaretle', 'LABELLING'), ('beslenme', 'CLAIMS'), ('sağlık beyan', 'CLAIMS'),
+                  ('ürün özellik', 'COMPOSITION'))
+# "... tüketici aşağıdaki sözleşmelerde cayma hakkını kullanamaz:": what the consumer may not do is no duty of a company.
+CONSUMER_RIGHT = re.compile(r'(?<![%s])tüketici(?:ler)?\s[^.;]{0,80}hakkını\s+kullana(?:maz|mazlar)' % LETTERS)
+# "(a) bendinde belirtilen bilgiler ... sunulur": information is given, not served.
+INFORMATION_GIVEN = re.compile(r'(?<![%s])bilgi[%s]*\s[^.;]{0,160}sunul' % (LETTERS, LETTERS))
+CONDITION_SUBJECT = re.compile(r'\s*(?:\(\d+\)\s*)?(?:[%s]+\s+){0,2}(?:şartı|koşulu),?\s[^.;]{0,120}(?<![%s])aranır\s*\.?\s*$' % (LETTERS, LETTERS))
+# Case endings an authority named as the subject of its own task does not carry ("Belediye ..., görüşünü alır").
+CASE_ENDINGS = ('dan', 'den', 'tan', 'ten', 'nın', 'nin', 'nun', 'nün', 'ın', 'in', 'un', 'ün', 'na', 'ne', 'ya', 'ca', 'ce', 'ça', 'çe',
+                'da', 'de', 'ta', 'te')
 AGENTIVE = re.compile(r'^(?:ca|ce|ça|çe|nca|nce|larca|lerce|larınca|lerince)$')
 GENITIVE = re.compile(r'^(?:ın|in|un|ün|nın|nin|nun|nün|ların|lerin)$')
 POSSESSIVE = re.compile(r'^(?:ı|i|u|ü|sı|si|su|sü|ları|leri)$')
@@ -218,7 +246,7 @@ PROPERTY_OF_PRODUCT = re.compile(r'\s*[’\']?\s*(?:den|dan|ten|tan)\s+(?:fazla|
 ABV_CONDITION = re.compile(r'hacmen\s*%%\s*%s\s*[’\']?\s*(?:(den|dan|ten|tan)\s+fazla|(ve\s+daha\s+fazla)|(ve\s+(?:daha\s+)?(?:az|düşük))|'
                            r'(den|dan|ten|tan)\s+(?:az|düşük))\s+alkol' % NUMBER)
 CLOCK = re.compile(r'\d{1,2}[:.]\d{2}\s*(?:ila|ile|-|–)\s*\d{1,2}[:.]\d{2}(?:\s+saatleri\s+arasında)?')
-EXPORT_ONLY = re.compile(r'ihraç amaçlı|ihraç edilmek (?:üzere|amacıyla)|ihracat amacıyla')
+EXPORT_ONLY = re.compile(r'ihraç amaçlı|ihraç edilmek (?:üzere|amacıyla)|ihracat amacıyla|ihracat amacı ile')
 ANAPHORA = re.compile(r'(?<![%s])bu ürün' % LETTERS)
 THIS_FIKRA = re.compile(r'bu fıkra')
 THIS_ARTICLE = re.compile(r'bu madde')
@@ -295,6 +323,33 @@ def _plain_active_aorist(marker: str, passive: bool) -> bool:
         and not NECESSITATIVE.search(word) and word not in EXISTENTIAL
 
 
+def _plural_agreement(marker: str) -> bool:
+    """An aorist that agrees with a plural subject ("yerine getirirler", "karşılarlar"): somebody acts, even where the
+    sentence names them with a pronoun ("Bu yerler ..."). A plural noun ("ürünler", "belgeler") has no aorist under its
+    plural ending."""
+    word = marker.split(' (')[0].split()[-1] if marker else ''
+    return word.endswith(('ler', 'lar')) and word[-4:-3] == 'r' and bool(AORIST.search(word[:-3]))
+
+
+def _authority_subject(lex: 'Lexicon', folded: str, modality, marker: str, passive: bool) -> bool:
+    """"Belediye veya il özel idaresi, ruhsat vermeden önce, ... görüşünü alır.": an authority that opens the sentence
+    as the subject of an active verb does its own task."""
+    if modality != 'MUST' or passive or MUST_WORDS.search(marker):
+        return False
+    opening = re.match(r'\s*(?:\(\d+\)\s*)?(?:[%s]{1,2}\)\s+)?' % LETTERS, folded).end()
+    for pattern in lex.authorities:
+        match = pattern.match(folded, opening)
+        if match:
+            end = match.end()
+            while end < len(folded) and folded[end].isalpha():
+                end += 1
+            word = folded[match.start():end]
+            # "Kurum tarafından adına dağıtım yetki belgesi düzenlenen firmalar, ...": the firms are the subject.
+            if (word == 'belediye' or not word.endswith(CASE_ENDINGS)) and not TARAFINDAN.match(folded, end):
+                return True
+    return False
+
+
 def _find(patterns, folded: str, text: str, base: int, where: str = 'CLAUSE') -> list[Mention]:
     """Lexicon matches in one reading, longest first; a match inside a longer match of the same kind is dropped."""
     found = []
@@ -330,17 +385,29 @@ def _actors(lex: Lexicon, folded: str, text: str, base: int, where: str, active:
             continue
         kept.append((start, stem_end, end, suffix, entry))
     kept.sort()
-    out = []
+    rows = []
     for start, stem_end, end, suffix, entry in kept:
         after = folded[end:end + 14]
         agentive = bool(AGENTIVE.match(suffix)) or bool(TARAFINDAN.match(after))
         genitive = bool(GENITIVE.match(suffix))
-        nominative = suffix == '' or (bool(POSSESSIVE.match(suffix)) and folded[end:end + 1] in (',', ';'))
+        nominative = (suffix == '' or (bool(POSSESSIVE.match(suffix)) and folded[end:end + 1] in (',', ';'))) \
+            and not INSTRUMENT_AFTER.match(after)
         separated = folded[end:end + 1] in (',', ';', '/') or folded[end:end + 4] in (' ve ', ' vey') or folded[end:end + 6] == ' ile '
-        if agentive or (genitive and where != 'CLAUSE') or (active and (nominative or genitive)) or (where == 'CHAPEAU' and (nominative or separated)):
+        rows.append([start, end, entry, agentive, genitive, nominative, separated])
+    # "üreticileri veya ithalatçıları tarafından": the postposition governs every noun coordinated with the one it follows.
+    for index in range(len(rows) - 2, -1, -1):
+        if rows[index + 1][3] and not rows[index][3] and COORDINATOR.match(folded[rows[index][1]:rows[index + 1][0]]):
+            rows[index][3] = True
+    # A genitive is the addressee only of a nominalised duty ("isteyenlerin ... almaları zorunludur"); next to a subject
+    # it is whose thing the sentence is about ("perakende satıcıların taleplerini ... karşılayacak").
+    subject = any(agentive or nominative for _, _, _, agentive, _, nominative, _ in rows)
+    out = []
+    for start, end, entry, agentive, genitive, nominative, separated in rows:
+        if agentive or (genitive and where != 'CLAUSE') or (active and (nominative or (genitive and not subject))) \
+                or (where == 'CHAPEAU' and (nominative or separated)):
             out.append(Mention(id=entry['id'], text=text[start:end], start=base + start, end=base + end,
                                classes=list(entry['activities']), entities=list(entry['entities']), where=where,
-                               note='agentive' if agentive else 'genitive' if genitive else 'nominative'))
+                               note='agentive' if agentive else 'genitive' if genitive and not nominative else 'nominative'))
     return out
 
 
@@ -435,6 +502,8 @@ def _exceptions(lex: Lexicon, folded: str, text: str, base: int, ref: str, produ
     for match in lex.exception.finditer(folded):
         if match.group() in ('uygulanmaz', 'aranmaz', 'dışındadır', 'zorunlu değildir', 'kapsamaz') or match.group().startswith(('muaf', 'istisna', 'kapsamı dışında')):
             continue                                          # the main predicate of an EXCEPTION clause, handled per clause
+        if match.group().endswith('dışında') and re.match(r',?\s+(?:farklı|başka|diğer)\s', folded[match.end():match.end() + 12]):
+            continue                                          # "... ürünler dışında, farklı ürünlerin de satıldığı": besides, not except
         if match.group().startswith('saklı'):
             a, b = _segment(folded, match.start())
         else:
@@ -512,10 +581,12 @@ def frame_of(clause: Clause, regulation_id: str, lex: Lexicon | None = None) -> 
         kind = 'SCOPE'
     elif EXEMPTING.search(folded[-60:]) or (modality == 'MAY' and re.match(r'\s*(?:\(\d+\)\s*)?ancak', folded)):
         kind = 'EXCEPTION'
-    elif _authority_task(lex, folded, modality, passive):
+    elif _authority_task(lex, folded, modality, passive) or _authority_subject(lex, folded, modality, marker, passive):
         kind = 'DELEGATION'
-    elif REFERENCE.search(folded) and references and modality != 'MUST_NOT':
+    elif (REFERENCE.search(folded) and references or INTERNAL_REFERENCE.search(folded)) and modality != 'MUST_NOT':
         kind = 'REFERENCE'
+    elif CONDITION_SUBJECT.match(folded) or CLASSIFICATION.search(folded):
+        kind = 'OTHER'
     elif modality == 'MUST_NOT':
         kind = 'PROHIBITION'
     elif modality == 'MUST':
@@ -526,18 +597,35 @@ def frame_of(clause: Clause, regulation_id: str, lex: Lexicon | None = None) -> 
         kind = 'OTHER'
     # -- elements ----------------------------------------------------------------------------------
     active = modality is not None and not passive
-    actors = []
-    if clause.chapeau:
-        chapeau_text = clause.chapeau
-        actors = _actors(lex, chapeau_folded, chapeau_text, clause.chapeau_start, 'CHAPEAU', True)
-    if not actors:
-        actors = _actors(lex, folded, text, base, 'CLAUSE', active)
+    own = _actors(lex, folded, text, base, 'CLAUSE', active)
+    lead = _actors(lex, chapeau_folded, clause.chapeau, clause.chapeau_start, 'CHAPEAU', True) if clause.chapeau else []
+    # A bent that is a sentence of its own names its own addressee ("... halinde satıcı, ... kimlik belgesi talep eder");
+    # an item of a list has the addressee of its lead-in ("Piyasaya sürenler; a) ... kayıt olmakla, yükümlüdürler").
+    named = source == 'CLAUSE' and any(a.note in ('nominative', 'agentive') and (a.classes or a.entities or a.id == 'OPERATOR')
+                                      for a in own)
+    actors = own if named or not lead else lead
     if kind == 'OBLIGATION' and _plain_active_aorist(marker, passive) and not any(a.note in ('nominative', 'agentive') for a in actors):
-        # "Bu işaretleme, piyasaya sürenin kayıt altında olduğunu ... gösterir.": an active aorist whose subject is not an
-        # addressee describes; Turkish drafting orders a company with a named subject, a passive or a duty word.
-        kind, actors = 'OTHER', []
+        # The closing word only looks like an aorist where it is the plural noun that ends a list item ("c) ... Ürünler.",
+        # "ğ) Sosyal amaçlı yardımlar,"): the lead-in or the closing line of the fıkra carries the duty.
+        carried = next(((m, word, p, where) for where, other in (('CLOSING', closing_folded), ('CHAPEAU', chapeau_folded)) if other
+                        for m, word, p in [_modality(other)] if m in ('MUST', 'MUST_NOT') and not _plain_active_aorist(word, p)), None)
+        if source == 'CLAUSE' and carried:
+            modality, marker, passive, source = carried
+            kind, actors = 'PROHIBITION' if modality == 'MUST_NOT' else 'OBLIGATION', lead
+        elif not (source == 'CLAUSE' and _plural_agreement(marker) and ANAPHORIC_SUBJECT.match(folded)):
+            # "Bu işaretleme, piyasaya sürenin kayıt altında olduğunu ... gösterir.": an active aorist whose subject is not
+            # an addressee describes; Turkish drafting orders a company with a named subject, a passive or a duty word.
+            # "Bu yerler ... sorumlulukları yerine getirirler." keeps its duty: frames_of names who "bu yerler" are.
+            kind, actors = 'OTHER', []
     activities = _find(lex.activities, folded, text, base)
     products = _find(lex.products, folded, text, base)
+    # "Tütün ve Alkol Piyasası Düzenleme Kurumundan satış belgesi ...": the name of an authority names no product.
+    products = [m for m in products if not any(a.start <= m.start and m.end <= a.end for a in authorities)]
+    if not products and INFORMATION_GIVEN.search(folded):
+        # "... bilgiler de başka yöntemler kullanılarak ... sunulur": what is presented is information, not a drink.
+        activities = [m for m in activities if not fold(m.text).startswith('sunul')]
+    if kind == 'PROHIBITION' and CONSUMER_RIGHT.search(chapeau_folded if source == 'CHAPEAU' else folded):
+        kind = 'OTHER'
     facilities = _find(lex.facilities, folded, text, base)
     places = _find(lex.places, folded, text, base)
     counterparties = _find(lex.counterparties, folded, text, base)
@@ -548,6 +636,10 @@ def frame_of(clause: Clause, regulation_id: str, lex: Lexicon | None = None) -> 
         products += _find(lex.products, chapeau_folded, chapeau, clause.chapeau_start, 'CHAPEAU')
         facilities += _find(lex.facilities, chapeau_folded, chapeau, clause.chapeau_start, 'CHAPEAU')
     exceptions = _exceptions(lex, folded, text, base, clause.ref, products, places)
+    if clause.chapeau and source != 'CLAUSE':
+        # "(1) Bu Yönetmelikteki istisnalar saklı kalmak kaydıyla, aşağıdaki bilgilerin belirtilmesi zorunludur:": the
+        # reservation of the lead-in qualifies every item of the list.
+        exceptions += _exceptions(lex, chapeau_folded, clause.chapeau, clause.chapeau_start, clause.ref, [], [])
     quantities = _quantities(folded, text, base)
     # A mention inside an agent-noun phrase ("alkollü içkileri üreten, ithal eden ve pazarlayan firmaların") says who,
     # and one inside an exception ("ihraç amaçlı üretilenler hariç") says what is left out: neither is the regulated act.
@@ -561,14 +653,18 @@ def frame_of(clause: Clause, regulation_id: str, lex: Lexicon | None = None) -> 
     conditions = _conditions(lex, folded, text, base, places, counterparties, quantities)
     if kind == 'EXCEPTION' and EXEMPTING.search(folded[-60:]):
         marker = EXEMPTING.search(folded[-60:]).group()
+    topic = _topic(activities, reading)
+    if topic == 'GENERAL':
+        # A clause that names no subject of its own is about what its article is about ("Etiket bilgileri ve reklam").
+        heading = fold(clause.heading)
+        topic = next((name for word, name in HEADING_TOPICS if word in heading), topic)
     return Frame(ref=clause.ref, regulation_id=regulation_id, label=clause.label, heading=clause.heading, kind=kind,
                  modality=modality if kind in ('OBLIGATION', 'PROHIBITION', 'PERMISSION', 'REFERENCE') else None,
                  marker=f'{marker} ({source.lower()})' if marker and source != 'CLAUSE' else marker, passive=passive,
                  transitional=bool(TRANSITIONAL.search(clause.label)), text=text, start=clause.start, end=clause.end,
                  chapeau=clause.chapeau, closing=clause.closing, actors=actors, authorities=authorities, activities=activities,
                  products=products, facilities=facilities, places=places, counterparties=counterparties, quantities=quantities,
-                 conditions=conditions, exceptions=exceptions, references=references, product_basis=basis,
-                 topic=_topic(activities, reading))
+                 conditions=conditions, exceptions=exceptions, references=references, product_basis=basis, topic=topic)
 
 
 def _authority_task(lex: Lexicon, folded: str, modality, passive: bool) -> bool:
@@ -606,6 +702,7 @@ def frames_of(section: dict, regulation_id: str, lex: Lexicon | None = None) -> 
     for indices in by_fikra.values():
         since = []                                   # duty frames since the last exception sentence in this fıkra
         named = []                                   # the products the fıkra has named so far
+        parties = []                                 # the parties the sentence before names, in whatever case
         for index in indices:
             frame = frames[index]
             if frame.product_basis == 'CLAUSE':
@@ -615,8 +712,25 @@ def frames_of(section: dict, regulation_id: str, lex: Lexicon | None = None) -> 
                 # regulation's whole scope.
                 frame.products = [m.model_copy(update={'where': 'PREVIOUS'}) for m in named]
                 frame.product_basis = 'CLAUSE'
+            if frame.duty_bearing and not frame.actors and parties and ANAPHORIC_SUBJECT.match(fold(frame.text)):
+                # "Bu yerler ... sorumlulukları yerine getirirler.": the places the sentence before called sales points.
+                frame.actors = parties
+            parties = _parties(lex, frame)
             if frame.duty_bearing:
+                if since and ANCAK.match(fold(_mask(frame.text))):
+                    # "Ancak ... birlikte nakliyesinin gerektiği hallerde; ... ayrı bölümde taşınır.": a duty that opens
+                    # with "ancak" qualifies the duty before it.
+                    frames[since[-1]].exceptions.append(ExceptionRule(effect='NARROWS', quote=frame.text, start=frame.start,
+                                                                      end=frame.end, source_ref=frame.ref))
                 since.append(index)
+                continue
+            if frame.kind == 'PERMISSION' and since and since[-1] == index - 1 and frames[index - 1].kind == 'PROHIBITION' \
+                    and {m.id for m in frame.activities} & {m.id for m in frames[index - 1].activities}:
+                # "... hiçbir etkinlik alanında bulundurulamaz. Açık alkollü içki satışı ... işletmelerde servis amaçlı
+                # materyallerde marka, amblem ve logo kullanılabilir.": a permission about the act just prohibited limits it.
+                frames[index - 1].exceptions.append(ExceptionRule(
+                    effect='PERMITS', quote=frame.text, start=frame.start, end=frame.end, source_ref=frame.ref,
+                    about='PLACE' if frame.places or frame.facilities or re.search(r'işletmelerde|yerlerde', fold(frame.text)) else 'OTHER'))
                 continue
             if frame.kind != 'EXCEPTION':
                 continue
@@ -627,8 +741,17 @@ def frames_of(section: dict, regulation_id: str, lex: Lexicon | None = None) -> 
                 targets = [i for i in indices if frames[i].duty_bearing]
             elif 'bu hükmün' in folded or 'bu hüküm' in folded:
                 targets = since[-1:]
-            else:
+            elif since:
                 targets = list(since)
+            elif CITES_PROVISION.search(folded):
+                targets = []                             # names the provision it lifts: regulation_frames resolves it
+            elif len(indices) == 1:
+                # A fıkra that is one exception and cites nothing ("Üçüncü ülkelere ihracat amacı ile dolumu yapılan suların
+                # etiket düzenlemelerinde bu Yönetmelikte geçen hükümler uygulanmaz."): it lifts the duties of its article.
+                targets = [i for i, f in enumerate(frames) if f.duty_bearing]
+            else:
+                # "Mesafe şartı turizm belgeli işletmeler için uygulanmaz.", after another exception of the same fıkra.
+                targets = [i for i in indices if i < index and frames[i].duty_bearing]
             predicate, about = None, 'OTHER'
             if EXPORT_ONLY.search(folded):
                 predicate, about = {'fact': 'product.export_only', 'op': 'eq', 'value': True}, 'PRODUCT'
@@ -641,5 +764,48 @@ def frames_of(section: dict, regulation_id: str, lex: Lexicon | None = None) -> 
     return frames
 
 
+def _parties(lex: Lexicon, frame: Frame) -> list[Mention]:
+    """The parties a clause names, whatever their case: what a following "Bu yerler ..." refers back to."""
+    folded = fold(_mask(frame.text))
+    found = sorted(((m.start(), m.end('stem'), entry) for entry, pattern in lex.actors for m in pattern.finditer(folded)
+                    if entry['activities'] or entry['entities']), key=lambda item: (-(item[1] - item[0]), item[0]))
+    kept = []
+    for start, end, entry in found:
+        if not any(start < b and a < end for a, b, _ in kept):
+            kept.append((start, end, entry))
+    return [Mention(id=entry['id'], text=frame.text[a:b], start=frame.start + a, end=frame.start + b, classes=list(entry['activities']),
+                    entities=list(entry['entities']), where='PREVIOUS', note='anaphora') for a, b, entry in sorted(kept)]
+
+
+def article_label(ref: str) -> str:
+    """'Yönetmelik 23282 md. 19/f.4' -> 'Yönetmelik 23282 md. 19' (the printed label of the article a clause sits in)."""
+    return re.split(r'/(?:f|b|c)\.', ref)[0]
+
+
+def _cited_exceptions(frames: list[Frame]) -> None:
+    """An exception that names the bents it lifts is attached to them, wherever in the text they stand.
+
+    "... 9 uncu maddenin birinci fıkrasının (b) ve (j) bentlerinde atıf yapılan bilgilerin hacmen % 1,2’den fazla alkol
+    içeren içeceklerde verilmesi zorunlu değildir." lifts md. 9/f.1/b.b and b.j for the products its condition selects."""
+    by_ref: dict[str, list[Frame]] = {}
+    for frame in frames:
+        by_ref.setdefault(re.sub(r'/c\.\d+$', '', frame.ref), []).append(frame)
+    for frame in frames:
+        if frame.kind != 'EXCEPTION':
+            continue
+        document = frame.ref.split(' md. ')[0]
+        predicate = next((c.predicate for c in frame.conditions if c.predicate), None)
+        for match in CITED_BENTS.finditer(fold(_mask(frame.text))):
+            article, fikra = match.group(1), ORDINALS[match.group(2)]
+            for bent in re.findall(r'\(([%s])\)' % LETTERS, match.group(3)):
+                for target in by_ref.get(f'{document} md. {article}/f.{fikra}/b.{bent}', []):
+                    if target.duty_bearing and not any(e.source_ref == frame.ref for e in target.exceptions):
+                        target.exceptions.append(ExceptionRule(effect='EXEMPTS', quote=frame.text, start=frame.start, end=frame.end,
+                                                               source_ref=frame.ref, predicate=predicate,
+                                                               about='PRODUCT' if predicate else 'OTHER'))
+
+
 def regulation_frames(sections: list[dict], regulation_id: str) -> list[Frame]:
-    return [frame for section in sections for frame in frames_of(section, regulation_id)]
+    frames = [frame for section in sections for frame in frames_of(section, regulation_id)]
+    _cited_exceptions(frames)
+    return frames
