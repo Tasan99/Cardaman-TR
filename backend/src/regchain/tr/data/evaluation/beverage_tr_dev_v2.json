@@ -1,10 +1,10 @@
 {
  "format": "cardaman-evaluation-dataset-v2",
  "dataset_id": "BEVERAGE_TR_DEV_V2",
- "version": "0.3.0",
+ "version": "0.4.0",
  "label_status": "DEVELOPMENT",
  "labelled_on": "2026-09-30",
- "note": "Developer labels on the stored official texts and the synthetic pilot profiles and registers. INDICATIVE only: not expert gold, one reader, no adjudication. No label is copied from a model or from the rule reader. Clauses of the DEV split were read while the wording rules were being corrected against them, so a score on DEV measures fit, not accuracy; the HOLDOUT clauses were labelled from the text before any reader was run on them and no rule was changed after they were scored. Their addressee and exception labels were added later the same day, again from the text and before the scope output of the rule reader on them was looked at. UNDECIDED marks a clause the developer could not classify; it is scored in no task. Label corrections made after a first scoring are listed under label_changes, with the score before them.",
+ "note": "Developer labels on the stored official texts and the synthetic pilot profiles and registers. INDICATIVE only: not expert gold, one reader, no adjudication. No label is copied from a model or from the rule reader. Clauses of the DEV split were read while the wording rules were being corrected against them, so a score on DEV measures fit, not accuracy; the HOLDOUT clauses were labelled from the text before any reader was run on them and no rule was changed after they were scored. Their addressee and exception labels were added later the same day, again from the text and before the scope output of the rule reader on them was looked at. The HOLDOUT coverage cases were used to improve the comparer after their first scoring (recorded in evaluation/reports) and are development data from then on; the VALIDATION coverage cases (a second register for two pilots) were written and labelled before that, and nothing is tuned on them. UNDECIDED marks a clause the developer could not classify; it is scored in no task. Label corrections made after a first scoring are listed under label_changes, with the score before them.",
  "label_changes": [
   {
    "task": "APPLICABILITY",
@@ -35,10 +35,13 @@
   "TR:TEBLIG:TGK_ENERJI_ICECEKLERI": "20260930-85e33626fdc8",
   "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM": "20260930-07cd0ca24a1f",
   "TR:YONETMELIK:ALKOL_IC_DIS_TICARET": "20260930-c3d5ba94a7b1",
+  "TR:YONETMELIK:ALKOL_TESIS_TEKNIK_SARTLAR": "20260930-d26494e97888",
   "TR:YONETMELIK:AMBALAJ_ATIKLARI": "20260930-e11acf13abef",
   "TR:YONETMELIK:GEKAP": "20260930-ea756006c28a",
   "TR:YONETMELIK:GIDA_HIJYENI": "20260930-aebe05d434a3",
+  "TR:YONETMELIK:GIDA_ISLETMELERI_KAYIT_ONAY": "20260930-57965927498e",
   "TR:YONETMELIK:INSANI_TUKETIM_SULAR": "20260930-64c5c301da1c",
+  "TR:YONETMELIK:MESAFELI_SOZLESMELER": "20260930-0041cce06b6f",
   "TR:YONETMELIK:TGK_BESLENME_BEYANLARI": "20260930-db22b9ab0c05",
   "TR:YONETMELIK:TGK_ETIKETLEME": "20260930-975f2369d7e8",
   "TR:YONETMELIK:TICARI_REKLAM": "20260930-a21f046fc3a4"
@@ -5280,6 +5283,557 @@
     "NOT_COVERED"
    ],
    "basis": "no statement on recording products by number and weight"
+  },
+  {
+   "case_id": "COVV-01",
+   "split": "VALIDATION",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-COLA",
+   "ref": "Tebliğ 11376 md. 5/f.1/b.d",
+   "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
+   "register_root": "pilot_policies_validation",
+   "expected": [
+    "COVERED"
+   ],
+   "basis": "SPEC-BEV-21 st. 1: carbon dioxide not below 2 g/L"
+  },
+  {
+   "case_id": "COVV-02",
+   "split": "VALIDATION",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-COLA",
+   "ref": "Tebliğ 11376 md. 5/f.1/b.ç",
+   "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
+   "register_root": "pilot_policies_validation",
+   "expected": [
+    "CONTRADICTED"
+   ],
+   "basis": "SPEC-BEV-21 st. 2 allows 100 mg/L of quinine against 85"
+  },
+  {
+   "case_id": "COVV-03",
+   "split": "VALIDATION",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-ICED-TEA",
+   "ref": "Tebliğ 11376 md. 5/f.1/b.b",
+   "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
+   "register_root": "pilot_policies_validation",
+   "expected": [
+    "PARTIALLY_COVERED"
+   ],
+   "basis": "SPEC-BEV-21 st. 3 states the ethyl alcohol limit, not lactic and volatile acid"
+  },
+  {
+   "case_id": "COVV-04",
+   "split": "VALIDATION",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-COLA-ZERO",
+   "ref": "Tebliğ 11376 md. 5/f.1/b.a",
+   "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
+   "register_root": "pilot_policies_validation",
+   "expected": [
+    "COVERED"
+   ],
+   "basis": "SPEC-BEV-21 st. 4"
+  },
+  {
+   "case_id": "COVV-05",
+   "split": "VALIDATION",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-ENERGY",
+   "ref": "Tebliğ 23706 md. 5/f.1/b.g",
+   "regulation_id": "TR:TEBLIG:TGK_ENERJI_ICECEKLERI",
+   "register_root": "pilot_policies_validation",
+   "expected": [
+    "NOT_COVERED"
+   ],
+   "basis": "no statement on use as an ingredient (SPEC-ENR-22 st. 3 is about the filling line)"
+  },
+  {
+   "case_id": "COVV-06",
+   "split": "VALIDATION",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-ENERGY",
+   "ref": "Tebliğ 23706 md. 13/f.1/c.2",
+   "regulation_id": "TR:TEBLIG:TGK_ENERJI_ICECEKLERI",
+   "register_root": "pilot_policies_validation",
+   "expected": [
+    "COVERED"
+   ],
+   "basis": "SPEC-ENR-22 st. 1: no \"energy\" nutrition claims on energy drinks"
+  },
+  {
+   "case_id": "COVV-07",
+   "split": "VALIDATION",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-ENERGY-MAX",
+   "ref": "Tebliğ 23706 md. 5/f.1/b.e",
+   "regulation_id": "TR:TEBLIG:TGK_ENERJI_ICECEKLERI",
+   "register_root": "pilot_policies_validation",
+   "expected": [
+    "CONTRADICTED"
+   ],
+   "basis": "SPEC-ENR-22 st. 2 sets 3 % fruit for carbonated products against 4 %"
+  },
+  {
+   "case_id": "COVV-08",
+   "split": "VALIDATION",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-COLA",
+   "ref": "Yönetmelik 40154 md. 5/f.2/b.c",
+   "regulation_id": "TR:YONETMELIK:TGK_BESLENME_BEYANLARI",
+   "register_root": "pilot_policies_validation",
+   "expected": [
+    "COVERED"
+   ],
+   "basis": "POL-CLM-23 st. 1: claims may not encourage consuming more"
+  },
+  {
+   "case_id": "COVV-09",
+   "split": "VALIDATION",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-JUICE",
+   "ref": "Yönetmelik 40154 md. 5/f.2/b.a",
+   "regulation_id": "TR:YONETMELIK:TGK_BESLENME_BEYANLARI",
+   "register_root": "pilot_policies_validation",
+   "expected": [
+    "PARTIALLY_COVERED"
+   ],
+   "basis": "POL-CLM-23 st. 2 says misleading; vague and false are not stated"
+  },
+  {
+   "case_id": "COVV-10",
+   "split": "VALIDATION",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-COLA",
+   "ref": "Yönetmelik 40154 md. 5/f.2/b.b",
+   "regulation_id": "TR:YONETMELIK:TGK_BESLENME_BEYANLARI",
+   "register_root": "pilot_policies_validation",
+   "expected": [
+    "NOT_COVERED"
+   ],
+   "basis": "no statement on casting doubt on other foods"
+  },
+  {
+   "case_id": "COVV-11",
+   "split": "VALIDATION",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-WATER",
+   "ref": "Yönetmelik 23282 md. 7/f.1/b.b",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "register_root": "pilot_policies_validation",
+   "expected": [
+    "COVERED"
+   ],
+   "basis": "POL-CLM-23 st. 3: no effect or property the product does not have"
+  },
+  {
+   "case_id": "COVV-12",
+   "split": "VALIDATION",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-BOTTLING",
+   "ref": "Kanun 6502 md. 10/f.3/c.3",
+   "regulation_id": "TR:KANUN:6502",
+   "register_root": "pilot_policies_validation",
+   "expected": [
+    "CONTRADICTED"
+   ],
+   "basis": "SOP-OPS-24 st. 1 lets a non-conforming batch be placed on the market at a discount"
+  },
+  {
+   "case_id": "COVV-13",
+   "split": "VALIDATION",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-ONLINE",
+   "ref": "Kanun 6502 md. 9/f.1",
+   "regulation_id": "TR:KANUN:6502",
+   "register_root": "pilot_policies_validation",
+   "expected": [
+    "COVERED",
+    "PARTIALLY_COVERED"
+   ],
+   "basis": "POL-DIG-25 st. 1: orders reach the consumer as confirmed"
+  },
+  {
+   "case_id": "COVV-14",
+   "split": "VALIDATION",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-BOTTLING",
+   "ref": "Yönetmelik 38745 md. 5/f.1/c.3",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "register_root": "pilot_policies_validation",
+   "expected": [
+    "COVERED",
+    "PARTIALLY_COVERED"
+   ],
+   "basis": "SOP-OPS-24 st. 4: waste that cannot be recovered goes to licensed disposal"
+  },
+  {
+   "case_id": "COVV-15",
+   "split": "VALIDATION",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-BOTTLING",
+   "ref": "Yönetmelik 38745 md. 5/f.2/c.1",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "register_root": "pilot_policies_validation",
+   "expected": [
+    "PARTIALLY_COVERED"
+   ],
+   "basis": "SOP-OPS-24 st. 5 names recyclable material, not reusable packaging"
+  },
+  {
+   "case_id": "COVV-16",
+   "split": "VALIDATION",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-BOTTLING",
+   "ref": "Yönetmelik 15594 md. 6/f.5",
+   "regulation_id": "TR:YONETMELIK:GIDA_ISLETMELERI_KAYIT_ONAY",
+   "register_root": "pilot_policies_validation",
+   "expected": [
+    "CONTRADICTED"
+   ],
+   "basis": "SOP-OPS-24 st. 2 gives six months; the by-law three"
+  },
+  {
+   "case_id": "COVV-17",
+   "split": "VALIDATION",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-BOTTLING",
+   "ref": "Yönetmelik 15594 md. 6/f.4/c.3",
+   "regulation_id": "TR:YONETMELIK:GIDA_ISLETMELERI_KAYIT_ONAY",
+   "register_root": "pilot_policies_validation",
+   "expected": [
+    "COVERED"
+   ],
+   "basis": "SOP-OPS-24 st. 3"
+  },
+  {
+   "case_id": "COVV-18",
+   "split": "VALIDATION",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-DISTRIBUTION",
+   "ref": "Yönetmelik 15592 md. 6/f.1/b.c",
+   "regulation_id": "TR:YONETMELIK:GIDA_HIJYENI",
+   "register_root": "pilot_policies_validation",
+   "expected": [
+    "NOT_COVERED"
+   ],
+   "basis": "no statement on the cold chain"
+  },
+  {
+   "case_id": "COVV-19",
+   "split": "VALIDATION",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-WATER",
+   "ref": "Yönetmelik 7510 md. 16/f.1/b.c",
+   "regulation_id": "TR:YONETMELIK:INSANI_TUKETIM_SULAR",
+   "register_root": "pilot_policies_validation",
+   "expected": [
+    "COVERED"
+   ],
+   "basis": "SOP-OPS-24 st. 6: the source is operated by the company alone"
+  },
+  {
+   "case_id": "COVV-20",
+   "split": "VALIDATION",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-ONLINE",
+   "ref": "Yönetmelik 20237 md. 5/f.1/b.g",
+   "regulation_id": "TR:YONETMELIK:MESAFELI_SOZLESMELER",
+   "register_root": "pilot_policies_validation",
+   "expected": [
+    "PARTIALLY_COVERED"
+   ],
+   "basis": "POL-DIG-25 st. 2 states the period and the procedure, not the conditions or the carrier"
+  },
+  {
+   "case_id": "COVV-21",
+   "split": "VALIDATION",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-SALES",
+   "ref": "Kanun 6502 md. 6/f.1",
+   "regulation_id": "TR:KANUN:6502",
+   "register_root": "pilot_policies_validation",
+   "expected": [
+    "NOT_COVERED"
+   ],
+   "basis": "no statement on refusing the sale of displayed goods"
+  },
+  {
+   "case_id": "COVV-22",
+   "split": "VALIDATION",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-BRAND",
+   "ref": "Yönetmelik 20435 md. 5/f.1/b.ç",
+   "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+   "register_root": "pilot_policies_validation",
+   "expected": [
+    "COVERED"
+   ],
+   "basis": "POL-DIG-25 st. 3"
+  },
+  {
+   "case_id": "COVV-23",
+   "split": "VALIDATION",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-BRAND",
+   "ref": "Yönetmelik 20435 md. 5/f.1/b.g",
+   "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+   "register_root": "pilot_policies_validation",
+   "expected": [
+    "PARTIALLY_COVERED"
+   ],
+   "basis": "POL-DIG-25 st. 4 names fears, not superstitions"
+  },
+  {
+   "case_id": "COVV-24",
+   "split": "VALIDATION",
+   "profile_id": "tr-bev-pilot-alcohol-integrated",
+   "target_id": "ALC-INT-ACT-TRADE-PROMO",
+   "ref": "Yönetmelik 14646 md. 20/f.5",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "register_root": "pilot_policies_validation",
+   "expected": [
+    "CONTRADICTED"
+   ],
+   "basis": "POL-TRD-31 st. 1 allows promotions tied to buying alcoholic drinks"
+  },
+  {
+   "case_id": "COVV-25",
+   "split": "VALIDATION",
+   "profile_id": "tr-bev-pilot-alcohol-integrated",
+   "target_id": "ALC-INT-ACT-BEER-ADS",
+   "ref": "Yönetmelik 14646 md. 20/f.3/c.2",
+   "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+   "register_root": "pilot_policies_validation",
+   "expected": [
+    "COVERED"
+   ],
+   "basis": "POL-TRD-31 st. 2: scientific articles are not used as promotional material"
+  },
+  {
+   "case_id": "COVV-26",
+   "split": "VALIDATION",
+   "profile_id": "tr-bev-pilot-alcohol-integrated",
+   "target_id": "ALC-INT-LAGER",
+   "ref": "Tebliğ 10474 md. 5/f.1/b.d",
+   "regulation_id": "TR:TEBLIG:TGK_BIRA",
+   "register_root": "pilot_policies_validation",
+   "expected": [
+    "COVERED"
+   ],
+   "basis": "SPEC-BRW-32 st. 1: at least 65 % malt (stricter than 60 %)"
+  },
+  {
+   "case_id": "COVV-27",
+   "split": "VALIDATION",
+   "profile_id": "tr-bev-pilot-alcohol-integrated",
+   "target_id": "ALC-INT-DARK",
+   "ref": "Tebliğ 10474 md. 5/f.1/b.c",
+   "regulation_id": "TR:TEBLIG:TGK_BIRA",
+   "register_root": "pilot_policies_validation",
+   "expected": [
+    "CONTRADICTED"
+   ],
+   "basis": "SPEC-BRW-32 st. 2 sets 0,25 % carbon dioxide against 0,3 %"
+  },
+  {
+   "case_id": "COVV-28",
+   "split": "VALIDATION",
+   "profile_id": "tr-bev-pilot-alcohol-integrated",
+   "target_id": "ALC-INT-LAGER",
+   "ref": "Tebliğ 10474 md. 5/f.1/b.ç/c.1",
+   "regulation_id": "TR:TEBLIG:TGK_BIRA",
+   "register_root": "pilot_policies_validation",
+   "expected": [
+    "PARTIALLY_COVERED"
+   ],
+   "basis": "SPEC-BRW-32 st. 3 states the upper bound of the pH only"
+  },
+  {
+   "case_id": "COVV-29",
+   "split": "VALIDATION",
+   "profile_id": "tr-bev-pilot-alcohol-integrated",
+   "target_id": "ALC-INT-LOW",
+   "ref": "Tebliğ 10474 md. 5/f.1/b.e",
+   "regulation_id": "TR:TEBLIG:TGK_BIRA",
+   "register_root": "pilot_policies_validation",
+   "expected": [
+    "COVERED"
+   ],
+   "basis": "SPEC-BRW-32 st. 4: the water meets the legislation on water for human consumption"
+  },
+  {
+   "case_id": "COVV-30",
+   "split": "VALIDATION",
+   "profile_id": "tr-bev-pilot-alcohol-integrated",
+   "target_id": "ALC-INT-LAGER",
+   "ref": "Tebliğ 10474 md. 9/f.1",
+   "regulation_id": "TR:TEBLIG:TGK_BIRA",
+   "register_root": "pilot_policies_validation",
+   "expected": [
+    "NOT_COVERED"
+   ],
+   "basis": "no statement on contaminants"
+  },
+  {
+   "case_id": "COVV-31",
+   "split": "VALIDATION",
+   "profile_id": "tr-bev-pilot-alcohol-integrated",
+   "target_id": "ALC-INT-LAGER",
+   "ref": "Yönetmelik 6207 md. 10/f.1",
+   "regulation_id": "TR:YONETMELIK:ALKOL_TESIS_TEKNIK_SARTLAR",
+   "register_root": "pilot_policies_validation",
+   "expected": [
+    "COVERED"
+   ],
+   "basis": "SOP-PLT-33 st. 1: what touches raw materials and additives is of documented food-contact material"
+  },
+  {
+   "case_id": "COVV-32",
+   "split": "VALIDATION",
+   "profile_id": "tr-bev-pilot-alcohol-integrated",
+   "target_id": "ALC-INT-DARK",
+   "ref": "Yönetmelik 6207 md. 11/f.1",
+   "regulation_id": "TR:YONETMELIK:ALKOL_TESIS_TEKNIK_SARTLAR",
+   "register_root": "pilot_policies_validation",
+   "expected": [
+    "PARTIALLY_COVERED"
+   ],
+   "basis": "SOP-PLT-33 st. 2: control at every stage, sampling points and frequency; responsibilities, laboratories and assessment rules are not stated"
+  },
+  {
+   "case_id": "COVV-33",
+   "split": "VALIDATION",
+   "profile_id": "tr-bev-pilot-alcohol-integrated",
+   "target_id": "ALC-INT-LAGER",
+   "ref": "Yönetmelik 6207 md. 9/f.1/c.2",
+   "regulation_id": "TR:YONETMELIK:ALKOL_TESIS_TEKNIK_SARTLAR",
+   "register_root": "pilot_policies_validation",
+   "expected": [
+    "NOT_COVERED"
+   ],
+   "basis": "no statement on mass balance and capacity"
+  },
+  {
+   "case_id": "COVV-34",
+   "split": "VALIDATION",
+   "profile_id": "tr-bev-pilot-alcohol-integrated",
+   "target_id": "ALC-INT-EXPORT",
+   "ref": "Yönetmelik 6203 md. 5/f.2",
+   "regulation_id": "TR:YONETMELIK:ALKOL_IC_DIS_TICARET",
+   "register_root": "pilot_policies_validation",
+   "expected": [
+    "COVERED"
+   ],
+   "basis": "SOP-PLT-33 st. 5: the import notification to the Authority"
+  },
+  {
+   "case_id": "COVV-35",
+   "split": "VALIDATION",
+   "profile_id": "tr-bev-pilot-alcohol-integrated",
+   "target_id": "ALC-INT-SALES",
+   "ref": "Kanun 6502 md. 10/f.3/c.1",
+   "regulation_id": "TR:KANUN:6502",
+   "register_root": "pilot_policies_validation",
+   "expected": [
+    "COVERED",
+    "PARTIALLY_COVERED"
+   ],
+   "basis": "SOP-RTL-34 st. 1: a label that explains the defect; easy to read is not stated"
+  },
+  {
+   "case_id": "COVV-36",
+   "split": "VALIDATION",
+   "profile_id": "tr-bev-pilot-alcohol-integrated",
+   "target_id": "ALC-INT-SALES",
+   "ref": "Kanun 6502 md. 6/f.1",
+   "regulation_id": "TR:KANUN:6502",
+   "register_root": "pilot_policies_validation",
+   "expected": [
+    "COVERED",
+    "PARTIALLY_COVERED"
+   ],
+   "basis": "SOP-RTL-34 st. 2 names the shelf only"
+  },
+  {
+   "case_id": "COVV-37",
+   "split": "VALIDATION",
+   "profile_id": "tr-bev-pilot-alcohol-integrated",
+   "target_id": "ALC-INT-BREWING",
+   "ref": "Yönetmelik 38745 md. 5/f.1/c.3",
+   "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+   "register_root": "pilot_policies_validation",
+   "expected": [
+    "NOT_COVERED"
+   ],
+   "basis": "no statement on disposal"
+  },
+  {
+   "case_id": "COVV-38",
+   "split": "VALIDATION",
+   "profile_id": "tr-bev-pilot-alcohol-integrated",
+   "target_id": "ALC-INT-BREWING",
+   "ref": "Yönetmelik 15594 md. 6/f.5",
+   "regulation_id": "TR:YONETMELIK:GIDA_ISLETMELERI_KAYIT_ONAY",
+   "register_root": "pilot_policies_validation",
+   "expected": [
+    "COVERED",
+    "PARTIALLY_COVERED"
+   ],
+   "basis": "SOP-PLT-33 st. 4: notified within three months; keeping the authority informed is not stated"
+  },
+  {
+   "case_id": "COVV-39",
+   "split": "VALIDATION",
+   "profile_id": "tr-bev-pilot-alcohol-integrated",
+   "target_id": "ALC-INT-BREWING",
+   "ref": "Yönetmelik 15592 md. 6/f.1/b.ç",
+   "regulation_id": "TR:YONETMELIK:GIDA_HIJYENI",
+   "register_root": "pilot_policies_validation",
+   "expected": [
+    "COVERED"
+   ],
+   "basis": "SOP-PLT-33 st. 3"
+  },
+  {
+   "case_id": "COVV-40",
+   "split": "VALIDATION",
+   "profile_id": "tr-bev-pilot-alcohol-integrated",
+   "target_id": "ALC-INT-HOLDING",
+   "ref": "Yönetmelik 20435 md. 5/f.1/b.e",
+   "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+   "register_root": "pilot_policies_validation",
+   "expected": [
+    "NOT_COVERED"
+   ],
+   "basis": "no statement on human dignity in advertisements"
+  },
+  {
+   "case_id": "COVV-41",
+   "split": "VALIDATION",
+   "profile_id": "tr-bev-pilot-alcohol-integrated",
+   "target_id": "ALC-INT-AF",
+   "ref": "Yönetmelik 40154 md. 5/f.2/b.c",
+   "regulation_id": "TR:YONETMELIK:TGK_BESLENME_BEYANLARI",
+   "register_root": "pilot_policies_validation",
+   "expected": [
+    "COVERED"
+   ],
+   "basis": "SPEC-BRW-32 st. 5"
+  },
+  {
+   "case_id": "COVV-42",
+   "split": "VALIDATION",
+   "profile_id": "tr-bev-pilot-alcohol-integrated",
+   "target_id": "ALC-INT-LAGER",
+   "ref": "Yönetmelik 23282 md. 7/f.1/b.b",
+   "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+   "register_root": "pilot_policies_validation",
+   "expected": [
+    "NOT_COVERED"
+   ],
+   "basis": "no statement on effects the food does not have (SPEC-BRW-32 st. 6 is an approval step)"
   }
  ]
 }

@@ -43,8 +43,25 @@ class DatasetTests(unittest.TestCase):
 
     def test_no_brand_name_is_in_the_dataset(self):
         text = devset.DATASET.read_text(encoding='utf-8').lower()
+        validation = ' '.join(p.read_text(encoding='utf-8').lower() for p in (devset.TR_DATA / 'pilot_policies_validation').rglob('*.*'))
         for name in ('efes', 'tuborg', 'coca', 'pepsi', 'red bull'):
             self.assertNotIn(name, text)
+            self.assertNotIn(name, validation)
+
+    def test_the_validation_cases_are_labelled_on_registers_of_their_own(self):
+        # Written and labelled on 30 September 2026 before the held-out coverage results were read and before the comparer
+        # was changed on them: nothing is tuned on these cases.
+        cases = [c for c in DATASET['coverage'] if c['split'] == 'VALIDATION']
+        self.assertEqual((len(cases), {c['register_root'] for c in cases}), (42, {'pilot_policies_validation'}))
+        readers = devset.Readers(DATASET, REGISTRY, STORE)
+        registers = {}
+        for case in cases:
+            self.assertTrue(devset.case_register(case, registers).synthetic)
+            self.assertIn(case['ref'], readers.obligations, case['case_id'])
+        seen = {p.text for c in DATASET['coverage'] if c['split'] != 'VALIDATION' for p in devset.case_register(c, registers).passages}
+        unseen = {p.text for (root, _), r in registers.items() if root == 'pilot_policies_validation' for p in r.passages}
+        self.assertEqual(len(unseen), 41)
+        self.assertFalse(seen & unseen)             # no statement is shared with the registers the comparer was developed on
 
 
 class ClauseTaskTests(unittest.TestCase):

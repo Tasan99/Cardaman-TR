@@ -26,7 +26,7 @@ from pathlib import Path
 from ..evaluation.tasks import DEVELOPMENT, pair_consistency, task_report, unsupported_reasons
 from . import ai
 from .adjudicate import Adjudicator, ClauseAdjudicator, assess_obligation, clause_escalation, clause_verdict
-from .compare import compare_obligation, load_register
+from .compare import DATA as TR_DATA, compare_obligation, load_register
 from .corpus import CorpusStore
 from .extraction import extract_regulation, route
 from .frames import article_label
@@ -64,6 +64,16 @@ class Readers:
             self.frames.update({f.ref: f for f in frames})
             for obligation in obligations:
                 self.obligations.setdefault(obligation.provision_ref, []).append(obligation)
+
+
+def case_register(case: dict, registers: dict):
+    """The register a coverage case is labelled on: the pilot's own, or the one under the data directory the case names
+    (a validation case is written against a second set of documents for the same company)."""
+    root = case.get('register_root', 'pilot_policies')
+    key = (root, case['profile_id'])
+    if key not in registers:
+        registers[key] = load_register(case['profile_id'], TR_DATA / root)
+    return registers[key]
 
 
 def _report(task, rows, labels, dataset, **more):
@@ -249,7 +259,7 @@ def score_coverage(dataset: dict, readers: Readers, profiles: dict, engine_runs:
         joined.append((ai.engine_rows(run, obligations), articles, own, ai.second_readings(run, obligations)))
     for case in (c for c in dataset['coverage'] if split is None or c.get('split', 'DEV') == split):
         profile = profiles[case['profile_id']]
-        register = registers.setdefault(profile.profile_id, load_register(profile.profile_id))
+        register = case_register(case, registers)
         gap = _gap_rows(readers, case['ref'], profile, register, case['target_id'])
         predicted = _word(gap)
         expected = predicted if predicted in case['expected'] else case['expected'][0]
@@ -409,7 +419,7 @@ def score_pipeline(dataset: dict, readers: Readers, profiles: dict, table=None, 
     registers, cases, wrong, rows = {}, [], [], []
     for case in (c for c in dataset['coverage'] if split is None or c.get('split', 'DEV') == split):
         profile = profiles[case['profile_id']]
-        register = registers.setdefault(profile.profile_id, load_register(profile.profile_id))
+        register = case_register(case, registers)
         found = []
         for obligation in readers.obligations.get(case['ref'], []):
             decisions, _ = route(obligation, profile, readers.registry, readers.store)

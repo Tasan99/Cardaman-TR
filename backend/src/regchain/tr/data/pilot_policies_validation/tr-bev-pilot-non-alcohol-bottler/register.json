@@ -1,0 +1,128 @@
+{
+  "format": "cardaman-tr-policy-register/1",
+  "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+  "synthetic": true,
+  "disclaimer": "Sentetik test kaydı (doğrulama seti): temsili grubun ikinci bir iç belge takımını örnekler. Cümleler mevzuat metnini tekrar etmeden, bir şirketin kendi sözleriyle yazılmıştır (BEVERAGE_TR_DEV_V2 kapsama VALIDATION seti). Gerçek bir şirketin belgesi, kontrolü veya kanıtı değildir.",
+  "period": "2026-Q3",
+  "documents": [
+    {
+      "document_id": "SPEC-BEV-21",
+      "type": "SPECIFICATION",
+      "title": "Gazlı ve Aromalı İçecek Ürün Şartnamesi",
+      "owner_department": "RND",
+      "version": "3.0",
+      "file": "documents/SPEC-BEV-21-gazli-aromali.md",
+      "scope": {
+        "policy_id": "SPEC-BEV-21",
+        "owner_level": "LEGAL_ENTITY",
+        "entity_id": "NONALC-BOTTLING"
+      },
+      "product_ids": [
+        "NONALC-COLA",
+        "NONALC-COLA-ZERO",
+        "NONALC-ICED-TEA"
+      ]
+    },
+    {
+      "document_id": "SPEC-ENR-22",
+      "type": "SPECIFICATION",
+      "title": "Enerji İçeceği Geliştirme ve Beyan Esasları",
+      "owner_department": "RND",
+      "version": "1.4",
+      "file": "documents/SPEC-ENR-22-enerji-gelistirme.md",
+      "scope": {
+        "policy_id": "SPEC-ENR-22",
+        "owner_level": "LEGAL_ENTITY",
+        "entity_id": "NONALC-BOTTLING"
+      },
+      "product_ids": [
+        "NONALC-ENERGY",
+        "NONALC-ENERGY-MAX"
+      ]
+    },
+    {
+      "document_id": "POL-CLM-23",
+      "type": "POLICY",
+      "title": "Beyan ve Etiket Dili Politikası",
+      "owner_department": "QUALITY",
+      "version": "2.2",
+      "file": "documents/POL-CLM-23-beyan-dili.md",
+      "scope": {
+        "policy_id": "POL-CLM-23",
+        "owner_level": "GROUP"
+      }
+    },
+    {
+      "document_id": "SOP-OPS-24",
+      "type": "SOP",
+      "title": "İşletme Kayıt ve Piyasaya Arz Prosedürü",
+      "owner_department": "MANUFACTURING",
+      "version": "1.1",
+      "file": "documents/SOP-OPS-24-isletme-kayit.md",
+      "scope": {
+        "policy_id": "SOP-OPS-24",
+        "owner_level": "GROUP"
+      }
+    },
+    {
+      "document_id": "POL-DIG-25",
+      "type": "POLICY",
+      "title": "Çevrimiçi Satış ve Reklam Esasları",
+      "owner_department": "MARKETING",
+      "version": "1.0",
+      "file": "documents/POL-DIG-25-cevrimici-satis.md",
+      "scope": {
+        "policy_id": "POL-DIG-25",
+        "owner_level": "GROUP"
+      }
+    }
+  ],
+  "controls": [
+    {
+      "control_id": "CTL-V-BATCH",
+      "description": "Parti serbest bırakma öncesi bileşim analizi",
+      "owner_department": "QUALITY",
+      "documents": [
+        "SPEC-BEV-21",
+        "SPEC-ENR-22"
+      ],
+      "evidence_types": [
+        "BATCH_ANALYSIS_RECORD"
+      ],
+      "topics": [
+        "COMPOSITION"
+      ]
+    },
+    {
+      "control_id": "CTL-V-CLAIM",
+      "description": "Beyan metninin yayın öncesi onayı",
+      "owner_department": "QUALITY",
+      "documents": [
+        "POL-CLM-23"
+      ],
+      "evidence_types": [
+        "CLAIM_APPROVAL_RECORD"
+      ],
+      "topics": [
+        "CLAIMS",
+        "LABELLING"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "EV-V-BATCH-2026Q3",
+      "control_id": "CTL-V-BATCH",
+      "evidence_type": "BATCH_ANALYSIS_RECORD",
+      "period": "2026-Q3",
+      "in_period": true
+    },
+    {
+      "evidence_id": "EV-V-CLAIM-2026Q3",
+      "control_id": "CTL-V-CLAIM",
+      "evidence_type": "CLAIM_APPROVAL_RECORD",
+      "period": "2026-Q3",
+      "in_period": true
+    }
+  ]
+}

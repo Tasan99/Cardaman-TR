@@ -1,0 +1,114 @@
+{
+  "format": "cardaman-tr-policy-register/1",
+  "profile_id": "tr-bev-pilot-alcohol-integrated",
+  "synthetic": true,
+  "disclaimer": "Sentetik test kaydı (doğrulama seti): temsili grubun ikinci bir iç belge takımını örnekler. Cümleler mevzuat metnini tekrar etmeden, bir şirketin kendi sözleriyle yazılmıştır (BEVERAGE_TR_DEV_V2 kapsama VALIDATION seti). Gerçek bir şirketin belgesi, kontrolü veya kanıtı değildir.",
+  "period": "2026-Q3",
+  "documents": [
+    {
+      "document_id": "POL-TRD-31",
+      "type": "POLICY",
+      "title": "Ticari Pazarlama ve Bayi Teşvikleri Esasları",
+      "owner_department": "MARKETING",
+      "version": "1.2",
+      "file": "documents/POL-TRD-31-ticari-pazarlama.md",
+      "scope": {
+        "policy_id": "POL-TRD-31",
+        "owner_level": "GROUP"
+      }
+    },
+    {
+      "document_id": "SPEC-BRW-32",
+      "type": "SPECIFICATION",
+      "title": "Bira Ürün Şartnamesi",
+      "owner_department": "QUALITY",
+      "version": "5.1",
+      "file": "documents/SPEC-BRW-32-bira-urun.md",
+      "scope": {
+        "policy_id": "SPEC-BRW-32",
+        "owner_level": "LEGAL_ENTITY",
+        "entity_id": "ALC-INT-BREWING"
+      },
+      "product_ids": [
+        "ALC-INT-LAGER",
+        "ALC-INT-DARK",
+        "ALC-INT-LOW",
+        "ALC-INT-AF",
+        "ALC-INT-LAGER-EXPORT"
+      ]
+    },
+    {
+      "document_id": "SOP-PLT-33",
+      "type": "SOP",
+      "title": "Tesis İşletme ve Kalite Güvence Prosedürü",
+      "owner_department": "MANUFACTURING",
+      "version": "2.0",
+      "file": "documents/SOP-PLT-33-tesis-isletme.md",
+      "scope": {
+        "policy_id": "SOP-PLT-33",
+        "owner_level": "GROUP"
+      }
+    },
+    {
+      "document_id": "SOP-RTL-34",
+      "type": "SOP",
+      "title": "Satış Noktası Uygulama Esasları",
+      "owner_department": "SALES",
+      "version": "1.0",
+      "file": "documents/SOP-RTL-34-satis-noktasi.md",
+      "scope": {
+        "policy_id": "SOP-RTL-34",
+        "owner_level": "LEGAL_ENTITY",
+        "entity_id": "ALC-INT-SALES"
+      }
+    }
+  ],
+  "controls": [
+    {
+      "control_id": "CTL-V-BREW",
+      "description": "Parti bazında bileşim ve pH analizi",
+      "owner_department": "QUALITY",
+      "documents": [
+        "SPEC-BRW-32"
+      ],
+      "evidence_types": [
+        "BATCH_ANALYSIS_RECORD"
+      ],
+      "topics": [
+        "COMPOSITION"
+      ]
+    },
+    {
+      "control_id": "CTL-V-PLANT",
+      "description": "Yıllık tesis iç denetimi",
+      "owner_department": "MANUFACTURING",
+      "documents": [
+        "SOP-PLT-33"
+      ],
+      "evidence_types": [
+        "INTERNAL_AUDIT_REPORT"
+      ],
+      "topics": [
+        "HYGIENE",
+        "COMPOSITION",
+        "LICENSING"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "EV-V-BREW-2026Q3",
+      "control_id": "CTL-V-BREW",
+      "evidence_type": "BATCH_ANALYSIS_RECORD",
+      "period": "2026-Q3",
+      "in_period": true
+    },
+    {
+      "evidence_id": "EV-V-PLANT-2025",
+      "control_id": "CTL-V-PLANT",
+      "evidence_type": "INTERNAL_AUDIT_REPORT",
+      "period": "2025-Q4",
+      "in_period": false
+    }
+  ]
+}
