@@ -36,6 +36,7 @@ from .core import RegulationMeta, RegulationVersion, SourceRef
 
 CORPUS = Path(__file__).resolve().parent / 'data' / 'corpus'
 INDEX_FORMAT = 'cardaman-tr-corpus/1'
+RAW_FILE = 'source.html'
 SNAPSHOT_FORMAT = 'regchain-fca-snapshot-v1'          # the pilot's snapshot format; the name predates the Turkish sources
 DOCUMENT_TYPE = {'KANUN': 'KANUN', 'YONETMELIK': 'YONETMELIK', 'TEBLIG': 'TEBLIG'}
 SEARCH_FAMILY = {'KANUN': 'kanun', 'YONETMELIK': 'yonetmelik', 'TEBLIG': 'teblig', 'CBK': 'cbk', 'KHK': 'khk', 'TUZUK': 'tuzuk'}
@@ -223,7 +224,9 @@ class CorpusStore:
         directory = f'{storage_key(ref)}/{version_id}'
         target = self.root / directory
         target.mkdir(parents=True, exist_ok=False)
-        name = source.raw_hash + '.html'
+        # One fixed, short name: the hash is recorded in snapshot.json and checked on every load, and a 64-character file
+        # name under a deep install path exceeds the Windows path limit for tools that copy the package.
+        name = RAW_FILE
         (target / name).write_bytes(source.body)
         snapshot = {'format': SNAPSHOT_FORMAT, 'parser_version': PARSER_VERSION,
                     'sources': [{'url': source.final_url, 'requested_url': source.requested_url,
@@ -244,6 +247,10 @@ class CorpusStore:
         self._load().setdefault(regulation_id, []).append(version)
         self._save()
         return 'NEW_VERSION', version
+
+    def raw_path(self, version: CorpusVersion) -> Path:
+        """The file holding the bytes as served for one stored version."""
+        return self.root / version.directory / RAW_FILE
 
     # -- reading ------------------------------------------------------------------------------------
     def sections(self, regulation_id: str, version_id: str | None = None) -> list[dict]:

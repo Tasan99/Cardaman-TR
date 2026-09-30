@@ -62,7 +62,7 @@ class StoreTests(unittest.TestCase):
         self.assertEqual(version.publication_date, date(2017, 6, 30))
         self.assertEqual(version.effective_date, date(2017, 6, 30))          # "yayımı tarihinde yürürlüğe girer"
         self.assertEqual(version.catalogue.gazette_number, '30110')
-        raw = Path(self.directory.name) / version.directory / f'{version.raw_hash}.html'
+        raw = self.store.raw_path(version)
         self.assertEqual(raw.read_bytes(), page())
         sections = self.store.sections('TR:TEBLIG:SENTETIK')
         self.assertEqual([s['printed_label'] for s in sections], ['Tebliğ 99001 md. 1', 'Tebliğ 99001 md. 2', 'Tebliğ 99001 md. 3'])
@@ -108,7 +108,7 @@ class StoreTests(unittest.TestCase):
     def test_a_tampered_stored_text_is_refused_on_load(self):
         refresh([meta()], self.store, fetcher=self.fetcher(page()), search=search, pause=0)
         version = self.store.head('TR:TEBLIG:SENTETIK')
-        raw = Path(self.directory.name) / version.directory / f'{version.raw_hash}.html'
+        raw = self.store.raw_path(version)
         raw.write_bytes(page('999'))
         with self.assertRaises(ValueError):
             CorpusStore(Path(self.directory.name)).sections('TR:TEBLIG:SENTETIK')

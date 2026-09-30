@@ -19,7 +19,7 @@ def seed(store: CorpusStore, registry, regulation_id: str):
     """Record the packaged head version of a regulation in a temporary store, bytes unchanged."""
     meta = registry.regulations[regulation_id]
     version = PACKAGED.head(regulation_id)
-    raw = (CORPUS / version.directory / f'{version.raw_hash}.html').read_bytes()
+    raw = PACKAGED.raw_path(version).read_bytes()
     url = source_url(meta.source_ref)
     download = Download(url, url, raw, 'text/html', version.fetched_at)
     return store.record(regulation_id, meta.source_ref, download, parse_mevzuat(download, WRAPPED_TEXT_VERSION), version.catalogue)[1]
