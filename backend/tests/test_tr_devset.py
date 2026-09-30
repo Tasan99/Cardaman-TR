@@ -128,6 +128,49 @@ class ClauseTaskTests(unittest.TestCase):
         self.assertEqual(sum(RESULT['wrong_by_layer']['rule'].values()), len(RESULT['wrong']))
 
 
+class RecordedPipelineTests(unittest.TestCase):
+    """The selective pipeline replayed from the recorded run of 1 October 2026 (commit 3e36ebf, qwen3:8b with thinking,
+    bge-m3 similarities): the numbers of evaluation/reports/beverage-tr-20261001, pinned as measured. A replay asks no
+    model; the answers are the records', their validation is the code's."""
+    RECORDED = devset.TR_DATA / 'evaluation' / 'recorded' / '20261001'
+
+    @classmethod
+    def setUpClass(cls):
+        from regchain.tr.adjudicate import load_adjudications
+        from regchain.tr.semantic import SimilarityTable
+        cls.table = SimilarityTable.load(cls.RECORDED / 'similarities.json')
+        cls.records = {}
+        for name in ('adjudicate-dev.jsonl', 'adjudicate-holdout.jsonl', 'adjudicate-validation.jsonl'):
+            cls.records.update(load_adjudications(cls.RECORDED / name)[1])
+        readers = devset.Readers(DATASET, REGISTRY, STORE)
+        profiles = {p.profile_id: p for p in load_pilot_profiles(REGISTRY.vocabulary).values()}
+        cls.results = {split: devset.score_pipeline(DATASET, readers, profiles, cls.table, cls.records, split) for split in ('DEV', 'HOLDOUT', 'VALIDATION')}
+
+    def test_nothing_a_model_says_alone_becomes_covered_or_contradicted(self):
+        for split, result in self.results.items():
+            with self.subTest(split=split):
+                for case in result['cases']:
+                    if 'MODEL_PROPOSES_COVERED' in case['basis'] or 'MODEL_CONFLICT_UNCONFIRMED' in case['basis']:
+                        self.assertTrue(case['review'], case['case_id'])
+                        self.assertEqual(case['final'], case['rule'], case['case_id'])
+                m = result['metrics']
+                self.assertEqual(m['auto_false_covered'], 0)
+                self.assertEqual(m['adjudicated'], m['escalated'])                  # every escalated case has its record
+                self.assertEqual(m['calls_failed'], 0)
+
+    def test_the_measured_numbers_are_pinned(self):
+        m = {split: r['metrics'] for split, r in self.results.items()}
+        self.assertEqual((m['DEV']['n'], m['HOLDOUT']['n'], m['VALIDATION']['n']), (45, 28, 42))
+        self.assertEqual((m['DEV']['rules_only_correct'], m['HOLDOUT']['rules_only_correct'], m['VALIDATION']['rules_only_correct']), (36, 19, 19))
+        self.assertGreaterEqual(m['DEV']['auto_correct'], 34)
+        self.assertGreaterEqual(m['HOLDOUT']['auto_correct'], 19)
+        self.assertGreaterEqual(m['VALIDATION']['auto_correct'], 25)
+        self.assertLessEqual(m['VALIDATION']['auto_wrong'], 6)
+        # the unseen set keeps the known limits visible: one contradiction the rules invent, one they miss
+        self.assertEqual((m['VALIDATION']['auto_false_contradicted'], m['VALIDATION']['auto_missed_contradictions']), (1, 1))
+        self.assertLessEqual(m['VALIDATION']['review_rate'], 0.30)
+
+
 class ModelReadingScoreTests(unittest.TestCase):
     def test_a_recorded_model_reading_is_scored_next_to_the_rule_reader(self):
         readers = devset.Readers(DATASET, REGISTRY, STORE)

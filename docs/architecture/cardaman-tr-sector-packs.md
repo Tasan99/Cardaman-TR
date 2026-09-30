@@ -507,6 +507,45 @@ Reported metric: **pair consistency** = share of pairs whose two outcomes both m
 
 Out of scope until asked: multi-tenant API, UI, deployment, fine-tuning, model changes, cloud LLMs.
 
+## 9. Status, 1 October 2026: rules first, a model only where the rules cannot decide
+
+Implemented on `feat/beverage-pilot-ai` (local commits, not pushed). Every number below is a developer's label scored
+as INDICATIVE; the detail is in `evaluation/reports/beverage-tr-20261001/`.
+
+### 9.1 What decides
+
+| Step | Module | Who decides |
+|---|---|---|
+| clause reading (kind, addressee, exceptions, conditions, quantities) | `tr/frames.py`, `tr/extraction.py` | rules; the extraction model (qwen3:4b) reads the same units as a second reader and never decides |
+| applicability | `tr/routing.py` | rules over the profile's facts (Kleene); a duty whose clause names no constraint applies through its regulation's presence in the pilot's catalogue and is recorded as `applicability_basis = REGULATION_SCOPE` |
+| policy coverage | `tr/compare.py` (`tr-compare-rules-v2`) | rules, element by element: act, polarity, products, places, other party, limits, list items, label particulars, deadlines, time windows, conditions, exceptions |
+| candidate statements | `tr/semantic.py` (`tr-candidates-v2`) | character n-grams, recorded bge-m3 similarities, an anchored lower floor; a candidate is never a coverage |
+| adjudication | `tr/adjudicate.py` | qwen3:8b with thinking, only on escalated rows (a candidate the rules could not relate, a statement that may go against the duty, an open coverage, a contested reading); one answer per statement with an exact quote; a failed or truncated call is recorded, retried once without thinking, and leaves the row open |
+| decision | `compare.combine_coverage`, `adjudicate.assess_obligation` | the rules' word stands. The model may fill PARTIAL where the rules found nothing; its COVERED and its CONTRADICTED are proposals with `REVIEW_REQUIRED`; an element check of the rules is never overruled; what a decision rests on is verified again (`adjudicate.verify`: exact spans of the stored version and of the documents in force, gates of the applicability) |
+
+Three things are counted apart everywhere: automatic decisions (right or wrong), cases sent to a person (never counted as right: `strict_accuracy`), and the model's proposals on their own.
+
+### 9.2 Measured
+
+Rule reader on clauses: DEV 289/289 kind, 204/204 addressee, 60/60 exception (fit); HOLDOUT 105/112, 55/61, 22/27 (blind labels; the exception count was 21 before the exemption wording "gerek yoktur" was added on a corpus finding; five of the remaining misses are one disputed label family, Yönetmelik 14646 md. 22/3). Extraction model qwen3:4b: DEV 231/289, HOLDOUT 89/112.
+
+Policy coverage, rules only: DEV 33 → 36 of 45; HOLDOUT 10 → 19 of 28 (18 misses read one by one: 11 statements retrieved but not related by wording, 7 not retrieved, no other error kind); VALIDATION (unseen, 42 cases on a second register per pilot, scored once) 17 → 19. Whole corpus CONTRADICTED rows unchanged by v2 (brewer 23, bottler 1, importer 7).
+
+Rules + qwen3:8b thinking (run 8, commit 3e36ebf): see the report's table for the per-split rows (automatic right / wrong, review, proposals, seconds per call). On the unseen set: 25 of 42 right automatically, 6 wrong (one contradiction the rules invent — a limit written as a prohibition, "4,8'i geçemez", read as negating the duty — and one they miss, a fruit-ratio minimum the quantity reader has no attribute for), 11 to a person (10 of them cases the rules had wrong), 18 of 21 proposals right, no false COVERED, ~18 s per call. The no-thinking variant is five times faster and claims a false CONTRADICTED on about half of the DEV escalations; it is the fallback only.
+
+Corpus: escalation 4.8 / 5.7 / 3.4 % of the obligations (6.2 / 10.0 / 7.7 % of the rows) for the three pilots at the frozen commit; the report holds the run-8 figures with model time per obligation and per call.
+
+### 9.3 Known limits
+
+- A limit written as a prohibition of the other polarity ("... geçemez" against "... olmalıdır") is read as a negation: one false CONTRADICTED on the unseen set (also present before v2). A property limit without a lexicon attribute (fruit ratio, quinine in mg/L) is not compared: one missed contradiction.
+- Paraphrase without an element the rules can check goes to the model and then to a person; that is by design, and it is where the review load is.
+- The clause escalation (nested exception, several parties, cross-reference, unclear addressee, reader disagreement) does not target the rule reader's errors: on HOLDOUT it reached 1 of 7.
+- HOLDOUT is development data since commit 3e36ebf; the next round needs a fresh unseen set, and the validation register and its labels were written by the same developer (blind to results, not to the code).
+- Applicability of horizontal duties rests on the catalogue, not on a company fact (`REGULATION_SCOPE`, 695 of 3235 brewer rows); it is recorded, not verified against the profile.
+- Development labels only; no expert gold.
+
+---
+
 ## Open decisions (owner: Emir)
 
 1. Whether the AML knowledge becomes `FINANCIAL_SERVICES_TR` now (step 3) or stays as the engine default until a second financial jurisdiction appears.

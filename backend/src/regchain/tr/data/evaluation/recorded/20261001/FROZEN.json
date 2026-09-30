@@ -1,0 +1,5 @@
+{"commit": "3e36ebf", "dataset": "BEVERAGE_TR_DEV_V2 0.4.0", "splits": ["DEV (fit)", "HOLDOUT (development since 3e36ebf)", "VALIDATION (unseen: scored once here)"],
+ "settings": {"SEMANTIC_FLOOR": 0.66, "LEXICAL_FLOOR": 0.30, "ANCHOR_FLOOR": 0.55, "ANCHOR_STEMS": 2, "TOP_K": 3, "SEMANTIC_RELEVANCE": 0.70,
+              "prompt": "tr-adjudicate-v3", "clause_prompt": "tr-clause-adjudicate-v2", "compare_rules": "tr-compare-rules-v2", "candidates": "tr-candidates-v2",
+              "judge": "qwen3:8b@500a1f06 ctx 8192, thinking on (adjudicate-*) / off (-quick)", "embedder": "bge-m3@79076464"},
+ "rule": "nothing changes between these legs; the validation legs run once and are not repeated after being read"}
