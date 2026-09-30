@@ -17,9 +17,9 @@ polarity for a compatible product, and every limit is the same or stricter. This
 model. It is strict about elements and blind to paraphrase ("Satış belgesi ... bir yere asılır" for "Satış belgeleri ...
 uygun yerlere asılır"): measured on BEVERAGE_TR_DEV_V2 it invented no conflict and missed nine statements that say the
 duty in other words. Where an engine run judged the same passages, combine_coverage joins the two readings: the rule
-comparer decides what it can check (a weaker limit, a missing place, a time window), the model what it cannot (other
-wording), and a result only one of them stands behind is marked for review. The registers under data/pilot_policies
-are synthetic.
+comparer decides what it can check (a weaker limit, a missing place, a time window); the model's "covers" is taken
+where the rules found nothing (other wording); a conflict or a partial cover only the model sees changes no coverage
+and marks the row for review. The registers under data/pilot_policies are synthetic.
 """
 import json
 import re
@@ -492,7 +492,11 @@ def combine_coverage(rule: str, reasons: list[str], model: str | None) -> tuple[
     """(coverage, basis, review) from the rule comparer's coverage and the engine's for the same duty and documents.
 
     CONFLICT      the rule comparer's conflicts are element checks (a weaker limit, a violated time window, a permitted
-                  prohibited act) and stand alone; a conflict only the model sees is UNKNOWN until a person reads it.
+                  prohibited act) and stand alone. A conflict only the model sees keeps the rule comparer's coverage and
+                  is marked for review with the passage the model quoted: on the twelve labelled cases of the two unit
+                  runs of 30 September 2026 the judge claimed four conflicts, one real (the caffeine limit, which the
+                  rules also found) and three not (a tasting permission against a display rule, "etil alkol ilave
+                  edilmez" against a label warning, campus sampling against a ban in school canteens).
     PARTIAL       a missing element the rule comparer names stands against a model's COVERS_TEXT.
     paraphrase    where the rule comparer found nothing or only loose wording, the model's COVERS_TEXT is taken, for
                   review: the statement says the duty in words the rules do not match.
@@ -506,7 +510,7 @@ def combine_coverage(rule: str, reasons: list[str], model: str | None) -> tuple[
     if rule == 'CONFLICT':
         return 'CONFLICT', 'BOTH_READINGS' if model == 'CONFLICT' else 'RULE_ELEMENT_CHECK', True
     if model == 'CONFLICT':
-        return 'UNKNOWN', 'MODEL_CONFLICT_UNCONFIRMED', True
+        return rule, 'MODEL_CONFLICT_UNCONFIRMED', True
     element_gap = any(r.startswith(ELEMENT_GAPS) for r in reasons)
     if rule == 'PARTIAL' and element_gap:
         return 'PARTIAL', 'BOTH_READINGS' if model == 'PARTIAL' else 'RULE_ELEMENT_CHECK', False

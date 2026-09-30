@@ -327,8 +327,14 @@ class SecondReadingTests(unittest.TestCase):
         self.assertEqual(combine_coverage('PARTIAL', ['PLACE_MISSING:HEALTH_FACILITY'], 'COVERS_TEXT'), ('PARTIAL', 'RULE_ELEMENT_CHECK', False))
 
     def test_a_conflict_only_the_model_sees_waits_for_a_person(self):
-        self.assertEqual(combine_coverage('PARTIAL', ['WORDING_PARTLY_MATCHED'], 'CONFLICT'), ('UNKNOWN', 'MODEL_CONFLICT_UNCONFIRMED', True))
-        self.assertEqual(combine_coverage('NO_EVIDENCE', ['NO_RELATED_STATEMENT'], 'CONFLICT')[0], 'UNKNOWN')
+        # The rule comparer's word stays, the row goes to review with the passage the model quoted.
+        self.assertEqual(combine_coverage('PARTIAL', ['PLACE_MISSING:HEALTH_FACILITY'], 'CONFLICT'), ('PARTIAL', 'MODEL_CONFLICT_UNCONFIRMED', True))
+        self.assertEqual(combine_coverage('NO_EVIDENCE', ['NO_RELATED_STATEMENT'], 'CONFLICT'), ('NO_EVIDENCE', 'MODEL_CONFLICT_UNCONFIRMED', True))
+        args = (BOTTLER, BOTTLER_REGISTER, 'TR:TEBLIG:TGK_ENERJI_ICECEKLERI', 'Tebliğ 23706 md. 11/f.2', 'NONALC-BOTTLING', 'SUPPLY')
+        quote = '3. Üniversite kampüslerindeki etkinliklerde enerji içeceği numune dağıtımı yapılabilir.'
+        joined = row(*args, second={'coverage': 'CONFLICT', 'quotes': {'CONFLICTS': [quote]}})
+        self.assertEqual((joined.document_coverage, joined.model_coverage, joined.review_required), ('PARTIAL', 'CONFLICT', True))
+        self.assertIn(('POL-MKT-02#3', 'CONFLICTS', ['MODEL_READING']), [(r.passage_id, r.relation, r.reasons) for r in joined.readings])
 
     def test_paraphrase_is_the_models_to_read_and_a_persons_to_confirm(self):
         self.assertEqual(combine_coverage('NO_EVIDENCE', ['NO_RELATED_STATEMENT'], 'COVERS_TEXT'), ('COVERS_TEXT', 'MODEL_PARAPHRASE', True))
