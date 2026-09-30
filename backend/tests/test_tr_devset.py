@@ -83,7 +83,7 @@ class ClauseTaskTests(unittest.TestCase):
 
     def test_the_rule_comparer_misses_paraphrase_and_invents_no_conflict(self):
         report = task('coverage', 'POLICY_COVERAGE/rule')
-        self.assertEqual(report['n'], 44)
+        self.assertEqual(report['n'], 45)
         self.assertGreaterEqual(report['accuracy'], 0.72)
         self.assertLess(report['accuracy'], 1.0)                                    # the known limit stays visible
         conflict = report['per_class']['CONTRADICTED']

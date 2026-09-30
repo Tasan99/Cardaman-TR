@@ -327,3 +327,18 @@ def diagnose_applicability(expected: str, decision, obligation: ExtractedObligat
         'ENTITY' if any('ENTITY' in c for c in codes) else 'FACILITY' if any('FACILITY' in c for c in codes) else 'SCOPE'
     return Diagnosis(layer='SCOPE', code=f'{element}_GATE_WRONG', stage='routing',
                      detail=f'expected {expected}, routed {decision.status} with {codes} ({obligation.basis}, flags {obligation.flags})')
+
+
+def second_readings(run: dict, obligations: list[ExtractedObligation]) -> dict[str, dict]:
+    """{provision ref: the engine's reading} of one recorded run, in the shape compare.compare_obligation takes as its
+    second reading: the coverage word and the passages the judge found supporting, partial or conflicting."""
+    reverse = {word: key for key, word in COVERAGE_WORDS.items()}
+    out = {}
+    for ref, rows in engine_rows(run, obligations).items():
+        quotes: dict[str, list[str]] = {}
+        for row in rows:
+            for check in row['proposal'].get('policy_checks') or []:
+                if check.get('relation') in ('SUPPORTS', 'PARTIAL', 'CONFLICTS') and check.get('quote'):
+                    quotes.setdefault(check['relation'], []).append(check['quote'])
+        out[ref] = {'coverage': reverse[engine_coverage(rows)], 'quotes': quotes, 'entity_id': run['entity_id']}
+    return out

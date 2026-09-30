@@ -14,8 +14,12 @@ An extracted obligation that applies to a target is compared with the internal d
 
 Shared words are never enough: a statement supports a duty only when its own frame states the same act with the same
 polarity for a compatible product, and every limit is the same or stricter. This reading is deterministic and needs no
-model; ai.py puts the engine's model judgement of the same passages beside it, and a disagreement is a review item, not
-a silent choice. The registers under data/pilot_policies are synthetic.
+model. It is strict about elements and blind to paraphrase ("Satış belgesi ... bir yere asılır" for "Satış belgeleri ...
+uygun yerlere asılır"): measured on BEVERAGE_TR_DEV_V2 it invented no conflict and missed nine statements that say the
+duty in other words. Where an engine run judged the same passages, combine_coverage joins the two readings: the rule
+comparer decides what it can check (a weaker limit, a missing place, a time window), the model what it cannot (other
+wording), and a result only one of them stands behind is marked for review. The registers under data/pilot_policies
+are synthetic.
 """
 import json
 import re
@@ -133,6 +137,10 @@ class GapRow(Strict):
     readings: list[PassageReading] = []
     document_coverage: DocumentCoverage
     coverage_reasons: list[str] = []
+    # Who stands behind the coverage: the rule comparer alone, or the two readings joined (combine_coverage).
+    coverage_basis: str = 'RULE_ONLY'
+    rule_coverage: DocumentCoverage | None = None
+    model_coverage: DocumentCoverage | None = None
     mapping: ObligationMapping
     product_findings: list[ProductFinding] = []
     gap: str | None = None
@@ -456,6 +464,41 @@ def coverage_of(readings: list[PassageReading]) -> tuple[str, list[str]]:
     return 'NO_EVIDENCE', ['NO_RELATED_STATEMENT']
 
 
+# What the rule comparer checks element by element; a gap it names this way is not overruled by a model's "covers".
+ELEMENT_GAPS = ('PLACE_MISSING', 'PLACES_MISSING', 'LIMIT_MISSING', 'PREDICATE_NOT_STATED', 'TIME_WINDOW_', 'CONDITION_NARROWER',
+                'POLICY_ADDS_EXCEPTION', 'POLICY_OPTIONAL')
+
+
+def combine_coverage(rule: str, reasons: list[str], model: str | None) -> tuple[str, str, bool]:
+    """(coverage, basis, review) from the rule comparer's coverage and the engine's for the same duty and documents.
+
+    CONFLICT      the rule comparer's conflicts are element checks (a weaker limit, a violated time window, a permitted
+                  prohibited act) and stand alone; a conflict only the model sees is UNKNOWN until a person reads it.
+    PARTIAL       a missing element the rule comparer names stands against a model's COVERS_TEXT; a gap only the model
+                  sees lowers the rule comparer's COVERS_TEXT to PARTIAL, for review.
+    paraphrase    where the rule comparer found nothing or only loose wording, the model's COVERS_TEXT or PARTIAL is
+                  taken, for review: the statement says the duty in words the rules do not match.
+    """
+    if model is None:
+        return rule, 'RULE_ONLY', rule in ('CONFLICT', 'UNKNOWN')
+    if rule == 'CONFLICT':
+        return 'CONFLICT', 'BOTH_READINGS' if model == 'CONFLICT' else 'RULE_ELEMENT_CHECK', True
+    if model == 'CONFLICT':
+        return 'UNKNOWN', 'MODEL_CONFLICT_UNCONFIRMED', True
+    element_gap = any(r.startswith(ELEMENT_GAPS) for r in reasons)
+    if rule == 'PARTIAL' and element_gap:
+        return 'PARTIAL', 'BOTH_READINGS' if model == 'PARTIAL' else 'RULE_ELEMENT_CHECK', False
+    if rule == 'COVERS_TEXT':
+        if model == 'PARTIAL':
+            return 'PARTIAL', 'MODEL_FOUND_GAP', True
+        return 'COVERS_TEXT', 'BOTH_READINGS' if model == 'COVERS_TEXT' else 'RULE_WORDING_MATCH', False
+    if model in ('COVERS_TEXT', 'PARTIAL'):
+        return model, 'MODEL_PARAPHRASE', True
+    if rule == 'UNKNOWN' or model == 'UNKNOWN':
+        return rule, 'RULE_ONLY', True
+    return rule, 'BOTH_READINGS' if rule == model else 'RULE_ONLY', False
+
+
 # -- profile-level comparison ------------------------------------------------------------------------
 def documents_in_force(register: Register, profile: EnterpriseProfile, decision) -> list[DocumentRecord]:
     """The documents that are the target's to compare: by owner (group, entity, facility) and, for a product target,
@@ -533,14 +576,37 @@ def _actions(row: GapRow, register: Register, owners: list[str]) -> tuple[str | 
     return gap, actions
 
 
+def _model_readings(second: dict, register: Register, in_force: set[str]) -> list[PassageReading]:
+    """The passages the model judged favourable or conflicting, as readings of the register's own statements."""
+    numbered = re.compile(r'^\s*\d{1,3}\.\s+')
+    out = []
+    for relation, quotes in (second.get('quotes') or {}).items():
+        for quote in quotes:
+            wanted = numbered.sub('', quote).strip()
+            passage = next((p for p in register.passages if p.document_id in in_force and wanted
+                            and (wanted in p.text or numbered.sub('', p.text).strip() in wanted)), None)
+            if passage is not None:
+                out.append(PassageReading(passage_id=passage.passage_id, document_id=passage.document_id, number=passage.number,
+                                          relation=relation, reasons=['MODEL_READING'], quote=passage.text, detail={'reader': 'model'}))
+    return out
+
+
 def compare_obligation(obligation: ExtractedObligation, decision, profile: EnterpriseProfile, register: Register,
-                       registry: Registry) -> GapRow:
-    """The gap row of one obligation on one target it applies to."""
+                       registry: Registry, second: dict | None = None) -> GapRow:
+    """The gap row of one obligation on one target it applies to. `second` is the engine's reading of the same duty
+    ({'coverage': word, 'quotes': {'SUPPORTS': [...], 'PARTIAL': [...], 'CONFLICTS': [...]}}, from ai.second_readings)."""
     documents = documents_in_force(register, profile, decision)
     in_force = {d.document_id for d in documents}
     readings = [relate(obligation, passage, registry.vocabulary) for passage in register.passages if passage.document_id in in_force]
     related = [r for r in readings if r.relation != 'UNRELATED']
     coverage, coverage_reasons = coverage_of(related)
+    rule_coverage, basis, contested = coverage, 'RULE_ONLY', False
+    if second is not None:
+        coverage, basis, contested = combine_coverage(rule_coverage, coverage_reasons, second.get('coverage'))
+        if basis in ('MODEL_PARAPHRASE', 'MODEL_FOUND_GAP', 'MODEL_CONFLICT_UNCONFIRMED'):
+            known = {r.passage_id for r in related}
+            related += [r for r in _model_readings(second, register, in_force) if r.passage_id not in known]
+            coverage_reasons = sorted(set(coverage_reasons) - {'NO_RELATED_STATEMENT'}) + [basis]
     decisive = {'CONFLICT': 'CONFLICTS', 'COVERS_TEXT': 'SUPPORTS', 'PARTIAL': 'PARTIAL', 'UNKNOWN': 'UNCLEAR'}.get(coverage)
     covering = sorted({r.document_id for r in related if r.relation == decisive}) if decisive else []
     controls = [c for c in register.controls if set(c.documents) & set(covering) and (not c.topics or obligation.topic in c.topics)]
@@ -558,16 +624,19 @@ def compare_obligation(obligation: ExtractedObligation, decision, profile: Enter
                  topic=obligation.topic, modality=obligation.modality, quote=obligation.text, level=decision.level,
                  target_id=decision.target_id, entity_id=decision.entity_id, applicability=decision.status,
                  applies_to_products=list(decision.applies_to_products), documents_in_force=sorted(in_force), readings=related,
-                 document_coverage=coverage, coverage_reasons=coverage_reasons, mapping=mapping,
+                 document_coverage=coverage, coverage_reasons=coverage_reasons, coverage_basis=basis, rule_coverage=rule_coverage,
+                 model_coverage=second.get('coverage') if second else None, mapping=mapping,
                  product_findings=product_findings(obligation, profile, products),
-                 review_required=decision.review_required or coverage in ('UNKNOWN', 'CONFLICT'))
+                 review_required=decision.review_required or contested or coverage in ('UNKNOWN', 'CONFLICT'))
     row.gap, row.actions = _actions(row, register, owners)
     return row
 
 
 def compare_profile(profile: EnterpriseProfile, obligations: list[ExtractedObligation], register: Register, registry: Registry,
-                    store: CorpusStore | None = None) -> GapReport:
-    """Every obligation on every target it applies to (APPLIES or PARTIAL), with coverage, mapping and gap."""
+                    store: CorpusStore | None = None, second: dict | None = None) -> GapReport:
+    """Every obligation on every target it applies to (APPLIES or PARTIAL), with coverage, mapping and gap. `second` holds
+    the engine's readings per legal entity ({entity id: {provision ref: reading}}): a row is joined with the reading made
+    for its own entity, because the documents in force differ from entity to entity."""
     from .extraction import route
     store = store or CorpusStore()
     rows = []
@@ -575,7 +644,8 @@ def compare_profile(profile: EnterpriseProfile, obligations: list[ExtractedOblig
         decisions, _ = route(obligation, profile, registry, store)
         for decision in decisions:
             if decision.status in ('APPLIES', 'PARTIAL'):
-                rows.append(compare_obligation(obligation, decision, profile, register, registry))
+                reading = ((second or {}).get(decision.entity_id) or {}).get(obligation.provision_ref)
+                rows.append(compare_obligation(obligation, decision, profile, register, registry, reading))
     counts: dict[str, int] = {}
     for row in rows:
         counts[row.mapping.status] = counts.get(row.mapping.status, 0) + 1

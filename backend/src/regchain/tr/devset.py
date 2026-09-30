@@ -204,33 +204,46 @@ def score_applicability(dataset: dict, readers: Readers, profiles: dict) -> dict
             'pairs': pair_consistency(pairs), 'wrong': wrong, 'by_family': dict(sorted(families.items()))}
 
 
-def _gap_rows(readers: Readers, ref: str, profile, register, target_id: str):
+def _gap_rows(readers: Readers, ref: str, profile, register, target_id: str, second: dict | None = None):
     out = []
     for obligation in readers.obligations.get(ref, []):
         decisions, _ = route(obligation, profile, readers.registry, readers.store)
         for decision in decisions:
             if decision.status in ('APPLIES', 'PARTIAL') and (decision.target_id == target_id or target_id in decision.applies_to_products
                                                              or decision.entity_id == target_id):
-                out.append(compare_obligation(obligation, decision, profile, register, readers.registry))
+                out.append(compare_obligation(obligation, decision, profile, register, readers.registry, second))
     return out
 
 
+def _word(rows) -> str:
+    words = [ai.COVERAGE_WORDS[row.document_coverage] for row in rows]
+    return next((w for w in ('CONTRADICTED', 'UNKNOWN', 'NOT_COVERED', 'PARTIALLY_COVERED', 'COVERED') if w in words), 'NO_ROW')
+
+
 def score_coverage(dataset: dict, readers: Readers, profiles: dict, engine_runs: list[dict] = ()) -> dict:
-    """Policy coverage of the rule comparer on every labelled case, and of each recorded engine run on the cases whose
-    clause that run analysed for the labelled profile."""
+    """Policy coverage of the rule comparer on every labelled case; of each recorded engine run on the cases whose clause
+    that run analysed for the labelled profile; and, on those same cases, of the two readings joined
+    (compare.combine_coverage) next to the rule comparer alone.
+
+    An engine run reads the documents in force for one legal entity; a label names a target. The engine's word is scored
+    on a case only when the labelled target is that entity or one of its products or activities and every document in
+    force for the target was among the documents the run read, so that both readers looked at the same statements."""
     rule_rows, wrong, registers = [], [], {}
     engine_rows_by_run = [[] for _ in engine_runs]
+    joined_rows, rule_on_engine_cases = [], []
     joined = []
     for run in engine_runs:
         obligations = [o for ref_obligations in readers.obligations.values() for o in ref_obligations if o.regulation_id == run['regulation_id']]
         articles = {f"{article_label(o.provision_ref)}" for o in obligations if o.frame.label.split(' md. ')[-1] in set(run['articles'])}
-        joined.append((ai.engine_rows(run, obligations), articles))
+        profile = profiles[run['profile_id']]
+        entity = profile.entity(run['entity_id'])
+        own = {run['entity_id'], *entity.product_ids, *(a.activity_id for a in profile.activities if a.entity_id == run['entity_id'])}
+        joined.append((ai.engine_rows(run, obligations), articles, own, ai.second_readings(run, obligations)))
     for case in dataset['coverage']:
         profile = profiles[case['profile_id']]
         register = registers.setdefault(profile.profile_id, load_register(profile.profile_id))
         gap = _gap_rows(readers, case['ref'], profile, register, case['target_id'])
-        words = [ai.COVERAGE_WORDS[row.document_coverage] for row in gap]
-        predicted = next((w for w in ('CONTRADICTED', 'UNKNOWN', 'NOT_COVERED', 'PARTIALLY_COVERED', 'COVERED') if w in words), 'NO_ROW')
+        predicted = _word(gap)
         expected = predicted if predicted in case['expected'] else case['expected'][0]
         rule_rows.append((expected, predicted))
         if expected != predicted:
@@ -240,8 +253,11 @@ def score_coverage(dataset: dict, readers: Readers, profiles: dict, engine_runs:
             wrong.append(_wrong('POLICY_COVERAGE', 'rule', f"{case['case_id']} {case['ref']} @ {case['target_id']}", expected, predicted, diagnosis))
         decisive = [r.quote for row in gap for r in row.readings if r.relation in ('SUPPORTS', 'PARTIAL', 'CONFLICTS')]
         for index, run in enumerate(engine_runs):
-            rows_by_ref, articles = joined[index]
-            if run['profile_id'] != case['profile_id'] or article_label(case['ref']) not in articles:
+            rows_by_ref, articles, own, second = joined[index]
+            if run['profile_id'] != case['profile_id'] or article_label(case['ref']) not in articles or case['target_id'] not in own:
+                continue
+            files = {Path(register.document(d).file).name for row in gap for d in row.documents_in_force}
+            if not files <= set(run['policy_files']):
                 continue
             rows = rows_by_ref.get(case['ref'], [])
             got = ai.engine_coverage(rows) if rows else 'NO_ROW'
@@ -251,10 +267,23 @@ def score_coverage(dataset: dict, readers: Readers, profiles: dict, engine_runs:
                 diagnosis = ai.diagnose_engine_coverage(case['expected'], rows, ai.engine_case(run, case['ref']), decisive)
                 wrong.append(_wrong('POLICY_COVERAGE', f"engine:{run['entity_id']}:{run['regulation_id']}",
                                     f"{case['case_id']} {case['ref']}", want, got, diagnosis))
+            both = _word(_gap_rows(readers, case['ref'], profile, register, case['target_id'], second.get(case['ref'])))
+            joined_rows.append((both if both in case['expected'] else case['expected'][0], both))
+            rule_on_engine_cases.append((expected, predicted))
+            if both not in case['expected']:
+                wrong.append(_wrong('POLICY_COVERAGE', 'joined', f"{case['case_id']} {case['ref']} @ {case['target_id']}",
+                                    case['expected'][0], both, ai.Diagnosis(
+                                        layer='VALIDATOR_PIPELINE', code='JOIN_RULE', stage='combine_coverage',
+                                        detail=f'rule comparer {predicted}, engine {got}, joined {both}')))
     tasks = {'POLICY_COVERAGE/rule': _report('POLICY_COVERAGE', rule_rows, COVERAGE_LABELS, dataset)}
     for index, run in enumerate(engine_runs):
         tasks[f"POLICY_COVERAGE/engine:{run['entity_id']}:{run['regulation_id']}"] = _report('POLICY_COVERAGE', engine_rows_by_run[index],
                                                                                              COVERAGE_LABELS, dataset)
+    if engine_runs:
+        tasks['POLICY_COVERAGE/engine (all runs)'] = _report('POLICY_COVERAGE', [r for rows in engine_rows_by_run for r in rows],
+                                                             COVERAGE_LABELS, dataset)
+        tasks['POLICY_COVERAGE/rule (engine cases)'] = _report('POLICY_COVERAGE', rule_on_engine_cases, COVERAGE_LABELS, dataset)
+        tasks['POLICY_COVERAGE/joined (engine cases)'] = _report('POLICY_COVERAGE', joined_rows, COVERAGE_LABELS, dataset)
     return {'tasks': tasks, 'wrong': wrong}
 
 

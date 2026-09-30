@@ -5,7 +5,8 @@ corpus status    the stored versions
 corpus verify    what the catalogue or the scopes claim that the stored texts do not support
 corpus apply     write the fields the stored texts support into the catalogue (regulations.json)
 obligations      the clause-level obligations of a stored regulation; with --profile, where each applies
-gaps             obligation -> policy -> control -> evidence -> gap for a pilot profile and its (synthetic) register
+gaps             obligation -> policy -> control -> evidence -> gap for a pilot profile and its (synthetic) register;
+                 with --engine, joined with the model judgements of recorded engine runs for the same entity
 changes          the clauses an amendment touched since a date, the duties they carry and, with --profile, whom they reach
 ai units         the reading units of some articles (what a model is given)
 ai compare       rule reader against a recorded model reading: agreement, and the layer of every disagreement
@@ -83,7 +84,7 @@ def _obligation_row(obligation, decisions=None) -> dict:
 def _domain(args, store: CorpusStore) -> int:
     from .extraction import extract_regulation, route
     registry = Registry.load()
-    articles = args.article or None
+    articles = getattr(args, 'article', None) or None
     if args.command == 'obligations':
         profile = _profile(registry, args.profile) if args.profile else None
         _, obligations = extract_regulation(args.regulation, registry, store, articles=articles)
@@ -94,9 +95,17 @@ def _domain(args, store: CorpusStore) -> int:
         profile = _profile(registry, args.profile)
         regulations = args.regulation or [rid for rid in registry.regulations if store.versions(rid)]
         obligations = [o for rid in regulations for o in extract_regulation(rid, registry, store, articles=articles)[1]]
-        report = compare_profile(profile, obligations, load_register(profile.profile_id), registry, store)
+        second = {}
+        for path in args.engine:
+            from .ai import second_readings
+            run = json.loads(Path(path).read_text(encoding='utf-8'))
+            if run['profile_id'] == profile.profile_id:
+                second.setdefault(run['entity_id'], {}).update(
+                    second_readings(run, [o for o in obligations if o.regulation_id == run['regulation_id']]))
+        report = compare_profile(profile, obligations, load_register(profile.profile_id), registry, store, second or None)
         rows = [{'ref': r.provision_ref, 'target': r.target_id, 'applicability': r.applicability, 'status': r.mapping.status,
-                 'document_coverage': r.document_coverage, 'reasons': r.coverage_reasons, 'gap': r.gap, 'actions': r.actions,
+                 'document_coverage': r.document_coverage, 'coverage_basis': r.coverage_basis, 'rule_coverage': r.rule_coverage,
+                 'model_coverage': r.model_coverage, 'reasons': r.coverage_reasons, 'gap': r.gap, 'actions': r.actions,
                  'products': [f.model_dump(mode='json') for f in r.product_findings if f.result != 'WITHIN_LIMIT'],
                  'review_required': r.review_required} for r in report.rows if args.all or r.mapping.status != 'COVERED']
         _print({'profile_id': report.profile_id, 'register_synthetic': report.register_synthetic, 'summary': report.summary, 'rows': rows})
@@ -156,6 +165,7 @@ def main(argv=None):
     gaps.add_argument('--profile', required=True)
     gaps.add_argument('--regulation', action='append', default=[], help='regulation id; repeat to name several (default: every stored text)')
     gaps.add_argument('--all', action='store_true', help='also list the covered rows')
+    gaps.add_argument('--engine', action='append', default=[], help='a recorded engine run to join (live.analyze_entity); repeat to name several')
     changes = commands.add_parser('changes', help='clauses amended since a date, their duties and whom they reach')
     changes.add_argument('--regulation', required=True)
     changes.add_argument('--since', required=True, help='ISO date; amendment notes dated on or after it are read')

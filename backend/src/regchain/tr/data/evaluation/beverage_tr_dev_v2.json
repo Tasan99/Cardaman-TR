@@ -4622,6 +4622,17 @@
     "PARTIALLY_COVERED"
    ],
    "basis": "POL-MKT-02 st. 5 names television programmes and sugary drinks only"
+  },
+  {
+   "case_id": "COV-45",
+   "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+   "target_id": "NONALC-BOTTLING",
+   "ref": "Tebliğ 23706 md. 11/f.2",
+   "regulation_id": "TR:TEBLIG:TGK_ENERJI_ICECEKLERI",
+   "expected": [
+    "PARTIALLY_COVERED"
+   ],
+   "basis": "as COV-23, on the entity that places the drinks on the market (added so that the engine run on this entity has a labelled case; the basis is the same statement)"
   }
  ]
 }

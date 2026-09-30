@@ -5,8 +5,8 @@ where a developer's own reading differs, the evaluation set (BEVERAGE_TR_DEV_V2)
 """
 import unittest
 
-from regchain.tr.compare import (GapRow, Passage, compare_obligation, compare_profile, coverage_of, distinctive, documents_in_force,
-                                 load_register, ownership, passage_frames, relate)
+from regchain.tr.compare import (GapRow, Passage, combine_coverage, compare_obligation, compare_profile, coverage_of, distinctive,
+                                 documents_in_force, load_register, ownership, passage_frames, relate)
 from regchain.tr.corpus import CorpusStore
 from regchain.tr.extraction import extract_regulation, route
 from regchain.tr.mapping import mapping_status
@@ -31,12 +31,12 @@ def obligation(regulation_id, ref, group=None):
     return found[0]
 
 
-def row(profile, register, regulation_id, ref, target_id, group=None) -> GapRow:
+def row(profile, register, regulation_id, ref, target_id, group=None, second=None) -> GapRow:
     item = obligation(regulation_id, ref, group)
     decisions, _ = route(item, profile, REGISTRY, STORE)
     decision = next(d for d in decisions if d.target_id == target_id)
     assert decision.status in ('APPLIES', 'PARTIAL'), (ref, target_id, decision.status)
-    return compare_obligation(item, decision, profile, register, REGISTRY)
+    return compare_obligation(item, decision, profile, register, REGISTRY, second)
 
 
 def statement(text, document_id='DOC-TEST', number=1) -> Passage:
@@ -277,6 +277,54 @@ class BottlerGapTests(unittest.TestCase):
                                                                      if e.evidence_id in item.mapping.evidence_ids))[0])
             for seen in item.readings:
                 self.assertEqual(next(p.text for p in BOTTLER_REGISTER.passages if p.passage_id == seen.passage_id), seen.quote)
+
+
+class SecondReadingTests(unittest.TestCase):
+    """The rule comparer and the engine's judge on the same duty and documents (combine_coverage)."""
+
+    def test_an_element_check_of_the_rule_comparer_is_not_overruled(self):
+        self.assertEqual(combine_coverage('CONFLICT', ['LIMIT_WEAKER'], 'COVERS_TEXT'), ('CONFLICT', 'RULE_ELEMENT_CHECK', True))
+        self.assertEqual(combine_coverage('CONFLICT', ['TIME_WINDOW_VIOLATED'], 'CONFLICT'), ('CONFLICT', 'BOTH_READINGS', True))
+        # "Okul kantinlerinde ve spor tesislerinde ..." against a duty that also names hospitals: the judge called it covered.
+        self.assertEqual(combine_coverage('PARTIAL', ['PLACE_MISSING:HEALTH_FACILITY'], 'COVERS_TEXT'), ('PARTIAL', 'RULE_ELEMENT_CHECK', False))
+
+    def test_a_conflict_only_the_model_sees_waits_for_a_person(self):
+        self.assertEqual(combine_coverage('PARTIAL', ['WORDING_PARTLY_MATCHED'], 'CONFLICT'), ('UNKNOWN', 'MODEL_CONFLICT_UNCONFIRMED', True))
+        self.assertEqual(combine_coverage('NO_EVIDENCE', ['NO_RELATED_STATEMENT'], 'CONFLICT')[0], 'UNKNOWN')
+
+    def test_paraphrase_is_the_models_to_read_and_a_persons_to_confirm(self):
+        self.assertEqual(combine_coverage('NO_EVIDENCE', ['NO_RELATED_STATEMENT'], 'COVERS_TEXT'), ('COVERS_TEXT', 'MODEL_PARAPHRASE', True))
+        self.assertEqual(combine_coverage('PARTIAL', ['WORDING_PARTLY_MATCHED'], 'COVERS_TEXT'), ('COVERS_TEXT', 'MODEL_PARAPHRASE', True))
+        self.assertEqual(combine_coverage('COVERS_TEXT', ['SUPPORTING_STATEMENT'], 'PARTIAL'), ('PARTIAL', 'MODEL_FOUND_GAP', True))
+        self.assertEqual(combine_coverage('COVERS_TEXT', ['SUPPORTING_STATEMENT'], 'NO_EVIDENCE'), ('COVERS_TEXT', 'RULE_WORDING_MATCH', False))
+        self.assertEqual(combine_coverage('NO_EVIDENCE', ['NO_RELATED_STATEMENT'], 'NO_EVIDENCE'), ('NO_EVIDENCE', 'BOTH_READINGS', False))
+        self.assertEqual(combine_coverage('NO_EVIDENCE', ['NO_RELATED_STATEMENT'], None), ('NO_EVIDENCE', 'RULE_ONLY', False))
+
+    def test_a_statement_the_model_found_is_tied_to_its_document_and_control(self):
+        # "4. Satış belgesi, satış noktasının içinde tüketicilerin görebileceği bir yere asılır." says the duty of
+        # Yönetmelik 14646 md. 6/1-e in other words; the rule comparer finds no related statement.
+        args = (BREWER, BREWER_REGISTER, 'TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM', 'Yönetmelik 14646 md. 6/f.1/b.e', 'ALC-INT-SALES')
+        alone = row(*args)
+        self.assertEqual((alone.document_coverage, alone.coverage_basis, alone.mapping.status), ('NO_EVIDENCE', 'RULE_ONLY', 'NOT_COVERED'))
+        quote = '4. Satış belgesi, satış noktasının içinde tüketicilerin görebileceği bir yere asılır.'
+        joined = row(*args, second={'coverage': 'COVERS_TEXT', 'quotes': {'SUPPORTS': [quote]}})
+        self.assertEqual((joined.document_coverage, joined.rule_coverage, joined.model_coverage, joined.coverage_basis),
+                         ('COVERS_TEXT', 'NO_EVIDENCE', 'COVERS_TEXT', 'MODEL_PARAPHRASE'))
+        self.assertTrue(joined.review_required)
+        self.assertEqual(joined.mapping.document_ids, ['SOP-SALES-02'])
+        self.assertEqual([(r.passage_id, r.reasons) for r in joined.readings if r.relation == 'SUPPORTS'], [('SOP-SALES-02#4', ['MODEL_READING'])])
+        self.assertNotEqual(joined.mapping.status, 'NOT_COVERED')
+
+    def test_a_profile_report_joins_each_row_with_the_reading_made_for_its_own_entity(self):
+        selected = extract_regulation('TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM', REGISTRY, STORE, articles=['6'])[1]
+        quote = '4. Satış belgesi, satış noktasının içinde tüketicilerin görebileceği bir yere asılır.'
+        second = {'ALC-INT-SALES': {'Yönetmelik 14646 md. 6/f.1/b.e': {'coverage': 'COVERS_TEXT', 'quotes': {'SUPPORTS': [quote]}}}}
+        report = compare_profile(BREWER, selected, BREWER_REGISTER, REGISTRY, STORE, second)
+        licence = [r for r in report.rows if r.provision_ref == 'Yönetmelik 14646 md. 6/f.1/b.e']
+        # the wholesaler's row of the same duty has no reading of its own and stays with the rule comparer
+        self.assertEqual({(r.entity_id, r.coverage_basis) for r in licence},
+                         {('ALC-INT-SALES', 'MODEL_PARAPHRASE'), ('ALC-INT-DISTRIBUTION', 'RULE_ONLY')})
+        self.assertTrue(all(r.coverage_basis == 'RULE_ONLY' for r in report.rows if r.provision_ref != 'Yönetmelik 14646 md. 6/f.1/b.e'))
 
 
 if __name__ == '__main__':
