@@ -1,60 +1,247 @@
 {
   "format": "cardaman-tr-enterprise-profile/1",
   "profile_id": "tr-bev-pilot-alcohol-import",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "synthetic": true,
   "representative_type": "ALCOHOL_GROUP_TUBORG_TYPE",
   "disclaimer": "Sentetik temsili test profili: bira üreten ve ayrıca ithal distile alkollü içki ile şarap dağıtan bir grubun tipik yapısını örnekler. Gerçek bir şirketin yapısı, ürünü, lisansı veya ticari verisi değildir; yalnızca kapsam yönlendirmesini sınamak içindir.",
   "jurisdiction": "TR",
-  "group": {"group_id": "GRP-ALC-IMP", "name": "Temsili Bira ve İthal İçki Grubu (sentetik)"},
+  "group": {
+    "group_id": "GRP-ALC-IMP",
+    "name": "Temsili Bira ve İthal İçki Grubu (sentetik)"
+  },
   "legal_entities": [
-    {"entity_id": "ALC-IMP-BREWING", "name": "Temsili Bira Fabrikası A.Ş. (sentetik)", "entity_classes": ["PRODUCER"],
-     "activity_classes": ["PRODUCTION", "BOTTLING", "PLACING_ON_MARKET"], "product_ids": ["ALC-IMP-PILSNER", "ALC-IMP-WHEAT"],
-     "licenses": [
-       {"license_class": "ALCOHOL_PRODUCTION_PERMIT", "status": "HELD", "facility_id": "ALC-IMP-BREWERY"},
-       {"license_class": "FOOD_BUSINESS_APPROVAL", "status": "HELD"}
-     ],
-     "sales_channels": [], "profile_complete": true},
-    {"entity_id": "ALC-IMP-TRADING", "name": "Temsili İçki İthalat ve Dağıtım A.Ş. (sentetik)",
-     "entity_classes": ["IMPORTER", "DISTRIBUTOR", "WHOLESALER"],
-     "activity_classes": ["IMPORT", "PLACING_ON_MARKET", "DISTRIBUTION", "WAREHOUSING", "WHOLESALE"],
-     "product_ids": ["ALC-IMP-PILSNER", "ALC-IMP-WHEAT", "ALC-IMP-WHISKY", "ALC-IMP-WINE"],
-     "licenses": [
-       {"license_class": "ALCOHOL_IMPORT_PERMIT", "status": "HELD"},
-       {"license_class": "ALCOHOL_WHOLESALE_PERMIT", "status": "HELD"}
-     ],
-     "sales_channels": ["WHOLESALE_TRADE", "MODERN_RETAIL", "ON_PREMISE"], "profile_complete": true},
-    {"entity_id": "ALC-IMP-MARKETING", "name": "Temsili Marka Pazarlama Ltd. Şti. (sentetik)", "entity_classes": ["BRAND_OWNER"],
-     "activity_classes": ["ADVERTISING", "PROMOTION"],
-     "product_ids": ["ALC-IMP-PILSNER", "ALC-IMP-WHEAT", "ALC-IMP-WHISKY", "ALC-IMP-WINE"],
-     "licenses": [], "sales_channels": [], "profile_complete": false}
+    {
+      "entity_id": "ALC-IMP-BREWING",
+      "name": "Temsili Bira Fabrikası A.Ş. (sentetik)",
+      "entity_classes": [
+        "PRODUCER"
+      ],
+      "activity_classes": [
+        "PRODUCTION",
+        "BOTTLING",
+        "PLACING_ON_MARKET"
+      ],
+      "product_ids": [
+        "ALC-IMP-PILSNER",
+        "ALC-IMP-WHEAT"
+      ],
+      "licenses": [
+        {
+          "license_class": "ALCOHOL_PRODUCTION_PERMIT",
+          "status": "HELD",
+          "facility_id": "ALC-IMP-BREWERY"
+        },
+        {
+          "license_class": "FOOD_BUSINESS_APPROVAL",
+          "status": "HELD"
+        }
+      ],
+      "sales_channels": [],
+      "profile_complete": true
+    },
+    {
+      "entity_id": "ALC-IMP-TRADING",
+      "name": "Temsili İçki İthalat ve Dağıtım A.Ş. (sentetik)",
+      "entity_classes": [
+        "IMPORTER",
+        "DISTRIBUTOR",
+        "WHOLESALER"
+      ],
+      "activity_classes": [
+        "IMPORT",
+        "PLACING_ON_MARKET",
+        "DISTRIBUTION",
+        "WAREHOUSING",
+        "WHOLESALE"
+      ],
+      "product_ids": [
+        "ALC-IMP-PILSNER",
+        "ALC-IMP-WHEAT",
+        "ALC-IMP-WHISKY",
+        "ALC-IMP-WINE"
+      ],
+      "licenses": [
+        {
+          "license_class": "ALCOHOL_IMPORT_PERMIT",
+          "status": "HELD"
+        },
+        {
+          "license_class": "ALCOHOL_WHOLESALE_PERMIT",
+          "status": "HELD"
+        }
+      ],
+      "sales_channels": [
+        "WHOLESALE_TRADE",
+        "MODERN_RETAIL",
+        "ON_PREMISE"
+      ],
+      "profile_complete": true
+    },
+    {
+      "entity_id": "ALC-IMP-MARKETING",
+      "name": "Temsili Marka Pazarlama Ltd. Şti. (sentetik)",
+      "entity_classes": [
+        "BRAND_OWNER"
+      ],
+      "activity_classes": [
+        "ADVERTISING",
+        "PROMOTION"
+      ],
+      "product_ids": [
+        "ALC-IMP-PILSNER",
+        "ALC-IMP-WHEAT",
+        "ALC-IMP-WHISKY",
+        "ALC-IMP-WINE"
+      ],
+      "licenses": [],
+      "sales_channels": [],
+      "profile_complete": false
+    }
   ],
   "facilities": [
-    {"facility_id": "ALC-IMP-BREWERY", "name": "Bira fabrikası", "entity_id": "ALC-IMP-BREWING", "facility_classes": ["BREWERY"],
-     "activity_classes": ["PRODUCTION", "BOTTLING"], "product_ids": ["ALC-IMP-PILSNER", "ALC-IMP-WHEAT"],
-     "activities_complete": true},
-    {"facility_id": "ALC-IMP-BONDED-WAREHOUSE", "name": "İthal ürün deposu", "entity_id": "ALC-IMP-TRADING",
-     "facility_classes": ["WAREHOUSE"], "activity_classes": ["WAREHOUSING"],
-     "product_ids": ["ALC-IMP-WHISKY", "ALC-IMP-WINE"], "activities_complete": true},
-    {"facility_id": "ALC-IMP-DC", "name": "Dağıtım merkezi", "entity_id": "ALC-IMP-TRADING", "facility_classes": ["DISTRIBUTION_CENTER"],
-     "activity_classes": ["WAREHOUSING", "DISTRIBUTION"],
-     "product_ids": ["ALC-IMP-PILSNER", "ALC-IMP-WHEAT", "ALC-IMP-WHISKY", "ALC-IMP-WINE"], "activities_complete": true}
+    {
+      "facility_id": "ALC-IMP-BREWERY",
+      "name": "Bira fabrikası",
+      "entity_id": "ALC-IMP-BREWING",
+      "facility_classes": [
+        "BREWERY"
+      ],
+      "activity_classes": [
+        "PRODUCTION",
+        "BOTTLING"
+      ],
+      "product_ids": [
+        "ALC-IMP-PILSNER",
+        "ALC-IMP-WHEAT"
+      ],
+      "activities_complete": true
+    },
+    {
+      "facility_id": "ALC-IMP-BONDED-WAREHOUSE",
+      "name": "İthal ürün deposu",
+      "entity_id": "ALC-IMP-TRADING",
+      "facility_classes": [
+        "WAREHOUSE"
+      ],
+      "activity_classes": [
+        "WAREHOUSING"
+      ],
+      "product_ids": [
+        "ALC-IMP-WHISKY",
+        "ALC-IMP-WINE"
+      ],
+      "activities_complete": true
+    },
+    {
+      "facility_id": "ALC-IMP-DC",
+      "name": "Dağıtım merkezi",
+      "entity_id": "ALC-IMP-TRADING",
+      "facility_classes": [
+        "DISTRIBUTION_CENTER"
+      ],
+      "activity_classes": [
+        "WAREHOUSING",
+        "DISTRIBUTION"
+      ],
+      "product_ids": [
+        "ALC-IMP-PILSNER",
+        "ALC-IMP-WHEAT",
+        "ALC-IMP-WHISKY",
+        "ALC-IMP-WINE"
+      ],
+      "activities_complete": true
+    }
   ],
   "products": [
-    {"product_id": "ALC-IMP-PILSNER", "name": "Temsili pilsner bira", "product_class": "BEER",
-     "tags": ["GLASS_PACKAGING", "CAN_PACKAGING"], "tags_complete": true},
-    {"product_id": "ALC-IMP-WHEAT", "name": "Temsili buğday birası", "product_class": "BEER", "tags": ["GLASS_PACKAGING"],
-     "tags_complete": true},
-    {"product_id": "ALC-IMP-WHISKY", "name": "Temsili ithal viski", "product_class": "SPIRIT", "tags": ["GLASS_PACKAGING"],
-     "tags_complete": true},
-    {"product_id": "ALC-IMP-WINE", "name": "Temsili ithal şarap", "product_class": "WINE", "tags": ["GLASS_PACKAGING"],
-     "tags_complete": false}
+    {
+      "product_id": "ALC-IMP-PILSNER",
+      "name": "Temsili pilsner bira",
+      "product_class": "BEER",
+      "tags": [
+        "GLASS_PACKAGING",
+        "CAN_PACKAGING"
+      ],
+      "tags_complete": true,
+      "attributes": {
+        "abv_percent": {
+          "value": 4.8,
+          "status": "STATED"
+        },
+        "export_only": {
+          "value": false,
+          "status": "STATED"
+        }
+      }
+    },
+    {
+      "product_id": "ALC-IMP-WHEAT",
+      "name": "Temsili buğday birası",
+      "product_class": "BEER",
+      "tags": [
+        "GLASS_PACKAGING"
+      ],
+      "tags_complete": true,
+      "attributes": {
+        "abv_percent": {
+          "value": 5.2,
+          "status": "STATED"
+        },
+        "export_only": {
+          "value": false,
+          "status": "STATED"
+        }
+      }
+    },
+    {
+      "product_id": "ALC-IMP-WHISKY",
+      "name": "Temsili ithal viski",
+      "product_class": "SPIRIT",
+      "tags": [
+        "GLASS_PACKAGING"
+      ],
+      "tags_complete": true,
+      "attributes": {
+        "abv_percent": {
+          "value": 40.0,
+          "status": "STATED"
+        },
+        "export_only": {
+          "value": false,
+          "status": "STATED"
+        }
+      }
+    },
+    {
+      "product_id": "ALC-IMP-WINE",
+      "name": "Temsili ithal şarap",
+      "product_class": "WINE",
+      "tags": [
+        "GLASS_PACKAGING"
+      ],
+      "tags_complete": false
+    }
   ],
   "activities": [
-    {"activity_id": "ALC-IMP-ACT-BEER-ADS", "entity_id": "ALC-IMP-MARKETING", "activity_class": "ADVERTISING",
-     "product_ids": ["ALC-IMP-PILSNER"]},
-    {"activity_id": "ALC-IMP-ACT-WINE-PROMO", "entity_id": "ALC-IMP-MARKETING", "activity_class": "PROMOTION",
-     "product_ids": ["ALC-IMP-WINE"], "channels": ["ON_PREMISE"]}
+    {
+      "activity_id": "ALC-IMP-ACT-BEER-ADS",
+      "entity_id": "ALC-IMP-MARKETING",
+      "activity_class": "ADVERTISING",
+      "product_ids": [
+        "ALC-IMP-PILSNER"
+      ]
+    },
+    {
+      "activity_id": "ALC-IMP-ACT-WINE-PROMO",
+      "entity_id": "ALC-IMP-MARKETING",
+      "activity_class": "PROMOTION",
+      "product_ids": [
+        "ALC-IMP-WINE"
+      ],
+      "channels": [
+        "ON_PREMISE"
+      ]
+    }
   ],
   "products_complete": true
 }

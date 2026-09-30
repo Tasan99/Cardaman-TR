@@ -167,13 +167,60 @@ def _fact(values: set, complete: bool, required: list[str]) -> Fact:
     return 'NO' if complete else 'UNKNOWN'
 
 
+_COMPARE = {'gt': lambda a, b: a > b, 'ge': lambda a, b: a >= b, 'lt': lambda a, b: a < b, 'le': lambda a, b: a <= b,
+            'eq': lambda a, b: a == b}
+
+
+def evaluate_predicate(predicate: dict, product) -> Fact:
+    """One clause predicate against one product, in three-valued logic: a fact the profile does not state is UNKNOWN."""
+    fact = predicate.get('fact', '')
+    if fact == 'product.class':
+        return 'YES' if product.product_class in (predicate.get('value') or []) else 'NO'
+    if not fact.startswith('product.'):
+        return 'UNKNOWN'
+    stated = product.attributes.get(fact.split('.', 1)[1])
+    if stated is None or stated.status != 'STATED':
+        return 'UNKNOWN'
+    value, wanted = stated.value, predicate.get('value')
+    if isinstance(wanted, bool) or isinstance(value, bool):
+        return 'YES' if bool(value) == bool(wanted) and predicate.get('op') == 'eq' else 'NO'
+    try:
+        return 'YES' if _COMPARE[predicate['op']](float(value), float(wanted)) else 'NO'
+    except (KeyError, TypeError, ValueError):
+        return 'UNKNOWN'
+
+
 def _product_fact(scope: ObligationScope, product, registry: Registry) -> tuple[Fact, list[str]]:
-    """(fact, codes) for one product against the scope's product dimensions and alcohol category."""
+    """(fact, codes) for one product against the scope's product dimensions, alcohol category, and the conditions and
+    exceptions of an extracted clause. An exception the profile cannot decide leaves the product in scope and says so
+    (EXCEPTION_POSSIBLE); it never removes it."""
     facts, yes, no = [], [], []
     if scope.product_classes:
         fact = 'YES' if product.product_class in scope.product_classes else 'NO'
         facts.append(fact)
         (yes if fact == 'YES' else no).append('PRODUCT_MATCH' if fact == 'YES' else 'PRODUCT_MISMATCH')
+    if scope.excluded_product_classes and product.product_class in scope.excluded_product_classes:
+        facts.append('NO')
+        no.append('PRODUCT_EXCLUDED')
+    for condition in scope.conditions:
+        fact = evaluate_predicate(condition, product)
+        facts.append(fact)
+        if fact == 'YES':
+            yes.append('CONDITION_MET')
+        elif fact == 'NO':
+            no.append('CONDITION_NOT_MET')
+    possible = False
+    for exception in scope.exceptions:
+        if not exception.get('fact'):
+            continue
+        fact = evaluate_predicate(exception, product)
+        if fact == 'YES':
+            facts.append('NO')
+            no.append('EXCEPTION_APPLIES')
+        elif fact == 'UNKNOWN':
+            possible = True
+    if possible:
+        yes.append('EXCEPTION_POSSIBLE')
     if scope.product_attributes:
         fact = _fact(set(product.tags), product.tags_complete, scope.product_attributes)
         facts.append(fact)
@@ -199,7 +246,8 @@ def _product_fact(scope: ObligationScope, product, registry: Registry) -> tuple[
 
 
 def _constrains_products(scope: ObligationScope) -> bool:
-    return bool(scope.product_classes or scope.product_attributes or scope.alcohol_scope != 'ANY')
+    return bool(scope.product_classes or scope.product_attributes or scope.alcohol_scope != 'ANY'
+                or scope.excluded_product_classes or scope.conditions or any(e.get('fact') for e in scope.exceptions))
 
 
 def _decide(scope: ObligationScope, target: _Target, profile: EnterpriseProfile, registry: Registry) -> Decision:
@@ -222,7 +270,7 @@ def _decide(scope: ObligationScope, target: _Target, profile: EnterpriseProfile,
         facts = {fact for fact, _ in readings.values()}
         if matched:
             fact = 'YES'
-            codes = next(codes for f, codes in readings.values() if f == 'YES')
+            codes = list(dict.fromkeys(c for f, cs in readings.values() if f == 'YES' for c in cs))
             partial = len(matched) < len(readings)
         elif 'UNKNOWN' in facts or not target.products_complete:
             fact, codes = 'UNKNOWN', ['PROFILE_INCOMPLETE']
@@ -237,6 +285,13 @@ def _decide(scope: ObligationScope, target: _Target, profile: EnterpriseProfile,
                           matched=matched, products=list(target.products), complete=target.products_complete))
         {'YES': yes, 'NO': no, 'UNKNOWN': unknown}[fact].extend(codes)
 
+    unevaluated = [e for e in scope.exceptions if not e.get('fact')]
+    if unevaluated:
+        # Wording that lifts the duty in circumstances no profile states (a trade fair, a residential area): recorded
+        # for the reviewer with its quote; it never changes the status.
+        gates.append(gate('EXCEPTIONS', 'UNDETERMINED', 'exceptions the profile cannot decide', clear=False,
+                          quotes=[e.get('quote', '') for e in unevaluated]))
+        yes.append('EXCEPTION_NOT_EVALUATED')
     if scope.scope_status == 'UNCLEAR':
         status, reasons = 'UNKNOWN', ['REGULATORY_SCOPE_UNCLEAR']
     elif no:

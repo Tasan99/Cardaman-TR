@@ -87,9 +87,14 @@ class PackSelectionContrastTests(unittest.TestCase):
 class AlcoholAdvertisingContrastTests(unittest.TestCase):
     def test_alcohol_advertising_lands_on_the_alcohol_activities_only(self):
         decisions = targets(INTEGRATED, 'ALC_ADVERTISING_PROMOTION')
+        # v0.2.0 profile: digital marketing and a festival for the lager are reached too; the brand activity that
+        # carries the beer brand onto the alcohol-free beer is reached for the beer only.
         self.assertEqual(status(decisions), {'ALC-INT-ACT-BEER-ADS': 'APPLIES', 'ALC-INT-ACT-SPONSORSHIP': 'APPLIES',
-                                             'ALC-INT-ACT-AF-ADS': 'DOES_NOT_APPLY', 'ALC-INT-ACT-TRADE-PROMO': 'APPLIES'})
+                                             'ALC-INT-ACT-AF-ADS': 'DOES_NOT_APPLY', 'ALC-INT-ACT-TRADE-PROMO': 'APPLIES',
+                                             'ALC-INT-ACT-DIGITAL': 'APPLIES', 'ALC-INT-ACT-AF-BRAND': 'PARTIAL',
+                                             'ALC-INT-ACT-FESTIVAL': 'APPLIES'})
         self.assertEqual(decisions['ALC-INT-ACT-AF-ADS'].reason_codes, ['ALCOHOL_SCOPE_MISMATCH'])
+        self.assertEqual(decisions['ALC-INT-ACT-AF-BRAND'].applies_to_products, ['ALC-INT-LAGER'])
 
     def test_the_alcohol_group_is_partially_in_scope_and_the_non_alcohol_group_not_at_all(self):
         alcohol = rolled(INTEGRATED, 'ALC_ADVERTISING_PROMOTION')
@@ -106,7 +111,8 @@ class AlcoholAdvertisingContrastTests(unittest.TestCase):
     def test_the_general_advertising_rule_still_reaches_the_non_alcohol_advertising(self):
         decisions = targets(BOTTLER, 'COMMERCIAL_ADVERTISING_GENERAL')
         self.assertEqual(status(decisions), {'NONALC-ACT-COLA-ADS': 'APPLIES', 'NONALC-ACT-SPONSORSHIP': 'DOES_NOT_APPLY',
-                                             'NONALC-ACT-ENERGY-ONLINE-ADS': 'APPLIES'})
+                                             'NONALC-ACT-ENERGY-ONLINE-ADS': 'APPLIES', 'NONALC-ACT-ENERGY-CAMPUS': 'DOES_NOT_APPLY',
+                                             'NONALC-ACT-WATER-DIGITAL': 'APPLIES'})
         self.assertEqual(targets(INTEGRATED, 'COMMERCIAL_ADVERTISING_GENERAL')['ALC-INT-ACT-AF-ADS'].status, 'APPLIES')
 
 
@@ -162,8 +168,10 @@ class ProductContrastTests(unittest.TestCase):
 
     def test_the_alcohol_label_rule_covers_alcoholic_products_and_skips_the_alcohol_free_beer(self):
         decisions = targets(INTEGRATED, 'ALC_LABEL_WARNINGS')
+        # Pack metadata knows the topic, not the clause: the export lager is still APPLIES here. The clause-level scope
+        # (test_tr_extraction) reads "ihraç amaçlı üretilenler hariç olmak üzere" and lifts it.
         self.assertEqual(status(decisions), {'ALC-INT-LAGER': 'APPLIES', 'ALC-INT-DARK': 'APPLIES', 'ALC-INT-LOW': 'APPLIES',
-                                             'ALC-INT-AF': 'DOES_NOT_APPLY'})
+                                             'ALC-INT-AF': 'DOES_NOT_APPLY', 'ALC-INT-LAGER-EXPORT': 'APPLIES'})
         self.assertEqual(status(targets(IMPORTER, 'ALC_LABEL_WARNINGS')),
                          {p.product_id: 'APPLIES' for p in IMPORTER.products})
 
@@ -172,7 +180,7 @@ class ProductContrastTests(unittest.TestCase):
             self.assertEqual(set(status(targets(profile, 'FOOD_LABELLING_GENERAL')).values()), {'APPLIES'})
 
     def test_claims_follow_the_product_tags_and_stay_unknown_where_tags_are_incomplete(self):
-        decisions = targets(BOTTLER, 'NUTRITION_HEALTH_CLAIMS')
+        decisions = targets(BOTTLER, 'NUTRITION_CLAIMS')
         self.assertEqual(decisions['NONALC-COLA-ZERO'].status, 'APPLIES')
         self.assertEqual(decisions['NONALC-COLA'].status, 'DOES_NOT_APPLY')
         self.assertEqual(decisions['NONALC-JUICE'].status, 'UNKNOWN')
@@ -182,16 +190,18 @@ class FacilityContrastTests(unittest.TestCase):
     def test_the_food_facility_rule_lands_on_production_plants_not_on_warehouses(self):
         self.assertEqual(status(targets(BOTTLER, 'FOOD_PRODUCTION_FACILITY')),
                          {'NONALC-PLANT-1': 'APPLIES', 'NONALC-PLANT-2': 'APPLIES', 'NONALC-WATER-PLANT': 'APPLIES',
-                          'NONALC-SPRING': 'DOES_NOT_APPLY', 'NONALC-WAREHOUSE': 'DOES_NOT_APPLY', 'NONALC-DC': 'DOES_NOT_APPLY'})
+                          'NONALC-SPRING': 'DOES_NOT_APPLY', 'NONALC-WAREHOUSE': 'DOES_NOT_APPLY', 'NONALC-DC': 'DOES_NOT_APPLY',
+                          'NONALC-LAB': 'DOES_NOT_APPLY'})
         self.assertEqual(status(targets(INTEGRATED, 'FOOD_PRODUCTION_FACILITY')),
                          {'ALC-INT-BREWERY-1': 'APPLIES', 'ALC-INT-BREWERY-2': 'APPLIES', 'ALC-INT-MALTING': 'APPLIES',
-                          'ALC-INT-DC': 'DOES_NOT_APPLY', 'ALC-INT-HQ': 'DOES_NOT_APPLY'})
+                          'ALC-INT-DC': 'DOES_NOT_APPLY', 'ALC-INT-HQ': 'DOES_NOT_APPLY', 'ALC-INT-TAPROOM': 'DOES_NOT_APPLY',
+                          'ALC-INT-LAB': 'DOES_NOT_APPLY'})
 
     def test_the_alcohol_facility_rule_reads_the_brewery_and_what_it_brews(self):
         decisions = targets(INTEGRATED, 'ALC_PRODUCTION_FACILITY')
         self.assertEqual(decisions['ALC-INT-BREWERY-1'].status, 'PARTIAL')
         self.assertEqual(set(decisions['ALC-INT-BREWERY-1'].applies_to_products),
-                         {'ALC-INT-LAGER', 'ALC-INT-DARK', 'ALC-INT-LOW'})
+                         {'ALC-INT-LAGER', 'ALC-INT-DARK', 'ALC-INT-LOW', 'ALC-INT-LAGER-EXPORT'})
         self.assertEqual(decisions['ALC-INT-BREWERY-2'].status, 'APPLIES')
         self.assertEqual(decisions['ALC-INT-MALTING'].status, 'DOES_NOT_APPLY')
         entity = rolled(INTEGRATED, 'ALC_PRODUCTION_FACILITY')
@@ -210,12 +220,28 @@ class UnclearScopeTests(unittest.TestCase):
                 self.assertEqual((decision.status, decision.reason_codes), ('UNKNOWN', ['REGULATORY_SCOPE_UNCLEAR']))
         self.assertEqual(set(status(targets(IMPORTER, 'ALC_SPIRIT_MONOPOLY')).values()), {'UNKNOWN'})
 
-    def test_no_pilot_decision_is_grounded_beyond_pack_metadata_yet(self):
+    def test_a_pack_metadata_decision_cites_the_articles_its_scope_was_read_from(self):
+        # Since the corpus was fetched, a topic-level scope names the articles of the stored text it rests on; the
+        # excise-tax scope, whose lists are annex tables nobody parsed, still names none.
         for profile in PROFILES.values():
             result = resolve(profile, REGISTRY)
             self.assertTrue(result.decisions)
             for decision in result.decisions + result.rollups:
-                self.assertEqual((decision.basis, decision.provision_status), ('PACK_METADATA', 'UNRESOLVED'))
+                self.assertEqual(decision.basis, 'PACK_METADATA')
+                if decision.scope_id == 'EXCISE_TAX_BEVERAGES':
+                    self.assertEqual((decision.provision_status, decision.provision_ref), ('UNRESOLVED', None))
+                else:
+                    self.assertEqual(decision.provision_status, 'RESOLVED', decision.scope_id)
+                    self.assertTrue(decision.provision_ref)
+
+    def test_the_new_product_scopes_separate_the_product_lines(self):
+        soft = status(targets(BOTTLER, 'SOFT_DRINK_PRODUCT'))
+        self.assertEqual((soft['NONALC-COLA'], soft['NONALC-ICED-TEA'], soft['NONALC-ENERGY'], soft['NONALC-WATER']),
+                         ('APPLIES', 'APPLIES', 'DOES_NOT_APPLY', 'DOES_NOT_APPLY'))
+        self.assertEqual(set(status(targets(INTEGRATED, 'BEER_PRODUCT')).values()), {'APPLIES'})
+        recovery = status(targets(BOTTLER, 'RECOVERY_CONTRIBUTION'))
+        self.assertEqual((recovery['NONALC-BOTTLING'], recovery['NONALC-DISTRIBUTION'], recovery['NONALC-SALES']),
+                         ('APPLIES', 'DOES_NOT_APPLY', 'APPLIES'))                             # the sales entity imports
 
 
 class PolicyInheritanceContrastTests(unittest.TestCase):
@@ -233,7 +259,7 @@ class PolicyInheritanceContrastTests(unittest.TestCase):
         production = PolicyScope(policy_id='BREWING-QA', owner_level='LEGAL_ENTITY', entity_id='ALC-INT-BREWING')
         sales = targets(INTEGRATED, 'ALC_SALES_PRESENTATION')
         subject = [k for k, d in sales.items() if d.status in ('APPLIES', 'PARTIAL')]
-        self.assertEqual(subject, ['ALC-INT-DISTRIBUTION'])
+        self.assertEqual(subject, ['ALC-INT-DISTRIBUTION', 'ALC-INT-SALES'])             # v0.2.0: the sales entity sells too
         self.assertEqual(policy_covers(production, INTEGRATED, 'LEGAL_ENTITY', 'ALC-INT-DISTRIBUTION'),
                          {'covers': 'NO', 'reason': 'OTHER_ENTITY_POLICY'})
         self.assertEqual(policy_covers(production, INTEGRATED, 'FACILITY', 'ALC-INT-BREWERY-1'),

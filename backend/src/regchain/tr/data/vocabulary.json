@@ -34,7 +34,9 @@
     "ONLINE_SELLER": "internet üzerinden satıcı",
     "BRAND_OWNER": "marka sahibi",
     "SALES": "satış şirketi",
-    "MARKETING": "pazarlama şirketi"
+    "MARKETING": "pazarlama şirketi",
+    "PACKAGING_PRODUCER": "ambalaj üreticisi",
+    "CONTRACT_SUPPLIER": "fason üretim yapan tedarikçi"
   },
   "activity_classes": {
     "PRODUCTION": "üretim",
@@ -57,7 +59,8 @@
     "ADVERTISING": "reklam",
     "SPONSORSHIP": "sponsorluk",
     "PROMOTION": "promosyon",
-    "PRODUCT_PROMOTION": "ürün tanıtımı"
+    "PRODUCT_PROMOTION": "ürün tanıtımı",
+    "BRAND_USE": "marka, logo ve ayırt edici işaret kullanımı"
   },
   "facility_classes": {
     "BREWERY": "bira üretim tesisi",

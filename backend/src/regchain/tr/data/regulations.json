@@ -296,7 +296,8 @@
           "source_hash": "120006ce15d8fd1514f37fae94704eeb203497180863cf48ca899c046372e39f",
           "previous_version_id": null
         }
-      ]
+      ],
+      "default_level": "PRODUCT"
     },
     {
       "regulation_id": "TR:YONETMELIK:INSANI_TUKETIM_SULAR",
@@ -428,7 +429,8 @@
           "source_hash": "85e33626fdc88a26e2a65603ea7bb176d1e75aec129cd42ee416ce0b968cdc5f",
           "previous_version_id": null
         }
-      ]
+      ],
+      "default_level": "PRODUCT"
     },
     {
       "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
@@ -472,7 +474,8 @@
           "source_hash": "af75cffb8bb3a19093899070897df6b65026b2ed3750210d6adbc28187018793",
           "previous_version_id": null
         }
-      ]
+      ],
+      "default_level": "PRODUCT"
     },
     {
       "regulation_id": "TR:TEBLIG:TGK_MEYVE_SUYU",
@@ -512,7 +515,8 @@
           "source_hash": "1be9140f1fc0a80db128d42e6e047607b13c6d37003aa0d7012c6a0ba42d8288",
           "previous_version_id": null
         }
-      ]
+      ],
+      "default_level": "PRODUCT"
     },
     {
       "regulation_id": "TR:KANUN:5996",
@@ -680,7 +684,8 @@
           "source_hash": "975f2369d7e85c12888d9a6024bcec6a99977d1dc51925190481f3290f036184",
           "previous_version_id": null
         }
-      ]
+      ],
+      "default_level": "PRODUCT"
     },
     {
       "regulation_id": "TR:YONETMELIK:TGK_BESLENME_BEYANLARI",
@@ -717,7 +722,8 @@
           "source_hash": "db22b9ab0c05b5e359c25e12bc8174a2d691ccb7c13ce48a58cd566bb60cb7b4",
           "previous_version_id": null
         }
-      ]
+      ],
+      "default_level": "PRODUCT"
     },
     {
       "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",

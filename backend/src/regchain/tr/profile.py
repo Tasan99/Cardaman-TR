@@ -18,6 +18,7 @@ from pydantic import Field, ValidationError, model_validator
 
 from ..pilot.schema import Company, Strict
 from .core import Vocabulary
+from .facts import alcoholic_from
 
 PILOT_PROFILES = Path(__file__).parent / 'data' / 'pilot_profiles'
 
@@ -236,11 +237,12 @@ ABV_DEPENDENT = frozenset({'LOW_ALCOHOL_BEER', 'MALT_BEVERAGE'})
 
 
 def product_alcohol(product: Product, vocab: Vocabulary) -> str:
-    """ALCOHOLIC, NON_ALCOHOLIC or UNKNOWN. A stated ABV of 0 is non-alcoholic; any stated ABV above 0 is
-    alcoholic. A class that is decided only by ABV, without a stated value, stays UNKNOWN."""
+    """ALCOHOLIC, NON_ALCOHOLIC or UNKNOWN. A stated alcohol strength decides: at or above the threshold the official
+    text names ("hacmen % 0,5 ve daha fazla alkol içeren", facts.alcoholic_from) the product is an alcoholic beverage,
+    below it it is not. A class that is decided only by strength, without a stated value, stays UNKNOWN."""
     abv = product.attributes.get('abv_percent')
-    if abv is not None and abv.status == 'STATED' and isinstance(abv.value, (int, float)):
-        return 'NON_ALCOHOLIC' if float(abv.value) == 0 else 'ALCOHOLIC'
+    if abv is not None and abv.status == 'STATED' and isinstance(abv.value, (int, float)) and not isinstance(abv.value, bool):
+        return 'ALCOHOLIC' if float(abv.value) >= alcoholic_from() else 'NON_ALCOHOLIC'
     if product.product_class in ABV_DEPENDENT:
         return 'UNKNOWN'
     return vocab.alcohol_of(product.product_class)

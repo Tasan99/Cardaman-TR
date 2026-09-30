@@ -1,73 +1,473 @@
 {
   "format": "cardaman-tr-enterprise-profile/1",
   "profile_id": "tr-bev-pilot-alcohol-integrated",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "synthetic": true,
   "representative_type": "ALCOHOL_GROUP_EFES_TYPE",
-  "disclaimer": "Sentetik temsili test profili: entegre bir bira üreticisi grubunun tipik yapısını (malt, birden çok bira fabrikası, dağıtım, alkolsüz bira hattı) örnekler. Gerçek bir şirketin yapısı, ürünü, lisansı veya ticari verisi değildir; yalnızca kapsam yönlendirmesini sınamak içindir.",
+  "disclaimer": "Sentetik temsili test profili: entegre bir bira üreticisi grubunun tipik yapısını (malt, birden çok bira fabrikası, dağıtım, satış, ihracat; standart, düşük alkollü ve alkolsüz bira) örnekler. Gerçek bir şirketin yapısı, ürünü, lisansı, reçetesi veya ticari verisi değildir; alkol dereceleri ve diğer ürün değerleri yalnızca kapsam yönlendirmesini sınamak için seçilmiştir.",
   "jurisdiction": "TR",
-  "group": {"group_id": "GRP-ALC-INT", "name": "Temsili Entegre Bira Grubu (sentetik)"},
+  "group": {
+    "group_id": "GRP-ALC-INT",
+    "name": "Temsili Entegre Bira Grubu (sentetik)"
+  },
   "legal_entities": [
-    {"entity_id": "ALC-INT-HOLDING", "name": "Temsili Bira Holding A.Ş. (sentetik)", "entity_classes": ["HOLDING", "BRAND_OWNER"],
-     "activity_classes": ["ADVERTISING", "SPONSORSHIP"], "product_ids": ["ALC-INT-LAGER", "ALC-INT-DARK", "ALC-INT-AF"],
-     "licenses": [], "sales_channels": [], "profile_complete": true},
-    {"entity_id": "ALC-INT-BREWING", "name": "Temsili Bira Üretim A.Ş. (sentetik)", "entity_classes": ["PRODUCER"],
-     "activity_classes": ["PRODUCTION", "BOTTLING", "PLACING_ON_MARKET", "WAREHOUSING"],
-     "product_ids": ["ALC-INT-LAGER", "ALC-INT-DARK", "ALC-INT-LOW", "ALC-INT-AF"],
-     "licenses": [
-       {"license_class": "ALCOHOL_PRODUCTION_PERMIT", "status": "HELD", "facility_id": "ALC-INT-BREWERY-1"},
-       {"license_class": "ALCOHOL_PRODUCTION_PERMIT", "status": "HELD", "facility_id": "ALC-INT-BREWERY-2"},
-       {"license_class": "FOOD_BUSINESS_APPROVAL", "status": "HELD"},
-       {"license_class": "ENVIRONMENTAL_PERMIT", "status": "HELD"}
-     ],
-     "sales_channels": [], "profile_complete": true},
-    {"entity_id": "ALC-INT-MALT", "name": "Temsili Malt Sanayi A.Ş. (sentetik)", "entity_classes": ["PRODUCER"],
-     "activity_classes": ["PRODUCTION"], "product_ids": [],
-     "licenses": [{"license_class": "FOOD_BUSINESS_REGISTRATION", "status": "HELD"}],
-     "sales_channels": [], "profile_complete": true},
-    {"entity_id": "ALC-INT-DISTRIBUTION", "name": "Temsili Bira Dağıtım ve Pazarlama A.Ş. (sentetik)",
-     "entity_classes": ["DISTRIBUTOR", "WHOLESALER"],
-     "activity_classes": ["DISTRIBUTION", "WAREHOUSING", "WHOLESALE", "PROMOTION"],
-     "product_ids": ["ALC-INT-LAGER", "ALC-INT-DARK", "ALC-INT-LOW", "ALC-INT-AF"],
-     "licenses": [{"license_class": "ALCOHOL_WHOLESALE_PERMIT", "status": "HELD"}],
-     "sales_channels": ["WHOLESALE_TRADE", "TRADITIONAL_RETAIL", "MODERN_RETAIL", "ON_PREMISE"], "profile_complete": true},
-    {"entity_id": "ALC-INT-EXPORT", "name": "Temsili Bira Dış Ticaret A.Ş. (sentetik)", "entity_classes": ["EXPORTER"],
-     "activity_classes": ["EXPORT"], "product_ids": ["ALC-INT-LAGER"],
-     "licenses": [], "sales_channels": ["EXPORT_MARKET"], "profile_complete": false}
+    {
+      "entity_id": "ALC-INT-HOLDING",
+      "name": "Temsili Bira Holding A.Ş. (sentetik)",
+      "entity_classes": [
+        "HOLDING",
+        "BRAND_OWNER",
+        "MARKETING"
+      ],
+      "activity_classes": [
+        "ADVERTISING",
+        "SPONSORSHIP",
+        "BRAND_USE",
+        "DIGITAL_MARKETING",
+        "EVENTS"
+      ],
+      "product_ids": [
+        "ALC-INT-LAGER",
+        "ALC-INT-DARK",
+        "ALC-INT-LOW",
+        "ALC-INT-AF"
+      ],
+      "licenses": [],
+      "sales_channels": [],
+      "profile_complete": true
+    },
+    {
+      "entity_id": "ALC-INT-BREWING",
+      "name": "Temsili Bira Üretim A.Ş. (sentetik)",
+      "entity_classes": [
+        "PRODUCER"
+      ],
+      "activity_classes": [
+        "PRODUCTION",
+        "BREWING",
+        "BOTTLING",
+        "PACKAGING",
+        "PLACING_ON_MARKET",
+        "WAREHOUSING"
+      ],
+      "product_ids": [
+        "ALC-INT-LAGER",
+        "ALC-INT-DARK",
+        "ALC-INT-LOW",
+        "ALC-INT-AF",
+        "ALC-INT-LAGER-EXPORT"
+      ],
+      "licenses": [
+        {
+          "license_class": "ALCOHOL_PRODUCTION_PERMIT",
+          "status": "HELD",
+          "facility_id": "ALC-INT-BREWERY-1"
+        },
+        {
+          "license_class": "ALCOHOL_PRODUCTION_PERMIT",
+          "status": "HELD",
+          "facility_id": "ALC-INT-BREWERY-2"
+        },
+        {
+          "license_class": "FOOD_BUSINESS_APPROVAL",
+          "status": "HELD"
+        },
+        {
+          "license_class": "ENVIRONMENTAL_PERMIT",
+          "status": "HELD"
+        }
+      ],
+      "sales_channels": [],
+      "profile_complete": true
+    },
+    {
+      "entity_id": "ALC-INT-MALT",
+      "name": "Temsili Malt Sanayi A.Ş. (sentetik)",
+      "entity_classes": [
+        "PRODUCER"
+      ],
+      "activity_classes": [
+        "PRODUCTION"
+      ],
+      "product_ids": [],
+      "licenses": [
+        {
+          "license_class": "FOOD_BUSINESS_REGISTRATION",
+          "status": "HELD"
+        }
+      ],
+      "sales_channels": [],
+      "profile_complete": true
+    },
+    {
+      "entity_id": "ALC-INT-DISTRIBUTION",
+      "name": "Temsili Bira Dağıtım ve Pazarlama A.Ş. (sentetik)",
+      "entity_classes": [
+        "DISTRIBUTOR",
+        "WHOLESALER"
+      ],
+      "activity_classes": [
+        "DISTRIBUTION",
+        "WAREHOUSING",
+        "WHOLESALE",
+        "PROMOTION"
+      ],
+      "product_ids": [
+        "ALC-INT-LAGER",
+        "ALC-INT-DARK",
+        "ALC-INT-LOW",
+        "ALC-INT-AF"
+      ],
+      "licenses": [
+        {
+          "license_class": "ALCOHOL_WHOLESALE_PERMIT",
+          "status": "HELD"
+        }
+      ],
+      "sales_channels": [
+        "WHOLESALE_TRADE",
+        "TRADITIONAL_RETAIL",
+        "MODERN_RETAIL",
+        "ON_PREMISE"
+      ],
+      "profile_complete": true
+    },
+    {
+      "entity_id": "ALC-INT-SALES",
+      "name": "Temsili Bira Satış ve Sunum A.Ş. (sentetik)",
+      "entity_classes": [
+        "SALES",
+        "RETAILER",
+        "ON_PREMISE_OPERATOR"
+      ],
+      "activity_classes": [
+        "RETAIL_SALE",
+        "ON_PREMISE_SERVICE",
+        "HORECA_SUPPLY"
+      ],
+      "product_ids": [
+        "ALC-INT-LAGER",
+        "ALC-INT-DARK",
+        "ALC-INT-LOW",
+        "ALC-INT-AF"
+      ],
+      "licenses": [
+        {
+          "license_class": "ALCOHOL_RETAIL_PERMIT",
+          "status": "HELD",
+          "facility_id": "ALC-INT-TAPROOM"
+        }
+      ],
+      "sales_channels": [
+        "ON_PREMISE",
+        "TRADITIONAL_RETAIL"
+      ],
+      "profile_complete": true
+    },
+    {
+      "entity_id": "ALC-INT-EXPORT",
+      "name": "Temsili Bira Dış Ticaret A.Ş. (sentetik)",
+      "entity_classes": [
+        "EXPORTER"
+      ],
+      "activity_classes": [
+        "EXPORT"
+      ],
+      "product_ids": [
+        "ALC-INT-LAGER",
+        "ALC-INT-LAGER-EXPORT"
+      ],
+      "licenses": [],
+      "sales_channels": [
+        "EXPORT_MARKET"
+      ],
+      "profile_complete": false
+    }
   ],
   "facilities": [
-    {"facility_id": "ALC-INT-BREWERY-1", "name": "Bira fabrikası 1", "entity_id": "ALC-INT-BREWING", "facility_classes": ["BREWERY"],
-     "activity_classes": ["PRODUCTION", "BOTTLING"], "product_ids": ["ALC-INT-LAGER", "ALC-INT-DARK", "ALC-INT-LOW", "ALC-INT-AF"],
-     "activities_complete": true},
-    {"facility_id": "ALC-INT-BREWERY-2", "name": "Bira fabrikası 2", "entity_id": "ALC-INT-BREWING", "facility_classes": ["BREWERY"],
-     "activity_classes": ["PRODUCTION", "BOTTLING"], "product_ids": ["ALC-INT-LAGER"], "activities_complete": true},
-    {"facility_id": "ALC-INT-MALTING", "name": "Malt tesisi", "entity_id": "ALC-INT-MALT", "facility_classes": ["MALTING_PLANT"],
-     "activity_classes": ["PRODUCTION"], "product_ids": [], "activities_complete": true},
-    {"facility_id": "ALC-INT-DC", "name": "Bölge dağıtım merkezi", "entity_id": "ALC-INT-DISTRIBUTION",
-     "facility_classes": ["DISTRIBUTION_CENTER"], "activity_classes": ["WAREHOUSING", "DISTRIBUTION"],
-     "product_ids": ["ALC-INT-LAGER", "ALC-INT-DARK", "ALC-INT-LOW", "ALC-INT-AF"], "activities_complete": true},
-    {"facility_id": "ALC-INT-HQ", "name": "Genel merkez", "entity_id": "ALC-INT-HOLDING", "facility_classes": ["HEAD_OFFICE"],
-     "activity_classes": [], "product_ids": [], "activities_complete": true}
+    {
+      "facility_id": "ALC-INT-BREWERY-1",
+      "name": "Bira fabrikası 1",
+      "entity_id": "ALC-INT-BREWING",
+      "facility_classes": [
+        "BREWERY"
+      ],
+      "activity_classes": [
+        "PRODUCTION",
+        "BOTTLING"
+      ],
+      "product_ids": [
+        "ALC-INT-LAGER",
+        "ALC-INT-DARK",
+        "ALC-INT-LOW",
+        "ALC-INT-AF",
+        "ALC-INT-LAGER-EXPORT"
+      ],
+      "activities_complete": true,
+      "city": "İzmir"
+    },
+    {
+      "facility_id": "ALC-INT-BREWERY-2",
+      "name": "Bira fabrikası 2",
+      "entity_id": "ALC-INT-BREWING",
+      "facility_classes": [
+        "BREWERY"
+      ],
+      "activity_classes": [
+        "PRODUCTION",
+        "BOTTLING"
+      ],
+      "product_ids": [
+        "ALC-INT-LAGER"
+      ],
+      "activities_complete": true,
+      "city": "Adana"
+    },
+    {
+      "facility_id": "ALC-INT-MALTING",
+      "name": "Malt tesisi",
+      "entity_id": "ALC-INT-MALT",
+      "facility_classes": [
+        "MALTING_PLANT"
+      ],
+      "activity_classes": [
+        "PRODUCTION"
+      ],
+      "product_ids": [],
+      "activities_complete": true
+    },
+    {
+      "facility_id": "ALC-INT-DC",
+      "name": "Bölge dağıtım merkezi",
+      "entity_id": "ALC-INT-DISTRIBUTION",
+      "facility_classes": [
+        "DISTRIBUTION_CENTER"
+      ],
+      "activity_classes": [
+        "WAREHOUSING",
+        "DISTRIBUTION"
+      ],
+      "product_ids": [
+        "ALC-INT-LAGER",
+        "ALC-INT-DARK",
+        "ALC-INT-LOW",
+        "ALC-INT-AF"
+      ],
+      "activities_complete": true
+    },
+    {
+      "facility_id": "ALC-INT-HQ",
+      "name": "Genel merkez",
+      "entity_id": "ALC-INT-HOLDING",
+      "facility_classes": [
+        "HEAD_OFFICE"
+      ],
+      "activity_classes": [],
+      "product_ids": [],
+      "activities_complete": true
+    },
+    {
+      "facility_id": "ALC-INT-TAPROOM",
+      "name": "Fabrika satış ve tadım noktası",
+      "entity_id": "ALC-INT-SALES",
+      "facility_classes": [
+        "RETAIL_OUTLET"
+      ],
+      "activity_classes": [
+        "RETAIL_SALE",
+        "ON_PREMISE_SERVICE"
+      ],
+      "product_ids": [
+        "ALC-INT-LAGER",
+        "ALC-INT-DARK",
+        "ALC-INT-LOW",
+        "ALC-INT-AF"
+      ],
+      "activities_complete": true,
+      "city": "İzmir"
+    },
+    {
+      "facility_id": "ALC-INT-LAB",
+      "name": "Kalite laboratuvarı",
+      "entity_id": "ALC-INT-BREWING",
+      "facility_classes": [
+        "LABORATORY"
+      ],
+      "activity_classes": [],
+      "product_ids": [],
+      "activities_complete": true,
+      "city": "İzmir"
+    }
   ],
   "products": [
-    {"product_id": "ALC-INT-LAGER", "name": "Temsili lager bira", "product_class": "BEER",
-     "tags": ["GLASS_PACKAGING", "CAN_PACKAGING", "RETURNABLE_PACKAGING"], "tags_complete": true},
-    {"product_id": "ALC-INT-DARK", "name": "Temsili koyu bira", "product_class": "BEER", "tags": ["GLASS_PACKAGING"],
-     "tags_complete": true},
-    {"product_id": "ALC-INT-LOW", "name": "Temsili düşük alkollü bira", "product_class": "LOW_ALCOHOL_BEER",
-     "tags": ["CAN_PACKAGING"], "tags_complete": true, "attributes": {"abv_percent": {"value": 1.2, "status": "STATED"}}},
-    {"product_id": "ALC-INT-AF", "name": "Temsili alkolsüz bira", "product_class": "ALCOHOL_FREE_BEER",
-     "tags": ["CAN_PACKAGING"], "tags_complete": true}
+    {
+      "product_id": "ALC-INT-LAGER",
+      "name": "Temsili lager bira",
+      "product_class": "BEER",
+      "tags": [
+        "GLASS_PACKAGING",
+        "CAN_PACKAGING",
+        "RETURNABLE_PACKAGING"
+      ],
+      "tags_complete": true,
+      "attributes": {
+        "abv_percent": {
+          "value": 5.0,
+          "status": "STATED"
+        },
+        "export_only": {
+          "value": false,
+          "status": "STATED"
+        }
+      }
+    },
+    {
+      "product_id": "ALC-INT-DARK",
+      "name": "Temsili koyu bira",
+      "product_class": "BEER",
+      "tags": [
+        "GLASS_PACKAGING"
+      ],
+      "tags_complete": true,
+      "attributes": {
+        "abv_percent": {
+          "value": 5.5,
+          "status": "STATED"
+        },
+        "export_only": {
+          "value": false,
+          "status": "STATED"
+        }
+      }
+    },
+    {
+      "product_id": "ALC-INT-LOW",
+      "name": "Temsili düşük alkollü bira",
+      "product_class": "LOW_ALCOHOL_BEER",
+      "tags": [
+        "CAN_PACKAGING"
+      ],
+      "tags_complete": true,
+      "attributes": {
+        "abv_percent": {
+          "value": 1.2,
+          "status": "STATED"
+        },
+        "export_only": {
+          "value": false,
+          "status": "STATED"
+        }
+      }
+    },
+    {
+      "product_id": "ALC-INT-AF",
+      "name": "Temsili alkolsüz bira",
+      "product_class": "ALCOHOL_FREE_BEER",
+      "tags": [
+        "CAN_PACKAGING"
+      ],
+      "tags_complete": true,
+      "attributes": {
+        "abv_percent": {
+          "value": 0.3,
+          "status": "STATED"
+        },
+        "export_only": {
+          "value": false,
+          "status": "STATED"
+        },
+        "dealcoholised": {
+          "value": true,
+          "status": "STATED"
+        }
+      }
+    },
+    {
+      "product_id": "ALC-INT-LAGER-EXPORT",
+      "name": "Temsili ihraç lager bira",
+      "product_class": "BEER",
+      "tags": [
+        "CAN_PACKAGING"
+      ],
+      "tags_complete": true,
+      "attributes": {
+        "abv_percent": {
+          "value": 5.0,
+          "status": "STATED"
+        },
+        "export_only": {
+          "value": true,
+          "status": "STATED"
+        }
+      }
+    }
   ],
   "activities": [
-    {"activity_id": "ALC-INT-ACT-BEER-ADS", "entity_id": "ALC-INT-HOLDING", "activity_class": "ADVERTISING",
-     "product_ids": ["ALC-INT-LAGER", "ALC-INT-DARK"]},
-    {"activity_id": "ALC-INT-ACT-SPONSORSHIP", "entity_id": "ALC-INT-HOLDING", "activity_class": "SPONSORSHIP",
-     "product_ids": ["ALC-INT-LAGER"]},
-    {"activity_id": "ALC-INT-ACT-AF-ADS", "entity_id": "ALC-INT-HOLDING", "activity_class": "ADVERTISING",
-     "product_ids": ["ALC-INT-AF"]},
-    {"activity_id": "ALC-INT-ACT-TRADE-PROMO", "entity_id": "ALC-INT-DISTRIBUTION", "activity_class": "PROMOTION",
-     "facility_id": "ALC-INT-DC", "product_ids": ["ALC-INT-LAGER"], "channels": ["ON_PREMISE"]}
+    {
+      "activity_id": "ALC-INT-ACT-BEER-ADS",
+      "entity_id": "ALC-INT-HOLDING",
+      "activity_class": "ADVERTISING",
+      "product_ids": [
+        "ALC-INT-LAGER",
+        "ALC-INT-DARK"
+      ]
+    },
+    {
+      "activity_id": "ALC-INT-ACT-SPONSORSHIP",
+      "entity_id": "ALC-INT-HOLDING",
+      "activity_class": "SPONSORSHIP",
+      "product_ids": [
+        "ALC-INT-LAGER"
+      ]
+    },
+    {
+      "activity_id": "ALC-INT-ACT-AF-ADS",
+      "entity_id": "ALC-INT-HOLDING",
+      "activity_class": "ADVERTISING",
+      "product_ids": [
+        "ALC-INT-AF"
+      ]
+    },
+    {
+      "activity_id": "ALC-INT-ACT-TRADE-PROMO",
+      "entity_id": "ALC-INT-DISTRIBUTION",
+      "activity_class": "PROMOTION",
+      "facility_id": "ALC-INT-DC",
+      "product_ids": [
+        "ALC-INT-LAGER"
+      ],
+      "channels": [
+        "ON_PREMISE"
+      ]
+    },
+    {
+      "activity_id": "ALC-INT-ACT-DIGITAL",
+      "entity_id": "ALC-INT-HOLDING",
+      "activity_class": "DIGITAL_MARKETING",
+      "product_ids": [
+        "ALC-INT-LAGER"
+      ],
+      "channels": [
+        "ONLINE"
+      ]
+    },
+    {
+      "activity_id": "ALC-INT-ACT-AF-BRAND",
+      "entity_id": "ALC-INT-HOLDING",
+      "activity_class": "BRAND_USE",
+      "product_ids": [
+        "ALC-INT-LAGER",
+        "ALC-INT-AF"
+      ]
+    },
+    {
+      "activity_id": "ALC-INT-ACT-FESTIVAL",
+      "entity_id": "ALC-INT-HOLDING",
+      "activity_class": "EVENTS",
+      "product_ids": [
+        "ALC-INT-LAGER"
+      ]
+    }
   ],
   "products_complete": true
 }

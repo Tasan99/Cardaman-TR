@@ -1,117 +1,141 @@
 {
   "format": "cardaman-tr-scopes/1",
-  "note": "Topic-level scopes from pack metadata (origin PACK_METADATA, provision UNRESOLVED): they route a duty to the kind of target it lands on. The article and subclause are attached when the text is ingested and its scope extracted (origin EXTRACTED). A scope whose addressee is not yet read is UNCLEAR and always answers UNKNOWN.",
+  "note": "Topic-level scopes from pack metadata (origin PACK_METADATA): they route a duty to the kind of target it lands on. A provision reference is RESOLVED only where the named articles of the stored official text (data/corpus) were read and carry the topic; tests check that every referenced article exists and is in force. The clause-level reading of those articles (origin EXTRACTED: conditions, exceptions, quotes) is computed from the corpus by regchain.tr.extraction and is not stored here. A scope whose addressee the text leaves open is UNCLEAR and always answers UNKNOWN.",
   "scopes": [
     {
-      "scope_id": "ALC_ADVERTISING_PROMOTION", "regulation_id": "TR:KANUN:4733", "topic": "ALCOHOL_ADVERTISING",
-      "description_tr": "Alkollü içkilerin reklamı, sponsorluğu, promosyonu ve ürün tanıtımına ilişkin kısıtlar.",
-      "level": "ACTIVITY", "provision_ref": null, "provision_status": "UNRESOLVED", "alcohol_scope": "ALCOHOLIC",
-      "activity_classes": ["ADVERTISING", "SPONSORSHIP", "PROMOTION", "PRODUCT_PROMOTION"]
+      "scope_id": "ALC_ADVERTISING_PROMOTION", "regulation_id": "TR:KANUN:4250", "topic": "ALCOHOL_ADVERTISING",
+      "description_tr": "Alkollü içkilerin reklamı, tüketiciye yönelik tanıtımı, kampanya, promosyon, etkinlik ve sponsorluk yasakları; bedelsiz dağıtım yasağı.",
+      "level": "ACTIVITY", "provision_ref": "Kanun 4250 md. 6/f.1; Kanun 4250 md. 6/f.2", "provision_status": "RESOLVED", "alcohol_scope": "ALCOHOLIC",
+      "activity_classes": ["ADVERTISING", "SPONSORSHIP", "PROMOTION", "PRODUCT_PROMOTION", "DIGITAL_MARKETING", "EVENTS", "BRAND_USE"]
     },
     {
       "scope_id": "ALC_SALES_PRESENTATION", "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM", "topic": "ALCOHOL_SALES",
-      "description_tr": "Alkollü içkilerin toptan ve perakende satışı ile sunumu: satış noktası, yaş sınırı ve satış koşulları.",
-      "level": "LEGAL_ENTITY", "provision_ref": null, "provision_status": "UNRESOLVED", "alcohol_scope": "ALCOHOLIC",
+      "description_tr": "Alkollü içkilerin toptan ve perakende satışı ile sunumu: satış belgesi, işyeri koşulları, yaş sınırı ve satış yapılamayacak yerler.",
+      "level": "LEGAL_ENTITY", "provision_ref": "Yönetmelik 14646 md. 5; Yönetmelik 14646 md. 6; Yönetmelik 14646 md. 10", "provision_status": "RESOLVED", "alcohol_scope": "ALCOHOLIC",
       "activity_classes": ["WHOLESALE", "RETAIL_SALE", "ON_PREMISE_SERVICE"]
     },
     {
-      "scope_id": "ALC_ONLINE_SALES", "regulation_id": "TR:KANUN:4733", "topic": "ALCOHOL_ECOMMERCE",
-      "description_tr": "Alkollü içkilerin internet üzerinden satışına ilişkin kısıtlar.",
-      "level": "LEGAL_ENTITY", "provision_ref": null, "provision_status": "UNRESOLVED", "alcohol_scope": "ALCOHOLIC",
+      "scope_id": "ALC_ONLINE_SALES", "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM", "topic": "ALCOHOL_ECOMMERCE",
+      "description_tr": "Alkollü içkilerin bilgi toplumu hizmetleri veya posta ile tüketiciye satışı yasağı ve internet sitelerine ilişkin kısıtlar.",
+      "level": "LEGAL_ENTITY", "provision_ref": "Yönetmelik 14646 md. 11", "provision_status": "RESOLVED", "alcohol_scope": "ALCOHOLIC",
       "activity_classes": ["ECOMMERCE_SALE"]
     },
     {
-      "scope_id": "ALC_PRODUCTION_FACILITY", "regulation_id": "TR:KANUN:4733", "topic": "ALCOHOL_FACILITY_PERMISSION",
-      "description_tr": "Alkollü içki üretim tesislerine ilişkin izin ve tesis yükümlülükleri.",
-      "level": "FACILITY", "provision_ref": null, "provision_status": "UNRESOLVED", "alcohol_scope": "ALCOHOLIC",
+      "scope_id": "ALC_PRODUCTION_FACILITY", "regulation_id": "TR:YONETMELIK:ALKOL_TESIS_TEKNIK_SARTLAR", "topic": "ALCOHOL_FACILITY_PERMISSION",
+      "description_tr": "Alkollü içki üretim tesisleri için tesis kurma izni ve üretim izni.",
+      "level": "FACILITY", "provision_ref": "Yönetmelik 6207 md. 17; Yönetmelik 6207 md. 18", "provision_status": "RESOLVED", "alcohol_scope": "ALCOHOLIC",
       "facility_classes": ["BREWERY", "DISTILLERY", "WINERY"], "activity_classes": ["PRODUCTION"]
     },
     {
-      "scope_id": "ALC_PERMIT_HOLDER_DUTIES", "regulation_id": "TR:KANUN:4733", "topic": "ALCOHOL_LICENCE",
-      "description_tr": "Alkollü içki üretim, ithalat veya toptan satış izni sahiplerinin yükümlülükleri.",
-      "level": "LEGAL_ENTITY", "provision_ref": null, "provision_status": "UNRESOLVED", "alcohol_scope": "ALCOHOLIC",
+      "scope_id": "ALC_PERMIT_HOLDER_DUTIES", "regulation_id": "TR:YONETMELIK:ALKOL_IC_DIS_TICARET", "topic": "ALCOHOL_LICENCE",
+      "description_tr": "Alkollü içki üretici ve ithalatçılarının dağıtım, piyasaya arz ve aylık satış raporu bildirim yükümlülükleri.",
+      "level": "LEGAL_ENTITY", "provision_ref": "Yönetmelik 6203 md. 9; Yönetmelik 6203 md. 15", "provision_status": "RESOLVED", "alcohol_scope": "ALCOHOLIC",
       "license_classes": ["ALCOHOL_PRODUCTION_PERMIT", "ALCOHOL_IMPORT_PERMIT", "ALCOHOL_WHOLESALE_PERMIT"]
     },
     {
-      "scope_id": "ALC_LABEL_WARNINGS", "regulation_id": "TR:KANUN:4733", "topic": "ALCOHOL_LABELLING",
-      "description_tr": "Alkollü içki ambalaj ve etiketlerinde uyarı ve bilgi gereklilikleri.",
-      "level": "PRODUCT", "provision_ref": null, "provision_status": "UNRESOLVED", "alcohol_scope": "ALCOHOLIC"
+      "scope_id": "ALC_LABEL_WARNINGS", "regulation_id": "TR:KANUN:4250", "topic": "ALCOHOL_LABELLING",
+      "description_tr": "Alkollü içki ambalajlarında zararlarını belirten Türkçe uyarı mesajı zorunluluğu.",
+      "level": "PRODUCT", "provision_ref": "Kanun 4250 md. 6/f.8", "provision_status": "RESOLVED", "alcohol_scope": "ALCOHOLIC"
     },
     {
       "scope_id": "ALC_SPIRIT_MONOPOLY", "regulation_id": "TR:KANUN:4250", "topic": "SPIRITS",
-      "description_tr": "İspirto ve ispirtolu içkilere ilişkin hükümler (yürürlükteki kapsam doğrulanacak).",
-      "level": "LEGAL_ENTITY", "provision_ref": null, "provision_status": "UNRESOLVED", "scope_status": "UNCLEAR",
+      "description_tr": "İspirto ve ispirtolu içkilerin üretim ve ithalatına ilişkin kapasite ve teslim koşulları (md. 1 hâlâ Tekel Genel Müdürlüğüne atıf yaptığı için güncel muhatabı metinden okunamıyor).",
+      "level": "LEGAL_ENTITY", "provision_ref": "Kanun 4250 md. 1; Kanun 4250 md. 3", "provision_status": "RESOLVED", "scope_status": "UNCLEAR",
       "alcohol_scope": "ALCOHOLIC", "activity_classes": ["PRODUCTION", "IMPORT"], "product_classes": ["SPIRIT"]
     },
     {
+      "scope_id": "ALC_TOBACCO_ALCOHOL_MARKET_LAW", "regulation_id": "TR:KANUN:4733", "topic": "ALCOHOL_MARKET_SANCTIONS",
+      "description_tr": "4733 sayılı Kanunun alkol piyasasına ilişkin idari yaptırım ve teminat hükümleri (kanunun 6 ncı maddesi tütüne ilişkindir; alkollü içki reklam ve satış kuralları 4250 sayılı Kanunun 6 ncı maddesindedir).",
+      "level": "LEGAL_ENTITY", "provision_ref": "Kanun 4733 md. 8; Kanun 4733 md. 8/A", "provision_status": "RESOLVED", "scope_status": "UNCLEAR",
+      "alcohol_scope": "ALCOHOLIC", "activity_classes": ["PRODUCTION", "IMPORT", "WHOLESALE", "RETAIL_SALE", "ON_PREMISE_SERVICE"]
+    },
+    {
+      "scope_id": "BEER_PRODUCT", "regulation_id": "TR:TEBLIG:TGK_BIRA", "topic": "BEER",
+      "description_tr": "Biranın ürün özellikleri ile ambalajlama, etiketleme ve işaretleme kuralları.",
+      "level": "PRODUCT", "provision_ref": "Tebliğ 10474 md. 5; Tebliğ 10474 md. 12", "provision_status": "RESOLVED",
+      "product_classes": ["BEER", "LOW_ALCOHOL_BEER", "ALCOHOL_FREE_BEER"]
+    },
+    {
       "scope_id": "ENERGY_DRINK_PRODUCT", "regulation_id": "TR:TEBLIG:TGK_ENERJI_ICECEKLERI", "topic": "ENERGY_DRINK",
-      "description_tr": "Enerji içeceklerinin bileşim ve etiket gereklilikleri.",
-      "level": "PRODUCT", "provision_ref": null, "provision_status": "UNRESOLVED", "alcohol_scope": "NON_ALCOHOLIC",
+      "description_tr": "Enerji içeceklerinin bileşim sınırları (kafein, taurin, inositol, glukoronolakton), piyasaya arz ve etiket uyarıları.",
+      "level": "PRODUCT", "provision_ref": "Tebliğ 23706 md. 5; Tebliğ 23706 md. 11; Tebliğ 23706 md. 12", "provision_status": "RESOLVED", "alcohol_scope": "NON_ALCOHOLIC",
       "product_classes": ["ENERGY_DRINK"]
     },
     {
+      "scope_id": "SOFT_DRINK_PRODUCT", "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER", "topic": "SOFT_DRINK",
+      "description_tr": "Kola, meyveli ve aromalı içecek, şurup ve içecek tozlarının ürün özellikleri ve etiket kuralları.",
+      "level": "PRODUCT", "provision_ref": "Tebliğ 11376 md. 5; Tebliğ 11376 md. 11", "provision_status": "RESOLVED", "alcohol_scope": "NON_ALCOHOLIC",
+      "product_classes": ["CARBONATED_SOFT_DRINK", "STILL_SOFT_DRINK", "FRUIT_DRINK", "ICED_TEA", "SYRUP", "CONCENTRATE"]
+    },
+    {
       "scope_id": "PACKAGED_WATER_PRODUCT", "regulation_id": "TR:YONETMELIK:INSANI_TUKETIM_SULAR", "topic": "PACKAGED_WATER",
-      "description_tr": "Ambalajlı içme sularının nitelik ve etiket gereklilikleri.",
-      "level": "PRODUCT", "provision_ref": null, "provision_status": "UNRESOLVED", "alcohol_scope": "NON_ALCOHOLIC",
+      "description_tr": "Ambalajlı içme ve kaynak sularının kalite standartları, kapları ve etiket bilgileri.",
+      "level": "PRODUCT", "provision_ref": "Yönetmelik 7510 md. 7; Yönetmelik 7510 md. 31; Yönetmelik 7510 md. 34", "provision_status": "RESOLVED", "alcohol_scope": "NON_ALCOHOLIC",
       "product_classes": ["PACKAGED_WATER"]
     },
     {
       "scope_id": "WATER_BOTTLING_FACILITY", "regulation_id": "TR:YONETMELIK:INSANI_TUKETIM_SULAR", "topic": "WATER_FACILITY",
-      "description_tr": "Su kaynağı ve su dolum tesislerine ilişkin izin ve tesis yükümlülükleri.",
-      "level": "FACILITY", "provision_ref": null, "provision_status": "UNRESOLVED", "alcohol_scope": "NON_ALCOHOLIC",
+      "description_tr": "Kaynak ve içme suyu tesisleri için izin alma mecburiyeti, tesis ve üretim izni, kaynak koruma alanı ve imlahane koşulları.",
+      "level": "FACILITY", "provision_ref": "Yönetmelik 7510 md. 17; Yönetmelik 7510 md. 23; Yönetmelik 7510 md. 24; Yönetmelik 7510 md. 28", "provision_status": "RESOLVED", "alcohol_scope": "NON_ALCOHOLIC",
       "facility_classes": ["WATER_BOTTLING_PLANT", "WATER_SOURCE"], "activity_classes": ["WATER_EXTRACTION", "BOTTLING"]
     },
     {
       "scope_id": "NATURAL_MINERAL_WATER_PRODUCT", "regulation_id": "TR:YONETMELIK:DOGAL_MINERALLI_SULAR", "topic": "MINERAL_WATER",
-      "description_tr": "Doğal mineralli suların nitelik ve etiket gereklilikleri.",
-      "level": "PRODUCT", "provision_ref": null, "provision_status": "UNRESOLVED", "alcohol_scope": "NON_ALCOHOLIC",
+      "description_tr": "Doğal mineralli suların genel, kimyasal ve mikrobiyolojik özellikleri ile etiket bilgileri.",
+      "level": "PRODUCT", "provision_ref": "Yönetmelik 4821 md. 5; Yönetmelik 4821 md. 6; Yönetmelik 4821 md. 25", "provision_status": "RESOLVED", "alcohol_scope": "NON_ALCOHOLIC",
       "product_classes": ["NATURAL_MINERAL_WATER"]
     },
     {
       "scope_id": "JUICE_NECTAR_PRODUCT", "regulation_id": "TR:TEBLIG:TGK_MEYVE_SUYU", "topic": "JUICE",
-      "description_tr": "Meyve suyu ve nektarların bileşim ve etiket gereklilikleri.",
-      "level": "PRODUCT", "provision_ref": null, "provision_status": "UNRESOLVED", "alcohol_scope": "NON_ALCOHOLIC",
+      "description_tr": "Meyve suyu ve nektarların ürün özellikleri ve etiket kuralları.",
+      "level": "PRODUCT", "provision_ref": "Tebliğ 19949 md. 5; Tebliğ 19949 md. 13", "provision_status": "RESOLVED", "alcohol_scope": "NON_ALCOHOLIC",
       "product_classes": ["JUICE_NECTAR"]
     },
     {
       "scope_id": "FOOD_PRODUCTION_FACILITY", "regulation_id": "TR:YONETMELIK:GIDA_ISLETMELERI_KAYIT_ONAY", "topic": "FOOD_FACILITY",
-      "description_tr": "Gıda üretim ve dolum tesislerinin kayıt / onay yükümlülükleri.",
-      "level": "FACILITY", "provision_ref": null, "provision_status": "UNRESOLVED",
-      "facility_classes": ["BREWERY", "MALTING_PLANT", "DISTILLERY", "WINERY", "BOTTLING_PLANT", "WATER_BOTTLING_PLANT"],
+      "description_tr": "Gıda üretim ve dolum tesislerinin kayıt yükümlülüğü (onaya tabi işletmeler Ek-1'de sayılır; ek tablolar okunmadığı için içecek tesislerinin kayıt mı onay mı gerektirdiği metinden doğrulanmadı).",
+      "level": "FACILITY", "provision_ref": "Yönetmelik 15594 md. 5; Yönetmelik 15594 md. 6", "provision_status": "RESOLVED",
+      "facility_classes": ["BREWERY", "MALTING_PLANT", "DISTILLERY", "WINERY", "BOTTLING_PLANT", "WATER_BOTTLING_PLANT", "MANUFACTURING_PLANT"],
       "activity_classes": ["PRODUCTION", "BOTTLING"]
     },
     {
       "scope_id": "FOOD_LABELLING_GENERAL", "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME", "topic": "FOOD_LABELLING",
-      "description_tr": "Gıda etiketleme ve tüketicinin bilgilendirilmesi genel gereklilikleri.",
-      "level": "PRODUCT", "provision_ref": null, "provision_status": "UNRESOLVED"
+      "description_tr": "Gıda etiketinde bulunması zorunlu bilgiler ve gıda hakkında doğru bilgilendirme.",
+      "level": "PRODUCT", "provision_ref": "Yönetmelik 23282 md. 7; Yönetmelik 23282 md. 9", "provision_status": "RESOLVED"
     },
     {
-      "scope_id": "NUTRITION_HEALTH_CLAIMS", "regulation_id": "TR:YONETMELIK:TGK_BESLENME_BEYANLARI", "topic": "CLAIMS",
-      "description_tr": "Beslenme ve sağlık beyanı taşıyan ürünlere ilişkin gereklilikler.",
-      "level": "PRODUCT", "provision_ref": null, "provision_status": "UNRESOLVED",
-      "product_attributes": ["HEALTH_CLAIM", "NUTRITION_CLAIM"]
+      "scope_id": "NUTRITION_CLAIMS", "regulation_id": "TR:YONETMELIK:TGK_BESLENME_BEYANLARI", "topic": "CLAIMS",
+      "description_tr": "Beslenme beyanı taşıyan ürünlerde beyanın kullanım koşulları (sağlık beyanları bu Yönetmeliğin kapsamında değildir; 2017 tarihli Beslenme ve Sağlık Beyanları Yönetmeliği md. 15 ile yürürlükten kaldırılmıştır).",
+      "level": "PRODUCT", "provision_ref": "Yönetmelik 40154 md. 5; Yönetmelik 40154 md. 7", "provision_status": "RESOLVED",
+      "product_attributes": ["NUTRITION_CLAIM", "ZERO_SUGAR_CLAIM"]
     },
     {
       "scope_id": "PACKAGING_WASTE_PLACING_ON_MARKET", "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI", "topic": "PACKAGING_WASTE",
-      "description_tr": "Ambalajlı ürünü piyasaya sürenlerin ambalaj atığı yükümlülükleri.",
-      "level": "LEGAL_ENTITY", "provision_ref": null, "provision_status": "UNRESOLVED",
+      "description_tr": "Ambalajlı ürünü piyasaya sürenlerin ambalaj, kayıt, işaretleme ve depozito yönetim sistemi yükümlülükleri.",
+      "level": "LEGAL_ENTITY", "provision_ref": "Yönetmelik 38745 md. 10; Yönetmelik 38745 md. 15", "provision_status": "RESOLVED",
+      "activity_classes": ["PRODUCTION", "BOTTLING", "IMPORT", "PLACING_ON_MARKET"]
+    },
+    {
+      "scope_id": "RECOVERY_CONTRIBUTION", "regulation_id": "TR:YONETMELIK:GEKAP", "topic": "PACKAGING_WASTE",
+      "description_tr": "Yurt içinde piyasaya arz edilen ürünler için geri kazanım katılım payı kayıt, beyan ve ödeme yükümlülükleri.",
+      "level": "LEGAL_ENTITY", "provision_ref": "Yönetmelik 34147 md. 8; Yönetmelik 34147 md. 9", "provision_status": "RESOLVED",
       "activity_classes": ["PRODUCTION", "BOTTLING", "IMPORT", "PLACING_ON_MARKET"]
     },
     {
       "scope_id": "COMMERCIAL_ADVERTISING_GENERAL", "regulation_id": "TR:YONETMELIK:TICARI_REKLAM", "topic": "ADVERTISING",
-      "description_tr": "Ticari reklam ve tanıtımın genel ilkeleri.",
-      "level": "ACTIVITY", "provision_ref": null, "provision_status": "UNRESOLVED",
-      "activity_classes": ["ADVERTISING", "PROMOTION", "PRODUCT_PROMOTION"]
+      "description_tr": "Ticari reklamın temel ilkeleri, doğruluk ve dürüstlük, örtülü reklam yasağı, çocuklara yönelik reklamlar.",
+      "level": "ACTIVITY", "provision_ref": "Yönetmelik 20435 md. 5; Yönetmelik 20435 md. 7; Yönetmelik 20435 md. 22; Yönetmelik 20435 md. 24; Yönetmelik 20435 md. 24/A", "provision_status": "RESOLVED",
+      "activity_classes": ["ADVERTISING", "PROMOTION", "PRODUCT_PROMOTION", "DIGITAL_MARKETING"]
     },
     {
       "scope_id": "DISTANCE_SALES", "regulation_id": "TR:YONETMELIK:MESAFELI_SOZLESMELER", "topic": "DISTANCE_SALES",
-      "description_tr": "İnternet üzerinden tüketiciye satışta mesafeli sözleşme yükümlülükleri.",
-      "level": "LEGAL_ENTITY", "provision_ref": null, "provision_status": "UNRESOLVED",
+      "description_tr": "İnternet üzerinden tüketiciye satışta ön bilgilendirme, cayma hakkı ve satıcının yükümlülükleri.",
+      "level": "LEGAL_ENTITY", "provision_ref": "Yönetmelik 20237 md. 5; Yönetmelik 20237 md. 9; Yönetmelik 20237 md. 12", "provision_status": "RESOLVED",
       "activity_classes": ["ECOMMERCE_SALE"]
     },
     {
       "scope_id": "EXCISE_TAX_BEVERAGES", "regulation_id": "TR:KANUN:4760", "topic": "EXCISE_TAX",
-      "description_tr": "Özel tüketim vergisi kapsamındaki içeceklerin üretimi veya ithalatı (kapsam doğrulanacak).",
+      "description_tr": "Özel tüketim vergisi kapsamındaki içeceklerin üretimi veya ithalatı (kapsam, Kanuna ekli listelerdedir; listeler ek tablo olduğu için okunmadı).",
       "level": "LEGAL_ENTITY", "provision_ref": null, "provision_status": "UNRESOLVED", "scope_status": "UNCLEAR",
       "activity_classes": ["PRODUCTION", "IMPORT"]
     }

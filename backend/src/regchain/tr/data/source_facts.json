@@ -1,0 +1,26 @@
+{
+  "format": "cardaman-tr-source-facts/1",
+  "note": "Numeric facts the routing relies on, each with the clause of the stored official text it was read from. tests/test_tr_frames.py checks every quote against the corpus; a fact whose quote is no longer in the head version fails the suite.",
+  "facts": {
+    "alcoholic_beverage_abv_from": {
+      "attribute": "abv_percent", "op": "ge", "value": 0.5,
+      "regulation_id": "TR:YONETMELIK:ALKOL_IC_DIS_TICARET", "provision_ref": "Yönetmelik 6203 md. 4/f.5",
+      "quote": "Alkollü içki: Hacmen % 0,5 ve daha fazla alkol içeren bira, şarap",
+      "also": [{"regulation_id": "TR:YONETMELIK:ALKOL_TESIS_TEKNIK_SARTLAR", "provision_label": "Yönetmelik 6207 md. 4",
+                "quote": "Hacmen % 0,5 ve daha fazla alkol içeren bira, şarap"}],
+      "reading": "A beverage with a stated alcohol strength of 0.5 % vol or more is an alcoholic beverage; below that it is not. A class decided by strength (low-alcohol beer, malt beverage) stays UNKNOWN until the strength is stated."
+    },
+    "label_alcohol_strength_above": {
+      "attribute": "abv_percent", "op": "gt", "value": 1.2,
+      "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME", "provision_ref": "Yönetmelik 23282 md. 9/f.1/b.i",
+      "quote": "Hacmen % 1,2’den fazla alkol içeren içeceklerde hacmen gerçek alkol derecesi.",
+      "reading": "The actual alcoholic strength is a mandatory label particular for beverages above 1.2 % vol."
+    },
+    "energy_drink_caffeine_max_mg_per_l": {
+      "attribute": "caffeine_mg_per_l", "op": "le", "value": 150,
+      "regulation_id": "TR:TEBLIG:TGK_ENERJI_ICECEKLERI", "provision_ref": "Tebliğ 23706 md. 5/f.1/b.b",
+      "quote": "Enerji içeceğinde toplam kafein miktarı 150 mg/L’den fazla olamaz.",
+      "reading": "Total caffeine in an energy drink may not exceed 150 mg/L."
+    }
+  }
+}

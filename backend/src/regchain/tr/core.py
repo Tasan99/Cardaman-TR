@@ -129,6 +129,10 @@ class RegulationMeta(Strict):
     # The Resmî Gazete date and issue the official catalogue records for the text; never typed from memory.
     gazette_date: date | None = None
     gazette_number: str | None = None
+    # The level an impersonal clause of this text lands on when its wording names no addressee: a product standard
+    # (a Türk Gıda Kodeksi communiqué, the labelling regulation) speaks about the product. Pack metadata, flagged on
+    # every scope that relies on it; never used when the clause itself says whom it binds.
+    default_level: Literal['LEGAL_ENTITY', 'FACILITY', 'PRODUCT', 'ACTIVITY'] | None = None
     interprets: list[str] = []
     sector_tags: list[str] = Field(min_length=1)
     entity_tags: list[str] = []
@@ -225,9 +229,26 @@ class ObligationScope(Strict):
     license_classes: list[str] = []
     product_classes: list[str] = []
     product_attributes: list[str] = []
+    # Clause-level narrowing of an EXTRACTED scope (extraction.py); pack metadata leaves them empty.
+    #   excluded_product_classes  classes the clause or the regulation's scope article leaves out ("sporcu içeceklerini kapsamaz")
+    #   conditions                predicates over a product fact the clause states ("hacmen % 1,2’den fazla alkol içeren"),
+    #                             each {'fact', 'op', 'value', 'quote'}; all must hold
+    #   exceptions                predicates that lift the duty ("ihraç amaçlı üretilenler hariç"), each
+    #                             {'fact', 'op', 'value', 'quote', 'effect'}; an exception without a predicate is recorded
+    #                             for the reviewer and never decides
+    excluded_product_classes: list[str] = []
+    conditions: list[dict] = []
+    exceptions: list[dict] = []
+    # The exact wording of the clause in the stored text, and the version it was read from.
+    quote: str = ''
+    version_id: str | None = None
 
     @model_validator(mode='after')
     def _consistent(self):
+        if (self.conditions or self.exceptions or self.excluded_product_classes or self.quote) and self.origin != 'EXTRACTED':
+            raise ValueError(f'{self.scope_id}: conditions, exceptions and quotes belong to an extracted scope')
+        if self.origin == 'EXTRACTED' and not self.quote:
+            raise ValueError(f'{self.scope_id}: an extracted scope quotes its clause')
         if (self.provision_ref is None) != (self.provision_status == 'UNRESOLVED'):
             raise ValueError(f'{self.scope_id}: provision_ref is set exactly when provision_status is RESOLVED')
         allowed = LEVEL_DIMENSIONS[self.level]
