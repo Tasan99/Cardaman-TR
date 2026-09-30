@@ -1,0 +1,2531 @@
+{
+ "title": "Cardaman TR beverage pilots - selective adjudication round, 30 September - 1 October 2026",
+ "claim": "INDICATIVE",
+ "label_status": "DEVELOPMENT",
+ "dataset": "BEVERAGE_TR_DEV_V2 0.4.0",
+ "code": {
+  "frozen_before": "6658175",
+  "frozen_after": "3e36ebf",
+  "head": "ef1693d"
+ },
+ "splits": {
+  "DEV": "fit (rules were corrected against it)",
+  "HOLDOUT": "blind until 6658175; development data since (its errors were used for comparer v2)",
+  "VALIDATION": "unseen: 42 cases on a second register per pilot, written before the held-out results were read; scored once (run 8)"
+ },
+ "clauses": {
+  "DEV": {
+   "OBLIGATION_EXTRACTION/rule": {
+    "n": 289,
+    "accuracy": 1.0,
+    "correct": 289
+   },
+   "ADDRESSEE_MATCH/rule": {
+    "n": 204,
+    "accuracy": 1.0,
+    "correct": 204
+   },
+   "EXCEPTION_DETECTION/rule": {
+    "n": 60,
+    "accuracy": 1.0,
+    "correct": 60
+   },
+   "OBLIGATION_EXTRACTION/model": {
+    "n": 289,
+    "accuracy": 0.7993,
+    "correct": 231
+   }
+  },
+  "HOLDOUT": {
+   "OBLIGATION_EXTRACTION/rule": {
+    "n": 112,
+    "accuracy": 0.9375,
+    "correct": 105
+   },
+   "ADDRESSEE_MATCH/rule": {
+    "n": 61,
+    "accuracy": 0.9016,
+    "correct": 55
+   },
+   "EXCEPTION_DETECTION/rule": {
+    "n": 27,
+    "accuracy": 0.8148,
+    "correct": 22
+   },
+   "OBLIGATION_EXTRACTION/model": {
+    "n": 112,
+    "accuracy": 0.7946,
+    "correct": 89
+   }
+  },
+  "HOLDOUT_before_3e36ebf": {
+   "OBLIGATION_EXTRACTION/rule": "105/112",
+   "ADDRESSEE_MATCH/rule": "55/61",
+   "EXCEPTION_DETECTION/rule": "21/27",
+   "note": "the exemption wording \"gerek yoktur\" (found on a corpus false COVERED) turned one held-out exception label right"
+  }
+ },
+ "coverage_rules_only": {
+  "DEV": {
+   "n": 45,
+   "correct": 36,
+   "accuracy": 0.8,
+   "contradicted_fp": 0,
+   "contradicted_fn": 0,
+   "wrong": [
+    {
+     "case": "COV-12 Kanun 4250 md. 6/f.10 @ ALC-INT-AF",
+     "expected": "PARTIALLY_COVERED",
+     "predicted": "NOT_COVERED",
+     "layer": "VALIDATOR_PIPELINE",
+     "code": "RULE_MISSED_STATEMENT"
+    },
+    {
+     "case": "COV-14 Yönetmelik 14646 md. 6/f.1/b.e @ ALC-INT-SALES",
+     "expected": "COVERED",
+     "predicted": "NOT_COVERED",
+     "layer": "VALIDATOR_PIPELINE",
+     "code": "RULE_MISSED_STATEMENT"
+    },
+    {
+     "case": "COV-16 Yönetmelik 14646 md. 6/f.1/b.f/c.2 @ ALC-INT-SALES",
+     "expected": "COVERED",
+     "predicted": "NOT_COVERED",
+     "layer": "VALIDATOR_PIPELINE",
+     "code": "RULE_MISSED_STATEMENT"
+    },
+    {
+     "case": "COV-18 Yönetmelik 38745 md. 10/f.1/b.b @ ALC-INT-BREWING",
+     "expected": "PARTIALLY_COVERED",
+     "predicted": "NOT_COVERED",
+     "layer": "VALIDATOR_PIPELINE",
+     "code": "RULE_MISSED_STATEMENT"
+    },
+    {
+     "case": "COV-30 Tebliğ 11376 md. 11/f.1/b.h/c.1 @ NONALC-COLA",
+     "expected": "COVERED",
+     "predicted": "PARTIALLY_COVERED",
+     "layer": "VALIDATOR_PIPELINE",
+     "code": "RULE_PARTIAL"
+    },
+    {
+     "case": "COV-40 Yönetmelik 34147 md. 8/f.1/b.b @ NONALC-BOTTLING",
+     "expected": "COVERED",
+     "predicted": "PARTIALLY_COVERED",
+     "layer": "VALIDATOR_PIPELINE",
+     "code": "RULE_PARTIAL"
+    },
+    {
+     "case": "COV-41 Yönetmelik 34147 md. 8/f.1/b.a @ NONALC-BOTTLING",
+     "expected": "COVERED",
+     "predicted": "NOT_COVERED",
+     "layer": "VALIDATOR_PIPELINE",
+     "code": "RULE_MISSED_STATEMENT"
+    },
+    {
+     "case": "COV-43 Yönetmelik 7510 md. 17/f.1 @ NONALC-BOTTLING",
+     "expected": "COVERED",
+     "predicted": "NOT_COVERED",
+     "layer": "VALIDATOR_PIPELINE",
+     "code": "RULE_MISSED_STATEMENT"
+    },
+    {
+     "case": "COV-44 Yönetmelik 20435 md. 24/A/f.1 @ NONALC-ACT-COLA-ADS",
+     "expected": "PARTIALLY_COVERED",
+     "predicted": "NOT_COVERED",
+     "layer": "VALIDATOR_PIPELINE",
+     "code": "RULE_MISSED_STATEMENT"
+    }
+   ]
+  },
+  "HOLDOUT": {
+   "n": 28,
+   "correct": 18,
+   "accuracy": 0.6429,
+   "contradicted_fp": 0,
+   "contradicted_fn": 2,
+   "wrong": [
+    {
+     "case": "COVH-06 Kanun 4250 md. 6/f.8/c.1 @ ALC-IMP-PILSNER",
+     "expected": "COVERED",
+     "predicted": "NOT_COVERED",
+     "layer": "VALIDATOR_PIPELINE",
+     "code": "RULE_MISSED_STATEMENT"
+    },
+    {
+     "case": "COVH-15 Yönetmelik 6203 md. 9/f.3 @ ALC-IMP-TRADING",
+     "expected": "COVERED",
+     "predicted": "NOT_COVERED",
+     "layer": "VALIDATOR_PIPELINE",
+     "code": "RULE_MISSED_STATEMENT"
+    },
+    {
+     "case": "COVH-16 Yönetmelik 6203 md. 15/f.2 @ ALC-IMP-TRADING",
+     "expected": "CONTRADICTED",
+     "predicted": "NOT_COVERED",
+     "layer": "VALIDATOR_PIPELINE",
+     "code": "RULE_MISSED_STATEMENT"
+    },
+    {
+     "case": "COVH-17 Yönetmelik 6203 md. 9/f.2 @ ALC-IMP-TRADING",
+     "expected": "COVERED",
+     "predicted": "NOT_COVERED",
+     "layer": "VALIDATOR_PIPELINE",
+     "code": "RULE_MISSED_STATEMENT"
+    },
+    {
+     "case": "COVH-19 Yönetmelik 14646 md. 22/f.2/c.1 @ ALC-IMP-TRADING",
+     "expected": "COVERED",
+     "predicted": "NOT_COVERED",
+     "layer": "VALIDATOR_PIPELINE",
+     "code": "RULE_MISSED_STATEMENT"
+    },
+    {
+     "case": "COVH-20 Yönetmelik 14646 md. 22/f.5/b.b/c.1 @ ALC-IMP-TRADING",
+     "expected": "CONTRADICTED",
+     "predicted": "NOT_COVERED",
+     "layer": "VALIDATOR_PIPELINE",
+     "code": "RULE_MISSED_STATEMENT"
+    },
+    {
+     "case": "COVH-21 Yönetmelik 14646 md. 22/f.4/c.2 @ ALC-IMP-TRADING",
+     "expected": "COVERED",
+     "predicted": "NOT_COVERED",
+     "layer": "VALIDATOR_PIPELINE",
+     "code": "RULE_MISSED_STATEMENT"
+    },
+    {
+     "case": "COVH-24 Yönetmelik 38745 md. 10/f.1/b.ç @ ALC-IMP-BREWING",
+     "expected": "PARTIALLY_COVERED",
+     "predicted": "NOT_COVERED",
+     "layer": "VALIDATOR_PIPELINE",
+     "code": "RULE_MISSED_STATEMENT"
+    },
+    {
+     "case": "COVH-26 Yönetmelik 34147 md. 8/f.1/b.b @ ALC-IMP-TRADING",
+     "expected": "COVERED",
+     "predicted": "NOT_COVERED",
+     "layer": "VALIDATOR_PIPELINE",
+     "code": "RULE_MISSED_STATEMENT"
+    },
+    {
+     "case": "COVH-27 Yönetmelik 34147 md. 8/f.1/b.c @ ALC-IMP-BREWING",
+     "expected": "COVERED",
+     "predicted": "NOT_COVERED",
+     "layer": "VALIDATOR_PIPELINE",
+     "code": "RULE_MISSED_STATEMENT"
+    }
+   ]
+  },
+  "VALIDATION": {
+   "n": 42,
+   "correct": 18,
+   "accuracy": 0.4286,
+   "contradicted_fp": 1,
+   "contradicted_fn": 3,
+   "wrong": [
+    {
+     "case": "COVV-01 Tebliğ 11376 md. 5/f.1/b.d @ NONALC-COLA",
+     "expected": "COVERED",
+     "predicted": "NOT_COVERED",
+     "layer": "VALIDATOR_PIPELINE",
+     "code": "RULE_MISSED_STATEMENT"
+    },
+    {
+     "case": "COVV-03 Tebliğ 11376 md. 5/f.1/b.b @ NONALC-ICED-TEA",
+     "expected": "PARTIALLY_COVERED",
+     "predicted": "NOT_COVERED",
+     "layer": "VALIDATOR_PIPELINE",
+     "code": "RULE_MISSED_STATEMENT"
+    },
+    {
+     "case": "COVV-07 Tebliğ 23706 md. 5/f.1/b.e @ NONALC-ENERGY-MAX",
+     "expected": "CONTRADICTED",
+     "predicted": "NOT_COVERED",
+     "layer": "VALIDATOR_PIPELINE",
+     "code": "RULE_MISSED_STATEMENT"
+    },
+    {
+     "case": "COVV-08 Yönetmelik 40154 md. 5/f.2/b.c @ NONALC-COLA",
+     "expected": "COVERED",
+     "predicted": "NOT_COVERED",
+     "layer": "VALIDATOR_PIPELINE",
+     "code": "RULE_MISSED_STATEMENT"
+    },
+    {
+     "case": "COVV-09 Yönetmelik 40154 md. 5/f.2/b.a @ NONALC-JUICE",
+     "expected": "PARTIALLY_COVERED",
+     "predicted": "NOT_COVERED",
+     "layer": "VALIDATOR_PIPELINE",
+     "code": "RULE_MISSED_STATEMENT"
+    },
+    {
+     "case": "COVV-11 Yönetmelik 23282 md. 7/f.1/b.b @ NONALC-WATER",
+     "expected": "COVERED",
+     "predicted": "NOT_COVERED",
+     "layer": "VALIDATOR_PIPELINE",
+     "code": "RULE_MISSED_STATEMENT"
+    },
+    {
+     "case": "COVV-13 Kanun 6502 md. 9/f.1 @ NONALC-ONLINE",
+     "expected": "COVERED",
+     "predicted": "NOT_COVERED",
+     "layer": "VALIDATOR_PIPELINE",
+     "code": "RULE_MISSED_STATEMENT"
+    },
+    {
+     "case": "COVV-15 Yönetmelik 38745 md. 5/f.2/c.1 @ NONALC-BOTTLING",
+     "expected": "PARTIALLY_COVERED",
+     "predicted": "NOT_COVERED",
+     "layer": "VALIDATOR_PIPELINE",
+     "code": "RULE_MISSED_STATEMENT"
+    },
+    {
+     "case": "COVV-16 Yönetmelik 15594 md. 6/f.5 @ NONALC-BOTTLING",
+     "expected": "CONTRADICTED",
+     "predicted": "NOT_COVERED",
+     "layer": "VALIDATOR_PIPELINE",
+     "code": "RULE_MISSED_STATEMENT"
+    },
+    {
+     "case": "COVV-19 Yönetmelik 7510 md. 16/f.1/b.c @ NONALC-WATER",
+     "expected": "COVERED",
+     "predicted": "NOT_COVERED",
+     "layer": "VALIDATOR_PIPELINE",
+     "code": "RULE_MISSED_STATEMENT"
+    },
+    {
+     "case": "COVV-20 Yönetmelik 20237 md. 5/f.1/b.g @ NONALC-ONLINE",
+     "expected": "PARTIALLY_COVERED",
+     "predicted": "NOT_COVERED",
+     "layer": "VALIDATOR_PIPELINE",
+     "code": "RULE_MISSED_STATEMENT"
+    },
+    {
+     "case": "COVV-23 Yönetmelik 20435 md. 5/f.1/b.g @ NONALC-BRAND",
+     "expected": "PARTIALLY_COVERED",
+     "predicted": "NOT_COVERED",
+     "layer": "VALIDATOR_PIPELINE",
+     "code": "RULE_MISSED_STATEMENT"
+    },
+    {
+     "case": "COVV-24 Yönetmelik 14646 md. 20/f.5 @ ALC-INT-ACT-TRADE-PROMO",
+     "expected": "CONTRADICTED",
+     "predicted": "NOT_COVERED",
+     "layer": "VALIDATOR_PIPELINE",
+     "code": "RULE_MISSED_STATEMENT"
+    },
+    {
+     "case": "COVV-25 Yönetmelik 14646 md. 20/f.3/c.2 @ ALC-INT-ACT-BEER-ADS",
+     "expected": "COVERED",
+     "predicted": "NOT_COVERED",
+     "layer": "VALIDATOR_PIPELINE",
+     "code": "RULE_MISSED_STATEMENT"
+    },
+    {
+     "case": "COVV-28 Tebliğ 10474 md. 5/f.1/b.ç/c.1 @ ALC-INT-LAGER",
+     "expected": "PARTIALLY_COVERED",
+     "predicted": "CONTRADICTED",
+     "layer": "VALIDATOR_PIPELINE",
+     "code": "RULE_FALSE_CONFLICT"
+    },
+    {
+     "case": "COVV-29 Tebliğ 10474 md. 5/f.1/b.e @ ALC-INT-LOW",
+     "expected": "COVERED",
+     "predicted": "NOT_COVERED",
+     "layer": "VALIDATOR_PIPELINE",
+     "code": "RULE_MISSED_STATEMENT"
+    },
+    {
+     "case": "COVV-31 Yönetmelik 6207 md. 10/f.1 @ ALC-INT-LAGER",
+     "expected": "COVERED",
+     "predicted": "NOT_COVERED",
+     "layer": "VALIDATOR_PIPELINE",
+     "code": "RULE_MISSED_STATEMENT"
+    },
+    {
+     "case": "COVV-32 Yönetmelik 6207 md. 11/f.1 @ ALC-INT-DARK",
+     "expected": "PARTIALLY_COVERED",
+     "predicted": "NOT_COVERED",
+     "layer": "VALIDATOR_PIPELINE",
+     "code": "RULE_MISSED_STATEMENT"
+    },
+    {
+     "case": "COVV-34 Yönetmelik 6203 md. 5/f.2 @ ALC-INT-EXPORT",
+     "expected": "COVERED",
+     "predicted": "PARTIALLY_COVERED",
+     "layer": "VALIDATOR_PIPELINE",
+     "code": "RULE_PARTIAL"
+    },
+    {
+     "case": "COVV-35 Kanun 6502 md. 10/f.3/c.1 @ ALC-INT-SALES",
+     "expected": "COVERED",
+     "predicted": "NOT_COVERED",
+     "layer": "VALIDATOR_PIPELINE",
+     "code": "RULE_MISSED_STATEMENT"
+    },
+    {
+     "case": "COVV-36 Kanun 6502 md. 6/f.1 @ ALC-INT-SALES",
+     "expected": "COVERED",
+     "predicted": "NOT_COVERED",
+     "layer": "VALIDATOR_PIPELINE",
+     "code": "RULE_MISSED_STATEMENT"
+    },
+    {
+     "case": "COVV-38 Yönetmelik 15594 md. 6/f.5 @ ALC-INT-BREWING",
+     "expected": "COVERED",
+     "predicted": "NOT_COVERED",
+     "layer": "VALIDATOR_PIPELINE",
+     "code": "RULE_MISSED_STATEMENT"
+    },
+    {
+     "case": "COVV-39 Yönetmelik 15592 md. 6/f.1/b.ç @ ALC-INT-BREWING",
+     "expected": "COVERED",
+     "predicted": "NOT_COVERED",
+     "layer": "VALIDATOR_PIPELINE",
+     "code": "RULE_MISSED_STATEMENT"
+    },
+    {
+     "case": "COVV-41 Yönetmelik 40154 md. 5/f.2/b.c @ ALC-INT-AF",
+     "expected": "COVERED",
+     "predicted": "PARTIALLY_COVERED",
+     "layer": "VALIDATOR_PIPELINE",
+     "code": "RULE_PARTIAL"
+    }
+   ]
+  },
+  "before_3e36ebf": {
+   "DEV": "33/45",
+   "HOLDOUT": "10/28"
+  }
+ },
+ "pipeline_holdout_frozen_6658175": {
+  "adjudicate-holdout-quick": {
+   "n": 28,
+   "rules_only_correct": 10,
+   "rules_only_accuracy": 0.3571,
+   "auto_decided": 18,
+   "auto_correct": 10,
+   "auto_wrong": 8,
+   "auto_accuracy": 0.5556,
+   "strict_accuracy": 0.3571,
+   "auto_false_covered": 0,
+   "auto_false_contradicted": 0,
+   "auto_overclaimed": 0,
+   "auto_missed_contradictions": 0,
+   "review_required": 10,
+   "review_rate": 0.3571,
+   "review_cases_the_rules_had_wrong": 10,
+   "review_cases_the_rules_had_right": 0,
+   "adjudicated": 11,
+   "model_answers": 11,
+   "model_correct": 10,
+   "model_accuracy": 0.9091,
+   "model_false_covered": 0,
+   "model_false_contradicted": 0,
+   "model_no_usable_answer": 0,
+   "calls_failed": 0,
+   "calls_without_thinking": 0,
+   "escalated": 11,
+   "escalation_rate": 0.3929,
+   "rule_errors": 18,
+   "rule_errors_escalated": 11,
+   "rule_errors_not_escalated": 7,
+   "contradictions_labelled": 3,
+   "unknown_labelled": 0,
+   "model_ms": 41540,
+   "model_ms_per_case": 1483.6,
+   "model_ms_per_adjudicated_case": 3776.4,
+   "model_ms_max": 8185,
+   "calls": 10,
+   "elapsed_s": 45.1
+  },
+  "adjudicate-holdout": {
+   "n": 28,
+   "rules_only_correct": 10,
+   "rules_only_accuracy": 0.3571,
+   "auto_decided": 23,
+   "auto_correct": 11,
+   "auto_wrong": 12,
+   "auto_accuracy": 0.4783,
+   "strict_accuracy": 0.3929,
+   "auto_false_covered": 0,
+   "auto_false_contradicted": 0,
+   "auto_overclaimed": 0,
+   "auto_missed_contradictions": 0,
+   "review_required": 5,
+   "review_rate": 0.1786,
+   "review_cases_the_rules_had_wrong": 5,
+   "review_cases_the_rules_had_right": 0,
+   "adjudicated": 11,
+   "model_answers": 11,
+   "model_correct": 6,
+   "model_accuracy": 0.5455,
+   "model_false_covered": 0,
+   "model_false_contradicted": 0,
+   "model_no_usable_answer": 0,
+   "calls_failed": 0,
+   "calls_without_thinking": 0,
+   "escalated": 11,
+   "escalation_rate": 0.3929,
+   "rule_errors": 18,
+   "rule_errors_escalated": 11,
+   "rule_errors_not_escalated": 7,
+   "contradictions_labelled": 3,
+   "unknown_labelled": 0,
+   "model_ms": 274213,
+   "model_ms_per_case": 9793.3,
+   "model_ms_per_adjudicated_case": 24928.5,
+   "model_ms_max": 58708,
+   "calls": 10,
+   "elapsed_s": 265.2
+  }
+ },
+ "clause_pipeline_holdout_frozen_6658175": {
+  "clause-holdout-quick": {
+   "n": 112,
+   "deterministic_accuracy": 0.9375,
+   "escalated": 28,
+   "escalation_rate": 0.25,
+   "adjudicated": 28,
+   "by_reason": {
+    "CROSS_REFERENCE": 2,
+    "MULTIPLE_ACTORS": 12,
+    "NESTED_EXCEPTION": 8,
+    "READER_DISAGREEMENT": 5,
+    "UNCLEAR_ADDRESSEE": 5
+   },
+   "deterministic_accuracy_on_escalated": 0.9643,
+   "model_accuracy_on_adjudicated": 0.8571,
+   "rule_errors": 7,
+   "rule_errors_escalated": 1,
+   "rule_errors_flagged": 1,
+   "review_required": 5,
+   "review_rate": 0.0446,
+   "review_precision": 0.2,
+   "wrong_not_flagged": 6,
+   "model_ms": 69944,
+   "model_ms_per_clause": 624.5,
+   "calls": 27,
+   "elapsed_s": 70.3
+  },
+  "clause-holdout": {
+   "n": 112,
+   "deterministic_accuracy": 0.9375,
+   "escalated": 28,
+   "escalation_rate": 0.25,
+   "adjudicated": 28,
+   "by_reason": {
+    "CROSS_REFERENCE": 2,
+    "MULTIPLE_ACTORS": 12,
+    "NESTED_EXCEPTION": 8,
+    "READER_DISAGREEMENT": 5,
+    "UNCLEAR_ADDRESSEE": 5
+   },
+   "deterministic_accuracy_on_escalated": 0.9643,
+   "model_accuracy_on_adjudicated": 1.0,
+   "rule_errors": 7,
+   "rule_errors_escalated": 1,
+   "rule_errors_flagged": 1,
+   "review_required": 1,
+   "review_rate": 0.0089,
+   "review_precision": 1.0,
+   "wrong_not_flagged": 6,
+   "model_ms": 409813,
+   "model_ms_per_clause": 3659.0,
+   "calls": 27,
+   "elapsed_s": 402.3
+  }
+ },
+ "pipeline_final_3e36ebf": {
+  "adjudicate-validation": {
+   "n": 42,
+   "rules_only_correct": 19,
+   "rules_only_accuracy": 0.4524,
+   "auto_decided": 31,
+   "auto_correct": 25,
+   "auto_wrong": 6,
+   "auto_accuracy": 0.8065,
+   "strict_accuracy": 0.5952,
+   "auto_false_covered": 0,
+   "auto_false_contradicted": 1,
+   "auto_overclaimed": 0,
+   "auto_missed_contradictions": 1,
+   "review_required": 11,
+   "review_rate": 0.2619,
+   "review_cases_the_rules_had_wrong": 10,
+   "review_cases_the_rules_had_right": 1,
+   "adjudicated": 22,
+   "model_answers": 21,
+   "model_correct": 18,
+   "model_accuracy": 0.8571,
+   "model_false_covered": 0,
+   "model_false_contradicted": 1,
+   "model_no_usable_answer": 1,
+   "calls_failed": 0,
+   "calls_without_thinking": 0,
+   "escalated": 22,
+   "escalation_rate": 0.5238,
+   "rule_errors": 23,
+   "rule_errors_escalated": 19,
+   "rule_errors_not_escalated": 4,
+   "contradictions_labelled": 6,
+   "unknown_labelled": 0,
+   "model_ms": 394607,
+   "model_ms_per_case": 9395.4,
+   "model_ms_per_adjudicated_case": 17936.7,
+   "model_ms_max": 52908,
+   "calls": 22,
+   "elapsed_s": 399.3
+  },
+  "adjudicate-validation-quick": {
+   "n": 42,
+   "rules_only_correct": 19,
+   "rules_only_accuracy": 0.4524,
+   "auto_decided": 22,
+   "auto_correct": 18,
+   "auto_wrong": 4,
+   "auto_accuracy": 0.8182,
+   "strict_accuracy": 0.4286,
+   "auto_false_covered": 0,
+   "auto_false_contradicted": 1,
+   "auto_overclaimed": 0,
+   "auto_missed_contradictions": 1,
+   "review_required": 20,
+   "review_rate": 0.4762,
+   "review_cases_the_rules_had_wrong": 19,
+   "review_cases_the_rules_had_right": 1,
+   "adjudicated": 22,
+   "model_answers": 22,
+   "model_correct": 16,
+   "model_accuracy": 0.7273,
+   "model_false_covered": 6,
+   "model_false_contradicted": 0,
+   "model_no_usable_answer": 0,
+   "calls_failed": 0,
+   "calls_without_thinking": 0,
+   "escalated": 22,
+   "escalation_rate": 0.5238,
+   "rule_errors": 23,
+   "rule_errors_escalated": 19,
+   "rule_errors_not_escalated": 4,
+   "contradictions_labelled": 6,
+   "unknown_labelled": 0,
+   "model_ms": 70386,
+   "model_ms_per_case": 1675.9,
+   "model_ms_per_adjudicated_case": 3199.4,
+   "model_ms_max": 5891,
+   "calls": 22,
+   "elapsed_s": 75.2
+  },
+  "adjudicate-dev": {
+   "n": 45,
+   "rules_only_correct": 36,
+   "rules_only_accuracy": 0.8,
+   "auto_decided": 40,
+   "auto_correct": 36,
+   "auto_wrong": 4,
+   "auto_accuracy": 0.9,
+   "strict_accuracy": 0.8,
+   "auto_false_covered": 0,
+   "auto_false_contradicted": 0,
+   "auto_overclaimed": 0,
+   "auto_missed_contradictions": 0,
+   "review_required": 5,
+   "review_rate": 0.1111,
+   "review_cases_the_rules_had_wrong": 2,
+   "review_cases_the_rules_had_right": 3,
+   "adjudicated": 18,
+   "model_answers": 18,
+   "model_correct": 9,
+   "model_accuracy": 0.5,
+   "model_false_covered": 2,
+   "model_false_contradicted": 3,
+   "model_no_usable_answer": 0,
+   "calls_failed": 0,
+   "calls_without_thinking": 3,
+   "escalated": 18,
+   "escalation_rate": 0.4,
+   "rule_errors": 9,
+   "rule_errors_escalated": 9,
+   "rule_errors_not_escalated": 0,
+   "contradictions_labelled": 5,
+   "unknown_labelled": 0,
+   "model_ms": 889601,
+   "model_ms_per_case": 19768.9,
+   "model_ms_per_adjudicated_case": 49422.3,
+   "model_ms_max": 119082,
+   "calls": 17,
+   "elapsed_s": 856.3
+  },
+  "adjudicate-holdout": {
+   "n": 28,
+   "rules_only_correct": 19,
+   "rules_only_accuracy": 0.6786,
+   "auto_decided": 23,
+   "auto_correct": 20,
+   "auto_wrong": 3,
+   "auto_accuracy": 0.8696,
+   "strict_accuracy": 0.7143,
+   "auto_false_covered": 0,
+   "auto_false_contradicted": 0,
+   "auto_overclaimed": 1,
+   "auto_missed_contradictions": 0,
+   "review_required": 5,
+   "review_rate": 0.1786,
+   "review_cases_the_rules_had_wrong": 5,
+   "review_cases_the_rules_had_right": 0,
+   "adjudicated": 13,
+   "model_answers": 13,
+   "model_correct": 10,
+   "model_accuracy": 0.7692,
+   "model_false_covered": 0,
+   "model_false_contradicted": 0,
+   "model_no_usable_answer": 0,
+   "calls_failed": 0,
+   "calls_without_thinking": 1,
+   "escalated": 13,
+   "escalation_rate": 0.4643,
+   "rule_errors": 9,
+   "rule_errors_escalated": 9,
+   "rule_errors_not_escalated": 0,
+   "contradictions_labelled": 3,
+   "unknown_labelled": 0,
+   "model_ms": 491584,
+   "model_ms_per_case": 17556.6,
+   "model_ms_per_adjudicated_case": 37814.2,
+   "model_ms_max": 129472,
+   "calls": 13,
+   "elapsed_s": 497.9
+  },
+  "adjudicate-dev-quick": {
+   "n": 45,
+   "rules_only_correct": 36,
+   "rules_only_accuracy": 0.8,
+   "auto_decided": 29,
+   "auto_correct": 27,
+   "auto_wrong": 2,
+   "auto_accuracy": 0.931,
+   "strict_accuracy": 0.6,
+   "auto_false_covered": 0,
+   "auto_false_contradicted": 0,
+   "auto_overclaimed": 0,
+   "auto_missed_contradictions": 0,
+   "review_required": 16,
+   "review_rate": 0.3556,
+   "review_cases_the_rules_had_wrong": 7,
+   "review_cases_the_rules_had_right": 9,
+   "adjudicated": 18,
+   "model_answers": 18,
+   "model_correct": 4,
+   "model_accuracy": 0.2222,
+   "model_false_covered": 2,
+   "model_false_contradicted": 10,
+   "model_no_usable_answer": 0,
+   "calls_failed": 0,
+   "calls_without_thinking": 0,
+   "escalated": 18,
+   "escalation_rate": 0.4,
+   "rule_errors": 9,
+   "rule_errors_escalated": 9,
+   "rule_errors_not_escalated": 0,
+   "contradictions_labelled": 5,
+   "unknown_labelled": 0,
+   "model_ms": 195581,
+   "model_ms_per_case": 4346.2,
+   "model_ms_per_adjudicated_case": 10865.6,
+   "model_ms_max": 25190,
+   "calls": 17,
+   "elapsed_s": 194.5
+  },
+  "adjudicate-holdout-quick": {
+   "n": 28,
+   "rules_only_correct": 19,
+   "rules_only_accuracy": 0.6786,
+   "auto_decided": 20,
+   "auto_correct": 17,
+   "auto_wrong": 3,
+   "auto_accuracy": 0.85,
+   "strict_accuracy": 0.6071,
+   "auto_false_covered": 0,
+   "auto_false_contradicted": 0,
+   "auto_overclaimed": 0,
+   "auto_missed_contradictions": 0,
+   "review_required": 8,
+   "review_rate": 0.2857,
+   "review_cases_the_rules_had_wrong": 6,
+   "review_cases_the_rules_had_right": 2,
+   "adjudicated": 13,
+   "model_answers": 13,
+   "model_correct": 8,
+   "model_accuracy": 0.6154,
+   "model_false_covered": 1,
+   "model_false_contradicted": 1,
+   "model_no_usable_answer": 0,
+   "calls_failed": 0,
+   "calls_without_thinking": 0,
+   "escalated": 13,
+   "escalation_rate": 0.4643,
+   "rule_errors": 9,
+   "rule_errors_escalated": 9,
+   "rule_errors_not_escalated": 0,
+   "contradictions_labelled": 3,
+   "unknown_labelled": 0,
+   "model_ms": 103778,
+   "model_ms_per_case": 3706.4,
+   "model_ms_per_adjudicated_case": 7982.9,
+   "model_ms_max": 22969,
+   "calls": 13,
+   "elapsed_s": 109.1
+  }
+ },
+ "pipeline_final_3e36ebf_cases": {
+  "adjudicate-validation": [
+   {
+    "case_id": "COVV-01",
+    "expected": [
+     "COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "COVERED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "basis": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "reasons": [
+     "POSSIBLE_CONFLICT",
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVV-07",
+    "expected": [
+     "CONTRADICTED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": null,
+    "review": false,
+    "review_reasons": [],
+    "basis": [
+     "RULE_ONLY"
+    ],
+    "reasons": []
+   },
+   {
+    "case_id": "COVV-08",
+    "expected": [
+     "COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "COVERED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "basis": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVV-11",
+    "expected": [
+     "COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "COVERED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "basis": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVV-13",
+    "expected": [
+     "COVERED",
+     "PARTIALLY_COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": null,
+    "review": false,
+    "review_reasons": [],
+    "basis": [
+     "RULE_ONLY"
+    ],
+    "reasons": []
+   },
+   {
+    "case_id": "COVV-14",
+    "expected": [
+     "COVERED",
+     "PARTIALLY_COVERED"
+    ],
+    "rule": "PARTIALLY_COVERED",
+    "final": "PARTIALLY_COVERED",
+    "proposal": "COVERED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "basis": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVV-19",
+    "expected": [
+     "COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "COVERED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "basis": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVV-24",
+    "expected": [
+     "CONTRADICTED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "CONTRADICTED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_CONFLICT_UNCONFIRMED"
+    ],
+    "basis": [
+     "MODEL_CONFLICT_UNCONFIRMED"
+    ],
+    "reasons": [
+     "POSSIBLE_CONFLICT",
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVV-25",
+    "expected": [
+     "COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "PARTIALLY_COVERED",
+    "proposal": "PARTIALLY_COVERED",
+    "review": false,
+    "review_reasons": [],
+    "basis": [
+     "SEMANTIC_ADJUDICATED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVV-28",
+    "expected": [
+     "PARTIALLY_COVERED"
+    ],
+    "rule": "CONTRADICTED",
+    "final": "CONTRADICTED",
+    "proposal": null,
+    "review": false,
+    "review_reasons": [],
+    "basis": [
+     "RULE_ONLY"
+    ],
+    "reasons": []
+   },
+   {
+    "case_id": "COVV-29",
+    "expected": [
+     "COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": null,
+    "review": false,
+    "review_reasons": [],
+    "basis": [
+     "RULE_ONLY"
+    ],
+    "reasons": []
+   },
+   {
+    "case_id": "COVV-31",
+    "expected": [
+     "COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "COVERED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "basis": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVV-34",
+    "expected": [
+     "COVERED"
+    ],
+    "rule": "PARTIALLY_COVERED",
+    "final": "PARTIALLY_COVERED",
+    "proposal": "PARTIALLY_COVERED",
+    "review": false,
+    "review_reasons": [],
+    "basis": [
+     "BOTH_READINGS"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVV-36",
+    "expected": [
+     "COVERED",
+     "PARTIALLY_COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "CONTRADICTED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_CONFLICT_UNCONFIRMED"
+    ],
+    "basis": [
+     "MODEL_CONFLICT_UNCONFIRMED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVV-38",
+    "expected": [
+     "COVERED",
+     "PARTIALLY_COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "UNKNOWN",
+    "review": true,
+    "review_reasons": [
+     "ADJUDICATION_UNRESOLVED"
+    ],
+    "basis": [
+     "RULE_ONLY"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVV-39",
+    "expected": [
+     "COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "COVERED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "basis": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVV-41",
+    "expected": [
+     "COVERED"
+    ],
+    "rule": "PARTIALLY_COVERED",
+    "final": "PARTIALLY_COVERED",
+    "proposal": "COVERED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "basis": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   }
+  ],
+  "adjudicate-validation-quick": [
+   {
+    "case_id": "COVV-01",
+    "expected": [
+     "COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "COVERED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "basis": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "reasons": [
+     "POSSIBLE_CONFLICT",
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVV-03",
+    "expected": [
+     "PARTIALLY_COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "COVERED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "basis": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "reasons": [
+     "POSSIBLE_CONFLICT",
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVV-07",
+    "expected": [
+     "CONTRADICTED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": null,
+    "review": false,
+    "review_reasons": [],
+    "basis": [
+     "RULE_ONLY"
+    ],
+    "reasons": []
+   },
+   {
+    "case_id": "COVV-08",
+    "expected": [
+     "COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "COVERED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "basis": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVV-09",
+    "expected": [
+     "PARTIALLY_COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "COVERED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "basis": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVV-11",
+    "expected": [
+     "COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "COVERED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "basis": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVV-13",
+    "expected": [
+     "COVERED",
+     "PARTIALLY_COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": null,
+    "review": false,
+    "review_reasons": [],
+    "basis": [
+     "RULE_ONLY"
+    ],
+    "reasons": []
+   },
+   {
+    "case_id": "COVV-14",
+    "expected": [
+     "COVERED",
+     "PARTIALLY_COVERED"
+    ],
+    "rule": "PARTIALLY_COVERED",
+    "final": "PARTIALLY_COVERED",
+    "proposal": "COVERED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "basis": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVV-15",
+    "expected": [
+     "PARTIALLY_COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "COVERED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "basis": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVV-19",
+    "expected": [
+     "COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "COVERED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "basis": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVV-20",
+    "expected": [
+     "PARTIALLY_COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "COVERED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "basis": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVV-23",
+    "expected": [
+     "PARTIALLY_COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "COVERED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "basis": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVV-24",
+    "expected": [
+     "CONTRADICTED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "CONTRADICTED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_CONFLICT_UNCONFIRMED"
+    ],
+    "basis": [
+     "MODEL_CONFLICT_UNCONFIRMED"
+    ],
+    "reasons": [
+     "POSSIBLE_CONFLICT",
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVV-25",
+    "expected": [
+     "COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "COVERED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "basis": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVV-28",
+    "expected": [
+     "PARTIALLY_COVERED"
+    ],
+    "rule": "CONTRADICTED",
+    "final": "CONTRADICTED",
+    "proposal": null,
+    "review": false,
+    "review_reasons": [],
+    "basis": [
+     "RULE_ONLY"
+    ],
+    "reasons": []
+   },
+   {
+    "case_id": "COVV-29",
+    "expected": [
+     "COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": null,
+    "review": false,
+    "review_reasons": [],
+    "basis": [
+     "RULE_ONLY"
+    ],
+    "reasons": []
+   },
+   {
+    "case_id": "COVV-31",
+    "expected": [
+     "COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "COVERED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "basis": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVV-32",
+    "expected": [
+     "PARTIALLY_COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "COVERED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "basis": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVV-34",
+    "expected": [
+     "COVERED"
+    ],
+    "rule": "PARTIALLY_COVERED",
+    "final": "PARTIALLY_COVERED",
+    "proposal": "COVERED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "basis": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVV-35",
+    "expected": [
+     "COVERED",
+     "PARTIALLY_COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "COVERED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "basis": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVV-36",
+    "expected": [
+     "COVERED",
+     "PARTIALLY_COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "COVERED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "basis": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVV-38",
+    "expected": [
+     "COVERED",
+     "PARTIALLY_COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "COVERED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "basis": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVV-39",
+    "expected": [
+     "COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "COVERED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "basis": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVV-41",
+    "expected": [
+     "COVERED"
+    ],
+    "rule": "PARTIALLY_COVERED",
+    "final": "PARTIALLY_COVERED",
+    "proposal": "COVERED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "basis": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   }
+  ],
+  "adjudicate-dev": [
+   {
+    "case_id": "COV-09",
+    "expected": [
+     "NOT_COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "CONTRADICTED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_CONFLICT_UNCONFIRMED"
+    ],
+    "basis": [
+     "MODEL_CONFLICT_UNCONFIRMED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COV-12",
+    "expected": [
+     "PARTIALLY_COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "COVERED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "basis": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COV-14",
+    "expected": [
+     "COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "PARTIALLY_COVERED",
+    "proposal": "PARTIALLY_COVERED",
+    "review": false,
+    "review_reasons": [],
+    "basis": [
+     "SEMANTIC_ADJUDICATED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COV-15",
+    "expected": [
+     "COVERED",
+     "PARTIALLY_COVERED"
+    ],
+    "rule": "PARTIALLY_COVERED",
+    "final": "PARTIALLY_COVERED",
+    "proposal": "CONTRADICTED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_CONFLICT_UNCONFIRMED"
+    ],
+    "basis": [
+     "MODEL_CONFLICT_UNCONFIRMED"
+    ],
+    "reasons": [
+     "POSSIBLE_CONFLICT",
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COV-16",
+    "expected": [
+     "COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "NOT_COVERED",
+    "review": false,
+    "review_reasons": [],
+    "basis": [
+     "BOTH_READINGS"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COV-25",
+    "expected": [
+     "NOT_COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "CONTRADICTED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_CONFLICT_UNCONFIRMED"
+    ],
+    "basis": [
+     "MODEL_CONFLICT_UNCONFIRMED"
+    ],
+    "reasons": [
+     "POSSIBLE_CONFLICT",
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COV-30",
+    "expected": [
+     "COVERED"
+    ],
+    "rule": "PARTIALLY_COVERED",
+    "final": "PARTIALLY_COVERED",
+    "proposal": "PARTIALLY_COVERED",
+    "review": false,
+    "review_reasons": [],
+    "basis": [
+     "BOTH_READINGS"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COV-40",
+    "expected": [
+     "COVERED"
+    ],
+    "rule": "PARTIALLY_COVERED",
+    "final": "PARTIALLY_COVERED",
+    "proposal": "PARTIALLY_COVERED",
+    "review": false,
+    "review_reasons": [],
+    "basis": [
+     "BOTH_READINGS"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COV-43",
+    "expected": [
+     "COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "COVERED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "basis": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   }
+  ],
+  "adjudicate-holdout": [
+   {
+    "case_id": "COVH-06",
+    "expected": [
+     "COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "COVERED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "basis": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVH-15",
+    "expected": [
+     "COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "COVERED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "basis": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVH-17",
+    "expected": [
+     "COVERED",
+     "PARTIALLY_COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "NOT_COVERED",
+    "review": false,
+    "review_reasons": [],
+    "basis": [
+     "BOTH_READINGS"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVH-19",
+    "expected": [
+     "COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "COVERED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "basis": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVH-20",
+    "expected": [
+     "CONTRADICTED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "CONTRADICTED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_CONFLICT_UNCONFIRMED"
+    ],
+    "basis": [
+     "MODEL_CONFLICT_UNCONFIRMED"
+    ],
+    "reasons": [
+     "POSSIBLE_CONFLICT",
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVH-21",
+    "expected": [
+     "COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "COVERED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "basis": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "reasons": [
+     "POSSIBLE_CONFLICT",
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVH-25",
+    "expected": [
+     "NOT_COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "PARTIALLY_COVERED",
+    "proposal": "PARTIALLY_COVERED",
+    "review": false,
+    "review_reasons": [],
+    "basis": [
+     "SEMANTIC_ADJUDICATED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVH-26",
+    "expected": [
+     "COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "PARTIALLY_COVERED",
+    "proposal": "PARTIALLY_COVERED",
+    "review": false,
+    "review_reasons": [],
+    "basis": [
+     "SEMANTIC_ADJUDICATED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   }
+  ],
+  "adjudicate-dev-quick": [
+   {
+    "case_id": "COV-07",
+    "expected": [
+     "NOT_COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "CONTRADICTED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_CONFLICT_UNCONFIRMED"
+    ],
+    "basis": [
+     "MODEL_CONFLICT_UNCONFIRMED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COV-09",
+    "expected": [
+     "NOT_COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "CONTRADICTED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_CONFLICT_UNCONFIRMED"
+    ],
+    "basis": [
+     "MODEL_CONFLICT_UNCONFIRMED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COV-12",
+    "expected": [
+     "PARTIALLY_COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "CONTRADICTED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_CONFLICT_UNCONFIRMED"
+    ],
+    "basis": [
+     "MODEL_CONFLICT_UNCONFIRMED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COV-14",
+    "expected": [
+     "COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "COVERED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "basis": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COV-15",
+    "expected": [
+     "COVERED",
+     "PARTIALLY_COVERED"
+    ],
+    "rule": "PARTIALLY_COVERED",
+    "final": "PARTIALLY_COVERED",
+    "proposal": "CONTRADICTED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_CONFLICT_UNCONFIRMED"
+    ],
+    "basis": [
+     "MODEL_CONFLICT_UNCONFIRMED"
+    ],
+    "reasons": [
+     "POSSIBLE_CONFLICT",
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COV-16",
+    "expected": [
+     "COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "NOT_COVERED",
+    "review": false,
+    "review_reasons": [],
+    "basis": [
+     "BOTH_READINGS"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COV-17",
+    "expected": [
+     "PARTIALLY_COVERED"
+    ],
+    "rule": "PARTIALLY_COVERED",
+    "final": "PARTIALLY_COVERED",
+    "proposal": "COVERED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "basis": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COV-18",
+    "expected": [
+     "PARTIALLY_COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "CONTRADICTED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_CONFLICT_UNCONFIRMED"
+    ],
+    "basis": [
+     "MODEL_CONFLICT_UNCONFIRMED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COV-23",
+    "expected": [
+     "PARTIALLY_COVERED"
+    ],
+    "rule": "PARTIALLY_COVERED",
+    "final": "PARTIALLY_COVERED",
+    "proposal": "CONTRADICTED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_CONFLICT_UNCONFIRMED"
+    ],
+    "basis": [
+     "MODEL_CONFLICT_UNCONFIRMED"
+    ],
+    "reasons": [
+     "POSSIBLE_CONFLICT"
+    ]
+   },
+   {
+    "case_id": "COV-25",
+    "expected": [
+     "NOT_COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "CONTRADICTED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_CONFLICT_UNCONFIRMED"
+    ],
+    "basis": [
+     "MODEL_CONFLICT_UNCONFIRMED"
+    ],
+    "reasons": [
+     "POSSIBLE_CONFLICT",
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COV-26",
+    "expected": [
+     "PARTIALLY_COVERED"
+    ],
+    "rule": "PARTIALLY_COVERED",
+    "final": "PARTIALLY_COVERED",
+    "proposal": "CONTRADICTED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_CONFLICT_UNCONFIRMED"
+    ],
+    "basis": [
+     "MODEL_CONFLICT_UNCONFIRMED"
+    ],
+    "reasons": [
+     "POSSIBLE_CONFLICT"
+    ]
+   },
+   {
+    "case_id": "COV-27",
+    "expected": [
+     "NOT_COVERED",
+     "PARTIALLY_COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "COVERED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "basis": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "reasons": [
+     "POSSIBLE_CONFLICT",
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COV-30",
+    "expected": [
+     "COVERED"
+    ],
+    "rule": "PARTIALLY_COVERED",
+    "final": "PARTIALLY_COVERED",
+    "proposal": "PARTIALLY_COVERED",
+    "review": false,
+    "review_reasons": [],
+    "basis": [
+     "BOTH_READINGS"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COV-40",
+    "expected": [
+     "COVERED"
+    ],
+    "rule": "PARTIALLY_COVERED",
+    "final": "PARTIALLY_COVERED",
+    "proposal": "COVERED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "basis": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COV-41",
+    "expected": [
+     "COVERED",
+     "PARTIALLY_COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "COVERED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "basis": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COV-43",
+    "expected": [
+     "COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "COVERED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "basis": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COV-44",
+    "expected": [
+     "PARTIALLY_COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "CONTRADICTED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_CONFLICT_UNCONFIRMED"
+    ],
+    "basis": [
+     "MODEL_CONFLICT_UNCONFIRMED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COV-45",
+    "expected": [
+     "PARTIALLY_COVERED"
+    ],
+    "rule": "PARTIALLY_COVERED",
+    "final": "PARTIALLY_COVERED",
+    "proposal": "CONTRADICTED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_CONFLICT_UNCONFIRMED"
+    ],
+    "basis": [
+     "MODEL_CONFLICT_UNCONFIRMED"
+    ],
+    "reasons": [
+     "POSSIBLE_CONFLICT"
+    ]
+   }
+  ],
+  "adjudicate-holdout-quick": [
+   {
+    "case_id": "COVH-06",
+    "expected": [
+     "COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "COVERED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "basis": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVH-15",
+    "expected": [
+     "COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "COVERED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "basis": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVH-17",
+    "expected": [
+     "COVERED",
+     "PARTIALLY_COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "NOT_COVERED",
+    "review": false,
+    "review_reasons": [],
+    "basis": [
+     "BOTH_READINGS"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVH-19",
+    "expected": [
+     "COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "COVERED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "basis": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVH-20",
+    "expected": [
+     "CONTRADICTED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "CONTRADICTED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_CONFLICT_UNCONFIRMED"
+    ],
+    "basis": [
+     "MODEL_CONFLICT_UNCONFIRMED"
+    ],
+    "reasons": [
+     "POSSIBLE_CONFLICT",
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVH-21",
+    "expected": [
+     "COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "PARTIALLY_COVERED",
+    "proposal": "PARTIALLY_COVERED",
+    "review": false,
+    "review_reasons": [],
+    "basis": [
+     "SEMANTIC_ADJUDICATED"
+    ],
+    "reasons": [
+     "POSSIBLE_CONFLICT",
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVH-22",
+    "expected": [
+     "NOT_COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "COVERED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "basis": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVH-24",
+    "expected": [
+     "PARTIALLY_COVERED",
+     "COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "COVERED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "basis": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVH-25",
+    "expected": [
+     "NOT_COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "CONTRADICTED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_CONFLICT_UNCONFIRMED"
+    ],
+    "basis": [
+     "MODEL_CONFLICT_UNCONFIRMED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVH-26",
+    "expected": [
+     "COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "PARTIALLY_COVERED",
+    "proposal": "PARTIALLY_COVERED",
+    "review": false,
+    "review_reasons": [],
+    "basis": [
+     "SEMANTIC_ADJUDICATED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   },
+   {
+    "case_id": "COVH-27",
+    "expected": [
+     "COVERED",
+     "PARTIALLY_COVERED"
+    ],
+    "rule": "NOT_COVERED",
+    "final": "NOT_COVERED",
+    "proposal": "COVERED",
+    "review": true,
+    "review_reasons": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "basis": [
+     "MODEL_PROPOSES_COVERED"
+    ],
+    "reasons": [
+     "SEMANTIC_PARAPHRASE"
+    ]
+   }
+  ]
+ },
+ "corpus_frozen_6658175": {
+  "tr-bev-pilot-alcohol-integrated": {
+   "rows": 3235,
+   "obligations": 2554,
+   "obligations_with_rows": 1292,
+   "escalated_rows": 202,
+   "escalated_obligations": 122,
+   "escalation_rate_rows": 0.0624,
+   "escalation_rate_obligations": 0.0478,
+   "adjudications": 0,
+   "by_reason": {
+    "POSSIBLE_CONFLICT": 28,
+    "SEMANTIC_PARAPHRASE": 202
+   },
+   "review_required": 724,
+   "decision_review_rows": 701,
+   "decision_review_obligations": 140,
+   "decision_review_rate_rows": 0.2167,
+   "decision_review_reasons": {
+    "NOT_VERIFIED": 701
+   },
+   "proposals": {},
+   "calls_failed": 0,
+   "calls_without_thinking": 0,
+   "escalated_unresolved_rows": 0,
+   "model_ms": 0,
+   "model_ms_per_obligation": 0.0,
+   "model_ms_per_call": null,
+   "model_ms_per_call_median": null,
+   "model_ms_per_call_max": null,
+   "by_basis": {
+    "RULE_ONLY": 3235
+   },
+   "rules_version": "tr-adjudication-v2"
+  },
+  "tr-bev-pilot-non-alcohol-bottler": {
+   "rows": 3431,
+   "obligations": 2554,
+   "obligations_with_rows": 1315,
+   "escalated_rows": 344,
+   "escalated_obligations": 145,
+   "escalation_rate_rows": 0.1003,
+   "escalation_rate_obligations": 0.0568,
+   "adjudications": 0,
+   "by_reason": {
+    "POSSIBLE_CONFLICT": 8,
+    "SEMANTIC_PARAPHRASE": 340
+   },
+   "review_required": 979,
+   "decision_review_rows": 978,
+   "decision_review_obligations": 140,
+   "decision_review_rate_rows": 0.285,
+   "decision_review_reasons": {
+    "NOT_VERIFIED": 978
+   },
+   "proposals": {},
+   "calls_failed": 0,
+   "calls_without_thinking": 0,
+   "escalated_unresolved_rows": 0,
+   "model_ms": 0,
+   "model_ms_per_obligation": 0.0,
+   "model_ms_per_call": null,
+   "model_ms_per_call_median": null,
+   "model_ms_per_call_max": null,
+   "by_basis": {
+    "RULE_ONLY": 3431
+   },
+   "rules_version": "tr-adjudication-v2"
+  },
+  "tr-bev-pilot-alcohol-import": {
+   "rows": 2115,
+   "obligations": 2554,
+   "obligations_with_rows": 1191,
+   "escalated_rows": 163,
+   "escalated_obligations": 87,
+   "escalation_rate_rows": 0.0771,
+   "escalation_rate_obligations": 0.0341,
+   "adjudications": 0,
+   "by_reason": {
+    "POSSIBLE_CONFLICT": 3,
+    "SEMANTIC_PARAPHRASE": 163
+   },
+   "review_required": 569,
+   "decision_review_rows": 562,
+   "decision_review_obligations": 143,
+   "decision_review_rate_rows": 0.2657,
+   "decision_review_reasons": {
+    "APPLICABILITY_REVIEW": 3,
+    "NOT_VERIFIED": 559
+   },
+   "proposals": {},
+   "calls_failed": 0,
+   "calls_without_thinking": 0,
+   "escalated_unresolved_rows": 0,
+   "model_ms": 0,
+   "model_ms_per_obligation": 0.0,
+   "model_ms_per_call": null,
+   "model_ms_per_call_median": null,
+   "model_ms_per_call_max": null,
+   "by_basis": {
+    "RULE_ONLY": 2115
+   },
+   "rules_version": "tr-adjudication-v2"
+  }
+ },
+ "corpus_final_3e36ebf": {},
+ "regression": {
+  "suite": "backend/tests (1640 tests)",
+  "failures": 242,
+  "compared": "identities and reasons identical to the recorded baseline (FileNotFoundError artefacts 239, ModuleNotFoundError 1, AssertionError 1, argument error 1)"
+ }
+}
