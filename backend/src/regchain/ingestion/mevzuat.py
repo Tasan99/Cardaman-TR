@@ -26,19 +26,27 @@ MEVZUAT_HOSTS = frozenset({'www.mevzuat.gov.tr', 'mevzuat.gov.tr'})
 # (1) 24/2/2021 tarihli ..."), found in md. 8 of the same regulation by the retained-snapshot
 # test; v2 read that block into the article. A retained snapshot is parsed with the rules of
 # the version that produced it (recorded in snapshot.json), so its hash keeps reproducing.
+# v4 (Cardaman TR corpus): the Türk Gıda Kodeksi texts (Enerji İçecekleri Tebliği, Gıda Etiketleme Yönetmeliği, ...) are
+# served as the Resmî Gazete page, whose whole text sits inside a layout table; v3 drops every paragraph inside a table and
+# found no MADDE in them. v4 keeps the paragraphs of the table that wraps the first article (and of the tables around it)
+# and still drops the data and amendment tables nested in the text. On a text outside any table v4 reads exactly what v3
+# reads. v3 stays the default, so retained AML snapshots and their evaluation manifests are untouched; the TR corpus
+# adapter of the Turkish sector core asks for v4 by name and records it in the snapshot.
 MEVZUAT_PARSER_VERSION = 'mevzuat-parser-v3'
+WRAPPED_TEXT_VERSION = 'mevzuat-parser-v4'
 # A run of dashes (v3: or underscores) opens the footnote block Word prints at the foot of a
 # page; each note starts with its number and the amending instrument's date.
 FOOTNOTE_RULES = {'mevzuat-parser-v1': None, 'mevzuat-parser-v2': re.compile(r'[–—-]{6,}'),
-                  'mevzuat-parser-v3': re.compile(r'[–—_-]{6,}')}
+                  'mevzuat-parser-v3': re.compile(r'[–—_-]{6,}'), 'mevzuat-parser-v4': re.compile(r'[–—_-]{6,}')}
 FOOTNOTE_RULE = FOOTNOTE_RULES[MEVZUAT_PARSER_VERSION]
 FOOTNOTE_NOTE = re.compile(r'^\(\d{1,2}\)\s+\d{1,2}/\d{1,2}/\d{4}\s+tarihli')
 # v3: a note may open with what was amended before the amending instrument's date ("(1) Bu madde
 # başlığı “Merkezi Kayıt Kuruluşu” iken, 29/2/2016 tarihli ..."); v2 closed the block there and
 # read the rest of the notes into md. 50.
-FOOTNOTE_NOTES = {'mevzuat-parser-v1': FOOTNOTE_NOTE, 'mevzuat-parser-v2': FOOTNOTE_NOTE,
-                  'mevzuat-parser-v3': re.compile(r'^\(\d{1,2}\)\s+(?:\d{1,2}/\d{1,2}/\d{4}\s+tarihli|'
-                                                  r'Bu (?:madde|fıkra|bent|bend|Yönetmeli|Kanun)[^.]{0,200}?\d{1,2}/\d{1,2}/\d{4}\s+tarihli)')}
+_NOTE_V3 = re.compile(r'^\(\d{1,2}\)\s+(?:\d{1,2}/\d{1,2}/\d{4}\s+tarihli|'
+                                                  r'Bu (?:madde|fıkra|bent|bend|Yönetmeli|Kanun)[^.]{0,200}?\d{1,2}/\d{1,2}/\d{4}\s+tarihli)')
+FOOTNOTE_NOTES = {'mevzuat-parser-v1': FOOTNOTE_NOTE, 'mevzuat-parser-v2': FOOTNOTE_NOTE, 'mevzuat-parser-v3': _NOTE_V3,
+                  'mevzuat-parser-v4': _NOTE_V3}
 TEXT_ENDPOINT = 'https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe'
 # MevzuatTur codes of the Mevzuat Bilgi Sistemi, read from its own search form: the
 # ASCII group code used inside the pilot, and the word printed in every provision label.
@@ -129,6 +137,43 @@ def centered(node) -> bool:
     return 'center' in (node.get('align') or '') or 'text-align:center' in (node.get('style') or '').replace(' ', '')
 
 
+def layout_tables(soup) -> set:
+    """v4: the tables that wrap the text itself, as ids: the ones around the first paragraph that opens an article."""
+    for node in soup.find_all('p'):
+        if ARTICLE.match(node.get_text(' ').replace(' ', ' ')):
+            return {id(table) for table in node.find_parents('table')}
+    return set()
+
+
+LEADING_REPEAL_NOTE = re.compile(r'^\s*\(\s*Mülga[^()]*(?:\([^()]*\)[^()]*)*\)\s*')
+
+
+def in_force_text(text: str) -> bool:
+    """v4: whether an article that opens with a repeal note still has operative text.
+
+    "(Mülga: 11/1/2001-4619/5 md.; Yeniden düzenleme: 24/5/2013-6487/2 md.) Alkollü içkilerin ... reklamı ... yapılamaz."
+    is the article as re-enacted (Kanun 4250 md. 6, 7 and 9), and "(Mülga birinci fıkra: ...) İkinci fıkra ..." has lost
+    one paragraph only. v3 reads both as repealed, because it looks at the opening word alone. An article is repealed
+    when nothing but repeal notes is left of it."""
+    rest = text
+    while True:
+        note = LEADING_REPEAL_NOTE.match(rest)
+        if not note:
+            break
+        rest = rest[note.end():]
+    return bool(re.search(r'[A-Za-zÇĞİÖŞÜçğıöşü]{3,}', rest))
+
+
+def line_spans(lines) -> tuple:
+    """v4: where each source paragraph sits in the article text. The text stays one space-joined string (as v3 reads it);
+    the spans keep the paragraph boundaries that tell one unnumbered fıkra from the next ("6 ncı maddenin beşinci fıkrası")."""
+    spans, offset = [], 0
+    for line in lines:
+        spans.append({'kind': 'line', 'start': offset, 'end': offset + len(line)})
+        offset += len(line) + 1
+    return tuple(spans)
+
+
 def parse_mevzuat(source: Download, version: str = MEVZUAT_PARSER_VERSION) -> Document:
     if not is_mevzuat(source):
         raise IngestionError('Only mevzuat.gov.tr text pages are parsed here')
@@ -143,9 +188,11 @@ def parse_mevzuat(source: Download, version: str = MEVZUAT_PARSER_VERSION) -> Do
     chapter, chapter_title, pending_heading, expecting_title = '', '', '', False
     articles: list[dict] = []
     warnings: list[str] = []
-    superscript_rule = footnote_rule if version == 'mevzuat-parser-v3' else None
+    superscript_rule = footnote_rule if version in ('mevzuat-parser-v3', WRAPPED_TEXT_VERSION) else None
+    wrappers = layout_tables(soup) if version == WRAPPED_TEXT_VERSION else set()
+    in_data_table = lambda node: (table := node.find_parent('table')) is not None and id(table) not in wrappers
     lines = [(line, node) for node in soup.find_all('p')
-             if not (node.find_parent('table') or node.find_parent(id=re.compile(r'^ftn')) or 'MsoFootnoteText' in (node.get('class') or []))
+             if not (in_data_table(node) or node.find_parent(id=re.compile(r'^ftn')) or 'MsoFootnoteText' in (node.get('class') or []))
              for line in paragraph_lines(node, superscript_rule)]
     footnotes = False
     for text, node in lines:
@@ -204,21 +251,30 @@ def parse_mevzuat(source: Download, version: str = MEVZUAT_PARSER_VERSION) -> Do
     published = publication_date(metadata)
     paragraphs = []
     seen = set()
+    wrapped = version == WRAPPED_TEXT_VERSION
+    counts: dict[str, int] = {}
     for item in articles:
         text = ' '.join(item['lines']).strip()
         flags = []
-        if item['number'] in seen:
+        number_ = item['number']
+        if number_ in seen:
             warnings.append(f'Duplicate article number {item["number"]}')
             flags.append('POSSIBLE_WRAPPED_LABEL')
+            if wrapped:
+                # v4: the articles an amending law left outside the text ("... SAYILI KANUNA İŞLENEMEYEN HÜKÜMLER") repeat
+                # a number; each keeps its own label, so a snapshot of the law can be loaded (labels must be unique).
+                counts[number_] = counts.get(number_, 1) + 1
+                number_ = f'{number_} (mükerrer {counts[number_]})'
         seen.add(item['number'])
-        if not text or REPEALED.match(text):
+        if not text or (REPEALED.match(text) and not (wrapped and in_force_text(text))):
             flags.append('DELETED_PROVISION')
             text = text or '(Mülga)'
         chapter_path = ' '.join(filter(None, (item['chapter'], item['chapter_title'])))
-        paragraphs.append(Paragraph(section=item['chapter'] or 'BÖLÜMSÜZ', number=item['number'], text=text,
+        paragraphs.append(Paragraph(section=item['chapter'] or 'BÖLÜMSÜZ', number=number_, text=text,
                                     heading_path=(title, chapter_path, item['heading']), locator_kind='mevzuat_madde',
-                                    printed_label=f'{label_prefix} md. {item["number"]}', source_kind='CONSOLIDATED',
-                                    quality_flags=tuple(flags), legal_type='RULE', effective_from=published))
+                                    printed_label=f'{label_prefix} md. {number_}', source_kind='CONSOLIDATED',
+                                    quality_flags=tuple(flags), source_spans=line_spans(item['lines']) if wrapped else (),
+                                    legal_type='RULE', effective_from=published))
     if all('DELETED_PROVISION' in p.quality_flags for p in paragraphs):
         raise IngestionError('Every article of this regulation is repealed')
     return Document(title=title, paragraphs=tuple(paragraphs), publication_date=published, warnings=tuple(warnings))
