@@ -1,0 +1,39 @@
+{
+  "format": "cardaman-tr-policy-register/1",
+  "profile_id": "tr-bev-pilot-alcohol-integrated",
+  "synthetic": true,
+  "disclaimer": "Sentetik test kaydı: temsili bira grubunun iç politika, prosedür, kontrol ve kanıt kayıtlarını örnekler. Gerçek bir şirketin belgesi, kontrolü veya kanıtı değildir.",
+  "period": "2026-Q3",
+  "documents": [
+    {"document_id": "POL-MKT-01", "type": "POLICY", "title": "Sorumlu Pazarlama ve İletişim Politikası", "owner_department": "MARKETING", "version": "3.0",
+     "file": "documents/POL-MKT-01-sorumlu-pazarlama.md",
+     "scope": {"policy_id": "POL-MKT-01", "owner_level": "GROUP"}},
+    {"document_id": "SOP-SALES-02", "type": "SOP", "title": "Satış Noktası Uygulama Prosedürü", "owner_department": "SALES", "version": "1.4",
+     "file": "documents/SOP-SALES-02-satis-noktasi.md",
+     "scope": {"policy_id": "SOP-SALES-02", "owner_level": "LEGAL_ENTITY", "entity_id": "ALC-INT-SALES"}},
+    {"document_id": "SPEC-LABEL-03", "type": "SPECIFICATION", "title": "Etiket ve Ambalaj Şartnamesi", "owner_department": "QUALITY", "version": "2.1",
+     "file": "documents/SPEC-LABEL-03-etiket-sartnamesi.md",
+     "scope": {"policy_id": "SPEC-LABEL-03", "owner_level": "LEGAL_ENTITY", "entity_id": "ALC-INT-BREWING"}},
+    {"document_id": "SOP-HR-04", "type": "SOP", "title": "İşe Alım ve Görevlendirme Prosedürü", "owner_department": "HR", "version": "1.0",
+     "file": "documents/SOP-HR-04-ise-alim.md",
+     "scope": {"policy_id": "SOP-HR-04", "owner_level": "GROUP"}},
+    {"document_id": "POL-ENV-05", "type": "POLICY", "title": "Ambalaj ve Atık Yönetimi Politikası", "owner_department": "ENVIRONMENT", "version": "1.2",
+     "file": "documents/POL-ENV-05-ambalaj-atik.md",
+     "scope": {"policy_id": "POL-ENV-05", "owner_level": "LEGAL_ENTITY", "entity_id": "ALC-INT-BREWING"}}
+  ],
+  "controls": [
+    {"control_id": "CTL-MKT-APPROVAL", "description": "Pazarlama ve iletişim içeriklerinin yayın öncesi Hukuk Müşavirliği onayı", "owner_department": "LEGAL",
+     "documents": ["POL-MKT-01"], "evidence_types": ["LEGAL_APPROVAL_RECORD"], "topics": ["ADVERTISING", "BRANDING"]},
+    {"control_id": "CTL-AGE-CHECK", "description": "Satış noktasında yaş doğrulama ve kimlik kontrolü kaydı", "owner_department": "SALES",
+     "documents": ["SOP-SALES-02"], "evidence_types": ["ID_CHECK_LOG"], "topics": ["AGE_RESTRICTION"]},
+    {"control_id": "CTL-LABEL-RELEASE", "description": "Etiket tasarımının baskı öncesi Kalite Güvence ve Hukuk onayı", "owner_department": "QUALITY",
+     "documents": ["SPEC-LABEL-03"], "evidence_types": ["APPROVED_LABEL_ARTWORK"], "topics": ["LABELLING"]},
+    {"control_id": "CTL-HR-AGE", "description": "İşe alımda kimlik ve yaş doğrulaması", "owner_department": "HR",
+     "documents": ["SOP-HR-04"], "evidence_types": ["PERSONNEL_FILE_CHECK"], "topics": ["AGE_RESTRICTION", "EMPLOYMENT"]}
+  ],
+  "evidence": [
+    {"evidence_id": "EV-MKT-2026Q3", "control_id": "CTL-MKT-APPROVAL", "evidence_type": "LEGAL_APPROVAL_RECORD", "period": "2026-Q3", "in_period": true},
+    {"evidence_id": "EV-LABEL-2026Q3", "control_id": "CTL-LABEL-RELEASE", "evidence_type": "APPROVED_LABEL_ARTWORK", "period": "2026-Q3", "in_period": true},
+    {"evidence_id": "EV-AGE-2025Q4", "control_id": "CTL-AGE-CHECK", "evidence_type": "ID_CHECK_LOG", "period": "2025-Q4", "in_period": false}
+  ]
+}

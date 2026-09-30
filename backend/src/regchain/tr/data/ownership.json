@@ -1,0 +1,28 @@
+{
+  "format": "cardaman-tr-ownership/1",
+  "note": "Default owning departments per obligation topic (pack default; a company register may override per document or control). Used to say who acts on a gap or a regulatory change; never to decide applicability.",
+  "departments": {
+    "LEGAL": "Hukuk", "COMPLIANCE": "Uyum", "MARKETING": "Pazarlama", "SALES": "Satış", "QUALITY": "Kalite Güvence",
+    "RND": "Ar-Ge", "FOOD_SAFETY": "Gıda Güvenliği", "MANUFACTURING": "Üretim", "SUPPLY_CHAIN": "Tedarik Zinciri",
+    "HR": "İnsan Kaynakları", "ENVIRONMENT": "Çevre ve Sürdürülebilirlik", "ECOMMERCE": "E-ticaret", "FINANCE": "Mali İşler"
+  },
+  "topics": {
+    "ADVERTISING": ["MARKETING", "LEGAL"],
+    "BRANDING": ["MARKETING", "LEGAL"],
+    "CLAIMS": ["QUALITY", "MARKETING"],
+    "LABELLING": ["QUALITY", "LEGAL"],
+    "COMPOSITION": ["RND", "QUALITY"],
+    "AGE_RESTRICTION": ["SALES", "COMPLIANCE"],
+    "SALE": ["SALES", "COMPLIANCE"],
+    "ECOMMERCE": ["ECOMMERCE", "LEGAL"],
+    "LICENSING": ["LEGAL", "COMPLIANCE"],
+    "EMPLOYMENT": ["HR"],
+    "PACKAGING_WASTE": ["ENVIRONMENT", "FINANCE"],
+    "PACKAGING": ["QUALITY", "SUPPLY_CHAIN"],
+    "MARKET_PLACEMENT": ["SUPPLY_CHAIN", "COMPLIANCE"],
+    "PRODUCTION": ["MANUFACTURING", "QUALITY"],
+    "LOGISTICS": ["SUPPLY_CHAIN"],
+    "HYGIENE": ["FOOD_SAFETY", "MANUFACTURING"],
+    "GENERAL": ["COMPLIANCE"]
+  }
+}

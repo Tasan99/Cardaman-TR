@@ -1,0 +1,42 @@
+{
+  "format": "cardaman-tr-policy-register/1",
+  "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+  "synthetic": true,
+  "disclaimer": "Sentetik test kaydı: temsili alkolsüz içecek grubunun iç politika, şartname, kontrol ve kanıt kayıtlarını örnekler. Gerçek bir şirketin belgesi, kontrolü veya kanıtı değildir.",
+  "period": "2026-Q3",
+  "documents": [
+    {"document_id": "SPEC-ENERGY-01", "type": "SPECIFICATION", "title": "Enerji İçeceği Ürün Şartnamesi", "owner_department": "RND", "version": "2.0",
+     "file": "documents/SPEC-ENERGY-01-enerji-icecegi.md",
+     "scope": {"policy_id": "SPEC-ENERGY-01", "owner_level": "LEGAL_ENTITY", "entity_id": "NONALC-BOTTLING"},
+     "product_ids": ["NONALC-ENERGY", "NONALC-ENERGY-MAX"]},
+    {"document_id": "POL-MKT-02", "type": "POLICY", "title": "Pazarlama ve Tanıtım Politikası", "owner_department": "MARKETING", "version": "1.3",
+     "file": "documents/POL-MKT-02-pazarlama.md",
+     "scope": {"policy_id": "POL-MKT-02", "owner_level": "GROUP"}},
+    {"document_id": "SPEC-LABEL-02", "type": "SPECIFICATION", "title": "Alkolsüz İçecek Etiket Şartnamesi", "owner_department": "QUALITY", "version": "4.2",
+     "file": "documents/SPEC-LABEL-02-etiket-sartnamesi.md",
+     "scope": {"policy_id": "SPEC-LABEL-02", "owner_level": "LEGAL_ENTITY", "entity_id": "NONALC-BOTTLING"},
+     "product_ids": ["NONALC-COLA", "NONALC-COLA-ZERO", "NONALC-ICED-TEA", "NONALC-JUICE"]},
+    {"document_id": "POL-ENV-03", "type": "POLICY", "title": "Ambalaj Atığı ve Geri Kazanım Politikası", "owner_department": "ENVIRONMENT", "version": "2.0",
+     "file": "documents/POL-ENV-03-ambalaj-atik.md",
+     "scope": {"policy_id": "POL-ENV-03", "owner_level": "GROUP", "activity_classes": ["PRODUCTION", "BOTTLING", "IMPORT", "PLACING_ON_MARKET"]}},
+    {"document_id": "SOP-WATER-04", "type": "SOP", "title": "Su Dolum ve Etiketleme Prosedürü", "owner_department": "MANUFACTURING", "version": "1.1",
+     "file": "documents/SOP-WATER-04-su-dolum.md",
+     "scope": {"policy_id": "SOP-WATER-04", "owner_level": "LEGAL_ENTITY", "entity_id": "NONALC-BOTTLING"},
+     "product_ids": ["NONALC-WATER"]}
+  ],
+  "controls": [
+    {"control_id": "CTL-ENERGY-BATCH", "description": "Her enerji içeceği partisinde kafein analizi ve parti kaydı", "owner_department": "QUALITY",
+     "documents": ["SPEC-ENERGY-01"], "evidence_types": ["BATCH_ANALYSIS_RECORD"], "topics": ["COMPOSITION"]},
+    {"control_id": "CTL-LABEL-APPROVAL", "description": "Etiket metninin baskı öncesi Kalite Güvence onayı", "owner_department": "QUALITY",
+     "documents": ["SPEC-LABEL-02", "SPEC-ENERGY-01"], "evidence_types": ["APPROVED_LABEL_ARTWORK"], "topics": ["LABELLING", "COMPOSITION", "CLAIMS"]},
+    {"control_id": "CTL-AD-REVIEW", "description": "Reklam metinlerinin yayın öncesi Hukuk Müşavirliği incelemesi", "owner_department": "LEGAL",
+     "documents": ["POL-MKT-02"], "evidence_types": ["LEGAL_REVIEW_RECORD"], "topics": ["ADVERTISING", "AGE_RESTRICTION"]},
+    {"control_id": "CTL-GEKAP-DECLARATION", "description": "Aylık geri kazanım katılım payı beyanı ve ödeme mutabakatı", "owner_department": "FINANCE",
+     "documents": ["POL-ENV-03"], "evidence_types": ["GEKAP_DECLARATION"], "topics": ["PACKAGING_WASTE"]}
+  ],
+  "evidence": [
+    {"evidence_id": "EV-BATCH-2026Q3", "control_id": "CTL-ENERGY-BATCH", "evidence_type": "BATCH_ANALYSIS_RECORD", "period": "2026-Q3", "in_period": true},
+    {"evidence_id": "EV-LABEL-2026Q3", "control_id": "CTL-LABEL-APPROVAL", "evidence_type": "APPROVED_LABEL_ARTWORK", "period": "2026-Q3", "in_period": true},
+    {"evidence_id": "EV-GEKAP-2026Q3", "control_id": "CTL-GEKAP-DECLARATION", "evidence_type": "GEKAP_DECLARATION", "period": "2026-Q3", "in_period": true}
+  ]
+}

@@ -284,11 +284,15 @@ def _modality(folded: str) -> tuple[str | None, str, bool]:
     return None, '', False
 
 
+# Aorists that state what is on a label or what a value is: "etiket üzerinde yer alır", "en fazla 3,0 g/L olur".
+EXISTENTIAL = frozenset({'alır', 'alırlar', 'olur', 'bulunur'})
+
+
 def _plain_active_aorist(marker: str, passive: bool) -> bool:
     """A duty that rests on a bare active aorist ("karşılarlar", "talep eder") and on no duty word."""
     word = marker.split(' (')[0].split()[-1] if marker else ''
     return bool(word) and not passive and bool(AORIST.search(word)) and not MUST_WORDS.search(marker) \
-        and not NECESSITATIVE.search(word)
+        and not NECESSITATIVE.search(word) and word not in EXISTENTIAL
 
 
 def _find(patterns, folded: str, text: str, base: int, where: str = 'CLAUSE') -> list[Mention]:

@@ -142,16 +142,20 @@ def _adjunct(frame: Frame, folded: str, mention: Mention) -> bool:
                 or word.endswith(('ilen', 'ılan', 'ulan', 'ülen')))
 
 
-def governing(frame: Frame) -> list[Mention]:
+def governing(frame: Frame, subject: str = 'first') -> list[Mention]:
     """The activity mentions the predicate governs: those that are the verb or stand right before one, and those
-    coordinated with such a mention ("reklamı ve tüketicilere yönelik tanıtımı yapılamaz")."""
+    coordinated with such a mention ("reklamı ve tüketicilere yönelik tanıtımı yapılamaz").
+
+    `subject` says what a passive clause with no such mention falls back on: 'first' the first act it names (a statute's
+    long subject), 'head' the first act that is the head of its noun phrase (followed by a comma: "markalarımızın
+    logoları, ..." yes, "satış belgesi, ..." no), 'none' nothing."""
     verbs = _verbs(frame)
     folded = fold(frame.text)
     mentions = sorted((m for m in frame.activities if m.where == 'CLAUSE' and not _adjunct(frame, folded, m)), key=lambda m: m.start)
     chosen: list[Mention] = []
     for mention in reversed(mentions):
         a, b = mention.start - frame.start, mention.end - frame.start
-        adjacent = any(a <= end and start - b <= 30 and not re.search(r'[,;:]', folded[b:max(b, start)])
+        adjacent = any(a <= end and start - b <= 30 and not re.search(r'[,;]|:\s', folded[b:max(b, start)])
                        for start, end in verbs if end >= a)
         if not adjacent and chosen:
             following = min(chosen, key=lambda m: m.start)
@@ -159,11 +163,28 @@ def governing(frame: Frame) -> list[Mention]:
             adjacent = len(between) <= 42 and bool(CONNECTOR.match(between))
         if adjacent:
             chosen.append(mention)
-    if not chosen and mentions and frame.passive:
+    if not chosen and mentions and frame.passive and subject != 'none':
         # A passive clause whose subject is long ("... firmaların isim, marka, logo, amblemleri ile ... görseller iş
         # yerlerinin içinde, ... bulundurulamaz"): the first act it names is its subject.
-        chosen = mentions[:1]
+        if subject == 'first':
+            chosen = mentions[:1]
+        else:
+            chosen = [m for m in mentions if folded[m.end - frame.start:m.end - frame.start + 1] == ','][:1]
     return sorted(chosen, key=lambda m: m.start)
+
+
+def predicate_segments(frame: Frame) -> list[tuple[int, int]]:
+    """(start, end) spans of the clause text, one per finite predicate: "... satılamaz, | ... oyun ve bahse konu edilemez."
+    A statement that repeats the first half of such a clause has stated half of it."""
+    spans, start = [], 0
+    for _, end in _verbs(frame):
+        if end > start:
+            spans.append((start, end))
+            start = end
+    if not spans:
+        return [(0, len(frame.text))]
+    spans[-1] = (spans[-1][0], len(frame.text))
+    return spans
 
 
 def _classes(mentions, registry: Registry, frame: Frame | None = None) -> list[str]:
@@ -337,12 +358,22 @@ def scopes_of(frame: Frame, regulation: RegulationScope, registry: Registry, ver
     return built
 
 
+# The topic of a clause that names none of its own, from what the whole text is about (its printed title).
+TITLE_TOPICS = (('etiketleme', 'LABELLING'), ('beyan', 'CLAIMS'), ('ambalaj atık', 'PACKAGING_WASTE'), ('geri kazanım', 'PACKAGING_WASTE'),
+                ('reklam', 'ADVERTISING'), ('mesafeli', 'ECOMMERCE'), ('elektronik ticaret', 'ECOMMERCE'), ('hijyen', 'HYGIENE'),
+                ('satışına ve sunumuna', 'SALE'), ('kayıt ve onay', 'LICENSING'))
+
+
 def obligations_of(frames: list[Frame], meta: RegulationMeta, registry: Registry, version_id: str) -> list[ExtractedObligation]:
     regulation = regulation_scope(frames, meta, registry.vocabulary)
+    title = fold(meta.title)
+    fallback_topic = next((topic for word, topic in TITLE_TOPICS if word in title), 'GENERAL')
     out = []
     for frame in frames:
         if not frame.duty_bearing:
             continue
+        if frame.topic == 'GENERAL' and fallback_topic != 'GENERAL':
+            frame.topic = fallback_topic
         for scope, group, basis, flags in scopes_of(frame, regulation, registry, version_id):
             out.append(ExtractedObligation(
                 obligation_id=digest([meta.regulation_id, version_id, frame.ref, group])[:24], regulation_id=meta.regulation_id,

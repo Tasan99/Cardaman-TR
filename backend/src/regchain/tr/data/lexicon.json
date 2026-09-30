@@ -47,7 +47,7 @@
     {"class": "WAREHOUSING", "pattern": "depola[a-zçğıöşü]*|muhafaza[a-zçğıöşü]*"},
     {"class": "WATER_EXTRACTION", "pattern": "kaynak suyu[a-zçğıöşü]*|suyun kaynağından çıkarıl[a-zçğıöşü]*"},
     {"class": "LABELLING", "pattern": "etiket[a-zçğıöşü]*|işaretle[a-zçğıöşü]*|uyarı mesaj[a-zçğıöşü]*|uyarı yazı[a-zçğıöşü]*|ambalaj[a-zçğıöşü]* üzerine"},
-    {"class": "BRAND_USE", "pattern": "marka[a-zçğıöşü]*, (?:amblem|logo|tanıtıcı)[a-zçğıöşü]*|isim, marka|markası(?![a-zçğıöşü])|ticaret unvan[a-zçğıöşü]*"},
+    {"class": "BRAND_USE", "pattern": "marka[a-zçğıöşü]*, (?:amblem|logo|tanıtıcı)[a-zçğıöşü]*|isim, marka|markası(?![a-zçğıöşü])|ticaret unvan[a-zçğıöşü]*|amblem[a-zçğıöşü]*|logo[a-zçğıöşü]*"},
     {"class": "EMPLOYMENT", "pattern": "istihdam[a-zçğıöşü]*|çalıştır[a-zçğıöşü]*"}
   ],
   "sale_activities": ["WHOLESALE", "RETAIL_SALE", "ON_PREMISE_SERVICE", "ECOMMERCE_SALE"],
