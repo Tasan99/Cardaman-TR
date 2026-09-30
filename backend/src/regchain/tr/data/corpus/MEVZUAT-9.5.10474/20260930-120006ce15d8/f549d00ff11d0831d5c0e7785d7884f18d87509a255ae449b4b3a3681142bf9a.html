@@ -1,0 +1,641 @@
+
+    <style>
+        * {
+            font-size: 12pt !important;
+            line-height: 127% !important;
+        }
+
+        @media print {
+            a {
+                visibility: hidden;
+            }
+
+            #section-to-print, #section-to-print * {
+                visibility: visible;
+            }
+
+            #section-to-print {
+                position: absolute;
+                left: 0;
+                top: 0;
+            }
+        }
+        /*aşağıda js kodu var table width değiştirmek için*/
+        table {
+            width: 100% !important;
+            page-break-inside: initial !important;
+            white-space: initial !important;
+            padding: 0 !important;
+            text-indent: 0 !important;
+        }
+
+        @media screen and (max-width: 768px) {
+
+            tr, p, table {
+                width: initial !important;
+                page-break-inside: initial !important;
+                white-space: initial !important;
+                padding: 0 !important;
+                text-indent: 0 !important;
+            }
+
+            table {
+                width: 100% !important;
+            }
+
+
+            td {
+                /*white-space: nowrap !important;*/
+            }
+
+            img {
+                max-width: 100%;
+            }
+        }
+    </style>
+
+    <link href="/lib/tooltip/tooltip.css" rel="stylesheet" />
+<html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=Windows-1254">
+<meta name=ProgId content=Word.Document>
+<meta name=Generator content="Microsoft Word 11">
+<meta name=Originator content="Microsoft Word 11">
+<link rel=File-List href="9.5.10474_dosyalar/filelist.xml">
+<title>.</title>
+<!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:View>Print</w:View>
+  <w:SpellingState>Clean</w:SpellingState>
+  <w:GrammarState>Clean</w:GrammarState>
+  <w:HyphenationZone>21</w:HyphenationZone>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" LatentStyleCount="156">
+ </w:LatentStyles>
+</xml><![endif]-->
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:"\30D2\30E9\30AE\30CE\660E\671D Pro W3";
+	panose-1:0 0 0 0 0 0 0 0 0 0;
+	mso-font-alt:"MS Mincho";
+	mso-font-charset:128;
+	mso-generic-font-family:auto;
+	mso-font-format:other;
+	mso-font-pitch:variable;
+	mso-font-signature:1 134676480 16 0 131072 0;}
+@font-face
+	{font-family:Times;
+	panose-1:2 2 6 3 5 4 5 2 3 4;
+	mso-font-charset:0;
+	mso-generic-font-family:auto;
+	mso-font-pitch:auto;
+	mso-font-signature:0 0 0 0 0 0;}
+@font-face
+	{font-family:"\@\30D2\30E9\30AE\30CE\660E\671D Pro W3";
+	mso-font-charset:128;
+	mso-generic-font-family:auto;
+	mso-font-pitch:variable;
+	mso-font-signature:1 0 16778247 0 131072 0;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{mso-style-parent:"";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+a:link, span.MsoHyperlink
+	{color:blue;
+	text-decoration:underline;
+	text-underline:single;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:purple;
+	text-decoration:underline;
+	text-underline:single;}
+p
+	{mso-margin-top-alt:auto;
+	margin-right:0cm;
+	mso-margin-bottom-alt:auto;
+	margin-left:0cm;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+p.3-NormalYaz, li.3-NormalYaz, div.3-NormalYaz
+	{mso-style-name:"3-Normal Yazı";
+	mso-style-parent:"";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	mso-pagination:widow-orphan;
+	tab-stops:28.3pt;
+	font-size:9.5pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"\30D2\30E9\30AE\30CE\660E\671D Pro W3";
+	mso-hansi-font-family:Times;
+	mso-fareast-language:EN-US;}
+span.SpellE
+	{mso-style-name:"";
+	mso-spl-e:yes;}
+span.GramE
+	{mso-style-name:"";
+	mso-gram-e:yes;}
+@page Section1
+	{size:595.3pt 841.9pt;
+	margin:70.85pt 70.85pt 70.85pt 70.85pt;
+	mso-header-margin:35.4pt;
+	mso-footer-margin:35.4pt;
+	mso-paper-source:0;}
+div.Section1
+	{page:Section1;}
+-->
+</style>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:"Normal Tablo";
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
+	mso-para-margin:0cm;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-ansi-language:#0400;
+	mso-fareast-language:#0400;
+	mso-bidi-language:#0400;}
+</style>
+<![endif]-->
+<script type="text/javascript">window.av = { database:'2' , rnApp:'False' }</script><script src="https://www.mevzuat.gov.tr/lib/jquery/dist/jquery.js"></script><script src="https://www.mevzuat.gov.tr/js/iframescript.min.js?v=1.05"></script><style><!--* {font-family:inherit!important;}--></style></head>
+
+<body lang=TR link=blue vlink=purple style='tab-interval:35.4pt'>
+
+<div class=Section1>
+
+<p class=MsoNormal align=center style='text-align:center;line-height:12.0pt'><b><span style='font-size:10.0pt'>TÜRK GIDA KODEKSİ BİRA TEBLİĞİ</span></b><span style='font-size:10.0pt'><o:p></o:p></span></p>
+
+<p class=MsoNormal align=center style='text-align:center;line-height:12.0pt'><b><span style='font-size:10.0pt'>(TEBLİĞ NO: 2006/33)</span></b><span style='font-size:
+10.0pt'><o:p></o:p></span></p>
+
+<p class=MsoNormal align=center style='text-align:center;line-height:12.0pt'><b><span style='font-size:10.0pt'>&nbsp;</span></b><span style='font-size:10.0pt'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><b><span style='font-size:10.0pt'>Amaç</span></b><span style='font-size:10.0pt'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><b><span style='font-size:10.0pt'>MADDE 1 – </span></b><span style='font-size:10.0pt'>(1) Bu Tebliğin amacı, biranın tekniğine uygun ve <span class=GramE>hijyenik</span> şekilde üretim, hazırlama, işleme, muhafaza, depolama,
+taşıma ve pazarlamasını sağlamak üzere özelliklerini
+belirlemektir.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><b><span style='font-size:10.0pt'>Kapsam</span></b><span style='font-size:10.0pt'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><b><span style='font-size:10.0pt'>MADDE 2 – </span></b><span style='font-size:10.0pt'>(1) Bu Tebliğ birayı kapsar. Malt içeceğini kapsamaz.<o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><b><span style='font-size:10.0pt'>Hukuki dayanak</span></b><span style='font-size:10.0pt'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><b><span style='font-size:10.0pt'>MADDE 3 –</span></b><span style='font-size:10.0pt'> (1) Bu Tebliğ, <span class=GramE>16/11/1997</span>
+tarihli ve 23172 mükerrer sayılı Resmi Gazete’de yayımlanan &quot;Türk Gıda
+Kodeksi Yönetmeliği&quot; ne göre hazırlanmıştır.<o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><b><span style='font-size:10.0pt'>Tanımlar</span></b><span style='font-size:10.0pt'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><b><span style='font-size:10.0pt'>MADDE 4 –</span></b><span style='font-size:10.0pt'> (1) Bu Tebliğde geçen:<o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><span style='font-size:10.0pt'>a) Malt: Bira üretiminde kullanılan
+başta arpa olmak üzere diğer tahılın kontrollü koşullarda su ile
+çimlendirildikten sonra kurutulup kavrulmuş halini, <o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><span style='font-size:10.0pt'>b) Şerbetçiotu: Biraya karakteristik <span class=GramE>aroma</span> ve acılık verici özellikleri kazandırma ve koruma
+amaçlı katılan <span class=SpellE>Humulus</span> <span class=SpellE>lupulus</span>
+adlı kültür bitkisini veya bu bitkinin fiziksel veya kimyasal veya hem fiziksel
+hem de kimyasal işlem görmüş halini,<o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><span style='font-size:10.0pt'>c) <span class=SpellE>Ekstrakt</span>
+maddeleri: Kuru madde <span class=GramE>konsantrasyonunun</span> sağlanması
+için ilave edilen malt, tahıl ve tahıldan elde edilen ürünler, bira
+konsantresi, malt konsantresi, şeker, maltoz ve <span class=SpellE>maltodekstrini</span>,<o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><span class=GramE><span style='font-size:10.0pt'>d) Bira: Sadece maltın
+veya malt ve <span class=SpellE>ekstrakt</span> maddelerinin öğütülüp, sıcak su
+ile belirli yöntemlerle işlenmesi sonucunda elde edilen şıranın; şerbetçiotu
+ile kaynatılması ve soğutulması, bira mayası ile fermente edilmesi ve
+dinlendirilmesinden sonra, filtre edilerek veya edilmeyerek, pastörize edilerek
+veya edilmeyerek üretilen içinde çözünmüş halde karbondioksit bulunan bulanık
+veya berrak içkiyi, </span></span><span style='font-size:10.0pt'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><span style='font-size:10.0pt'>e) Alkolsüz bira: Sadece maltın veya
+malt ve <span class=SpellE>ekstrakt</span> maddelerinin öğütülüp, sıcak su ile
+belirli yöntemlerle işlenmesi sonucunda elde edilen şıranın; şerbetçiotu ile
+kaynatılması ve soğutulması, bira mayası ile <span class=GramE>belirlenen</span>
+alkol derecesine kadar fermente edilmesi veya <span class=SpellE>fermentasyon</span>
+sonucu oluşan alkolün uzaklaştırılması yoluyla elde edilen, filtre edilerek
+veya edilmeyerek, pastörize edilerek veya edilmeyerek üretilen, içinde çözünmüş
+halde karbondioksit bulunan bulanık veya berrak içkiyi,<o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><span style='font-size:10.0pt'>f) Aromalı bira: <span class=SpellE>Aromatize</span>
+edilmiş bira ve <span class=SpellE>aromatize</span> edilmiş alkolsüz birayı,<o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><span style='font-size:10.0pt'>g) EBC birimi: Avrupa Biracılık Komitesi
+tarafından yayınlanan biranın renginin değerlendirilmesinde kullanılan ölçü
+birimini,<o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><span class=GramE><span style='font-size:10.0pt'>ifade</span></span><span style='font-size:10.0pt'> eder.<o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><b><span style='font-size:10.0pt'>Ürün özellikleri</span></b><span style='font-size:10.0pt'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><b><span style='font-size:10.0pt'>MADDE 5 –</span></b><span style='font-size:10.0pt'> (1) Bu Tebliğ kapsamındaki ürünlerin özellikleri
+aşağıda verilmiştir:<o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><span style='font-size:10.0pt'>a) Bira <span class=SpellE>hacmen</span>
+alkol miktarlarına göre dörde ayrılır:<o:p></o:p></span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 style='margin-left:35.4pt;border-collapse:collapse;mso-padding-alt:0cm 0cm 0cm 0cm'>
+ <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes'>
+  <td width=137 valign=top style='width:102.4pt;border:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal style='text-align:justify;line-height:12.0pt'><b><span style='font-size:10.0pt'>Ürün Adı</span></b><span style='font-size:10.0pt'><o:p></o:p></span></p>
+  </td>
+  <td width=171 valign=top style='width:128.6pt;border:solid windowtext 1.0pt;
+  border-left:none;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal style='line-height:12.0pt'><b><span style='font-size:10.0pt'>&nbsp;%
+  <span class=SpellE>Hacmen</span> Alkol (20 ºC)</span></b><span style='font-size:10.0pt'><o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr style='mso-yfti-irow:1'>
+  <td width=137 valign=top style='width:102.4pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal style='text-align:justify;line-height:12.0pt'><span style='font-size:10.0pt'>Alkolsüz
+  bira&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <o:p></o:p></span></p>
+  </td>
+  <td width=171 valign=top style='width:128.6pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal style='text-align:justify;line-height:12.0pt'><span style='font-size:10.0pt'>&nbsp;&nbsp;&nbsp; £ 0,5<o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr style='mso-yfti-irow:2'>
+  <td width=137 valign=top style='width:102.4pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal style='text-align:justify;line-height:12.0pt'><span style='font-size:10.0pt'>Düşük Alkollü Bira&nbsp;&nbsp;&nbsp;&nbsp; <o:p></o:p></span></p>
+  </td>
+  <td width=171 valign=top style='width:128.6pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal style='text-align:justify;line-height:12.0pt'><span style='font-size:10.0pt'>&nbsp;&nbsp;&nbsp; &gt;
+  0,5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; £ 3 <o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr style='mso-yfti-irow:3'>
+  <td width=137 valign=top style='width:102.4pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal style='text-align:justify;line-height:12.0pt'><span style='font-size:10.0pt'>Bira&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <o:p></o:p></span></p>
+  </td>
+  <td width=171 valign=top style='width:128.6pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal style='text-align:justify;line-height:12.0pt'><span style='font-size:10.0pt'>&nbsp;&nbsp;&nbsp; &gt;
+  3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; £ 6 <o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr style='mso-yfti-irow:4;mso-yfti-lastrow:yes'>
+  <td width=137 valign=top style='width:102.4pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal style='text-align:justify;line-height:12.0pt'><span style='font-size:10.0pt'>Yüksek Alkollü Bira&nbsp; <o:p></o:p></span></p>
+  </td>
+  <td width=171 valign=top style='width:128.6pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal style='text-align:justify;line-height:12.0pt'><span style='font-size:10.0pt'>&nbsp;&nbsp;&nbsp; &gt;
+  6&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; £ 10&nbsp; <o:p></o:p></span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=MsoNormal style='text-align:justify;line-height:12.0pt'><span style='font-size:10.0pt'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+b) Biralar renklerine göre üçe ayrılır:<o:p></o:p></span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 style='margin-left:35.2pt;border-collapse:collapse;mso-padding-alt:0cm 0cm 0cm 0cm'>
+ <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes'>
+  <td width=111 valign=top style='width:83.1pt;border:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal style='text-align:justify;line-height:12.0pt'><b><span style='font-size:10.0pt'>Ürün Adı</span></b><span style='font-size:10.0pt'><o:p></o:p></span></p>
+  </td>
+  <td width=89 valign=top style='width:66.75pt;border:solid windowtext 1.0pt;
+  border-left:none;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal style='line-height:12.0pt'><b><span style='font-size:10.0pt'>&nbsp;EBC
+  Değeri</span></b><span style='font-size:10.0pt'><o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr style='mso-yfti-irow:1'>
+  <td width=111 valign=top style='width:83.1pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal style='text-align:justify;line-height:12.0pt'><span style='font-size:10.0pt'>Açık Renkli Bira<o:p></o:p></span></p>
+  </td>
+  <td width=89 valign=top style='width:66.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal style='text-align:justify;line-height:12.0pt'><span style='font-size:10.0pt'>&lt; 15<o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr style='mso-yfti-irow:2'>
+  <td width=111 valign=top style='width:83.1pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal style='text-align:justify;line-height:12.0pt'><span style='font-size:10.0pt'>Koyu Renkli Bira<o:p></o:p></span></p>
+  </td>
+  <td width=89 valign=top style='width:66.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal style='text-align:justify;line-height:12.0pt'><span style='font-size:10.0pt'>15 - 40 <o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr style='mso-yfti-irow:3;mso-yfti-lastrow:yes'>
+  <td width=111 valign=top style='width:83.1pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal style='text-align:justify;line-height:12.0pt'><span style='font-size:10.0pt'>Siyah Bira<o:p></o:p></span></p>
+  </td>
+  <td width=89 valign=top style='width:66.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal style='text-align:justify;line-height:12.0pt'><span style='font-size:10.0pt'>&gt; 40<o:p></o:p></span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><span style='font-size:10.0pt'>c) Karbondioksit miktarı en az ağırlıkça
+% 0,3 olmalıdır.<o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><span style='font-size:10.0pt'>ç) <span class=SpellE>pH</span>
+değeri&nbsp; &gt;3,8 - &#8804;&nbsp; 4,8&nbsp; olmalıdır. Aromalı biralarda <span class=SpellE>pH</span> değeri &gt;2 - &#8805;&nbsp; 4,8&nbsp; arasında
+olmalıdır.<o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><span style='font-size:10.0pt'>d) Bu Tebliğde yer alan ürünlerde
+hammadde olarak kullanılan maltın oranı en az %60 olmalıdır.<o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><span style='font-size:10.0pt'>e) Biralarda kullanılan su ilgili
+mevzuata uygun olmalıdır. <o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><b><span style='font-size:10.0pt'>Katkı maddeleri</span></b><span style='font-size:10.0pt'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><b><span style='font-size:10.0pt'>MADDE 6 – </span></b><span style='font-size:10.0pt'>(1) Bu Tebliğ kapsamında yer alan ürünler &quot;Türk
+Gıda Kodeksi Yönetmeliği&quot; <span class=SpellE>nin</span> Gıda Katkı
+Maddeleri bölümünde yer alan hükümlere uygun olmalıdır. <o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><b><span style='font-size:10.0pt'>Aroma maddeleri</span></b><span style='font-size:10.0pt'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><b><span style='font-size:10.0pt'>MADDE 7 – </span></b><span style='font-size:10.0pt'>(1) Bu Tebliğ kapsamında yer alan ürünlere ilave
+edilecek <span class=GramE>aroma</span> maddeleri &quot;Türk Gıda Kodeksi
+Yönetmeliği&quot;nin Gıda Aroma Maddeleri bölümünde yer alan hükümlere uygun
+olmalıdır. Ayrıca Tebliğ kapsamında yer alan ürünlere <span class=SpellE>aromatize</span>
+otlar, tohumlar, bitki kısımları, <span class=GramE>aroma</span> vermek
+amacıyla baharat ve bitki karışımları ile bunların işlenmiş hali ilave
+edilebilir. <o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><b><span style='font-size:10.0pt'>İşleme ve İşlem Yardımcıları</span></b><span style='font-size:10.0pt'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><b><span style='font-size:10.0pt'>MADDE 8 – </span></b><span style='font-size:10.0pt'>(1) Biralarda; <span class=SpellE>kiselgur</span>, <span class=SpellE>kiseljel</span>, <span class=SpellE>silikajel</span>, <span class=SpellE>karragenan</span>, <span class=SpellE>isinglass</span>, PVPP, <span class=SpellE>bentonit</span>, selüloz, perlit, enzimler, fosforik asit, laktik
+asit, sitrik asit, kalsiyum tuzları, magnezyum tuzları, çinko tuzları işlem
+yardımcısı olarak kullanılabilir.<o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><b><span style='font-size:10.0pt'>Bulaşanlar</span></b><span style='font-size:10.0pt'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><b><span style='font-size:10.0pt'>MADDE 9 – </span></b><span style='font-size:10.0pt'>(1) Bu Tebliğ kapsamında yer alan ürünler &quot;Türk
+Gıda Kodeksi Yönetmeliği&quot;nin Bulaşanlar bölümüne uygun olmalıdır. <o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><span class=SpellE><b><span style='font-size:10.0pt'>Pestisit</span></b></span><b><span style='font-size:10.0pt'> kalıntıları</span></b><span style='font-size:10.0pt'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><b><span style='font-size:10.0pt'>MADDE 10 –</span></b><span style='font-size:10.0pt'> (1) Bu Tebliğ kapsamında yer alan ürünlerde <span class=SpellE>pestisit</span> kalıntıları &quot;Türk Gıda Kodeksi
+Yönetmeliği&quot;nin <span class=SpellE>Pestisit</span> Kalıntıları bölümünde
+verilen değerlere uygun olmalıdır.<o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><b><span style='font-size:10.0pt'>Hijyen</span></b><span style='font-size:10.0pt'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><b><span style='font-size:10.0pt'>MADDE 11 – </span></b><span style='font-size:10.0pt'>(1) Bu Tebliğ kapsamında yer alan ürünler &quot;Türk
+Gıda Kodeksi Yönetmeliği&quot;nin Gıda Hijyeni bölümünde yer alan genel
+kurallara uygun olmalıdır.&nbsp; <o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><b><span style='font-size:10.0pt'>Ambalajlama, etiketleme ve işaretleme</span></b><span style='font-size:10.0pt'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><b><span style='font-size:10.0pt'>MADDE 12 – </span></b><span style='font-size:10.0pt'>(1) Bu Tebliğ kapsamında yer alan ürünlerin
+ambalajlanması ve işaretlenmesi &quot;Türk Gıda Kodeksi Yönetmeliği&quot;nin
+Ambalajlama ve&nbsp; Etiketleme-İşaretleme bölümüne uygun olmalıdır. Bunun yanı
+sıra aşağıdaki kurallara da uyulur:<o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><span style='font-size:10.0pt'>a) Bu Tebliğ kapsamındaki ürünlere
+tanımı dışında ilave edilen <span class=GramE>aromalar</span> ürün adı ile
+birlikte etiketinde yer alır.<o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><span style='font-size:10.0pt'>b) Bira üretiminde kullanılan <span class=SpellE>ekstrakt</span> maddeleri ayrı <span class=SpellE>ayrı</span>
+etiket üzerinde belirtilmelidir.<o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><span style='font-size:10.0pt'>c) Bu Tebliğ kapsamındaki ürünler <span class=SpellE>hacmen</span> alkol miktarlarına ve 5 inci maddesinin (c) bendinde
+belirtilen renk gruplarına göre adlandırılır.<o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><span style='font-size:10.0pt'>d) Hammadde olarak arpa maltı ile
+birlikte kullanılan başka tahıl maltlarının oranı, en az %25 olduğu durumlarda,
+ürün ismi kullanılan ilgili tahılın ismi ile birlikte yazılır.<o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><span style='font-size:10.0pt'>e) Bu Tebliğde yer alan alkolsüz bira
+haricindeki ürünlerin, &quot;Türk Gıda Kodeksi Yönetmeliği – Gıda Maddelerinin
+Genel Etiketleme ve Beslenme Yönünden Etiketleme Kuralları&quot; Tebliğinin 5
+inci maddesi (i) bendi dikkate alınmaksızın, <span class=SpellE>hacmen</span>
+alkol miktarları etikette yer almalıdır. <o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><span style='font-size:10.0pt'>f) <b style='mso-bidi-font-weight:normal'>(<span class=GramE>Değişik:RG</span>-21/12/2011-28149) </b>5 inci maddenin birinci
+fıkrasının (a) bendinde yer alan biraya göre enerjisi en az %30 oranında
+azaltılmış düşük alkollü biralar etiket üzerinde ‘hafif’ veya eşdeğeri bir
+kelimeyle ifade edilebilir. <o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><b><span style='font-size:10.0pt'>Taşıma ve depolama</span></b><span style='font-size:10.0pt'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><b><span style='font-size:10.0pt'>MADDE 13 – </span></b><span style='font-size:10.0pt'>(1) Bu Tebliğ kapsamında yer alan ürünlerin taşınması
+ve depolanmasında &quot;Türk Gıda Kodeksi Yönetmeliği&quot;nin Taşıma ve
+Depolama bölümündeki kurallara uyulmalıdır.<o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><b><span style='font-size:10.0pt'>Numune alma ve analiz metotları</span></b><span style='font-size:10.0pt'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><b><span style='font-size:10.0pt'>MADDE 14 – </span></b><span style='font-size:10.0pt'>(1) Bu Tebliğ kapsamında yer alan ürünlerden, üretim
+hattından ve muhafaza deposundan numune alınmasında &quot;Türk Gıda Kodeksi
+Yönetmeliği&quot;nin Numune Alma ve Analiz Metotları bölümündeki kurallara
+uyulmalıdır. Numune uluslararası kabul görmüş metotlara göre analiz
+edilmelidir.<o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><b><span style='font-size:10.0pt'>Avrupa Birliğine Bildirim</span></b><span style='font-size:10.0pt'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><b><span style='font-size:10.0pt'>MADDE 15 –</span></b><span style='font-size:10.0pt'> Bu Tebliğ &quot;Teknik Mevzuatın ve Standartların
+Türkiye ile Avrupa Birliği Arasında Bildirimine Dair Yönetmelik&quot;
+kapsamında Avrupa Birliği Komisyonu’na bildirilmiştir.<o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><b><span style='font-size:10.0pt'>Tescil ve denetim</span></b><span style='font-size:10.0pt'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><b><span style='font-size:10.0pt'>MADDE 16 – </span></b><span style='font-size:10.0pt'>(1) Bu Tebliğ kapsamında yer alan ürünleri üreten ve
+satan işyerleri; tescil ve izin, ithalat işlemleri, kontrol ve denetim
+sırasında bu Tebliğ hükümlerine uymak zorundadır. Bu hükümlere uymayan
+işyerleri hakkında 5179 sayılı Gıdaların Üretimi, Tüketimi ve Denetlenmesine
+Dair Kanun Hükmünde Kararnamenin Değiştirilerek Kabulü Hakkında Kanun’un
+hükümlerine göre yasal işlem yapılır.<o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><b><span style='font-size:10.0pt'>Denetim </span></b><span style='font-size:10.0pt'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><b><span style='font-size:10.0pt'>MADDE 17 – </span></b><span style='font-size:10.0pt'>(1) Bu Tebliğde yer alan hükümlerin uygulanması ile
+ilgili denetim, 5179 sayılı Gıdaların Üretimi, Tüketimi ve Denetlenmesine Dair
+Kanun Hükmünde Kararnamenin Değiştirilerek Kabulü Hakkında Kanun’a göre Tarım
+ve <span class=SpellE>Köyişleri</span> Bakanlığı tarafından yerine getirilir.<o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><b><span style='font-size:10.0pt'>GEÇİCİ MADDE 1 –</span></b><span style='font-size:10.0pt'> (1) Halen faaliyet gösteren ve bu Tebliğ kapsamında
+yer alan ürünleri üreten ve satan işyerleri 1 yıl içinde Tebliğ hükümlerine
+uymak zorundadır. Bu süre içinde gerekli düzenlemeleri yapmayan söz konusu
+üretim yerlerinin faaliyetine izin verilmez. Bu sürenin sonunda söz konusu
+üretim yerleri ile Tebliğ hükümlerine uymayan ürünleri satan işyerleri hakkında
+5179 sayılı Gıdaların Üretimi, Tüketimi ve Denetlenmesine Dair Kanun Hükmünde
+Kararnamenin Değiştirilerek Kabulü Hakkında Kanun’a göre yasal işlem yapılır. <o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><b style='mso-bidi-font-weight:normal'><span style='font-size:10.0pt'>GEÇİCİ
+MADDE 2 – (Ek:RG-21/12/2011-28149) </span></b><span style='font-size:10.0pt'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><span style='font-size:10.0pt'>(1) Gıda işletmecileri, 12 <span class=SpellE>nci</span> maddenin birinci fıkrasının (f) bendine <span class=GramE>1/1/2013</span> tarihine kadar uymak zorundadırlar. <o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><span style='font-size:10.0pt'>(2) Bu maddenin yürürlüğe girmesinden
+önce faaliyet göstermekte olan gıda işletmecileri, 12 <span class=SpellE>nci</span>
+maddenin birinci fıkrasının (f) bendine <span class=GramE>1/1/2013</span>
+tarihine kadar uyum sağlayıncaya kadar; uyulması zorunlu oran, %25 olarak
+uygulanır. <o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><b><span style='font-size:10.0pt'>Yürürlük</span></b><span style='font-size:10.0pt'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><b><span style='font-size:10.0pt'>MADDE 18 – </span></b><span style='font-size:10.0pt'>(1) Bu Tebliğ yayımı tarihinde yürürlüğe girer.<o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><b><span style='font-size:10.0pt'>Yürütme</span></b><span style='font-size:10.0pt'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-align:justify;text-indent:27.0pt;line-height:
+12.0pt'><b><span style='font-size:10.0pt'>MADDE 19 –</span></b><span style='font-size:10.0pt'> (1) Bu Tebliğ hükümlerini Tarım ve <span class=SpellE>Köyişleri</span> Bakanı yürütür.<o:p></o:p></span></p>
+
+</div>
+
+</body>
+
+</html>
+    <p id="page-end"></p>
+    <script src="/lib/tooltip/tooltip.js"></script>
+    <script>
+        $(document).ready(function () {
+            jQuery('table').each(function (cmp) {
+                var parent = this.parentNode;
+                var wrapper = document.createElement('div');
+
+                parent.replaceChild(wrapper, this);
+                wrapper.appendChild(this);
+                this.parentElement.style.overflowX = 'auto';
+            });
+            if (window.location.search.indexOf("2709") != -1 || window.location.search.indexOf("MevzuatTur=19") != -1) {
+                var tableCss = document.styleSheets[0].cssRules[2].style;
+                tableCss.cssText = tableCss.cssText.replace("100%", "initial");
+            }
+            //$('.tooltip').tooltipster();
+            //replaceTable();
+            //$(window).on('resize', function () {
+            //    replaceTable();
+            //});
+            //replaceTable();
+        });
+            //function replaceTable() {
+            //    //if (window.location.search.indexOf("MevzuatTur=19") == -1) {
+            //    //    var iframe = document.getElementsByTagName("td");
+            //    //    var value = $('body').width() - 10;
+            //    //    for (var i = 0; i < iframe.length; i++) {
+            //    //        iframe[i].style.width = "initial !important";
+            //    //    }
+            //    //}
+
+
+            //    //var iframe = document.getElementsByClassName("MsoNormalTable");
+            //    //var value = $('body').width() - 10;
+            //
+            //    //for (var i = 0; i < iframe.length; i++) {
+            //    //    iframe[i].style.width = value;
+            //    //}
+
+            //    //var iframe2 = document.getElementsByClassName("MsoNormal");
+            //    ////for (var j = 0; j < iframe2.length; j++) {
+            //    ////    iframe2[j].style.width = value;
+            //    ////}
+            //}
+    </script>
+
+
+

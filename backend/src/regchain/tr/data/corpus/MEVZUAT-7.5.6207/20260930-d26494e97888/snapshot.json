@@ -1,0 +1,17 @@
+{
+  "format": "regchain-fca-snapshot-v1",
+  "parser_version": "fca-parser-v4",
+  "sources": [
+    {
+      "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=6207&MevzuatTertip=5",
+      "requested_url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=6207&MevzuatTertip=5",
+      "fetched_at": "2026-09-30T11:40:04.796420+00:00",
+      "media_type": "text/html",
+      "raw_hash": "784ba7d10d1b518efb83f5cc670d33b18e008dedfd9ed407137f9c62726d6026",
+      "raw_file": "784ba7d10d1b518efb83f5cc670d33b18e008dedfd9ed407137f9c62726d6026.html",
+      "parsed_hash": "d26494e9788809c731d6ede6b071483ea02da74cc1d6aad05869a69d079ecac7",
+      "parser_version": "mevzuat-parser-v4",
+      "title": "ALKOL VE ALKOLLÜ İÇKİ TESİSLERİNİN HAİZ OLMALARI GEREKEN TEKNİK ŞARTLAR, KURULMALARI, İŞLETİLMELERİ VE DENETLENMELERİNE İLİŞKİN USUL VE ESASLAR HAKKINDA YÖNETMELİK"
+    }
+  ]
+}

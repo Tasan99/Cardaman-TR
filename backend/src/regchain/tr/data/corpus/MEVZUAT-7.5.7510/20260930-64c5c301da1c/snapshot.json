@@ -1,0 +1,17 @@
+{
+  "format": "regchain-fca-snapshot-v1",
+  "parser_version": "fca-parser-v4",
+  "sources": [
+    {
+      "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=7510&MevzuatTertip=5",
+      "requested_url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=7510&MevzuatTertip=5",
+      "fetched_at": "2026-09-30T11:40:07.617924+00:00",
+      "media_type": "text/html",
+      "raw_hash": "f92552d662adc081ddae2212d9e83882515b7552f9b4ecad69399086f07dae55",
+      "raw_file": "f92552d662adc081ddae2212d9e83882515b7552f9b4ecad69399086f07dae55.html",
+      "parsed_hash": "64c5c301da1c4903dc953c6ea87216798f12e9a6bea69819fbb64e92c0047b7e",
+      "parser_version": "mevzuat-parser-v4",
+      "title": "İNSANİ TÜKETİM AMAÇLI SULAR HAKKINDA YÖNETMELİK"
+    }
+  ]
+}

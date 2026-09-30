@@ -1,0 +1,17 @@
+{
+  "format": "regchain-fca-snapshot-v1",
+  "parser_version": "fca-parser-v4",
+  "sources": [
+    {
+      "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=9&MevzuatNo=19949&MevzuatTertip=5",
+      "requested_url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=9&MevzuatNo=19949&MevzuatTertip=5",
+      "fetched_at": "2026-09-30T11:40:12.910173+00:00",
+      "media_type": "text/html",
+      "raw_hash": "1992f5ba8f2adf06fd9351c0dbfddd6892523e66b5c2570cc641538cb9e728ae",
+      "raw_file": "1992f5ba8f2adf06fd9351c0dbfddd6892523e66b5c2570cc641538cb9e728ae.html",
+      "parsed_hash": "1be9140f1fc0a80db128d42e6e047607b13c6d37003aa0d7012c6a0ba42d8288",
+      "parser_version": "mevzuat-parser-v4",
+      "title": "TÜRK GIDA KODEKSİ MEYVE SUYU VE BENZERİ ÜRÜNLER TEBLİĞİ (TEBLİĞ NO: 2014/34)"
+    }
+  ]
+}

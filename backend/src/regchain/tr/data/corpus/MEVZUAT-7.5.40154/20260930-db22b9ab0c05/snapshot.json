@@ -1,0 +1,17 @@
+{
+  "format": "regchain-fca-snapshot-v1",
+  "parser_version": "fca-parser-v4",
+  "sources": [
+    {
+      "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=40154&MevzuatTertip=5",
+      "requested_url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=40154&MevzuatTertip=5",
+      "fetched_at": "2026-09-30T11:40:19.617137+00:00",
+      "media_type": "text/html",
+      "raw_hash": "d0fcad0f8c6cdcd28a7fd5abf6990af40c17760125b1ea88a60eae69d0cfdb09",
+      "raw_file": "d0fcad0f8c6cdcd28a7fd5abf6990af40c17760125b1ea88a60eae69d0cfdb09.html",
+      "parsed_hash": "db22b9ab0c05b5e359c25e12bc8174a2d691ccb7c13ce48a58cd566bb60cb7b4",
+      "parser_version": "mevzuat-parser-v4",
+      "title": "TÜRK GIDA KODEKSİ BESLENME BEYANLARI YÖNETMELİĞİ"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "format": "regchain-fca-snapshot-v1",
+  "parser_version": "fca-parser-v4",
+  "sources": [
+    {
+      "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=15592&MevzuatTertip=5",
+      "requested_url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=15592&MevzuatTertip=5",
+      "fetched_at": "2026-09-30T11:40:16.822480+00:00",
+      "media_type": "text/html",
+      "raw_hash": "fae3e08ebcf3deed857a838f3846b6f095526e5d16135d3d53119bd4e76db378",
+      "raw_file": "fae3e08ebcf3deed857a838f3846b6f095526e5d16135d3d53119bd4e76db378.html",
+      "parsed_hash": "aebe05d434a3818f6c7c2caa875c4930499593699e66ef4664e73f9f37bdaf02",
+      "parser_version": "mevzuat-parser-v4",
+      "title": "Yönetmelik 15592"
+    }
+  ]
+}

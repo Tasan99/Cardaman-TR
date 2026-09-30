@@ -1,0 +1,17 @@
+{
+  "format": "regchain-fca-snapshot-v1",
+  "parser_version": "fca-parser-v4",
+  "sources": [
+    {
+      "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=6203&MevzuatTertip=5",
+      "requested_url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=6203&MevzuatTertip=5",
+      "fetched_at": "2026-09-30T11:40:03.003105+00:00",
+      "media_type": "text/html",
+      "raw_hash": "906dcefd48e01796482b79389be8397464bd6043558978e77ee8e019cdfd2ccd",
+      "raw_file": "906dcefd48e01796482b79389be8397464bd6043558978e77ee8e019cdfd2ccd.html",
+      "parsed_hash": "c3d5ba94a7b12664cb5d91f53af10f14cf3f0ca611bbf18e1e26ab33ff2b328e",
+      "parser_version": "mevzuat-parser-v4",
+      "title": "ALKOL VE ALKOLLÜ İÇKİLERİN İÇ VE DIŞ TİCARETİNE İLİŞKİN USUL VE ESASLAR HAKKINDA YÖNETMELİK"
+    }
+  ]
+}

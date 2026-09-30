@@ -1,0 +1,17 @@
+{
+  "format": "regchain-fca-snapshot-v1",
+  "parser_version": "fca-parser-v4",
+  "sources": [
+    {
+      "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=15594&MevzuatTertip=5",
+      "requested_url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=15594&MevzuatTertip=5",
+      "fetched_at": "2026-09-30T11:40:15.427106+00:00",
+      "media_type": "text/html",
+      "raw_hash": "b1cd54c602c1d619302db9036b7c4c59613f3def190231155e429df2dfe254db",
+      "raw_file": "b1cd54c602c1d619302db9036b7c4c59613f3def190231155e429df2dfe254db.html",
+      "parsed_hash": "57965927498eaca9f63af3fbe03ac438afe7616bc3479d29e9dbc5576b399593",
+      "parser_version": "mevzuat-parser-v4",
+      "title": "GIDA İŞLETMELERİNİN KAYIT VE ONAY İŞLEMLERİNE DAİR YÖNETMELİK"
+    }
+  ]
+}

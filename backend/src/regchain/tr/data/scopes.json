@@ -86,7 +86,7 @@
       "level": "PRODUCT", "provision_ref": null, "provision_status": "UNRESOLVED"
     },
     {
-      "scope_id": "NUTRITION_HEALTH_CLAIMS", "regulation_id": "TR:YONETMELIK:TGK_BESLENME_SAGLIK_BEYANLARI", "topic": "CLAIMS",
+      "scope_id": "NUTRITION_HEALTH_CLAIMS", "regulation_id": "TR:YONETMELIK:TGK_BESLENME_BEYANLARI", "topic": "CLAIMS",
       "description_tr": "Beslenme ve sağlık beyanı taşıyan ürünlere ilişkin gereklilikler.",
       "level": "PRODUCT", "provision_ref": null, "provision_status": "UNRESOLVED",
       "product_attributes": ["HEALTH_CLAIM", "NUTRITION_CLAIM"]

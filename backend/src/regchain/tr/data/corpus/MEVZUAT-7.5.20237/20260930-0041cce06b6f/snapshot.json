@@ -1,0 +1,17 @@
+{
+  "format": "regchain-fca-snapshot-v1",
+  "parser_version": "fca-parser-v4",
+  "sources": [
+    {
+      "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=20237&MevzuatTertip=5",
+      "requested_url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=20237&MevzuatTertip=5",
+      "fetched_at": "2026-09-30T11:40:26.616151+00:00",
+      "media_type": "text/html",
+      "raw_hash": "7304421c442933856300b86b3c16ca27812003b33930f4b40256d1e62e0c05a5",
+      "raw_file": "7304421c442933856300b86b3c16ca27812003b33930f4b40256d1e62e0c05a5.html",
+      "parsed_hash": "0041cce06b6f618223d39163107a14e8fd850582ec09288914a95e1f670d4251",
+      "parser_version": "mevzuat-parser-v4",
+      "title": "MESAFELİ SÖZLEŞMELER YÖNETMELİĞİ"
+    }
+  ]
+}

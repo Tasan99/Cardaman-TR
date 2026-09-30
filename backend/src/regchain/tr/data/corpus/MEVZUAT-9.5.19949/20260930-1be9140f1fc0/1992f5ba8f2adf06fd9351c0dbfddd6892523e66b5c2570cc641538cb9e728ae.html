@@ -1,0 +1,1880 @@
+
+    <style>
+        * {
+            font-size: 12pt !important;
+            line-height: 127% !important;
+        }
+
+        @media print {
+            a {
+                visibility: hidden;
+            }
+
+            #section-to-print, #section-to-print * {
+                visibility: visible;
+            }
+
+            #section-to-print {
+                position: absolute;
+                left: 0;
+                top: 0;
+            }
+        }
+        /*aşağıda js kodu var table width değiştirmek için*/
+        table {
+            width: 100% !important;
+            page-break-inside: initial !important;
+            white-space: initial !important;
+            padding: 0 !important;
+            text-indent: 0 !important;
+        }
+
+        @media screen and (max-width: 768px) {
+
+            tr, p, table {
+                width: initial !important;
+                page-break-inside: initial !important;
+                white-space: initial !important;
+                padding: 0 !important;
+                text-indent: 0 !important;
+            }
+
+            table {
+                width: 100% !important;
+            }
+
+
+            td {
+                /*white-space: nowrap !important;*/
+            }
+
+            img {
+                max-width: 100%;
+            }
+        }
+    </style>
+
+    <link href="/lib/tooltip/tooltip.css" rel="stylesheet" />
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=Windows-1254">
+<meta name=Generator content="Microsoft Word 14 (filtered)">
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+@font-face
+	{font-family:Tahoma;
+	panose-1:2 11 6 4 3 5 4 4 2 4;}
+@font-face
+	{font-family:"\30D2\30E9\30AE\30CE\660E\671D Pro W3";}
+@font-face
+	{font-family:Times;
+	panose-1:2 2 6 3 5 4 5 2 3 4;}
+@font-face
+	{font-family:"\@\30D2\30E9\30AE\30CE\660E\671D Pro W3";}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0cm;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	text-indent:42.55pt;
+	line-height:12.0pt;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+h1
+	{mso-style-link:"Başlık 1 Char";
+	margin-top:12.0pt;
+	margin-right:0cm;
+	margin-bottom:3.0pt;
+	margin-left:0cm;
+	page-break-after:avoid;
+	font-size:16.0pt;
+	font-family:"Arial","sans-serif";
+	font-weight:bold;}
+p.MsoHeading7, li.MsoHeading7, div.MsoHeading7
+	{mso-style-link:"Başlık 7 Char1";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	text-indent:35.4pt;
+	line-height:150%;
+	page-break-after:avoid;
+	font-size:9.5pt;
+	font-family:"Times New Roman","serif";
+	font-weight:bold;}
+p.MsoBodyText, li.MsoBodyText, div.MsoBodyText
+	{mso-style-link:"Gövde Metni Char";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	font-size:11.0pt;
+	font-family:"Tahoma","sans-serif";}
+em
+	{font-family:"Times New Roman","serif";}
+p.MsoPlainText, li.MsoPlainText, div.MsoPlainText
+	{mso-style-link:"Düz Metin Char";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	font-size:10.0pt;
+	font-family:"Courier New";}
+p
+	{margin-right:0cm;
+	margin-left:0cm;
+	font-size:12.0pt;
+	font-family:"Times New Roman","serif";}
+p.MsoListParagraph, li.MsoListParagraph, div.MsoListParagraph
+	{margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:36.0pt;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Times New Roman","serif";}
+p.MsoListParagraphCxSpFirst, li.MsoListParagraphCxSpFirst, div.MsoListParagraphCxSpFirst
+	{margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:36.0pt;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Times New Roman","serif";}
+p.MsoListParagraphCxSpMiddle, li.MsoListParagraphCxSpMiddle, div.MsoListParagraphCxSpMiddle
+	{margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:36.0pt;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Times New Roman","serif";}
+p.MsoListParagraphCxSpLast, li.MsoListParagraphCxSpLast, div.MsoListParagraphCxSpLast
+	{margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:36.0pt;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Times New Roman","serif";}
+span.Balk1Char
+	{mso-style-name:"Başlık 1 Char";
+	mso-style-link:"Başlık 1";
+	font-family:"Arial","sans-serif";
+	font-weight:bold;}
+span.Balk7Char
+	{mso-style-name:"Başlık 7 Char";
+	font-family:"Calibri","sans-serif";
+	color:#404040;
+	font-style:italic;}
+span.GvdeMetniChar
+	{mso-style-name:"Gövde Metni Char";
+	mso-style-link:"Gövde Metni";
+	font-family:"Tahoma","sans-serif";}
+span.DzMetinChar
+	{mso-style-name:"Düz Metin Char";
+	mso-style-link:"Düz Metin";
+	font-family:"Courier New";}
+p.2-OrtaBaslk, li.2-OrtaBaslk, div.2-OrtaBaslk
+	{mso-style-name:"2-Orta Baslık";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	text-align:center;
+	font-size:9.5pt;
+	font-family:"Times New Roman","serif";
+	font-weight:bold;}
+p.1-Baslk, li.1-Baslk, div.1-Baslk
+	{mso-style-name:1-Baslık;
+	margin:0cm;
+	margin-bottom:.0001pt;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";
+	text-decoration:underline;}
+p.3-NormalYaz, li.3-NormalYaz, div.3-NormalYaz
+	{mso-style-name:"3-Normal Yazı";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	font-size:9.5pt;
+	font-family:"Times New Roman","serif";}
+span.Normal1
+	{mso-style-name:Normal1;
+	font-family:"Times New Roman","serif";}
+span.Balk7Char1
+	{mso-style-name:"Başlık 7 Char1";
+	mso-style-link:"Başlık 7";
+	font-family:"Times New Roman","serif";
+	font-weight:bold;}
+.MsoChpDefault
+	{font-family:"Calibri","sans-serif";}
+.MsoPapDefault
+	{text-align:justify;
+	text-indent:42.55pt;
+	line-height:12.0pt;}
+@page WordSection1
+	{size:595.3pt 841.9pt;
+	margin:70.85pt 70.85pt 70.85pt 70.85pt;}
+div.WordSection1
+	{page:WordSection1;}
+-->
+</style>
+
+<script type="text/javascript">window.av = { database:'2' , rnApp:'False' }</script><script src="https://www.mevzuat.gov.tr/lib/jquery/dist/jquery.js"></script><script src="https://www.mevzuat.gov.tr/js/iframescript.min.js?v=1.05"></script><style><!--* {font-family:inherit!important;}--></style></head>
+
+<body lang=TR>
+
+<div class=WordSection1>
+
+<div align=center>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 style='margin-left:5.4pt;border-collapse:collapse'>
+ <tr>
+  <td width=607 valign=top style='width:455.2pt;padding:0cm 5.4pt 0cm 5.4pt'>
+  <div align=center>
+  <table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width=586 style='width:439.45pt;border-collapse:collapse'>
+   <tr style='height:24.0pt'>
+    <td width=586 style='width:439.45pt;padding:0cm 5.4pt 0cm 5.4pt;height:
+    24.0pt'>
+    <p class=MsoNormal align=center style='text-align:center'><b>TÜRK GIDA
+    KODEKSİ MEYVE SUYU VE BENZERİ ÜRÜNLER TEBLİĞİ</b></p>
+    <p class=MsoNormal align=center style='text-align:center'><b>(TEBLİĞ NO:
+    2014/34)</b></p>
+    <p class=MsoNormal align=center style='text-align:center'><b>&nbsp;</b></p>
+    <p class=MsoNormal><b>Amaç</b></p>
+    <p class=MsoNormal><b>MADDE 1 –</b> (1) Bu Tebliğin amacı; meyve suyu ve
+    benzeri ürünlerin tekniğine uygun ve hijyenik şekilde üretilmesi, hazırlanması,
+    işlenmesi, muhafazası, depolanması, taşınması ve pazarlanmasını sağlamak üzere
+    bu ürünlerin özelliklerini belirlemektir.</p>
+    <p class=MsoNormal><b>Kapsam</b></p>
+    <p class=MsoNormal><b>MADDE 2 – </b>(1) Bu Tebliğ; meyve suyu, konsantreden
+    üretilen meyve suyu, meyve suyu konsantresi, su ile ekstrakte edilen meyve
+    suyu, meyve suyu tozu, meyve nektarı, meyve püresi ve meyve püresi
+    konsantresini kapsar.</p>
+    <p class=MsoNormal><b>Dayanak</b></p>
+    <p class=MsoNormal><b>MADDE 3 –</b> (1) Bu Tebliğ;</p>
+    <p class=MsoNormal>a) 29/12/2011 tarihli ve 28157 üçüncü mükerrer sayılı
+    Resmî Gazete’de yayımlanan Türk Gıda Kodeksi Yönetmeliğine dayanılarak,</p>
+    <p class=MsoNormal>b) 20/12/2001 tarihli ve 2001/112/EC sayılı meyve suları
+    ve benzeri ürünlere ilişkin Konsey Direktifine paralel olarak,</p>
+    <p class=MsoNormal>hazırlanmıştır.</p>
+    <p class=MsoNormal><b>Tanımlar</b></p>
+    <p class=MsoNormal><b>MADDE 4 –</b> (1) Bu Tebliğde geçen;</p>
+    <p class=MsoNormal>a) Ana bileşenler:</p>
+    <p class=MsoNormal>1) Aroma: Meyvenin işlenmesi sırasında, meyvenin
+    yenilebilir kısımlarından (Turunçgil kabuklarının soğuk preslenmesi ile
+    elde edilen yağ ve meyve çekirdeği kaynaklı bileşenler de olabilir.) elde
+    edilen ve ürüne geri kazandırılmak üzere, aroma kalitesinin muhafazası,
+    korunması veya stabilize edilmesi için uygulanan sıkma, ekstraksiyon, damıtma,
+    filtrasyon, adsorbsiyon, buharlaştırma, parçalama, konsantrasyon ve benzeri
+    uygun fiziksel işlemler uygulanarak ayrılan yan ürünü,</p>
+    <p class=MsoNormal>2) Bal: 27/7/2012 tarihli ve 28366 sayılı Resmî Gazete’de
+    yayımlanan Türk Gıda Kodeksi Bal Tebliğine uygun balları,</p>
+    <p class=MsoNormal>3) Meyve: Bu Tebliğ kapsamında yer alan ürünlerin üretilmesi
+    için sağlam, yeterince olgun, taze veya hasat sonrası işlemlerle muhafaza
+    edilmiş domates dâhil tüm meyveleri,</p>
+    <p class=MsoNormal>4) Meyve püresi: Suyunu uzaklaştırmadan, bütün veya kabuğu
+    soyulmuş meyvenin yenilebilen kısmının eleme, ezme, öğütme gibi uygun
+    fiziksel işlemlerden geçirilmesiyle elde edilen, fermente olmamış ancak
+    fermente olabilen ürünü,</p>
+    <p class=MsoNormal>5) Meyve püresi konsantresi: Meyve püresindeki suyun
+    belirli bir kısmının fiziksel yollarla uzaklaştırılması ile elde edilen ürünü,</p>
+    <p class=MsoNormal>6) Pulp veya meyve kesecikleri: Suyunu uzaklaştırmadan
+    aynı meyvenin yenilebilen kısımlarından elde edilen ürünü, turunçgil
+    meyveleri için ise meyve etinden elde edilen meyve suyu keseciklerini,</p>
+    <p class=MsoNormal>7) Su: 17/2/2005 tarihli ve 25730 sayılı Resmî Gazete’de
+    yayımlanan İnsani Tüketim Amaçlı Sular Hakkında Yönetmelikte yer alan özelliklere
+    uygun insani tüketim amaçlı suları,</p>
+    <p class=MsoNormal>8) Şeker: 23/8/2006 tarihli ve 26268 sayılı Resmî Gazete’de
+    yayımlanan Türk Gıda Kodeksi Şeker Tebliğine uygun şekerleri ve meyvelerden
+    türetilmiş şekerleri,</p>
+    <p class=MsoNormal>b) Konsantreden üretilen meyve suyu: Meyve suyu
+    konsantresine, konsantrasyon sırasında uzaklaştırılan miktarda su ve
+    gerektiğinde işleme sırasında ayrılan aromanın, pulpun ve meyve
+    keseciklerinin tekrar kazandırılmasıyla elde edilen ürünü,</p>
+    <p class=MsoNormal>c) Meyve nektarı: Meyve suyuna, konsantreden üretilen
+    meyve suyuna, meyve suyu konsantresine, su ile ekstrakte edilen meyve
+    suyuna, meyve suyu tozuna, meyve püresine ve/veya meyve püresi
+    konsantresine ve/veya bunların karışımına, şekerlerin ve/veya balın ilave
+    edilmesiyle veya ilave edilmeksizin su ilave edilmesiyle elde edilen, ek-3’de
+    belirtilen özelliklere uygun, fermente olmamış ancak fermente olabilen ürünü,</p>
+    <p class=MsoNormal>ç) Meyve suyu: Sağlam, olgun, taze veya soğukta ya da
+    dondurularak muhafaza edilmiş, tek meyvenin veya daha fazla meyve karışımının
+    yenilebilir kısımlarından elde edilen, elde edildiği meyve ve meyvelerin
+    karakteristik renk, aroma ve tadına sahip, fermente olmamış ancak fermente
+    olabilen ürünü,</p>
+    <p class=MsoNormal>d) Meyve suyu konsantresi: Bir veya daha fazla sayıda
+    meyve türünden elde edilen meyve suyundan, fiziksel yollarla suyun belirli
+    oranlarda uzaklaştırılmasıyla elde edilen ürünü,</p>
+    <p class=MsoNormal>e) Meyve suyu tozu: Bir veya daha fazla meyveden elde
+    edilen meyve suyundan, fiziksel yollarla suyun olabildiğince ayrılması ile
+    elde edilen ürünü,</p>
+    <p class=MsoNormal>f) Su ile ekstrakte edilen meyve suyu: Herhangi bir
+    fiziksel işlemle suyu ekstrakte edilemeyen bütün haldeki pulplu veya bütün
+    olarak kurutulmuş meyvelerden su difüzyonu ile elde edilen ürünü,</p>
+    <p class=MsoNormal>ifade eder.</p>
+    <p class=MsoNormal><b>Ürün özellikleri</b></p>
+    <p class=MsoNormal><b>MADDE 5 –</b> (1) Bu Tebliğ kapsamındaki ürünlere ait
+    özellikler aşağıda verilmiştir.</p>
+    <p class=MsoNormal>a) Meyve suyu özellikleri:</p>
+    <p class=MsoNormal>1) Aynı tür meyveden işleme sırasında uygun fiziksel işlemlerle
+    ayrılan aroma, pulp ve meyve kesecikleri yine uygun fiziksel işlemlerle
+    meyve suyuna geri kazandırılabilir.</p>
+    <p class=MsoNormal>2) Turunçgil meyve suyu, meyve etinden (endokarp)
+    gelmelidir.</p>
+    <p class=MsoNormal>3) Misket limonu suyu, bütün haldeki meyveden elde
+    edilebilir.</p>
+    <p class=MsoNormal>4) Meyve suyunun, çekirdekli, tohumlu ve kabuklu
+    meyvelerden üretildiği durumlarda; çekirdek, tohum ve kabuk bileşenleri
+    veya parçaları meyve suyu içine dahil edilmez. Ancak iyi üretim uygulamaları
+    ile çekirdek, tohum ve kabuk bileşenleri veya parçalarının uzaklaştırılamadığı
+    durumlarda bu koşul aranmaz.</p>
+    <p class=MsoNormal>5) Meyve suyu üretiminde, meyve suyu ile meyve püresi
+    karıştırılabilir.</p>
+    <p class=MsoNormal>6) Meyve suyu ve püresinde etil alkol miktarı 3 g/L’yi,
+    uçucu asit miktarı 0,4 g/L’yi ve laktik asit miktarı 0,5 g/L’yi geçemez.</p>
+    <p class=MsoNormal>b) Konsantreden üretilen meyve suyu özellikleri:</p>
+    <p class=MsoNormal>1) Konsantreden üretilen meyve sularına ilave edilecek
+    su, meyve suyunun kalitesini etkilemeyecek şekilde, özellikle duyusal,
+    mikrobiyolojik ve kimyasal açıdan uygun özelliklerde ve İnsani Tüketim Amaçlı
+    Sular Hakkında Yönetmeliğe uygun olur.</p>
+    <p class=MsoNormal>2) Son ürünün suda çözünür kuru madde miktarı, ek-4’te
+    verilen meyve suyu için minimum briks değerlerini karşılar. Konsantreden üretilen
+    meyve suyu, ek-4’te yer almayan bir meyveden üretildi ise konsantreden üretilen
+    meyve suyunun minimum briks derecesi, konsantrenin elde edildiği meyveden
+    ekstrakte edilen meyve suyunun briks değerini sağlar.</p>
+    <p class=MsoNormal>3) Aynı tür meyveden işleme sırasında uygun fiziksel işlemlerle
+    ayrılan aroma, pulp ve meyve kesecikleri yine uygun fiziksel işlemlerle
+    konsantreden üretilen meyve suyuna geri kazandırılabilir.</p>
+    <p class=MsoNormal>4) Konsantreden üretilen meyve suyu, aynı meyveden elde
+    edilen meyve suyunun başlıca fiziksel, kimyasal, organoleptik ve besin özelliklerini
+    sağlayacak uygun işlemlerle hazırlanır.</p>
+    <p class=MsoNormal>5) Konsantreden üretilen meyve sularının üretiminde,
+    meyve suyu ve/veya meyve suyu konsantresi ile meyve püresi ve/veya meyve püresi
+    konsantresi karıştırılabilir.</p>
+    <p class=MsoNormal>c) Meyve suyu konsantresi özellikleri:</p>
+    <p class=MsoNormal>1) Doğrudan tüketime sunulan meyve suyu
+    konsantrelerinde, suyun en az %50’si uzaklaştırılmış olur.</p>
+    <p class=MsoNormal>2) Aynı tür meyveden işleme sırasında uygun fiziksel işlemlerle
+    ayrılan aroma, pulp ve meyve kesecikleri yine uygun fiziksel işlemlerle
+    meyve suyu konsantresine geri kazandırılabilir.</p>
+    <p class=MsoNormal>ç) Meyve nektarı özellikleri:</p>
+    <p class=MsoNormal>1) Sadece ilave şekersiz olarak üretilen meyve nektarlarında
+    şeker yerine tamamen, düşük enerjili olarak üretilen meyve nektarlarında
+    ise şeker yerine kısmen, 30/6/2013 tarihli ve 28693 sayılı Resmî Gazete’de
+    yayımlanan Türk Gıda Kodeksi Gıda Katkı Maddeleri Yönetmeliğine uygun
+    tatlandırıcılar kullanılabilir.</p>
+    <p class=MsoNormal>2) Aynı tür meyveden işleme sırasında uygun fiziksel işlemlerle
+    ayrılan aroma, pulp ve meyve kesecikleri yine uygun fiziksel işlemlerle
+    meyve nektarına geri kazandırılabilir.</p>
+    <p class=MsoNormal>d) Meyve püresi konsantresi özellikleri: İşleme sırasında
+    ayrılan aroma, aynı meyve püresi konsantresine ek-1’in (b) bendinde tanımlanan
+    uygun fiziksel işlemle geri kazandırılabilir.</p>
+    <p class=MsoNormal>e) Meyve suyu, konsantreden üretilen meyve suyu, meyve
+    suyu konsantresi, su ile ekstrakte edilen meyve suyu, meyve suyu tozu ve
+    meyve nektarı üretiminde uygulanabilecek işlemler ve işlem yardımcıları
+    ek-1’de verilmiştir.</p>
+    <p class=MsoNormal>f) Meyve suyu, konsantreden üretilen meyve suyu, meyve
+    suyu konsantresi, su ile ekstrakte edilen meyve suyu, meyve suyu tozu ve
+    meyve nektarı ile ilgili özel isimlendirmeler ek-2’de verilmiştir.</p>
+    <p class=MsoNormal>g) Meyve nektarlarına ait minimum meyve suyu ve/veya püresi
+    miktarı oranları ek-3’te, meyve suyu ve püresi için minimum briks
+    dereceleri ek-4’te verilmiştir.</p>
+    <p class=MsoNormal>(2) Bu Tebliğ kapsamında yer alan ürünlere katılmasına
+    izin verilen bileşenler aşağıda verilmiştir:</p>
+    <p class=MsoNormal>a) 29/12/2011 tarihli ve 28157 üçüncü mükerrer sayılı
+    Resmî Gazete’de yayımlanan Türk Gıda Kodeksi Etiketleme Yönetmeliğinin ek-9
+    Bölüm 1’de yer alan hükümlerine uygun olan vitamin ve mineraller uygun
+    miktarda eklenebilir.</p>
+    <p class=MsoNormal>b) Üzüm suyuna tartarik asit tuzları geri kazandırılabilir.</p>
+    <p class=MsoNormal>c) Meyve nektarına şekerler ve/veya bal ve/veya tatlandırıcılar
+    eklenebilir. Ancak ilave edilen şeker ve/veya bal son ürünün toplam ağırlığının
+    en fazla %20’si kadar olur.</p>
+    <p class=MsoNormal>ç) Meyve suyu, konsantreden üretilen meyve suyu, meyve
+    suyu konsantresi, su ile ekstrakte edilen meyve suyu, meyve suyu tozu ve
+    meyve nektarı üretiminde asitliği düzenlemek amacıyla, meyve suyuna susuz
+    sitrik asit cinsinden en fazla 3 g/L limon ve/veya misket limonu suyu
+    ve/veya limon ve/veya misket limonu suyu konsantresi ilave edilebilir.</p>
+    <p class=MsoNormal>d) Ek-2’nin (a) bendi, (b) bendinin 1 inci maddesi, (c)
+    bendi, (d) bendinin 2 inci maddesi ve (g) bendinde yer alan ürünlere; şekerler
+    ve/veya bal eklenebilir.</p>
+    <p class=MsoNormal>e) Domates suyu ve konsantreden üretilen domates suyuna
+    tuz, baharat ve aromatik bitkiler katılabilir.</p>
+    <p class=MsoNormal><b>Katkı maddeleri</b></p>
+    <p class=MsoNormal><b>MADDE 6 –</b> (1) Bu Tebliğ kapsamında yer alan ürünler,
+    Türk Gıda Kodeksi Gıda Katkı Maddeleri Yönetmeliğinde yer alan hükümlere
+    uygun olur.</p>
+    <p class=MsoNormal><b>Aroma vericiler ve aroma verme özelliği taşıyan gıda
+    bileşenleri</b></p>
+    <p class=MsoNormal><b>MADDE 7 –</b> (1) Bu Tebliğ kapsamında yer alan ürünlere,
+    4 üncü maddenin birinci fıkrasının (a) bendinde tanımlanan aroma dışında
+    aroma verici ya da aroma verme özelliği taşıyan gıda bileşeni katılmaz.</p>
+    <p class=MsoNormal><b>Bulaşanlar</b></p>
+    <p class=MsoNormal><b>MADDE 8 –</b> (1) Bu Tebliğ kapsamında yer alan ürünlerdeki
+    bulaşanların miktarları, 29/12/2011 tarihli ve 28157 üçüncü mükerrer sayılı
+    Resmî Gazete’de yayımlanan Türk Gıda Kodeksi Bulaşanlar Yönetmeliğinde yer
+    alan hükümlere uygun olur.</p>
+    <p class=MsoNormal><b>Pestisit kalıntıları</b></p>
+    <p class=MsoNormal><b>MADDE 9 –</b> (1) Bu Tebliğ kapsamında yer alan ürünlerdeki
+    pestisit kalıntı miktarları, 29/12/2011 tarihli ve 28157 üçüncü mükerrer
+    sayılı Resmî Gazete’de yayımlanan Türk Gıda Kodeksi Pestisitlerin Maksimum
+    Kalıntı Limitleri Yönetmeliğinde yer alan hükümlere uygun olur.</p>
+    <p class=MsoNormal><b>Veteriner ilaçları tolerans düzeyi</b></p>
+    <p class=MsoNormal><b>MADDE 10 –</b> (1) Bu Tebliğ kapsamında bileşiminde
+    bal içeren ürünlerde bulunabilecek veteriner ilaçları kalıntı miktarları,
+    4/5/2012 tarihli ve 28282 sayılı Resmî Gazete’de yayımlanan Türk Gıda
+    Kodeksi Hayvansal Gıdalarda Bulunabilecek Farmakolojik Aktif Maddelerin Sınıflandırılması
+    ve Maksimum Kalıntı Limitleri Yönetmeliğinde yer alan hükümlere uygun olur.</p>
+    <p class=MsoNormal><b>Hijyen</b></p>
+    <p class=MsoNormal><b>MADDE 11 –</b> (1) Bu Tebliğ kapsamında yer alan ürünler,
+    29/12/2011 tarihli ve 28157 üçüncü mükerrer sayılı Resmî Gazete’de yayımlanan
+    Türk Gıda Kodeksi Mikrobiyolojik Kriterler Yönetmeliği ile 17/12/2011
+    tarihli ve 28145 sayılı Resmî Gazete’de yayımlanan Gıda Hijyeni Yönetmeliğinde
+    yer alan hükümlere uygun olur.</p>
+    <p class=MsoNormal><b>Ambalajlama</b></p>
+    <p class=MsoNormal><b>MADDE 12 –</b> (1) Bu Tebliğ kapsamında yer alan ürün
+    ambalajları, 29/12/2011 tarihli ve 28157 üçüncü mükerrer sayılı Resmî
+    Gazete’de yayımlanan Türk Gıda Kodeksi Gıda ile Temas Eden Madde ve
+    Malzemeler Yönetmeliğinde yer alan hükümlere uygun olur.</p>
+    <p class=MsoNormal><b>Etiketleme</b></p>
+    <p class=MsoNormal><b>MADDE 13 –</b> (1) Bu Tebliğ kapsamında yer alan ürünlerin
+    etiketi, Türk Gıda Kodeksi Etiketleme Yönetmeliğinde yer alan hükümlere ek
+    olarak aşağıda belirtilen hükümlere de uygun olur.</p>
+    <p class=MsoNormal>a) Tebliğde yer alan ürünlerin ticari isimleri tanımlarda
+    yer alan isimlendirmelere uygun olur. Ayrıca buna alternatif olarak ek-2’de
+    yer alan isimler de kullanılabilir. Bu isimler ekte belirtilen koşullarda
+    ve dilde olur.</p>
+    <p class=MsoNormal>b) Eğer ürün tek bir çeşit meyveden elde ediliyorsa ürün
+    ismindeki &quot;meyve&quot; ifadesi yerine söz konusu meyvenin adı kullanılır.</p>
+    <p class=MsoNormal>c) İki veya daha fazla meyveden elde edilen ürünlerde,
+    limon ya da misket limonu suyunun asitliği düzenlemek amacıyla kullanıldığı
+    durumlar haricinde, ürün ismi bileşen listesinde gösterildiği gibi kullanılan
+    meyve sularının veya pürelerinin azalan hacimlerine göre sıralanan meyve
+    isimlerinden oluşur.</p>
+    <p class=MsoNormal>ç) Üç veya daha fazla meyveden elde edilen ürünler,
+    meyvelerin isimleri yerine &quot;karışık&quot; veya çoklu veya aynı anlama
+    gelen bir ifade ya da kullanılan meyve sayısını belirterek ifade
+    edilebilir.</p>
+    <p class=MsoNormal>d) Meyve suyu, konsantreden üretilen meyve suyu, meyve
+    suyu konsantresi, su ile ekstrakte edilen meyve suyu, meyve suyu tozu ve
+    meyve nektarının restorasyonu için geri kazandırılması gerekli maddelerin
+    etiket üzerinde belirtilmesi zorunlu değildir. Ancak meyve suyuna ekstra
+    ilave edilen pulp veya meyve kesecikleri etikette belirtilir.</p>
+    <p class=MsoNormal>e) Meyve suyunun konsantreden üretilen meyve suyu ile
+    karışımı ve kısmen, bir ya da daha fazla konsantre üründen elde edilen
+    meyve nektarı için “Kısmen konsantre(ler)den üretilmiştir.”, tümüyle bir ya
+    da daha fazla konsantre üründen elde edilen meyve nektarı için “Konsantre(ler)den
+    üretilmiştir.” ifadesi etiket üzerinde, ürün ismine yakın olarak kontrast
+    teşkil edecek ve açıkça görülebilir karakterde belirtilir.</p>
+    <p class=MsoNormal>f) Meyve nektarı bileşimindeki meyve suyu, meyve püresi
+    veya bunların karışımının minimum miktarı, etiket üzerinde, &quot;meyve
+    oranı en az % ......&quot; ifadesi ile belirtilir. Bu ifade ürün adı ile
+    aynı görüş alanı içerisinde yer alır.</p>
+    <p class=MsoNormal>g) Meyve suyu konsantresi eğer son tüketiciye
+    sunulmayacaksa etiket bilgilerine ek olarak, etiket üzerinde ilave edilen
+    limon suyunun, misket limonu suyunun veya Türk Gıda Kodeksi Gıda Katkı
+    Maddeleri Yönetmeliğine uygun asitliği düzenleyici maddelerin varlığı ve
+    miktarları belirtilir. Bu bilgiler ambalaj üzerinde veya ambalaja bir
+    etiketle iliştirilmiş olarak veya ayrı bir belge olarak verilebilir.</p>
+    <p class=MsoNormal>ğ) “Meyve nektarına şeker eklenmemiştir” beyanı veya aynı
+    anlama gelecek herhangi bir beyan; ancak, ürün ilave mono veya disakkarit
+    veya tatlandırıcılar dahil olmak üzere tatlandırmak amacıyla herhangi bir
+    başka gıda içermiyor ise yapılabilir. Şekerler, meyve nektarında doğal
+    olarak bulunuyorsa “Doğal olarak bulunan şekerler içerir.” ifadesi etiket üzerinde
+    yer alır.</p>
+    <p class=MsoNormal>h) “Türk Gıda Kodeksi gereğince meyve suları ilave şeker
+    içermez” ibaresi ürün adı ile aynı görüş alanı içerisinde ürün
+    etiketlerinde yer alabilir.</p>
+    <p class=MsoNormal>ı) Meyve suyu ve konsantreden üretilen meyve suyu ürün
+    etiketlerinde “% 100 meyve suyu” ifadesi kullanılabilir.</p>
+    <p class=MsoNormal><b>Taşıma ve depolama</b></p>
+    <p class=MsoNormal><b>MADDE 14 –</b> (1) Bu Tebliğ kapsamında yer alan ürünlerin
+    taşınması ve depolanması, Türk Gıda Kodeksi Yönetmeliğinin gıdaların taşınması
+    ve depolanması ile ilgili hükümlerine uygun olur.</p>
+    <p class=MsoNormal><b>Numune alma ve analiz metotları</b></p>
+    <p class=MsoNormal><b>MADDE 15 –</b> (1) Bu Tebliğ kapsamında yer alan ürünlerden
+    numune alınması ve analizleri Türk Gıda Kodeksi Yönetmeliğine uygun olur.</p>
+    <p class=MsoNormal><b>Avrupa Birliğine bildirim</b></p>
+    <p class=MsoNormal><b>MADDE 16 –</b> (1) Bu Tebliğ, 3/4/2002 tarihli ve
+    24714 sayılı Resmî Gazete’de yayımlanan Teknik Mevzuatın ve Standartların Türkiye
+    ile Avrupa Birliği Arasında Bildirimine Dair Yönetmeliğin 10 uncu maddesi hükmüne
+    istinaden Avrupa Birliği Komisyonuna bildirilmiştir.</p>
+    <p class=MsoNormal><b>İdari yaptırım</b></p>
+    <p class=MsoNormal><b>MADDE 17 –</b> (1) Bu Tebliğe aykırı davrananlar hakkında
+    11/6/2010 tarihli ve 5996 sayılı Veteriner Hizmetleri, Bitki Sağlığı, Gıda
+    ve Yem Kanununun ilgili maddelerine göre idari yaptırım uygulanır.</p>
+    <p class=MsoNormal><b>Yürürlükten kaldırılan tebliğ</b></p>
+    <p class=MsoNormal><b>MADDE 18 –</b> (1) 30/12/2006 tarihli ve 26392 sayılı
+    Resmî Gazete’de yayımlanan Türk Gıda Kodeksi Meyve Suyu ve Benzeri Ürünler
+    Tebliği yürürlükten kaldırılmıştır.</p>
+    <p class=MsoNormal><b>Uyum zorunluluğu</b></p>
+    <p class=MsoNormal><b>GEÇİCİ MADDE 1 –</b> (1) Bu Tebliğin yayımı
+    tarihinden önce faaliyet gösteren gıda işletmecileri 31/12/2014 tarihine
+    kadar bu Tebliğ hükümlerine uymak zorundadır.</p>
+    <p class=MsoNormal>(2) Bu Tebliğin yayımı tarihinden önce faaliyet gösteren
+    gıda işletmecileri tarafından 18 inci madde ile yürürlükten kaldırılan
+    Tebliğ hükümlerine uygun ürünler, 31/12/2014 tarihinden önce piyasaya arz
+    edilmek koşulu ile 31/12/2015 tarihine kadar piyasada bulunabilir.</p>
+    <p class=MsoNormal><b>Yürürlük</b></p>
+    <p class=MsoNormal><b>MADDE 19–</b> (1) Bu Tebliğ yayımı tarihinde yürürlüğe
+    girer.</p>
+    <p class=MsoNormal><b>Yürütme</b></p>
+    <p class=MsoNormal><b>MADDE 20 –</b> (1) Bu Tebliğ hükümlerini Gıda, Tarım
+    ve Hayvancılık Bakanı yürütür. </p>
+    <p class=MsoNormal><b>&nbsp;</b></p>
+    <p class=MsoNormal align=center style='text-align:center'><b>EK-1</b></p>
+    <p class=MsoNormal align=center style='text-align:center'><b>&nbsp;</b></p>
+    <p class=MsoNormal align=center style='text-align:center'><b>ÜRETİM
+    SIRASINDA UYGULANABİLECEK İŞLEMLER VE</b></p>
+    <p class=MsoNormal align=center style='text-align:center'><b>İŞLEM
+    YARDIMCILARI</b></p>
+    <p class=MsoNormal align=center style='text-align:center'><b>&nbsp;</b></p>
+    <p class=MsoNormal>a) Mekanik Ekstraksiyon İşlemleri</p>
+    <p class=MsoNormal>b) Fiziksel İşlemler: Elde edilen meyve suyu, 5 inci
+    maddenin birinci fıkrasının (a) bendinde sıralanan özellikleri karşılamak
+    koşuluyla, meyve suyu konsantresi üretimi için üzüm haricindeki meyvelerin
+    yenilebilir kısmından suyun ekstraksiyonu dahil, mutat fiziksel işlemler</p>
+    <p class=MsoNormal>c) Kükürtleme işlemi uygulanan meyvelerden elde edilen üzüm
+    suyuna, son üründeki toplam kükürdioksit miktarı 10 mg/L’yi geçmeyecek şekilde
+    fiziksel desülfitleme işlemi uygulanabilir.</p>
+    <p class=MsoNormal>ç) Pektolitik enzimler</p>
+    <p class=MsoNormal>d) Proteolitik enzimler</p>
+    <p class=MsoNormal>e) Amilolitik enzimler</p>
+    <p class=MsoNormal>f) Yenilebilir jelatin</p>
+    <p class=MsoNormal>g) Taninler</p>
+    <p class=MsoNormal>ğ) Silika sol</p>
+    <p class=MsoNormal>h) Aktif kömür</p>
+    <p class=MsoNormal>ı) Azot</p>
+    <p class=MsoNormal>i) Adsorban toprak olarak bentonit</p>
+    <p class=MsoNormal>j) Türk Gıda Kodeksinde gıdalar ile temasına izin
+    verilen, kimyasal inert filtrasyon yardımcıları ve perlit, yıkanmış
+    diatomin, selüloz, çözünmeyen poliamid, polivinilpolipirolidon, polistiren
+    gibi çökeltme ajanları</p>
+    <p class=MsoNormal>k) Gıdalar ile temasına izin verilen, turunçgil meyve
+    sularında limonoid glukositler, asit, oligosakkaritler de dahil olmak üzere
+    şekerler veya mineral içeriği önemli derecede etkilemeden, limonoid ve
+    narancin içeriğini azaltmak için kullanılan kimyasal inert adsorpsiyon yardımcıları</p>
+    <p class=MsoNormal>l) Durultma işlemi amacıyla buğday, bezelye veya
+    patatesten elde edilen bitkisel proteinler</p>
+    <p class=MsoNormal><b>&nbsp;</b></p>
+    <p class=MsoNormal align=center style='text-align:center'><b>Ek-2</b></p>
+    <p class=MsoNormal align=center style='text-align:center'><b>&nbsp;</b></p>
+    <p class=MsoNormal align=center style='text-align:center'><b>MEYVE SUYU,
+    KONSANTREDEN ÜRETİLEN MEYVE SUYU, MEYVE SUYU</b></p>
+    <p class=MsoNormal align=center style='text-align:center'><b>KONSANTRESİ,
+    SU İLE EKSTRAKTE EDİLEN MEYVE SUYU, MEYVE SUYU</b></p>
+    <p class=MsoNormal align=center style='text-align:center'><b>TOZU VE MEYVE
+    NEKTARI İÇİN ÖZEL İSİMLER</b></p>
+    <p class=MsoNormal align=center style='text-align:center'><b>&nbsp;</b></p>
+    <p class=MsoNormal>a) Vruchtendrank: Meyve nektarları için</p>
+    <p class=MsoNormal>b) Süßmost</p>
+    <p class=MsoNormal>Süßmost nitelemesi “Fruchtsaft” veya “Fruchtnektar” ürün
+    isimleri ile bir arada kullanılmak koşuluyla;</p>
+    <p class=MsoNormal>1) Sadece meyve suyundan, meyve suyu konsantrelerinden veya
+    bunların karışımından elde edilen ve doğal halleri yüksek miktarda asit içerdiği
+    için tüketilemeyen meyve nektarı için</p>
+    <p class=MsoNormal>2) Uygunsa elma karıştırılan ama şeker eklenmemiş armut
+    suyu ve elma suyu için</p>
+    <p class=MsoNormal>c) “succo e polpa” veya “somo e polpa”: Sadece meyve pürelerinden
+    ve/veya meyve püresi konsantrelerinden elde edilen meyve nektarları için</p>
+    <p class=MsoNormal>ç) “æblemost” : Şeker ilave edilmemiş elma suları için</p>
+    <p class=MsoNormal>d) 1) “sur ........saft”: Siyah frenk üzümü, kiraz, kırmızı
+    frenk üzümü, beyaz frenk üzümü, ahududu, çilek veya mürver yemişinden elde
+    edilen şeker ilave edilmemiş meyve suları için kullanılan meyvenin
+    Danimarka dilindeki ismiyle birlikte</p>
+    <p class=MsoNormal>2) “sød........saft” veya “sødet........saft” bir
+    litresine 200 gramdan fazla şeker ilave edilen meyve suları için, kullanılan
+    meyvenin Danimarka dilindeki ismiyle birlikte</p>
+    <p class=MsoNormal>e) “äppelmust”: Şeker eklenmemiş elma suları için</p>
+    <p class=MsoNormal>f) “mosto”: Üzüm suyu ile eş anlamlı olarak</p>
+    <p class=MsoNormal>g) “smilts&#275;rkš&#311;u sula ar cukuru” veya “astelpaju
+    mahl suhkruga” veya “s&#322;odzony sok z  rokitnika”: İlave şeker miktarı
+    140 g/L’den fazla olmayan yabani iğdelerden elde edilen meyve suları için
+    kullanılır.</p>
+    <p class=MsoNormal><b>&nbsp;</b></p>
+    <p class=MsoNormal align=center style='text-align:center'><b>Ek – 3</b></p>
+    <p class=MsoNormal align=center style='text-align:center'><b>MEYVE
+    NEKTARLARINA AİT MİNİMUM MEYVE SUYU VE/VEYA PÜRESİ MİKTARI</b> <b>ORANLARI</b></p>
+    <p class=MsoNormal style='text-indent:0cm'><b><i>1) Asidik suyuyla birlikte
+    doğal olarak tüketilemeyen meyveler</i></b></p>
+    <div align=center>
+    <table class=MsoNormalTable border=1 cellspacing=0 cellpadding=0 width=567 style='width:15.0cm;border-collapse:collapse;border:none'>
+     <tr>
+      <td width=274 style='width:205.55pt;border:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>Meyvenin Adı</p>
+      </td>
+      <td width=340 style='width:9.0cm;border:solid windowtext 1.0pt;
+      border-left:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Meyve nektarında minimum meyve
+      suyu ve/veya</p>
+      <p class=MsoNormal style='text-indent:0cm'>püresi miktarı (Son üründe %
+      hacim olarak)</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=274 valign=top style='width:205.55pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Çarkıfelek/Pasion meyvesi</p>
+      </td>
+      <td width=340 valign=top style='width:9.0cm;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>25</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=274 valign=top style='width:205.55pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'><span lang=FR>Quito
+      naranjillos/Lulo</span></p>
+      </td>
+      <td width=340 valign=top style='width:9.0cm;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>25</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=274 valign=top style='width:205.55pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Siyah frenk üzümü</p>
+      </td>
+      <td width=340 valign=top style='width:9.0cm;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>25</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=274 valign=top style='width:205.55pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Beyaz frenk  üzümü</p>
+      </td>
+      <td width=340 valign=top style='width:9.0cm;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>25</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=274 valign=top style='width:205.55pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Kırmızı frenk  üzümü</p>
+      </td>
+      <td width=340 valign=top style='width:9.0cm;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>25</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=274 valign=top style='width:205.55pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Bektaşi üzümü</p>
+      </td>
+      <td width=340 valign=top style='width:9.0cm;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>30</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=274 valign=top style='width:205.55pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Yabani iğde</p>
+      </td>
+      <td width=340 valign=top style='width:9.0cm;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>25</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=274 valign=top style='width:205.55pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Çakal eriği</p>
+      </td>
+      <td width=340 valign=top style='width:9.0cm;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>30</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=274 valign=top style='width:205.55pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Erik</p>
+      </td>
+      <td width=340 valign=top style='width:9.0cm;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>30</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=274 valign=top style='width:205.55pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Mürdüm eriği</p>
+      </td>
+      <td width=340 valign=top style='width:9.0cm;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>30</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=274 valign=top style='width:205.55pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Kuş Üvezi</p>
+      </td>
+      <td width=340 valign=top style='width:9.0cm;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>30</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=274 valign=top style='width:205.55pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Kuşburnu</p>
+      </td>
+      <td width=340 valign=top style='width:9.0cm;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>40</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=274 valign=top style='width:205.55pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Vişne</p>
+      </td>
+      <td width=340 valign=top style='width:9.0cm;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>35</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=274 valign=top style='width:205.55pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Diğer kirazlar</p>
+      </td>
+      <td width=340 valign=top style='width:9.0cm;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>40</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=274 valign=top style='width:205.55pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Yaban mersini/Çoban üzümü</p>
+      </td>
+      <td width=340 valign=top style='width:9.0cm;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>40</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=274 valign=top style='width:205.55pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Mürver yemişi </p>
+      </td>
+      <td width=340 valign=top style='width:9.0cm;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>50</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=274 valign=top style='width:205.55pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Ahududu</p>
+      </td>
+      <td width=340 valign=top style='width:9.0cm;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>40</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=274 valign=top style='width:205.55pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Kayısı</p>
+      </td>
+      <td width=340 valign=top style='width:9.0cm;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>40</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=274 valign=top style='width:205.55pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Çilek</p>
+      </td>
+      <td width=340 valign=top style='width:9.0cm;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>40</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=274 valign=top style='width:205.55pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Karadut/Böğürtlen</p>
+      </td>
+      <td width=340 valign=top style='width:9.0cm;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>40</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=274 valign=top style='width:205.55pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Büyük meyveli vaksiniyum</p>
+      </td>
+      <td width=340 valign=top style='width:9.0cm;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>30</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=274 valign=top style='width:205.55pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Ayva</p>
+      </td>
+      <td width=340 valign=top style='width:9.0cm;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>50</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=274 valign=top style='width:205.55pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Limon ve misket limonu</p>
+      </td>
+      <td width=340 valign=top style='width:9.0cm;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>25</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=274 valign=top style='width:205.55pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Bu kategoriye ait diğer
+      meyveler</p>
+      </td>
+      <td width=340 valign=top style='width:9.0cm;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>25</p>
+      </td>
+     </tr>
+    </table>
+    </div>
+    <p class=MsoNormal><b><i>&nbsp;</i></b></p>
+    <p class=MsoNormal style='text-indent:0cm'><b><i>2) Suyuyla birlikte doğal
+    olarak tüketilmeyen düşük asitli, pulpumsu kıvamda veya yüksek miktarda
+    aromalı meyveler</i></b></p>
+    <div align=center>
+    <table class=MsoNormalTable border=1 cellspacing=0 cellpadding=0 width=567 style='width:15.0cm;border-collapse:collapse;border:none'>
+     <tr>
+      <td width=274 valign=top style='width:205.55pt;border:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Mango/ Hintkirazı</p>
+      </td>
+      <td width=340 valign=top style='width:9.0cm;border:solid windowtext 1.0pt;
+      border-left:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>25</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=274 valign=top style='width:205.55pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Muz</p>
+      </td>
+      <td width=340 valign=top style='width:9.0cm;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>25</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=274 valign=top style='width:205.55pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Guava</p>
+      </td>
+      <td width=340 valign=top style='width:9.0cm;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>25</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=274 valign=top style='width:205.55pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Papaya /kavun ağacı</p>
+      </td>
+      <td width=340 valign=top style='width:9.0cm;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>25</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=274 valign=top style='width:205.55pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Liçi</p>
+      </td>
+      <td width=340 valign=top style='width:9.0cm;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>25</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=274 valign=top style='width:205.55pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Azerola/ Barbados Kirazı</p>
+      </td>
+      <td width=340 valign=top style='width:9.0cm;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>25</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=274 valign=top style='width:205.55pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Sursop/Tarçınelması</p>
+      </td>
+      <td width=340 valign=top style='width:9.0cm;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>25</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=274 valign=top style='width:205.55pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Kustard elması/Bullock’s heart</p>
+      </td>
+      <td width=340 valign=top style='width:9.0cm;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>25</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=274 valign=top style='width:205.55pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Hint ayvası</p>
+      </td>
+      <td width=340 valign=top style='width:9.0cm;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>25</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=274 valign=top style='width:205.55pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Nar</p>
+      </td>
+      <td width=340 valign=top style='width:9.0cm;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>25</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=274 valign=top style='width:205.55pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Kaşev/Kaju meyvesi</p>
+      </td>
+      <td width=340 valign=top style='width:9.0cm;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>25</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=274 valign=top style='width:205.55pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>İspanyol / Avrupa eriği</p>
+      </td>
+      <td width=340 valign=top style='width:9.0cm;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>25</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=274 valign=top style='width:205.55pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Umbu</p>
+      </td>
+      <td width=340 valign=top style='width:9.0cm;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>25</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=274 valign=top style='width:205.55pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'><span lang=NO-BOK>Bu
+      kategoriye giren diğer meyveler</span></p>
+      </td>
+      <td width=340 valign=top style='width:9.0cm;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>25</p>
+      </td>
+     </tr>
+    </table>
+    </div>
+    <p class=MsoNormal><b><i>&nbsp;</i></b></p>
+    <p class=MsoNormal style='text-indent:0cm'><b><i>3)  Suyuyla beraber doğal
+    olarak tüketilebilen meyveler</i></b></p>
+    <div align=center>
+    <table class=MsoNormalTable border=1 cellspacing=0 cellpadding=0 width=567 style='width:15.0cm;border-collapse:collapse;border:none'>
+     <tr>
+      <td width=274 valign=top style='width:205.55pt;border:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Elma</p>
+      </td>
+      <td width=340 valign=top style='width:9.0cm;border:solid windowtext 1.0pt;
+      border-left:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>50</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=274 valign=top style='width:205.55pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Armut</p>
+      </td>
+      <td width=340 valign=top style='width:9.0cm;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>50</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=274 valign=top style='width:205.55pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Şeftali</p>
+      </td>
+      <td width=340 valign=top style='width:9.0cm;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>50</p>
+      </td>
+     </tr>
+     <tr style='height:11.25pt'>
+      <td width=274 valign=top style='width:205.55pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt;height:11.25pt'>
+      <p class=MsoNormal style='text-indent:0cm'><span lang=FR>Limon ve Misket
+      limonu dışındaki turunçgiller</span></p>
+      </td>
+      <td width=340 valign=top style='width:9.0cm;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt;height:11.25pt'>
+      <p class=MsoNormal>50</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=274 valign=top style='width:205.55pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Ananas</p>
+      </td>
+      <td width=340 valign=top style='width:9.0cm;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>50</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=274 valign=top style='width:205.55pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'><span lang=NO-BOK>Domates</span></p>
+      </td>
+      <td width=340 valign=top style='width:9.0cm;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>50</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=274 valign=top style='width:205.55pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'><span lang=NO-BOK>Bu
+      kategoriye giren diğer meyveler</span></p>
+      </td>
+      <td width=340 valign=top style='width:9.0cm;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>50</p>
+      </td>
+     </tr>
+    </table>
+    </div>
+    <p class=MsoNormal><b>&nbsp;</b></p>
+    <p class=MsoNormal align=center style='text-align:center'><b>EK – 4</b></p>
+    <p class=MsoNormal align=center style='text-align:center'>&nbsp;</p>
+    <p class=MsoNormal align=center style='text-align:center'><b>KONSANTREDEN
+    ELDE EDİLEN MEYVE SUYU VE PÜRESİ İÇİN MİNİMUM</b><b> BRİKS DERECESİ</b></p>
+    <p class=MsoNormal align=center style='text-align:center'><b>&nbsp;</b></p>
+    <table class=MsoNormalTable border=1 cellspacing=0 cellpadding=0 width=567 style='width:15.0cm;border-collapse:collapse;border:none'>
+     <tr>
+      <td width=173 style='width:129.65pt;border:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Meyvenin Adı</p>
+      </td>
+      <td width=245 style='width:183.7pt;border:solid windowtext 1.0pt;
+      border-left:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Botanik Adı</p>
+      </td>
+      <td width=149 style='width:111.9pt;border:solid windowtext 1.0pt;
+      border-left:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Konsantreden elde edilen meyve
+      suyu ve püresi için minimum briks derecesi</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=173 valign=top style='width:129.65pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Elma (*)</p>
+      </td>
+      <td width=245 valign=top style='width:183.7pt;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'><i>Malus domestica </i>Borkh.</p>
+      </td>
+      <td width=149 valign=top style='width:111.9pt;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>11.2</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=173 valign=top style='width:129.65pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Kayısı (**)</p>
+      </td>
+      <td width=245 valign=top style='width:183.7pt;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'><i>Prunus armeniaca</i> L.</p>
+      </td>
+      <td width=149 valign=top style='width:111.9pt;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>11.2</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=173 valign=top style='width:129.65pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Muz (**)</p>
+      </td>
+      <td width=245 valign=top style='width:183.7pt;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'><i><span lang=FR>Musa x
+      paradisiaca </span></i><span lang=FR>L.(plantainler hariç)</span></p>
+      </td>
+      <td width=149 valign=top style='width:111.9pt;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>21.0</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=173 valign=top style='width:129.65pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Siyah frenk üzümü(*)</p>
+      </td>
+      <td width=245 valign=top style='width:183.7pt;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'><i>Ribes nigrum </i>L.</p>
+      </td>
+      <td width=149 valign=top style='width:111.9pt;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>11.0</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=173 valign=top style='width:129.65pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Üzüm/grape(*)</p>
+      </td>
+      <td width=245 valign=top style='width:183.7pt;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'><i>Vitis vinifera </i>L.ve
+      hibritleri</p>
+      <p class=MsoNormal style='text-indent:0cm'><i>Vits labrusca </i>L.ve
+      hibritleri</p>
+      </td>
+      <td width=149 valign=top style='width:111.9pt;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>15.9</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=173 valign=top style='width:129.65pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Greyfurt(*)</p>
+      </td>
+      <td width=245 valign=top style='width:183.7pt;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'><i>Citrus x paradisi </i>Macfad.</p>
+      </td>
+      <td width=149 valign=top style='width:111.9pt;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>10.0</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=173 valign=top style='width:129.65pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Guava(**)</p>
+      </td>
+      <td width=245 valign=top style='width:183.7pt;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'><i><span lang=FR>Psidium
+      guajava </span></i><span lang=FR>L.</span></p>
+      </td>
+      <td width=149 valign=top style='width:111.9pt;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>8.5</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=173 valign=top style='width:129.65pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Limon(*)</p>
+      </td>
+      <td width=245 valign=top style='width:183.7pt;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'><i>Citrus limon</i> (L.)
+      Burm.f.</p>
+      </td>
+      <td width=149 valign=top style='width:111.9pt;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>8.0</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=173 valign=top style='width:129.65pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Mango(**)</p>
+      </td>
+      <td width=245 valign=top style='width:183.7pt;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'><i><span lang=FR>Mangifera
+      indica</span></i><span lang=FR> L.</span></p>
+      </td>
+      <td width=149 valign=top style='width:111.9pt;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>13.5</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=173 valign=top style='width:129.65pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Portakal(*)</p>
+      </td>
+      <td width=245 valign=top style='width:183.7pt;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'><i>Citrus sinensis </i>(L.)Osbeck</p>
+      </td>
+      <td width=149 valign=top style='width:111.9pt;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>11.2</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=173 valign=top style='width:129.65pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Çarkıfelek/Pasion meyvesi</p>
+      </td>
+      <td width=245 valign=top style='width:183.7pt;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'><i>Passiflora edulis </i>Sims</p>
+      </td>
+      <td width=149 valign=top style='width:111.9pt;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>12.0</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=173 valign=top style='width:129.65pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Şeftali(**)</p>
+      </td>
+      <td width=245 valign=top style='width:183.7pt;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'><i>Prunus persica</i>
+      (L.)Batsch var.persica</p>
+      </td>
+      <td width=149 valign=top style='width:111.9pt;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>10.0</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=173 valign=top style='width:129.65pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Armut(**)</p>
+      </td>
+      <td width=245 valign=top style='width:183.7pt;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'><i>Pyrus communis </i>L.</p>
+      </td>
+      <td width=149 valign=top style='width:111.9pt;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>11.9</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=173 valign=top style='width:129.65pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Ananas(*)</p>
+      </td>
+      <td width=245 valign=top style='width:183.7pt;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'><i>Ananas comosus</i> (L.)
+      Merr.</p>
+      </td>
+      <td width=149 valign=top style='width:111.9pt;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>12.8</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=173 valign=top style='width:129.65pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Ahududu(*)</p>
+      </td>
+      <td width=245 valign=top style='width:183.7pt;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'><i><span lang=FR>Rubus idaeus</span></i><span lang=FR> L.</span></p>
+      </td>
+      <td width=149 valign=top style='width:111.9pt;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>7.0</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=173 valign=top style='width:129.65pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Vişne(*)</p>
+      </td>
+      <td width=245 valign=top style='width:183.7pt;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'><i>Prunus cerasus </i>L.</p>
+      </td>
+      <td width=149 valign=top style='width:111.9pt;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>13.5</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=173 valign=top style='width:129.65pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Çilek(*)</p>
+      </td>
+      <td width=245 valign=top style='width:183.7pt;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'><i>Fragaria  x ananassa</i>
+      Duch.</p>
+      </td>
+      <td width=149 valign=top style='width:111.9pt;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>7.0</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=173 valign=top style='width:129.65pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Domates(*)</p>
+      </td>
+      <td width=245 valign=top style='width:183.7pt;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'><i>Lycopersicon esculentum, </i>Mill.</p>
+      </td>
+      <td width=149 valign=top style='width:111.9pt;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>5.0</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=173 valign=top style='width:129.65pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Mandalina(*)</p>
+      </td>
+      <td width=245 valign=top style='width:183.7pt;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'><i>Citrus reticulata </i>Blanco</p>
+      </td>
+      <td width=149 valign=top style='width:111.9pt;border-top:none;border-left:
+      none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>11.2</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=173 style='width:129.65pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Beyaz frenk&nbsp; üzümü</p>
+      </td>
+      <td width=245 style='width:183.7pt;border-top:none;border-left:none;
+      border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'><i>Ribes rubrum</i> L.</p>
+      </td>
+      <td width=149 style='width:111.9pt;border-top:none;border-left:none;
+      border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>10.0</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=173 style='width:129.65pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Kırmızı frenk&nbsp; üzümü</p>
+      </td>
+      <td width=245 style='width:183.7pt;border-top:none;border-left:none;
+      border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'><i>Ribes rubrum</i> L.</p>
+      </td>
+      <td width=149 style='width:111.9pt;border-top:none;border-left:none;
+      border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>10.0</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=173 style='width:129.65pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Bektaşi üzümü</p>
+      </td>
+      <td width=245 style='width:183.7pt;border-top:none;border-left:none;
+      border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'><i>Ribes uva-crispa</i> L.</p>
+      </td>
+      <td width=149 style='width:111.9pt;border-top:none;border-left:none;
+      border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>7.5</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=173 style='width:129.65pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Yabani iğde</p>
+      </td>
+      <td width=245 style='width:183.7pt;border-top:none;border-left:none;
+      border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'><i>Hippohae rhamnoides</i> L.</p>
+      </td>
+      <td width=149 style='width:111.9pt;border-top:none;border-left:none;
+      border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>6.0</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=173 style='width:129.65pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Çakal eriği</p>
+      </td>
+      <td width=245 style='width:183.7pt;border-top:none;border-left:none;
+      border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'><i>Prunus spinosa</i> L. </p>
+      </td>
+      <td width=149 style='width:111.9pt;border-top:none;border-left:none;
+      border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>6.0</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=173 style='width:129.65pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Erik</p>
+      </td>
+      <td width=245 style='width:183.7pt;border-top:none;border-left:none;
+      border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'><i>Prunus domestica </i>L.</p>
+      </td>
+      <td width=149 style='width:111.9pt;border-top:none;border-left:none;
+      border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>12.0</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=173 style='width:129.65pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Mürdüm eriği</p>
+      </td>
+      <td width=245 style='width:183.7pt;border-top:none;border-left:none;
+      border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'><i>Prunus domestca </i>L.subsp.
+      <i>domestica</i></p>
+      </td>
+      <td width=149 style='width:111.9pt;border-top:none;border-left:none;
+      border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>12.0</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=173 style='width:129.65pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Kuş Üvezi</p>
+      </td>
+      <td width=245 style='width:183.7pt;border-top:none;border-left:none;
+      border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'><i>Sorbus aucuparia </i>L.</p>
+      </td>
+      <td width=149 style='width:111.9pt;border-top:none;border-left:none;
+      border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>11.0</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=173 style='width:129.65pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Kuşburnu</p>
+      </td>
+      <td width=245 style='width:183.7pt;border-top:none;border-left:none;
+      border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Rosa canina</p>
+      </td>
+      <td width=149 style='width:111.9pt;border-top:none;border-left:none;
+      border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>9.0</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=173 style='width:129.65pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Yüksek boylu maviyemiş </p>
+      </td>
+      <td width=245 style='width:183.7pt;border-top:none;border-left:none;
+      border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'><i>Vaccinium corymbosum </i>L<i>.
+      </i></p>
+      </td>
+      <td width=149 style='width:111.9pt;border-top:none;border-left:none;
+      border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>10.0</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=173 style='width:129.65pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Alçak boylu maviyemiş </p>
+      </td>
+      <td width=245 style='width:183.7pt;border-top:none;border-left:none;
+      border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'><i>Vaccinium angustifolium  </i>L<i>.
+      </i></p>
+      </td>
+      <td width=149 style='width:111.9pt;border-top:none;border-left:none;
+      border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>10.0</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=173 style='width:129.65pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Yaban mersini / Çoban Üzümü </p>
+      </td>
+      <td width=245 style='width:183.7pt;border-top:none;border-left:none;
+      border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'><i>Vaccinium myrtillus  </i>L<i>.
+      </i></p>
+      </td>
+      <td width=149 style='width:111.9pt;border-top:none;border-left:none;
+      border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>10.0</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=173 style='width:129.65pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Mürver yemişi</p>
+      </td>
+      <td width=245 style='width:183.7pt;border-top:none;border-left:none;
+      border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Sambucus nigra L.</p>
+      </td>
+      <td width=149 style='width:111.9pt;border-top:none;border-left:none;
+      border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>10.5</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=173 style='width:129.65pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Büyük Meyveli Vaksiniyum</p>
+      </td>
+      <td width=245 style='width:183.7pt;border-top:none;border-left:none;
+      border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'><i> Vaccinium macrocarpon </i>Aiton
+      <i>Vaccinium oxycoccos </i>L.</p>
+      </td>
+      <td width=149 style='width:111.9pt;border-top:none;border-left:none;
+      border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>7.5</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=173 style='width:129.65pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Liçi</p>
+      </td>
+      <td width=245 style='width:183.7pt;border-top:none;border-left:none;
+      border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'><i>Litchi chinenesis</i> Sonn.</p>
+      </td>
+      <td width=149 style='width:111.9pt;border-top:none;border-left:none;
+      border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>11.2</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=173 style='width:129.65pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Azerola/ Barbados Kirazı</p>
+      </td>
+      <td width=245 style='width:183.7pt;border-top:none;border-left:none;
+      border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'><i>Malpighia punicifolia </i>L.</p>
+      </td>
+      <td width=149 style='width:111.9pt;border-top:none;border-left:none;
+      border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>6.5</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=173 style='width:129.65pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Sursop /Tarçın elması </p>
+      </td>
+      <td width=245 style='width:183.7pt;border-top:none;border-left:none;
+      border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'><i>Annona muricata</i> L.</p>
+      </td>
+      <td width=149 style='width:111.9pt;border-top:none;border-left:none;
+      border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>14.5</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=173 style='width:129.65pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Hint ayvası</p>
+      </td>
+      <td width=245 style='width:183.7pt;border-top:none;border-left:none;
+      border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'><i>Annona squamosa</i> L </p>
+      </td>
+      <td width=149 style='width:111.9pt;border-top:none;border-left:none;
+      border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>14.5</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=173 style='width:129.65pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Nar</p>
+      </td>
+      <td width=245 style='width:183.7pt;border-top:none;border-left:none;
+      border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'><i>Punica granatum</i> L. </p>
+      </td>
+      <td width=149 style='width:111.9pt;border-top:none;border-left:none;
+      border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>13,0</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=173 style='width:129.65pt;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>Kaşev/ Kaju meyvesi</p>
+      </td>
+      <td width=245 style='width:183.7pt;border-top:none;border-left:none;
+      border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'><i>Anacardium occidentole</i>
+      L.</p>
+      </td>
+      <td width=149 style='width:111.9pt;border-top:none;border-left:none;
+      border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+      padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal>11.5</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=567 colspan=3 valign=top style='width:15.0cm;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>(*) Meyve suyu olarak
+      üretilir, 20/20 &#870; C’deki suya karşılık minimum relatif yoğunluk
+      hesaplanır.</p>
+      </td>
+     </tr>
+     <tr>
+      <td width=567 colspan=3 valign=top style='width:15.0cm;border:solid windowtext 1.0pt;
+      border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+      <p class=MsoNormal style='text-indent:0cm'>(**) Püre olarak üretilir,
+      sadece minimum düzeltilmemiş Briks okuması (asit düzeltmesi olmaksızın)
+      hesaplanır.</p>
+      </td>
+     </tr>
+    </table>
+    <p class=MsoNormal></p>
+    </td>
+   </tr>
+  </table>
+  </div>
+  </td>
+ </tr>
+</table>
+
+</div>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+</div>
+
+</body>
+
+</html>
+    <p id="page-end"></p>
+    <script src="/lib/tooltip/tooltip.js"></script>
+    <script>
+        $(document).ready(function () {
+            jQuery('table').each(function (cmp) {
+                var parent = this.parentNode;
+                var wrapper = document.createElement('div');
+
+                parent.replaceChild(wrapper, this);
+                wrapper.appendChild(this);
+                this.parentElement.style.overflowX = 'auto';
+            });
+            if (window.location.search.indexOf("2709") != -1 || window.location.search.indexOf("MevzuatTur=19") != -1) {
+                var tableCss = document.styleSheets[0].cssRules[2].style;
+                tableCss.cssText = tableCss.cssText.replace("100%", "initial");
+            }
+            //$('.tooltip').tooltipster();
+            //replaceTable();
+            //$(window).on('resize', function () {
+            //    replaceTable();
+            //});
+            //replaceTable();
+        });
+            //function replaceTable() {
+            //    //if (window.location.search.indexOf("MevzuatTur=19") == -1) {
+            //    //    var iframe = document.getElementsByTagName("td");
+            //    //    var value = $('body').width() - 10;
+            //    //    for (var i = 0; i < iframe.length; i++) {
+            //    //        iframe[i].style.width = "initial !important";
+            //    //    }
+            //    //}
+
+
+            //    //var iframe = document.getElementsByClassName("MsoNormalTable");
+            //    //var value = $('body').width() - 10;
+            //
+            //    //for (var i = 0; i < iframe.length; i++) {
+            //    //    iframe[i].style.width = value;
+            //    //}
+
+            //    //var iframe2 = document.getElementsByClassName("MsoNormal");
+            //    ////for (var j = 0; j < iframe2.length; j++) {
+            //    ////    iframe2[j].style.width = value;
+            //    ////}
+            //}
+    </script>
+
+
+

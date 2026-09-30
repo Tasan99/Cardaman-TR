@@ -1,0 +1,3 @@
+# Retained official texts are evidence: their bytes are hashed, so git must never rewrite their line endings.
+backend/src/regchain/tr/data/corpus/** -text
+backend/tests/fixtures/*.html -text

@@ -1,0 +1,17 @@
+{
+  "format": "regchain-fca-snapshot-v1",
+  "parser_version": "fca-parser-v4",
+  "sources": [
+    {
+      "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=34147&MevzuatTertip=5",
+      "requested_url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=34147&MevzuatTertip=5",
+      "fetched_at": "2026-09-30T11:40:22.415224+00:00",
+      "media_type": "text/html",
+      "raw_hash": "ed0c498a345607c5173949866f8edb93490069a0dc17fcc91f363eb85d9d040a",
+      "raw_file": "ed0c498a345607c5173949866f8edb93490069a0dc17fcc91f363eb85d9d040a.html",
+      "parsed_hash": "ea756006c28ab12fa159269007a36aca2b03cf4faad1924e4efdeccb024562e9",
+      "parser_version": "mevzuat-parser-v4",
+      "title": "GERİ KAZANIM KATILIM PAYINA İLİŞKİN YÖNETMELİK"
+    }
+  ]
+}

@@ -1,166 +1,1007 @@
 {
   "format": "cardaman-tr-regulations/1",
-  "note": "Catalogue of TR sources the beverage packs route to. Titles and numbers are recorded as commonly cited; every entry stays UNVERIFIED until its mevzuat.gov.tr record (number, tertip, Resmî Gazete date, current text) is fetched by the ingestion layer. No effective date is recorded before that.",
+  "note": "Catalogue of the TR sources the beverage packs route to. An entry is VERIFIED only by `python -m regchain.tr corpus apply`: the text was fetched from the official source its source_ref names, the catalogued title is the printed title, and the version chain carries the hash of the stored text (data/corpus). Gazette date and issue are the Mevzuat Bilgi Sistemi catalogue record; effective_date is set only when the text itself says it enters into force on publication.",
   "regulations": [
     {
       "regulation_id": "TR:KANUN:4733",
-      "title": "4733 sayılı Kanun (tütün, tütün mamulleri ve alkollü içkiler piyasasının düzenlenmesi)",
-      "jurisdiction": "TR", "regulator": "TARIM_ORMAN", "regulation_type": "KANUN", "binding_status": "BINDING",
-      "number": "4733", "effective_date": null, "effective_status": "UNKNOWN", "metadata_status": "UNVERIFIED",
-      "verification_note": "Current title, the competent authority after the 2017 reorganisation and the articles on alcohol sales, presentation, advertising and online sales are to be confirmed from the mevzuat.gov.tr text.",
-      "sector_tags": ["BEVERAGE", "ALCOHOL", "ADVERTISING"],
-      "activity_tags": ["PRODUCTION", "IMPORT", "WHOLESALE", "RETAIL_SALE", "ON_PREMISE_SERVICE", "ECOMMERCE_SALE", "ADVERTISING", "SPONSORSHIP", "PROMOTION"],
-      "product_tags": ["BEER", "WINE", "SPIRIT"],
-      "facility_tags": ["BREWERY", "DISTILLERY", "WINERY"]
+      "title": "Tütün, Tütün Mamulleri ve Alkol Piyasasının Düzenlenmesine Dair Kanun",
+      "jurisdiction": "TR",
+      "regulator": "TARIM_ORMAN",
+      "regulation_type": "KANUN",
+      "binding_status": "BINDING",
+      "number": "4733",
+      "effective_date": null,
+      "effective_status": "UNKNOWN",
+      "metadata_status": "VERIFIED",
+      "verification_note": "Title, Mevzuat Bilgi Sistemi identifiers, Resmî Gazete date and issue and the text hash were checked against the text fetched from mevzuat.gov.tr on 2026-09-30 (30 articles, 6 repealed). Annex tables and footnotes are not parsed; the effective date is not derived (staged or non-standard entry into force).",
+      "sector_tags": [
+        "BEVERAGE",
+        "ALCOHOL",
+        "ADVERTISING"
+      ],
+      "activity_tags": [
+        "PRODUCTION",
+        "IMPORT",
+        "WHOLESALE",
+        "RETAIL_SALE",
+        "ON_PREMISE_SERVICE",
+        "ECOMMERCE_SALE",
+        "ADVERTISING",
+        "SPONSORSHIP",
+        "PROMOTION"
+      ],
+      "product_tags": [
+        "BEER",
+        "WINE",
+        "SPIRIT"
+      ],
+      "facility_tags": [
+        "BREWERY",
+        "DISTILLERY",
+        "WINERY"
+      ],
+      "source_ref": {
+        "adapter": "mevzuat",
+        "kind": "1",
+        "number": "4733",
+        "tertip": "5"
+      },
+      "source_url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=1&MevzuatNo=4733&MevzuatTertip=5",
+      "gazette_date": "2002-01-09",
+      "gazette_number": "24635",
+      "versions": [
+        {
+          "regulation_id": "TR:KANUN:4733",
+          "version_id": "20260930-3a7b43cd61dd",
+          "publication_date": "2002-01-09",
+          "effective_date": null,
+          "source_hash": "3a7b43cd61dd226cc885c1aeead915e8596fd51b53a67407726c291d14454313",
+          "previous_version_id": null
+        }
+      ]
     },
     {
       "regulation_id": "TR:KANUN:4250",
-      "title": "4250 sayılı İspirto ve İspirtolu İçkiler İnhisarı Kanunu",
-      "jurisdiction": "TR", "regulator": "TARIM_ORMAN", "regulation_type": "KANUN", "binding_status": "BINDING",
-      "number": "4250", "effective_date": null, "effective_status": "UNKNOWN", "metadata_status": "UNVERIFIED",
-      "verification_note": "Which provisions remain in force and which authority applies them are to be confirmed; its scope is marked UNCLEAR until then.",
-      "sector_tags": ["BEVERAGE", "ALCOHOL"],
-      "activity_tags": ["PRODUCTION", "IMPORT"],
-      "product_tags": ["SPIRIT"]
+      "title": "İspirto ve İspirtolu İçkiler İnhisarı Kanunu",
+      "jurisdiction": "TR",
+      "regulator": "TARIM_ORMAN",
+      "regulation_type": "KANUN",
+      "binding_status": "BINDING",
+      "number": "4250",
+      "effective_date": null,
+      "effective_status": "UNKNOWN",
+      "metadata_status": "VERIFIED",
+      "verification_note": "Title, Mevzuat Bilgi Sistemi identifiers, Resmî Gazete date and issue and the text hash were checked against the text fetched from mevzuat.gov.tr on 2026-09-30 (51 articles, 26 repealed). Annex tables and footnotes are not parsed; the effective date is not derived (staged or non-standard entry into force).",
+      "sector_tags": [
+        "BEVERAGE",
+        "ALCOHOL"
+      ],
+      "activity_tags": [
+        "PRODUCTION",
+        "IMPORT"
+      ],
+      "product_tags": [
+        "SPIRIT"
+      ],
+      "source_ref": {
+        "adapter": "mevzuat",
+        "kind": "1",
+        "number": "4250",
+        "tertip": "3"
+      },
+      "source_url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=1&MevzuatNo=4250&MevzuatTertip=3",
+      "gazette_date": "1942-06-12",
+      "gazette_number": "5130",
+      "versions": [
+        {
+          "regulation_id": "TR:KANUN:4250",
+          "version_id": "20260930-609a640503b1",
+          "publication_date": "1942-06-12",
+          "effective_date": null,
+          "source_hash": "609a640503b1c01e2324da2f5ebaa1fb657faceb80130888028c79fb7df10414",
+          "previous_version_id": null
+        }
+      ]
     },
     {
       "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
-      "title": "Alkollü İçkilerin Satışına ve Sunumuna İlişkin Usul ve Esaslar Hakkında Yönetmelik",
-      "jurisdiction": "TR", "regulator": "TARIM_ORMAN", "regulation_type": "YONETMELIK", "binding_status": "BINDING",
-      "number": null, "effective_date": null, "effective_status": "UNKNOWN", "metadata_status": "UNVERIFIED",
-      "verification_note": "Mevzuat number, Resmî Gazete date and the current consolidated text are to be fetched.",
-      "sector_tags": ["BEVERAGE", "ALCOHOL"],
-      "entity_tags": ["WHOLESALER", "RETAILER", "ON_PREMISE_OPERATOR"],
-      "activity_tags": ["WHOLESALE", "RETAIL_SALE", "ON_PREMISE_SERVICE"],
-      "product_tags": ["BEER", "WINE", "SPIRIT"]
+      "title": "Tütün Mamulleri ve Alkollü İçkilerin Satışına ve Sunumuna İlişkin Usul ve Esaslar Hakkında Yönetmelik",
+      "jurisdiction": "TR",
+      "regulator": "TARIM_ORMAN",
+      "regulation_type": "YONETMELIK",
+      "binding_status": "BINDING",
+      "number": null,
+      "effective_date": null,
+      "effective_status": "UNKNOWN",
+      "metadata_status": "VERIFIED",
+      "verification_note": "Title, Mevzuat Bilgi Sistemi identifiers, Resmî Gazete date and issue and the text hash were checked against the text fetched from mevzuat.gov.tr on 2026-09-30 (43 articles, 1 repealed). Annex tables and footnotes are not parsed; the effective date is not derived (staged or non-standard entry into force).",
+      "sector_tags": [
+        "BEVERAGE",
+        "ALCOHOL"
+      ],
+      "entity_tags": [
+        "WHOLESALER",
+        "RETAILER",
+        "ON_PREMISE_OPERATOR"
+      ],
+      "activity_tags": [
+        "WHOLESALE",
+        "RETAIL_SALE",
+        "ON_PREMISE_SERVICE"
+      ],
+      "product_tags": [
+        "BEER",
+        "WINE",
+        "SPIRIT"
+      ],
+      "source_ref": {
+        "adapter": "mevzuat",
+        "kind": "7",
+        "number": "14646",
+        "tertip": "5"
+      },
+      "source_url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=14646&MevzuatTertip=5",
+      "gazette_date": "2011-01-07",
+      "gazette_number": "27808",
+      "versions": [
+        {
+          "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+          "version_id": "20260930-07cd0ca24a1f",
+          "publication_date": "2011-01-07",
+          "effective_date": null,
+          "source_hash": "07cd0ca24a1f78ae445925c0684939e077b7789a5b9d7b365f12d6b65314643c",
+          "previous_version_id": null
+        }
+      ]
+    },
+    {
+      "regulation_id": "TR:YONETMELIK:ALKOL_IC_DIS_TICARET",
+      "title": "Alkol ve Alkollü İçkilerin İç ve Dış Ticaretine İlişkin Usul ve Esaslar Hakkında Yönetmelik",
+      "jurisdiction": "TR",
+      "regulator": "TARIM_ORMAN",
+      "regulation_type": "YONETMELIK",
+      "binding_status": "BINDING",
+      "number": null,
+      "effective_date": "2003-06-06",
+      "effective_status": "IN_FORCE",
+      "metadata_status": "VERIFIED",
+      "verification_note": "Title, Mevzuat Bilgi Sistemi identifiers, Resmî Gazete date and issue and the text hash were checked against the text fetched from mevzuat.gov.tr on 2026-09-30 (36 articles, 0 repealed). Annex tables and footnotes are not parsed; the effective date is the publication date the text itself names.",
+      "source_ref": {
+        "adapter": "mevzuat",
+        "kind": "7",
+        "number": "6203",
+        "tertip": "5"
+      },
+      "sector_tags": [
+        "BEVERAGE",
+        "ALCOHOL"
+      ],
+      "entity_tags": [
+        "IMPORTER",
+        "PRODUCER",
+        "DISTRIBUTOR",
+        "WHOLESALER"
+      ],
+      "activity_tags": [
+        "IMPORT",
+        "EXPORT",
+        "DISTRIBUTION",
+        "PLACING_ON_MARKET"
+      ],
+      "product_tags": [
+        "BEER",
+        "WINE",
+        "SPIRIT"
+      ],
+      "source_url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=6203&MevzuatTertip=5",
+      "gazette_date": "2003-06-06",
+      "gazette_number": "25130",
+      "versions": [
+        {
+          "regulation_id": "TR:YONETMELIK:ALKOL_IC_DIS_TICARET",
+          "version_id": "20260930-c3d5ba94a7b1",
+          "publication_date": "2003-06-06",
+          "effective_date": "2003-06-06",
+          "source_hash": "c3d5ba94a7b12664cb5d91f53af10f14cf3f0ca611bbf18e1e26ab33ff2b328e",
+          "previous_version_id": null
+        }
+      ]
+    },
+    {
+      "regulation_id": "TR:YONETMELIK:ALKOL_TESIS_TEKNIK_SARTLAR",
+      "title": "Alkol ve Alkollü İçki Tesislerinin Haiz Olmaları Gereken Teknik Şartlar, Kurulmaları, İşletilmeleri ve Denetlenmelerine İlişkin Usul ve Esaslar Hakkında Yönetmelik",
+      "jurisdiction": "TR",
+      "regulator": "TARIM_ORMAN",
+      "regulation_type": "YONETMELIK",
+      "binding_status": "BINDING",
+      "number": null,
+      "effective_date": "2002-09-26",
+      "effective_status": "IN_FORCE",
+      "metadata_status": "VERIFIED",
+      "verification_note": "Title, Mevzuat Bilgi Sistemi identifiers, Resmî Gazete date and issue and the text hash were checked against the text fetched from mevzuat.gov.tr on 2026-09-30 (29 articles, 0 repealed). Annex tables and footnotes are not parsed; the effective date is the publication date the text itself names.",
+      "source_ref": {
+        "adapter": "mevzuat",
+        "kind": "7",
+        "number": "6207",
+        "tertip": "5"
+      },
+      "sector_tags": [
+        "BEVERAGE",
+        "ALCOHOL"
+      ],
+      "activity_tags": [
+        "PRODUCTION"
+      ],
+      "product_tags": [
+        "BEER",
+        "WINE",
+        "SPIRIT"
+      ],
+      "facility_tags": [
+        "BREWERY",
+        "DISTILLERY",
+        "WINERY"
+      ],
+      "source_url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=6207&MevzuatTertip=5",
+      "gazette_date": "2002-09-26",
+      "gazette_number": "24888",
+      "versions": [
+        {
+          "regulation_id": "TR:YONETMELIK:ALKOL_TESIS_TEKNIK_SARTLAR",
+          "version_id": "20260930-d26494e97888",
+          "publication_date": "2002-09-26",
+          "effective_date": "2002-09-26",
+          "source_hash": "d26494e9788809c731d6ede6b071483ea02da74cc1d6aad05869a69d079ecac7",
+          "previous_version_id": null
+        }
+      ]
+    },
+    {
+      "regulation_id": "TR:TEBLIG:TGK_BIRA",
+      "title": "Türk Gıda Kodeksi Bira Tebliği (Tebliğ No: 2006/33)",
+      "jurisdiction": "TR",
+      "regulator": "TARIM_ORMAN",
+      "regulation_type": "TEBLIG",
+      "binding_status": "BINDING",
+      "number": "2006/33",
+      "effective_date": "2006-07-07",
+      "effective_status": "IN_FORCE",
+      "metadata_status": "VERIFIED",
+      "verification_note": "Title, Mevzuat Bilgi Sistemi identifiers, Resmî Gazete date and issue and the text hash were checked against the text fetched from mevzuat.gov.tr on 2026-09-30 (21 articles, 0 repealed). Annex tables and footnotes are not parsed; the effective date is the publication date the text itself names.",
+      "source_ref": {
+        "adapter": "mevzuat",
+        "kind": "9",
+        "number": "10474",
+        "tertip": "5"
+      },
+      "sector_tags": [
+        "BEVERAGE",
+        "ALCOHOL",
+        "FOOD"
+      ],
+      "product_tags": [
+        "BEER",
+        "LOW_ALCOHOL_BEER",
+        "ALCOHOL_FREE_BEER"
+      ],
+      "source_url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=9&MevzuatNo=10474&MevzuatTertip=5",
+      "gazette_date": "2006-07-07",
+      "gazette_number": "26221",
+      "versions": [
+        {
+          "regulation_id": "TR:TEBLIG:TGK_BIRA",
+          "version_id": "20260930-120006ce15d8",
+          "publication_date": "2006-07-07",
+          "effective_date": "2006-07-07",
+          "source_hash": "120006ce15d8fd1514f37fae94704eeb203497180863cf48ca899c046372e39f",
+          "previous_version_id": null
+        }
+      ]
     },
     {
       "regulation_id": "TR:YONETMELIK:INSANI_TUKETIM_SULAR",
       "title": "İnsani Tüketim Amaçlı Sular Hakkında Yönetmelik",
-      "jurisdiction": "TR", "regulator": "SAGLIK", "regulation_type": "YONETMELIK", "binding_status": "BINDING",
-      "number": null, "effective_date": null, "effective_status": "UNKNOWN", "metadata_status": "UNVERIFIED",
-      "verification_note": "Mevzuat number, date and the provisions on packaged drinking water and bottling facilities are to be confirmed.",
-      "sector_tags": ["BEVERAGE", "WATER", "FOOD"],
-      "activity_tags": ["WATER_EXTRACTION", "BOTTLING"],
-      "product_tags": ["PACKAGED_WATER"],
-      "facility_tags": ["WATER_BOTTLING_PLANT", "WATER_SOURCE"]
+      "jurisdiction": "TR",
+      "regulator": "SAGLIK",
+      "regulation_type": "YONETMELIK",
+      "binding_status": "BINDING",
+      "number": null,
+      "effective_date": "2005-02-17",
+      "effective_status": "IN_FORCE",
+      "metadata_status": "VERIFIED",
+      "verification_note": "Title, Mevzuat Bilgi Sistemi identifiers, Resmî Gazete date and issue and the text hash were checked against the text fetched from mevzuat.gov.tr on 2026-09-30 (60 articles, 3 repealed). Annex tables and footnotes are not parsed; the effective date is the publication date the text itself names.",
+      "sector_tags": [
+        "BEVERAGE",
+        "WATER",
+        "FOOD"
+      ],
+      "activity_tags": [
+        "WATER_EXTRACTION",
+        "BOTTLING"
+      ],
+      "product_tags": [
+        "PACKAGED_WATER"
+      ],
+      "facility_tags": [
+        "WATER_BOTTLING_PLANT",
+        "WATER_SOURCE"
+      ],
+      "source_ref": {
+        "adapter": "mevzuat",
+        "kind": "7",
+        "number": "7510",
+        "tertip": "5"
+      },
+      "source_url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=7510&MevzuatTertip=5",
+      "gazette_date": "2005-02-17",
+      "gazette_number": "25730",
+      "versions": [
+        {
+          "regulation_id": "TR:YONETMELIK:INSANI_TUKETIM_SULAR",
+          "version_id": "20260930-64c5c301da1c",
+          "publication_date": "2005-02-17",
+          "effective_date": "2005-02-17",
+          "source_hash": "64c5c301da1c4903dc953c6ea87216798f12e9a6bea69819fbb64e92c0047b7e",
+          "previous_version_id": null
+        }
+      ]
     },
     {
       "regulation_id": "TR:YONETMELIK:DOGAL_MINERALLI_SULAR",
       "title": "Doğal Mineralli Sular Hakkında Yönetmelik",
-      "jurisdiction": "TR", "regulator": "SAGLIK", "regulation_type": "YONETMELIK", "binding_status": "BINDING",
-      "number": null, "effective_date": null, "effective_status": "UNKNOWN", "metadata_status": "UNVERIFIED",
-      "verification_note": "Mevzuat number, date and current text are to be confirmed.",
-      "sector_tags": ["BEVERAGE", "WATER", "FOOD"],
-      "product_tags": ["NATURAL_MINERAL_WATER"],
-      "facility_tags": ["WATER_BOTTLING_PLANT", "WATER_SOURCE"]
+      "jurisdiction": "TR",
+      "regulator": "SAGLIK",
+      "regulation_type": "YONETMELIK",
+      "binding_status": "BINDING",
+      "number": null,
+      "effective_date": "2004-12-01",
+      "effective_status": "IN_FORCE",
+      "metadata_status": "VERIFIED",
+      "verification_note": "Title, Mevzuat Bilgi Sistemi identifiers, Resmî Gazete date and issue and the text hash were checked against the text fetched from mevzuat.gov.tr on 2026-09-30 (53 articles, 1 repealed). Annex tables and footnotes are not parsed; the effective date is the publication date the text itself names.",
+      "sector_tags": [
+        "BEVERAGE",
+        "WATER",
+        "FOOD"
+      ],
+      "product_tags": [
+        "NATURAL_MINERAL_WATER"
+      ],
+      "facility_tags": [
+        "WATER_BOTTLING_PLANT",
+        "WATER_SOURCE"
+      ],
+      "source_ref": {
+        "adapter": "mevzuat",
+        "kind": "7",
+        "number": "4821",
+        "tertip": "5"
+      },
+      "source_url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=4821&MevzuatTertip=5",
+      "gazette_date": "2004-12-01",
+      "gazette_number": "25657",
+      "versions": [
+        {
+          "regulation_id": "TR:YONETMELIK:DOGAL_MINERALLI_SULAR",
+          "version_id": "20260930-2a0a339b64b1",
+          "publication_date": "2004-12-01",
+          "effective_date": "2004-12-01",
+          "source_hash": "2a0a339b64b12978d7e0d36fffae3f908e28aecb7088a30356a0ae8fca395fbd",
+          "previous_version_id": null
+        }
+      ]
     },
     {
       "regulation_id": "TR:TEBLIG:TGK_ENERJI_ICECEKLERI",
-      "title": "Türk Gıda Kodeksi enerji içecekleri tebliği",
-      "jurisdiction": "TR", "regulator": "TARIM_ORMAN", "regulation_type": "TEBLIG", "binding_status": "BINDING",
-      "number": null, "effective_date": null, "effective_status": "UNKNOWN", "metadata_status": "UNVERIFIED",
-      "verification_note": "Exact title and tebliğ number of the Türk Gıda Kodeksi text on energy drinks are to be confirmed.",
-      "sector_tags": ["BEVERAGE", "NON_ALCOHOLIC_BEVERAGE", "FOOD"],
-      "product_tags": ["ENERGY_DRINK"]
+      "title": "Türk Gıda Kodeksi Enerji İçecekleri Tebliği (2017/4)",
+      "jurisdiction": "TR",
+      "regulator": "TARIM_ORMAN",
+      "regulation_type": "TEBLIG",
+      "binding_status": "BINDING",
+      "number": "2017/4",
+      "effective_date": "2017-06-30",
+      "effective_status": "IN_FORCE",
+      "metadata_status": "VERIFIED",
+      "verification_note": "Title, Mevzuat Bilgi Sistemi identifiers, Resmî Gazete date and issue and the text hash were checked against the text fetched from mevzuat.gov.tr on 2026-09-30 (21 articles, 0 repealed). Annex tables and footnotes are not parsed; the effective date is the publication date the text itself names.",
+      "sector_tags": [
+        "BEVERAGE",
+        "NON_ALCOHOLIC_BEVERAGE",
+        "FOOD"
+      ],
+      "product_tags": [
+        "ENERGY_DRINK"
+      ],
+      "source_ref": {
+        "adapter": "mevzuat",
+        "kind": "9",
+        "number": "23706",
+        "tertip": "5"
+      },
+      "source_url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=9&MevzuatNo=23706&MevzuatTertip=5",
+      "gazette_date": "2017-06-30",
+      "gazette_number": "30110",
+      "versions": [
+        {
+          "regulation_id": "TR:TEBLIG:TGK_ENERJI_ICECEKLERI",
+          "version_id": "20260930-85e33626fdc8",
+          "publication_date": "2017-06-30",
+          "effective_date": "2017-06-30",
+          "source_hash": "85e33626fdc88a26e2a65603ea7bb176d1e75aec129cd42ee416ce0b968cdc5f",
+          "previous_version_id": null
+        }
+      ]
+    },
+    {
+      "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
+      "title": "Türk Gıda Kodeksi Alkolsüz İçecekler Tebliği (TebliğNo: 2007/26)",
+      "jurisdiction": "TR",
+      "regulator": "TARIM_ORMAN",
+      "regulation_type": "TEBLIG",
+      "binding_status": "BINDING",
+      "number": "2007/26",
+      "effective_date": "2007-06-15",
+      "effective_status": "IN_FORCE",
+      "metadata_status": "VERIFIED",
+      "verification_note": "Title, Mevzuat Bilgi Sistemi identifiers, Resmî Gazete date and issue and the text hash were checked against the text fetched from mevzuat.gov.tr on 2026-09-30 (20 articles, 0 repealed). Annex tables and footnotes are not parsed; the effective date is the publication date the text itself names.",
+      "source_ref": {
+        "adapter": "mevzuat",
+        "kind": "9",
+        "number": "11376",
+        "tertip": "5"
+      },
+      "sector_tags": [
+        "BEVERAGE",
+        "NON_ALCOHOLIC_BEVERAGE",
+        "FOOD"
+      ],
+      "product_tags": [
+        "CARBONATED_SOFT_DRINK",
+        "STILL_SOFT_DRINK",
+        "FRUIT_DRINK",
+        "ICED_TEA",
+        "SPORTS_DRINK"
+      ],
+      "source_url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=9&MevzuatNo=11376&MevzuatTertip=5",
+      "gazette_date": "2007-06-15",
+      "gazette_number": "26553",
+      "versions": [
+        {
+          "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
+          "version_id": "20260930-af75cffb8bb3",
+          "publication_date": "2007-06-15",
+          "effective_date": "2007-06-15",
+          "source_hash": "af75cffb8bb3a19093899070897df6b65026b2ed3750210d6adbc28187018793",
+          "previous_version_id": null
+        }
+      ]
     },
     {
       "regulation_id": "TR:TEBLIG:TGK_MEYVE_SUYU",
-      "title": "Türk Gıda Kodeksi Meyve Suyu ve Benzeri Ürünler Tebliği",
-      "jurisdiction": "TR", "regulator": "TARIM_ORMAN", "regulation_type": "TEBLIG", "binding_status": "BINDING",
-      "number": null, "effective_date": null, "effective_status": "UNKNOWN", "metadata_status": "UNVERIFIED",
-      "verification_note": "Tebliğ number and current text are to be confirmed.",
-      "sector_tags": ["BEVERAGE", "NON_ALCOHOLIC_BEVERAGE", "FOOD"],
-      "product_tags": ["JUICE_NECTAR"]
+      "title": "Türk Gıda Kodeksi Meyve Suyu ve Benzeri Ürünler Tebliği (Tebliğ No: 2014/34)",
+      "jurisdiction": "TR",
+      "regulator": "TARIM_ORMAN",
+      "regulation_type": "TEBLIG",
+      "binding_status": "BINDING",
+      "number": "2014/34",
+      "effective_date": "2014-08-06",
+      "effective_status": "IN_FORCE",
+      "metadata_status": "VERIFIED",
+      "verification_note": "Title, Mevzuat Bilgi Sistemi identifiers, Resmî Gazete date and issue and the text hash were checked against the text fetched from mevzuat.gov.tr on 2026-09-30 (21 articles, 0 repealed). Annex tables and footnotes are not parsed; the effective date is the publication date the text itself names.",
+      "sector_tags": [
+        "BEVERAGE",
+        "NON_ALCOHOLIC_BEVERAGE",
+        "FOOD"
+      ],
+      "product_tags": [
+        "JUICE_NECTAR"
+      ],
+      "source_ref": {
+        "adapter": "mevzuat",
+        "kind": "9",
+        "number": "19949",
+        "tertip": "5"
+      },
+      "source_url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=9&MevzuatNo=19949&MevzuatTertip=5",
+      "gazette_date": "2014-08-06",
+      "gazette_number": "29080",
+      "versions": [
+        {
+          "regulation_id": "TR:TEBLIG:TGK_MEYVE_SUYU",
+          "version_id": "20260930-1be9140f1fc0",
+          "publication_date": "2014-08-06",
+          "effective_date": "2014-08-06",
+          "source_hash": "1be9140f1fc0a80db128d42e6e047607b13c6d37003aa0d7012c6a0ba42d8288",
+          "previous_version_id": null
+        }
+      ]
     },
     {
       "regulation_id": "TR:KANUN:5996",
-      "title": "5996 sayılı Veteriner Hizmetleri, Bitki Sağlığı, Gıda ve Yem Kanunu",
-      "jurisdiction": "TR", "regulator": "TARIM_ORMAN", "regulation_type": "KANUN", "binding_status": "BINDING",
-      "number": "5996", "effective_date": null, "effective_status": "UNKNOWN", "metadata_status": "UNVERIFIED",
-      "verification_note": "Articles on food business operator duties are to be located in the current text.",
-      "sector_tags": ["FOOD", "BEVERAGE"],
-      "activity_tags": ["PRODUCTION", "BOTTLING", "PLACING_ON_MARKET"]
+      "title": "Veteriner Hizmetleri, Bitki Sağlığı, Gıda ve Yem Kanunu",
+      "jurisdiction": "TR",
+      "regulator": "TARIM_ORMAN",
+      "regulation_type": "KANUN",
+      "binding_status": "BINDING",
+      "number": "5996",
+      "effective_date": null,
+      "effective_status": "UNKNOWN",
+      "metadata_status": "VERIFIED",
+      "verification_note": "Title, Mevzuat Bilgi Sistemi identifiers, Resmî Gazete date and issue and the text hash were checked against the text fetched from mevzuat.gov.tr on 2026-09-30 (60 articles, 0 repealed). Annex tables and footnotes are not parsed; the effective date is not derived (staged or non-standard entry into force).",
+      "sector_tags": [
+        "FOOD",
+        "BEVERAGE"
+      ],
+      "activity_tags": [
+        "PRODUCTION",
+        "BOTTLING",
+        "PLACING_ON_MARKET"
+      ],
+      "source_ref": {
+        "adapter": "mevzuat",
+        "kind": "1",
+        "number": "5996",
+        "tertip": "5"
+      },
+      "source_url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=1&MevzuatNo=5996&MevzuatTertip=5",
+      "gazette_date": "2010-06-13",
+      "gazette_number": "27610",
+      "versions": [
+        {
+          "regulation_id": "TR:KANUN:5996",
+          "version_id": "20260930-f72824ca4517",
+          "publication_date": "2010-06-13",
+          "effective_date": null,
+          "source_hash": "f72824ca4517889b89625c7941f7afdf4368931b815d77bcb6ef1542faa43640",
+          "previous_version_id": null
+        }
+      ]
     },
     {
       "regulation_id": "TR:YONETMELIK:GIDA_ISLETMELERI_KAYIT_ONAY",
       "title": "Gıda İşletmelerinin Kayıt ve Onay İşlemlerine Dair Yönetmelik",
-      "jurisdiction": "TR", "regulator": "TARIM_ORMAN", "regulation_type": "YONETMELIK", "binding_status": "BINDING",
-      "number": null, "effective_date": null, "effective_status": "UNKNOWN", "metadata_status": "UNVERIFIED",
-      "verification_note": "Which beverage facilities need registration and which need approval is to be read from the current text; the pack scope covers production facilities only until then.",
-      "sector_tags": ["FOOD", "BEVERAGE"],
-      "activity_tags": ["PRODUCTION", "BOTTLING"],
-      "facility_tags": ["BREWERY", "MALTING_PLANT", "DISTILLERY", "WINERY", "BOTTLING_PLANT", "WATER_BOTTLING_PLANT"]
+      "jurisdiction": "TR",
+      "regulator": "TARIM_ORMAN",
+      "regulation_type": "YONETMELIK",
+      "binding_status": "BINDING",
+      "number": null,
+      "effective_date": "2011-12-17",
+      "effective_status": "IN_FORCE",
+      "metadata_status": "VERIFIED",
+      "verification_note": "Title, Mevzuat Bilgi Sistemi identifiers, Resmî Gazete date and issue and the text hash were checked against the text fetched from mevzuat.gov.tr on 2026-09-30 (16 articles, 0 repealed). Annex tables and footnotes are not parsed; the effective date is the publication date the text itself names.",
+      "sector_tags": [
+        "FOOD",
+        "BEVERAGE"
+      ],
+      "activity_tags": [
+        "PRODUCTION",
+        "BOTTLING"
+      ],
+      "facility_tags": [
+        "BREWERY",
+        "MALTING_PLANT",
+        "DISTILLERY",
+        "WINERY",
+        "BOTTLING_PLANT",
+        "WATER_BOTTLING_PLANT"
+      ],
+      "source_ref": {
+        "adapter": "mevzuat",
+        "kind": "7",
+        "number": "15594",
+        "tertip": "5"
+      },
+      "source_url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=15594&MevzuatTertip=5",
+      "gazette_date": "2011-12-17",
+      "gazette_number": "28145",
+      "versions": [
+        {
+          "regulation_id": "TR:YONETMELIK:GIDA_ISLETMELERI_KAYIT_ONAY",
+          "version_id": "20260930-57965927498e",
+          "publication_date": "2011-12-17",
+          "effective_date": "2011-12-17",
+          "source_hash": "57965927498eaca9f63af3fbe03ac438afe7616bc3479d29e9dbc5576b399593",
+          "previous_version_id": null
+        }
+      ]
+    },
+    {
+      "regulation_id": "TR:YONETMELIK:GIDA_HIJYENI",
+      "title": "Gıda Hijyeni Yönetmeliği",
+      "jurisdiction": "TR",
+      "regulator": "TARIM_ORMAN",
+      "regulation_type": "YONETMELIK",
+      "binding_status": "BINDING",
+      "number": null,
+      "effective_date": "2011-12-17",
+      "effective_status": "IN_FORCE",
+      "metadata_status": "VERIFIED",
+      "verification_note": "Title, Mevzuat Bilgi Sistemi identifiers, Resmî Gazete date and issue and the text hash were checked against the text fetched from mevzuat.gov.tr on 2026-09-30 (31 articles, 0 repealed). Annex tables and footnotes are not parsed; the effective date is the publication date the text itself names.",
+      "source_ref": {
+        "adapter": "mevzuat",
+        "kind": "7",
+        "number": "15592",
+        "tertip": "5"
+      },
+      "sector_tags": [
+        "FOOD",
+        "BEVERAGE"
+      ],
+      "activity_tags": [
+        "PRODUCTION",
+        "BOTTLING",
+        "WAREHOUSING",
+        "DISTRIBUTION"
+      ],
+      "source_url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=15592&MevzuatTertip=5",
+      "gazette_date": "2011-12-17",
+      "gazette_number": "28145",
+      "versions": [
+        {
+          "regulation_id": "TR:YONETMELIK:GIDA_HIJYENI",
+          "version_id": "20260930-aebe05d434a3",
+          "publication_date": "2011-12-17",
+          "effective_date": "2011-12-17",
+          "source_hash": "aebe05d434a3818f6c7c2caa875c4930499593699e66ef4664e73f9f37bdaf02",
+          "previous_version_id": null
+        }
+      ]
     },
     {
       "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
-      "title": "Türk Gıda Kodeksi Etiketleme ve Tüketicileri Bilgilendirme Yönetmeliği",
-      "jurisdiction": "TR", "regulator": "TARIM_ORMAN", "regulation_type": "YONETMELIK", "binding_status": "BINDING",
-      "number": null, "effective_date": null, "effective_status": "UNKNOWN", "metadata_status": "UNVERIFIED",
-      "verification_note": "Mevzuat number, date and the exemptions for beverages above an alcohol threshold are to be confirmed.",
-      "sector_tags": ["FOOD", "BEVERAGE", "CONSUMER"]
+      "title": "Türk Gıda Kodeksi Gıda Etiketleme ve Tüketicileri Bilgilendirme Yönetmeliği",
+      "jurisdiction": "TR",
+      "regulator": "TARIM_ORMAN",
+      "regulation_type": "YONETMELIK",
+      "binding_status": "BINDING",
+      "number": null,
+      "effective_date": "2017-01-26",
+      "effective_status": "IN_FORCE",
+      "metadata_status": "VERIFIED",
+      "verification_note": "Title, Mevzuat Bilgi Sistemi identifiers, Resmî Gazete date and issue and the text hash were checked against the text fetched from mevzuat.gov.tr on 2026-09-30 (58 articles, 0 repealed). Annex tables and footnotes are not parsed; the effective date is the publication date the text itself names.",
+      "sector_tags": [
+        "FOOD",
+        "BEVERAGE",
+        "CONSUMER"
+      ],
+      "source_ref": {
+        "adapter": "mevzuat",
+        "kind": "7",
+        "number": "23282",
+        "tertip": "5"
+      },
+      "source_url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=23282&MevzuatTertip=5",
+      "gazette_date": "2017-01-26",
+      "gazette_number": "29960 Mükerrer",
+      "versions": [
+        {
+          "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+          "version_id": "20260930-975f2369d7e8",
+          "publication_date": "2017-01-26",
+          "effective_date": "2017-01-26",
+          "source_hash": "975f2369d7e85c12888d9a6024bcec6a99977d1dc51925190481f3290f036184",
+          "previous_version_id": null
+        }
+      ]
     },
     {
-      "regulation_id": "TR:YONETMELIK:TGK_BESLENME_SAGLIK_BEYANLARI",
-      "title": "Türk Gıda Kodeksi Beslenme ve Sağlık Beyanları Yönetmeliği",
-      "jurisdiction": "TR", "regulator": "TARIM_ORMAN", "regulation_type": "YONETMELIK", "binding_status": "BINDING",
-      "number": null, "effective_date": null, "effective_status": "UNKNOWN", "metadata_status": "UNVERIFIED",
-      "verification_note": "Mevzuat number, date and the rules for claims on alcoholic beverages are to be confirmed.",
-      "sector_tags": ["FOOD", "BEVERAGE", "CONSUMER"]
+      "regulation_id": "TR:YONETMELIK:TGK_BESLENME_BEYANLARI",
+      "title": "Türk Gıda Kodeksi Beslenme Beyanları Yönetmeliği",
+      "jurisdiction": "TR",
+      "regulator": "TARIM_ORMAN",
+      "regulation_type": "YONETMELIK",
+      "binding_status": "BINDING",
+      "number": null,
+      "effective_date": "2023-04-20",
+      "effective_status": "IN_FORCE",
+      "metadata_status": "VERIFIED",
+      "verification_note": "Title, Mevzuat Bilgi Sistemi identifiers, Resmî Gazete date and issue and the text hash were checked against the text fetched from mevzuat.gov.tr on 2026-09-30 (17 articles, 0 repealed). Annex tables and footnotes are not parsed; the effective date is the publication date the text itself names.",
+      "sector_tags": [
+        "FOOD",
+        "BEVERAGE",
+        "CONSUMER"
+      ],
+      "source_ref": {
+        "adapter": "mevzuat",
+        "kind": "7",
+        "number": "40154",
+        "tertip": "5"
+      },
+      "source_url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=40154&MevzuatTertip=5",
+      "gazette_date": "2023-04-20",
+      "gazette_number": "32169",
+      "versions": [
+        {
+          "regulation_id": "TR:YONETMELIK:TGK_BESLENME_BEYANLARI",
+          "version_id": "20260930-db22b9ab0c05",
+          "publication_date": "2023-04-20",
+          "effective_date": "2023-04-20",
+          "source_hash": "db22b9ab0c05b5e359c25e12bc8174a2d691ccb7c13ce48a58cd566bb60cb7b4",
+          "previous_version_id": null
+        }
+      ]
     },
     {
       "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
       "title": "Ambalaj Atıklarının Kontrolü Yönetmeliği",
-      "jurisdiction": "TR", "regulator": "CEVRE_SEHIRCILIK", "regulation_type": "YONETMELIK", "binding_status": "BINDING",
-      "number": null, "effective_date": null, "effective_status": "UNKNOWN", "metadata_status": "UNVERIFIED",
-      "verification_note": "The version in force and the definition of the party placing packaging on the market are to be confirmed.",
-      "sector_tags": ["ENVIRONMENT", "BEVERAGE"],
-      "activity_tags": ["PRODUCTION", "BOTTLING", "IMPORT", "PLACING_ON_MARKET"]
+      "jurisdiction": "TR",
+      "regulator": "CEVRE_SEHIRCILIK",
+      "regulation_type": "YONETMELIK",
+      "binding_status": "BINDING",
+      "number": null,
+      "effective_date": "2021-06-26",
+      "effective_status": "IN_FORCE",
+      "metadata_status": "VERIFIED",
+      "verification_note": "Title, Mevzuat Bilgi Sistemi identifiers, Resmî Gazete date and issue and the text hash were checked against the text fetched from mevzuat.gov.tr on 2026-09-30 (35 articles, 0 repealed). Annex tables and footnotes are not parsed; the effective date is the publication date the text itself names.",
+      "sector_tags": [
+        "ENVIRONMENT",
+        "BEVERAGE"
+      ],
+      "activity_tags": [
+        "PRODUCTION",
+        "BOTTLING",
+        "IMPORT",
+        "PLACING_ON_MARKET"
+      ],
+      "source_ref": {
+        "adapter": "mevzuat",
+        "kind": "7",
+        "number": "38745",
+        "tertip": "5"
+      },
+      "source_url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=38745&MevzuatTertip=5",
+      "gazette_date": "2021-06-26",
+      "gazette_number": "31523",
+      "versions": [
+        {
+          "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+          "version_id": "20260930-e11acf13abef",
+          "publication_date": "2021-06-26",
+          "effective_date": "2021-06-26",
+          "source_hash": "e11acf13abefad6d71eacec9432db67624a3973592d5c28d43e08e29144d18e7",
+          "previous_version_id": null
+        }
+      ]
+    },
+    {
+      "regulation_id": "TR:YONETMELIK:GEKAP",
+      "title": "Geri Kazanım Katılım Payına İlişkin Yönetmelik",
+      "jurisdiction": "TR",
+      "regulator": "CEVRE_SEHIRCILIK",
+      "regulation_type": "YONETMELIK",
+      "binding_status": "BINDING",
+      "number": null,
+      "effective_date": null,
+      "effective_status": "UNKNOWN",
+      "metadata_status": "VERIFIED",
+      "verification_note": "Title, Mevzuat Bilgi Sistemi identifiers, Resmî Gazete date and issue and the text hash were checked against the text fetched from mevzuat.gov.tr on 2026-09-30 (17 articles, 0 repealed). Annex tables and footnotes are not parsed; the effective date is not derived (staged or non-standard entry into force).",
+      "source_ref": {
+        "adapter": "mevzuat",
+        "kind": "7",
+        "number": "34147",
+        "tertip": "5"
+      },
+      "sector_tags": [
+        "ENVIRONMENT",
+        "BEVERAGE"
+      ],
+      "activity_tags": [
+        "PRODUCTION",
+        "BOTTLING",
+        "IMPORT",
+        "PLACING_ON_MARKET"
+      ],
+      "source_url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=34147&MevzuatTertip=5",
+      "gazette_date": "2019-12-31",
+      "gazette_number": "30995 (4.Mükerrer)",
+      "versions": [
+        {
+          "regulation_id": "TR:YONETMELIK:GEKAP",
+          "version_id": "20260930-ea756006c28a",
+          "publication_date": "2019-12-31",
+          "effective_date": null,
+          "source_hash": "ea756006c28ab12fa159269007a36aca2b03cf4faad1924e4efdeccb024562e9",
+          "previous_version_id": null
+        }
+      ]
     },
     {
       "regulation_id": "TR:KANUN:6502",
-      "title": "6502 sayılı Tüketicinin Korunması Hakkında Kanun",
-      "jurisdiction": "TR", "regulator": "TICARET", "regulation_type": "KANUN", "binding_status": "BINDING",
-      "number": "6502", "effective_date": null, "effective_status": "UNKNOWN", "metadata_status": "UNVERIFIED",
-      "verification_note": "Articles on commercial advertising and distance contracts are to be located in the current text.",
-      "sector_tags": ["CONSUMER", "ADVERTISING"],
-      "activity_tags": ["RETAIL_SALE", "ECOMMERCE_SALE", "ADVERTISING"]
+      "title": "Tüketicinin Korunması Hakkında Kanun",
+      "jurisdiction": "TR",
+      "regulator": "TICARET",
+      "regulation_type": "KANUN",
+      "binding_status": "BINDING",
+      "number": "6502",
+      "effective_date": null,
+      "effective_status": "UNKNOWN",
+      "metadata_status": "VERIFIED",
+      "verification_note": "Title, Mevzuat Bilgi Sistemi identifiers, Resmî Gazete date and issue and the text hash were checked against the text fetched from mevzuat.gov.tr on 2026-09-30 (95 articles, 0 repealed). Annex tables and footnotes are not parsed; the effective date is not derived (staged or non-standard entry into force).",
+      "sector_tags": [
+        "CONSUMER",
+        "ADVERTISING"
+      ],
+      "activity_tags": [
+        "RETAIL_SALE",
+        "ECOMMERCE_SALE",
+        "ADVERTISING"
+      ],
+      "source_ref": {
+        "adapter": "mevzuat",
+        "kind": "1",
+        "number": "6502",
+        "tertip": "5"
+      },
+      "source_url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=1&MevzuatNo=6502&MevzuatTertip=5",
+      "gazette_date": "2013-11-28",
+      "gazette_number": "28835",
+      "versions": [
+        {
+          "regulation_id": "TR:KANUN:6502",
+          "version_id": "20260930-913bb5070a05",
+          "publication_date": "2013-11-28",
+          "effective_date": null,
+          "source_hash": "913bb5070a050690b7980a0a5340f0b473dc918c076e4c483741b5ee4d694dca",
+          "previous_version_id": null
+        }
+      ]
     },
     {
       "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
       "title": "Ticari Reklam ve Haksız Ticari Uygulamalar Yönetmeliği",
-      "jurisdiction": "TR", "regulator": "TICARET", "regulation_type": "YONETMELIK", "binding_status": "BINDING",
-      "number": null, "effective_date": null, "effective_status": "UNKNOWN", "metadata_status": "UNVERIFIED",
-      "verification_note": "Mevzuat number, date and current consolidated text are to be fetched.",
-      "sector_tags": ["ADVERTISING", "CONSUMER"],
-      "activity_tags": ["ADVERTISING", "PROMOTION", "PRODUCT_PROMOTION"]
+      "jurisdiction": "TR",
+      "regulator": "TICARET",
+      "regulation_type": "YONETMELIK",
+      "binding_status": "BINDING",
+      "number": null,
+      "effective_date": null,
+      "effective_status": "UNKNOWN",
+      "metadata_status": "VERIFIED",
+      "verification_note": "Title, Mevzuat Bilgi Sistemi identifiers, Resmî Gazete date and issue and the text hash were checked against the text fetched from mevzuat.gov.tr on 2026-09-30 (42 articles, 1 repealed). Annex tables and footnotes are not parsed; the effective date is not derived (staged or non-standard entry into force).",
+      "sector_tags": [
+        "ADVERTISING",
+        "CONSUMER"
+      ],
+      "activity_tags": [
+        "ADVERTISING",
+        "PROMOTION",
+        "PRODUCT_PROMOTION"
+      ],
+      "source_ref": {
+        "adapter": "mevzuat",
+        "kind": "7",
+        "number": "20435",
+        "tertip": "5"
+      },
+      "source_url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=20435&MevzuatTertip=5",
+      "gazette_date": "2015-01-10",
+      "gazette_number": "29232",
+      "versions": [
+        {
+          "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+          "version_id": "20260930-a21f046fc3a4",
+          "publication_date": "2015-01-10",
+          "effective_date": null,
+          "source_hash": "a21f046fc3a4270b3c59ee7e8d9121c7c908a23053417fceeeaadc1d028dff4f",
+          "previous_version_id": null
+        }
+      ]
     },
     {
       "regulation_id": "TR:YONETMELIK:MESAFELI_SOZLESMELER",
       "title": "Mesafeli Sözleşmeler Yönetmeliği",
-      "jurisdiction": "TR", "regulator": "TICARET", "regulation_type": "YONETMELIK", "binding_status": "BINDING",
-      "number": null, "effective_date": null, "effective_status": "UNKNOWN", "metadata_status": "UNVERIFIED",
-      "verification_note": "Mevzuat number, date and current text are to be fetched.",
-      "sector_tags": ["CONSUMER", "ECOMMERCE"],
-      "activity_tags": ["ECOMMERCE_SALE"]
+      "jurisdiction": "TR",
+      "regulator": "TICARET",
+      "regulation_type": "YONETMELIK",
+      "binding_status": "BINDING",
+      "number": null,
+      "effective_date": null,
+      "effective_status": "UNKNOWN",
+      "metadata_status": "VERIFIED",
+      "verification_note": "Title, Mevzuat Bilgi Sistemi identifiers, Resmî Gazete date and issue and the text hash were checked against the text fetched from mevzuat.gov.tr on 2026-09-30 (25 articles, 0 repealed). Annex tables and footnotes are not parsed; the effective date is not derived (staged or non-standard entry into force).",
+      "sector_tags": [
+        "CONSUMER",
+        "ECOMMERCE"
+      ],
+      "activity_tags": [
+        "ECOMMERCE_SALE"
+      ],
+      "source_ref": {
+        "adapter": "mevzuat",
+        "kind": "7",
+        "number": "20237",
+        "tertip": "5"
+      },
+      "source_url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=20237&MevzuatTertip=5",
+      "gazette_date": "2014-11-27",
+      "gazette_number": "29188",
+      "versions": [
+        {
+          "regulation_id": "TR:YONETMELIK:MESAFELI_SOZLESMELER",
+          "version_id": "20260930-0041cce06b6f",
+          "publication_date": "2014-11-27",
+          "effective_date": null,
+          "source_hash": "0041cce06b6f618223d39163107a14e8fd850582ec09288914a95e1f670d4251",
+          "previous_version_id": null
+        }
+      ]
     },
     {
       "regulation_id": "TR:KANUN:6563",
-      "title": "6563 sayılı Elektronik Ticaretin Düzenlenmesi Hakkında Kanun",
-      "jurisdiction": "TR", "regulator": "TICARET", "regulation_type": "KANUN", "binding_status": "BINDING",
-      "number": "6563", "effective_date": null, "effective_status": "UNKNOWN", "metadata_status": "UNVERIFIED",
-      "verification_note": "Catalogued for routing only; no scope is attached until its provisions are read.",
-      "sector_tags": ["ECOMMERCE", "CONSUMER"],
-      "activity_tags": ["ECOMMERCE_SALE"]
+      "title": "Elektronik Ticaretin Düzenlenmesi Hakkında Kanun",
+      "jurisdiction": "TR",
+      "regulator": "TICARET",
+      "regulation_type": "KANUN",
+      "binding_status": "BINDING",
+      "number": "6563",
+      "effective_date": null,
+      "effective_status": "UNKNOWN",
+      "metadata_status": "VERIFIED",
+      "verification_note": "Title, Mevzuat Bilgi Sistemi identifiers, Resmî Gazete date and issue and the text hash were checked against the text fetched from mevzuat.gov.tr on 2026-09-30 (22 articles, 1 repealed). Annex tables and footnotes are not parsed; the effective date is not derived (staged or non-standard entry into force).",
+      "sector_tags": [
+        "ECOMMERCE",
+        "CONSUMER"
+      ],
+      "activity_tags": [
+        "ECOMMERCE_SALE"
+      ],
+      "source_ref": {
+        "adapter": "mevzuat",
+        "kind": "1",
+        "number": "6563",
+        "tertip": "5"
+      },
+      "source_url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=1&MevzuatNo=6563&MevzuatTertip=5",
+      "gazette_date": "2014-11-05",
+      "gazette_number": "29166",
+      "versions": [
+        {
+          "regulation_id": "TR:KANUN:6563",
+          "version_id": "20260930-69a0a900e361",
+          "publication_date": "2014-11-05",
+          "effective_date": null,
+          "source_hash": "69a0a900e36171dd3a1dee7e23df091a1cb66b75381243efedf34b60f4de6ce0",
+          "previous_version_id": null
+        }
+      ]
     },
     {
       "regulation_id": "TR:KANUN:4760",
-      "title": "4760 sayılı Özel Tüketim Vergisi Kanunu",
-      "jurisdiction": "TR", "regulator": "HAZINE_MALIYE", "regulation_type": "KANUN", "binding_status": "BINDING",
-      "number": "4760", "effective_date": null, "effective_status": "UNKNOWN", "metadata_status": "UNVERIFIED",
-      "verification_note": "Which beverage classes the lists of the Kanun cover, and the link to tax stamp (bandrol) duties, are to be confirmed; its scope is marked UNCLEAR until then.",
-      "sector_tags": ["TAX", "BEVERAGE"],
-      "activity_tags": ["PRODUCTION", "IMPORT"]
+      "title": "Özel Tüketim Vergisi Kanunu",
+      "jurisdiction": "TR",
+      "regulator": "HAZINE_MALIYE",
+      "regulation_type": "KANUN",
+      "binding_status": "BINDING",
+      "number": "4760",
+      "effective_date": null,
+      "effective_status": "UNKNOWN",
+      "metadata_status": "VERIFIED",
+      "verification_note": "Title, Mevzuat Bilgi Sistemi identifiers, Resmî Gazete date and issue and the text hash were checked against the text fetched from mevzuat.gov.tr on 2026-09-30 (32 articles, 0 repealed). Annex tables and footnotes are not parsed; the effective date is not derived (staged or non-standard entry into force).",
+      "sector_tags": [
+        "TAX",
+        "BEVERAGE"
+      ],
+      "activity_tags": [
+        "PRODUCTION",
+        "IMPORT"
+      ],
+      "source_ref": {
+        "adapter": "mevzuat",
+        "kind": "1",
+        "number": "4760",
+        "tertip": "5"
+      },
+      "source_url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=1&MevzuatNo=4760&MevzuatTertip=5",
+      "gazette_date": "2002-06-12",
+      "gazette_number": "24783",
+      "versions": [
+        {
+          "regulation_id": "TR:KANUN:4760",
+          "version_id": "20260930-8f6d8e7b6499",
+          "publication_date": "2002-06-12",
+          "effective_date": null,
+          "source_hash": "8f6d8e7b64990ec5dd4d951698665df2cdc409f91bb63136e1efca90a4e50f64",
+          "previous_version_id": null
+        }
+      ]
     }
   ]
 }

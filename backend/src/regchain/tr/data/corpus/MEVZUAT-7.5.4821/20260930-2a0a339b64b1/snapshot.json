@@ -1,0 +1,17 @@
+{
+  "format": "regchain-fca-snapshot-v1",
+  "parser_version": "fca-parser-v4",
+  "sources": [
+    {
+      "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=4821&MevzuatTertip=5",
+      "requested_url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=4821&MevzuatTertip=5",
+      "fetched_at": "2026-09-30T11:40:09.216274+00:00",
+      "media_type": "text/html",
+      "raw_hash": "76a5362503d5766dbab4f14ec6d447521bfab9c815eec84873bc325d298ecb44",
+      "raw_file": "76a5362503d5766dbab4f14ec6d447521bfab9c815eec84873bc325d298ecb44.html",
+      "parsed_hash": "2a0a339b64b12978d7e0d36fffae3f908e28aecb7088a30356a0ae8fca395fbd",
+      "parser_version": "mevzuat-parser-v4",
+      "title": "DOĞAL MİNERALLİ SULAR HAKKINDA YÖNETMELİK"
+    }
+  ]
+}

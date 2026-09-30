@@ -100,6 +100,15 @@ class RegulationVersion(Strict):
         return self
 
 
+class SourceRef(Strict):
+    """Where the official text is fetched from: the identifiers of the Mevzuat Bilgi Sistemi (mevzuat.gov.tr) record.
+    The corpus adapter (corpus.py) turns them into the text URL; nothing else may be fetched for the regulation."""
+    adapter: Literal['mevzuat']
+    kind: str = Field(pattern=r'^\d{1,2}$')
+    number: str = Field(pattern=r'^\d{1,12}$')
+    tertip: str = Field(default='5', pattern=r'^\d$')
+
+
 class RegulationMeta(Strict):
     regulation_id: str = Field(pattern=REGULATION_ID)
     title: str = Field(min_length=1)
@@ -111,9 +120,15 @@ class RegulationMeta(Strict):
     effective_date: date | None
     effective_status: EffectiveStatus
     # UNVERIFIED: title, number or dates were not yet checked against mevzuat.gov.tr / Resmî Gazete.
+    # VERIFIED: the text was fetched from the official source named by source_ref, its printed title matches `title`,
+    # and the first version carries the hash of the stored text (corpus.verify_catalogue checks all three).
     metadata_status: MetadataStatus
     verification_note: str = ''
     source_url: str | None = None
+    source_ref: SourceRef | None = None
+    # The Resmî Gazete date and issue the official catalogue records for the text; never typed from memory.
+    gazette_date: date | None = None
+    gazette_number: str | None = None
     interprets: list[str] = []
     sector_tags: list[str] = Field(min_length=1)
     entity_tags: list[str] = []
@@ -137,6 +152,9 @@ class RegulationMeta(Strict):
             raise ValueError(f'{self.regulation_id}: an UNVERIFIED entry must say what is still to be verified')
         if self.effective_date is None and self.effective_status != 'UNKNOWN':
             raise ValueError(f'{self.regulation_id}: effective_status needs an effective_date')
+        if self.metadata_status == 'VERIFIED' and (self.source_ref is None or not self.source_url
+                                                   or not any(v.source_hash for v in self.versions)):
+            raise ValueError(f'{self.regulation_id}: a VERIFIED entry names its official source and the hash of the fetched text')
         version_chain(self)
         return self
 

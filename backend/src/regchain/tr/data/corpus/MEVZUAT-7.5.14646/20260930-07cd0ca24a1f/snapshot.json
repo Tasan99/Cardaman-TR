@@ -1,0 +1,17 @@
+{
+  "format": "regchain-fca-snapshot-v1",
+  "parser_version": "fca-parser-v4",
+  "sources": [
+    {
+      "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=14646&MevzuatTertip=5",
+      "requested_url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=14646&MevzuatTertip=5",
+      "fetched_at": "2026-09-30T11:40:01.577097+00:00",
+      "media_type": "text/html",
+      "raw_hash": "f67e81f3c9fba3e612dfb2f81a0b868d8dc958ddd4053d3318087c311f07f7ed",
+      "raw_file": "f67e81f3c9fba3e612dfb2f81a0b868d8dc958ddd4053d3318087c311f07f7ed.html",
+      "parsed_hash": "07cd0ca24a1f78ae445925c0684939e077b7789a5b9d7b365f12d6b65314643c",
+      "parser_version": "mevzuat-parser-v4",
+      "title": "TÜTÜN MAMULLERİ VE ALKOLLÜ İÇKİLERİN SATIŞINA VE SUNUMUNA İLİŞKİN USUL VE ESASLAR HAKKINDA YÖNETMELİK"
+    }
+  ]
+}

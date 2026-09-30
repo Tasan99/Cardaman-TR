@@ -1,0 +1,17 @@
+{
+  "format": "regchain-fca-snapshot-v1",
+  "parser_version": "fca-parser-v4",
+  "sources": [
+    {
+      "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=9&MevzuatNo=10474&MevzuatTertip=5",
+      "requested_url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=9&MevzuatNo=10474&MevzuatTertip=5",
+      "fetched_at": "2026-09-30T11:40:06.191234+00:00",
+      "media_type": "text/html",
+      "raw_hash": "f549d00ff11d0831d5c0e7785d7884f18d87509a255ae449b4b3a3681142bf9a",
+      "raw_file": "f549d00ff11d0831d5c0e7785d7884f18d87509a255ae449b4b3a3681142bf9a.html",
+      "parsed_hash": "120006ce15d8fd1514f37fae94704eeb203497180863cf48ca899c046372e39f",
+      "parser_version": "mevzuat-parser-v4",
+      "title": "TÜRK GIDA KODEKSİ BİRA TEBLİĞİ (TEBLİĞ NO: 2006/33)"
+    }
+  ]
+}

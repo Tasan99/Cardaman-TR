@@ -1,0 +1,17 @@
+{
+  "format": "regchain-fca-snapshot-v1",
+  "parser_version": "fca-parser-v4",
+  "sources": [
+    {
+      "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=1&MevzuatNo=4250&MevzuatTertip=3",
+      "requested_url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=1&MevzuatNo=4250&MevzuatTertip=3",
+      "fetched_at": "2026-09-30T11:40:00.294976+00:00",
+      "media_type": "text/html",
+      "raw_hash": "97e353c1d4d1b1de55643824af46b86da88251e53172b7cb1972d3e5d9eda2f0",
+      "raw_file": "97e353c1d4d1b1de55643824af46b86da88251e53172b7cb1972d3e5d9eda2f0.html",
+      "parsed_hash": "609a640503b1c01e2324da2f5ebaa1fb657faceb80130888028c79fb7df10414",
+      "parser_version": "mevzuat-parser-v4",
+      "title": "İSPİRTO VE İSPİRTOLU İÇKİLER İNHİSARI KANUNU"
+    }
+  ]
+}

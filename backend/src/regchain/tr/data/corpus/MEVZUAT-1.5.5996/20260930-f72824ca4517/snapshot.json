@@ -1,0 +1,17 @@
+{
+  "format": "regchain-fca-snapshot-v1",
+  "parser_version": "fca-parser-v4",
+  "sources": [
+    {
+      "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=1&MevzuatNo=5996&MevzuatTertip=5",
+      "requested_url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=1&MevzuatNo=5996&MevzuatTertip=5",
+      "fetched_at": "2026-09-30T11:40:14.148090+00:00",
+      "media_type": "text/html",
+      "raw_hash": "52ec1bc0cc6fb269193ebf6dfda02a6fa5d0f202ea1fc6e31c00ca1ae9afe820",
+      "raw_file": "52ec1bc0cc6fb269193ebf6dfda02a6fa5d0f202ea1fc6e31c00ca1ae9afe820.html",
+      "parsed_hash": "f72824ca4517889b89625c7941f7afdf4368931b815d77bcb6ef1542faa43640",
+      "parser_version": "mevzuat-parser-v4",
+      "title": "VETERİNER HİZMETLERİ, BİTKİ SAĞLIĞI, GIDA VE YEM KANUNU"
+    }
+  ]
+}

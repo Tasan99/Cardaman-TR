@@ -1,0 +1,658 @@
+{
+ "format": "cardaman-tr-corpus/1",
+ "note": "Official texts fetched from mevzuat.gov.tr by regchain.tr.corpus; every version keeps the bytes as served. Never edited by hand.",
+ "regulations": {
+  "TR:KANUN:4250": [
+   {
+    "regulation_id": "TR:KANUN:4250",
+    "version_id": "20260930-609a640503b1",
+    "previous_version_id": null,
+    "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=1&MevzuatNo=4250&MevzuatTertip=3",
+    "directory": "MEVZUAT-1.3.4250/20260930-609a640503b1",
+    "raw_hash": "97e353c1d4d1b1de55643824af46b86da88251e53172b7cb1972d3e5d9eda2f0",
+    "parsed_hash": "609a640503b1c01e2324da2f5ebaa1fb657faceb80130888028c79fb7df10414",
+    "parser_version": "mevzuat-parser-v4",
+    "fetched_at": "2026-09-30T11:40:00.294976Z",
+    "title": "İSPİRTO VE İSPİRTOLU İÇKİLER İNHİSARI KANUNU",
+    "articles": 51,
+    "repealed_articles": 26,
+    "publication_date": "1942-06-12",
+    "effective_date": null,
+    "catalogue": {
+     "title": "İSPİRTO VE İSPİRTOLU İÇKİLER İNHİSARI KANUNU",
+     "kind_name": "Kanunlar",
+     "number": "4250",
+     "tertip": "3",
+     "gazette_date": "1942-06-12",
+     "gazette_number": "5130"
+    },
+    "warnings": [
+     "Duplicate article number Geçici 1"
+    ],
+    "synthetic": false
+   }
+  ],
+  "TR:KANUN:4733": [
+   {
+    "regulation_id": "TR:KANUN:4733",
+    "version_id": "20260930-3a7b43cd61dd",
+    "previous_version_id": null,
+    "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=1&MevzuatNo=4733&MevzuatTertip=5",
+    "directory": "MEVZUAT-1.5.4733/20260930-3a7b43cd61dd",
+    "raw_hash": "0a52e252f5ab95d071f60a12d8d504d12a5c170b3e20605ed8021e190cc837b2",
+    "parsed_hash": "3a7b43cd61dd226cc885c1aeead915e8596fd51b53a67407726c291d14454313",
+    "parser_version": "mevzuat-parser-v4",
+    "fetched_at": "2026-09-30T11:39:58.893882Z",
+    "title": "TÜTÜN, TÜTÜN MAMULLERİ VE ALKOL PİYASASININ DÜZENLENMESİNE DAİR KANUN",
+    "articles": 30,
+    "repealed_articles": 6,
+    "publication_date": "2002-01-09",
+    "effective_date": null,
+    "catalogue": {
+     "title": "TÜTÜN, TÜTÜN MAMULLERİ VE ALKOL PİYASASININ DÜZENLENMESİNE DAİR KANUN",
+     "kind_name": "Kanunlar",
+     "number": "4733",
+     "tertip": "5",
+     "gazette_date": "2002-01-09",
+     "gazette_number": "24635"
+    },
+    "warnings": [
+     "Duplicate article number Geçici 2"
+    ],
+    "synthetic": false
+   }
+  ],
+  "TR:KANUN:4760": [
+   {
+    "regulation_id": "TR:KANUN:4760",
+    "version_id": "20260930-8f6d8e7b6499",
+    "previous_version_id": null,
+    "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=1&MevzuatNo=4760&MevzuatTertip=5",
+    "directory": "MEVZUAT-1.5.4760/20260930-8f6d8e7b6499",
+    "raw_hash": "5c62197de7d63e51dfb1e1c6dc22c4a632b794cae2038683bbde00a2bc805c28",
+    "parsed_hash": "8f6d8e7b64990ec5dd4d951698665df2cdc409f91bb63136e1efca90a4e50f64",
+    "parser_version": "mevzuat-parser-v4",
+    "fetched_at": "2026-09-30T11:40:29.434524Z",
+    "title": "ÖZEL TÜKETİM VERGİSİ KANUNU",
+    "articles": 32,
+    "repealed_articles": 0,
+    "publication_date": "2002-06-12",
+    "effective_date": null,
+    "catalogue": {
+     "title": "ÖZEL TÜKETİM VERGİSİ KANUNU",
+     "kind_name": "Kanunlar",
+     "number": "4760",
+     "tertip": "5",
+     "gazette_date": "2002-06-12",
+     "gazette_number": "24783"
+    },
+    "warnings": [
+     "Duplicate article number Geçici 3"
+    ],
+    "synthetic": false
+   }
+  ],
+  "TR:KANUN:5996": [
+   {
+    "regulation_id": "TR:KANUN:5996",
+    "version_id": "20260930-f72824ca4517",
+    "previous_version_id": null,
+    "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=1&MevzuatNo=5996&MevzuatTertip=5",
+    "directory": "MEVZUAT-1.5.5996/20260930-f72824ca4517",
+    "raw_hash": "52ec1bc0cc6fb269193ebf6dfda02a6fa5d0f202ea1fc6e31c00ca1ae9afe820",
+    "parsed_hash": "f72824ca4517889b89625c7941f7afdf4368931b815d77bcb6ef1542faa43640",
+    "parser_version": "mevzuat-parser-v4",
+    "fetched_at": "2026-09-30T11:40:14.148090Z",
+    "title": "VETERİNER HİZMETLERİ, BİTKİ SAĞLIĞI, GIDA VE YEM KANUNU",
+    "articles": 60,
+    "repealed_articles": 0,
+    "publication_date": "2010-06-13",
+    "effective_date": null,
+    "catalogue": {
+     "title": "VETERİNER HİZMETLERİ, BİTKİ SAĞLIĞI, GIDA VE YEM KANUNU",
+     "kind_name": "Kanunlar",
+     "number": "5996",
+     "tertip": "5",
+     "gazette_date": "2010-06-13",
+     "gazette_number": "27610"
+    },
+    "warnings": [],
+    "synthetic": false
+   }
+  ],
+  "TR:KANUN:6502": [
+   {
+    "regulation_id": "TR:KANUN:6502",
+    "version_id": "20260930-913bb5070a05",
+    "previous_version_id": null,
+    "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=1&MevzuatNo=6502&MevzuatTertip=5",
+    "directory": "MEVZUAT-1.5.6502/20260930-913bb5070a05",
+    "raw_hash": "88c932de3cc3a9081102d658c059082c984166350e0eaa1cf41be982bdb2f641",
+    "parsed_hash": "913bb5070a050690b7980a0a5340f0b473dc918c076e4c483741b5ee4d694dca",
+    "parser_version": "mevzuat-parser-v4",
+    "fetched_at": "2026-09-30T11:40:23.856824Z",
+    "title": "TÜKETİCİNİN KORUNMASI HAKKINDA KANUN",
+    "articles": 95,
+    "repealed_articles": 0,
+    "publication_date": "2013-11-28",
+    "effective_date": null,
+    "catalogue": {
+     "title": "TÜKETİCİNİN KORUNMASI HAKKINDA KANUN",
+     "kind_name": "Kanunlar",
+     "number": "6502",
+     "tertip": "5",
+     "gazette_date": "2013-11-28",
+     "gazette_number": "28835"
+    },
+    "warnings": [],
+    "synthetic": false
+   }
+  ],
+  "TR:KANUN:6563": [
+   {
+    "regulation_id": "TR:KANUN:6563",
+    "version_id": "20260930-69a0a900e361",
+    "previous_version_id": null,
+    "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=1&MevzuatNo=6563&MevzuatTertip=5",
+    "directory": "MEVZUAT-1.5.6563/20260930-69a0a900e361",
+    "raw_hash": "4fe79e0e03f652c6a75185a3f3571066cd98fd88e7455af62e1c52ed6b8a8ad7",
+    "parsed_hash": "69a0a900e36171dd3a1dee7e23df091a1cb66b75381243efedf34b60f4de6ce0",
+    "parser_version": "mevzuat-parser-v4",
+    "fetched_at": "2026-09-30T11:40:28.011166Z",
+    "title": "ELEKTRONİK TİCARETİN DÜZENLENMESİ HAKKINDA KANUN",
+    "articles": 22,
+    "repealed_articles": 1,
+    "publication_date": "2014-11-05",
+    "effective_date": null,
+    "catalogue": {
+     "title": "ELEKTRONİK TİCARETİN DÜZENLENMESİ HAKKINDA KANUN",
+     "kind_name": "Kanunlar",
+     "number": "6563",
+     "tertip": "5",
+     "gazette_date": "2014-11-05",
+     "gazette_number": "29166"
+    },
+    "warnings": [],
+    "synthetic": false
+   }
+  ],
+  "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER": [
+   {
+    "regulation_id": "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER",
+    "version_id": "20260930-af75cffb8bb3",
+    "previous_version_id": null,
+    "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=9&MevzuatNo=11376&MevzuatTertip=5",
+    "directory": "MEVZUAT-9.5.11376/20260930-af75cffb8bb3",
+    "raw_hash": "bfb42bc3556660786fea50cf8dd27168818685155c057b61b8f6d1fe35e381c3",
+    "parsed_hash": "af75cffb8bb3a19093899070897df6b65026b2ed3750210d6adbc28187018793",
+    "parser_version": "mevzuat-parser-v4",
+    "fetched_at": "2026-09-30T11:40:11.775965Z",
+    "title": "TÜRK GIDA KODEKSİ ALKOLSÜZ İÇECEKLER TEBLİĞİ (TEBLİĞNO: 2007/26)",
+    "articles": 20,
+    "repealed_articles": 0,
+    "publication_date": "2007-06-15",
+    "effective_date": "2007-06-15",
+    "catalogue": {
+     "title": "TÜRK GIDA KODEKSİ ALKOLSÜZ İÇECEKLER TEBLİĞİ (TEBLİĞNO: 2007/26)",
+     "kind_name": "Tebliğler",
+     "number": "11376",
+     "tertip": "5",
+     "gazette_date": "2007-06-15",
+     "gazette_number": "26553"
+    },
+    "warnings": [
+     "Duplicate article number Geçici 1"
+    ],
+    "synthetic": false
+   }
+  ],
+  "TR:TEBLIG:TGK_BIRA": [
+   {
+    "regulation_id": "TR:TEBLIG:TGK_BIRA",
+    "version_id": "20260930-120006ce15d8",
+    "previous_version_id": null,
+    "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=9&MevzuatNo=10474&MevzuatTertip=5",
+    "directory": "MEVZUAT-9.5.10474/20260930-120006ce15d8",
+    "raw_hash": "f549d00ff11d0831d5c0e7785d7884f18d87509a255ae449b4b3a3681142bf9a",
+    "parsed_hash": "120006ce15d8fd1514f37fae94704eeb203497180863cf48ca899c046372e39f",
+    "parser_version": "mevzuat-parser-v4",
+    "fetched_at": "2026-09-30T11:40:06.191234Z",
+    "title": "TÜRK GIDA KODEKSİ BİRA TEBLİĞİ (TEBLİĞ NO: 2006/33)",
+    "articles": 21,
+    "repealed_articles": 0,
+    "publication_date": "2006-07-07",
+    "effective_date": "2006-07-07",
+    "catalogue": {
+     "title": "TÜRK GIDA KODEKSİ BİRA TEBLİĞİ (TEBLİĞ NO: 2006/33)",
+     "kind_name": "Tebliğler",
+     "number": "10474",
+     "tertip": "5",
+     "gazette_date": "2006-07-07",
+     "gazette_number": "26221"
+    },
+    "warnings": [],
+    "synthetic": false
+   }
+  ],
+  "TR:TEBLIG:TGK_ENERJI_ICECEKLERI": [
+   {
+    "regulation_id": "TR:TEBLIG:TGK_ENERJI_ICECEKLERI",
+    "version_id": "20260930-85e33626fdc8",
+    "previous_version_id": null,
+    "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=9&MevzuatNo=23706&MevzuatTertip=5",
+    "directory": "MEVZUAT-9.5.23706/20260930-85e33626fdc8",
+    "raw_hash": "019567e68039ea7d4509432c690a10a02c31e366211175ee1eb988ffabe19cff",
+    "parsed_hash": "85e33626fdc88a26e2a65603ea7bb176d1e75aec129cd42ee416ce0b968cdc5f",
+    "parser_version": "mevzuat-parser-v4",
+    "fetched_at": "2026-09-30T11:40:10.643295Z",
+    "title": "TÜRK GIDA KODEKSİ ENERJİ İÇECEKLERİ TEBLİĞİ (2017/4)",
+    "articles": 21,
+    "repealed_articles": 0,
+    "publication_date": "2017-06-30",
+    "effective_date": "2017-06-30",
+    "catalogue": {
+     "title": "TÜRK GIDA KODEKSİ ENERJİ İÇECEKLERİ TEBLİĞİ (2017/4)",
+     "kind_name": "Tebliğler",
+     "number": "23706",
+     "tertip": "5",
+     "gazette_date": "2017-06-30",
+     "gazette_number": "30110"
+    },
+    "warnings": [],
+    "synthetic": false
+   }
+  ],
+  "TR:TEBLIG:TGK_MEYVE_SUYU": [
+   {
+    "regulation_id": "TR:TEBLIG:TGK_MEYVE_SUYU",
+    "version_id": "20260930-1be9140f1fc0",
+    "previous_version_id": null,
+    "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=9&MevzuatNo=19949&MevzuatTertip=5",
+    "directory": "MEVZUAT-9.5.19949/20260930-1be9140f1fc0",
+    "raw_hash": "1992f5ba8f2adf06fd9351c0dbfddd6892523e66b5c2570cc641538cb9e728ae",
+    "parsed_hash": "1be9140f1fc0a80db128d42e6e047607b13c6d37003aa0d7012c6a0ba42d8288",
+    "parser_version": "mevzuat-parser-v4",
+    "fetched_at": "2026-09-30T11:40:12.910173Z",
+    "title": "TÜRK GIDA KODEKSİ MEYVE SUYU VE BENZERİ ÜRÜNLER TEBLİĞİ (TEBLİĞ NO: 2014/34)",
+    "articles": 21,
+    "repealed_articles": 0,
+    "publication_date": "2014-08-06",
+    "effective_date": "2014-08-06",
+    "catalogue": {
+     "title": "TÜRK GIDA KODEKSİ MEYVE SUYU VE BENZERİ ÜRÜNLER TEBLİĞİ (TEBLİĞ NO: 2014/34)",
+     "kind_name": "Tebliğler",
+     "number": "19949",
+     "tertip": "5",
+     "gazette_date": "2014-08-06",
+     "gazette_number": "29080"
+    },
+    "warnings": [],
+    "synthetic": false
+   }
+  ],
+  "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM": [
+   {
+    "regulation_id": "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM",
+    "version_id": "20260930-07cd0ca24a1f",
+    "previous_version_id": null,
+    "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=14646&MevzuatTertip=5",
+    "directory": "MEVZUAT-7.5.14646/20260930-07cd0ca24a1f",
+    "raw_hash": "f67e81f3c9fba3e612dfb2f81a0b868d8dc958ddd4053d3318087c311f07f7ed",
+    "parsed_hash": "07cd0ca24a1f78ae445925c0684939e077b7789a5b9d7b365f12d6b65314643c",
+    "parser_version": "mevzuat-parser-v4",
+    "fetched_at": "2026-09-30T11:40:01.577097Z",
+    "title": "TÜTÜN MAMULLERİ VE ALKOLLÜ İÇKİLERİN SATIŞINA VE SUNUMUNA İLİŞKİN USUL VE ESASLAR HAKKINDA YÖNETMELİK",
+    "articles": 43,
+    "repealed_articles": 1,
+    "publication_date": "2011-01-07",
+    "effective_date": null,
+    "catalogue": {
+     "title": "TÜTÜN MAMULLERİ VE ALKOLLÜ İÇKİLERİN SATIŞINA VE SUNUMUNA İLİŞKİN USUL VE ESASLAR HAKKINDA YÖNETMELİK",
+     "kind_name": "Kurum ve Kuruluş Yönetmelikleri",
+     "number": "14646",
+     "tertip": "5",
+     "gazette_date": "2011-01-07",
+     "gazette_number": "27808"
+    },
+    "warnings": [],
+    "synthetic": false
+   }
+  ],
+  "TR:YONETMELIK:ALKOL_IC_DIS_TICARET": [
+   {
+    "regulation_id": "TR:YONETMELIK:ALKOL_IC_DIS_TICARET",
+    "version_id": "20260930-c3d5ba94a7b1",
+    "previous_version_id": null,
+    "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=6203&MevzuatTertip=5",
+    "directory": "MEVZUAT-7.5.6203/20260930-c3d5ba94a7b1",
+    "raw_hash": "906dcefd48e01796482b79389be8397464bd6043558978e77ee8e019cdfd2ccd",
+    "parsed_hash": "c3d5ba94a7b12664cb5d91f53af10f14cf3f0ca611bbf18e1e26ab33ff2b328e",
+    "parser_version": "mevzuat-parser-v4",
+    "fetched_at": "2026-09-30T11:40:03.003105Z",
+    "title": "ALKOL VE ALKOLLÜ İÇKİLERİN İÇ VE DIŞ TİCARETİNE İLİŞKİN USUL VE ESASLAR HAKKINDA YÖNETMELİK",
+    "articles": 36,
+    "repealed_articles": 0,
+    "publication_date": "2003-06-06",
+    "effective_date": "2003-06-06",
+    "catalogue": {
+     "title": "ALKOL VE ALKOLLÜ İÇKİLERİN İÇ VE DIŞ TİCARETİNE İLİŞKİN USUL VE ESASLAR HAKKINDA YÖNETMELİK",
+     "kind_name": "Kurum ve Kuruluş Yönetmelikleri",
+     "number": "6203",
+     "tertip": "5",
+     "gazette_date": "2003-06-06",
+     "gazette_number": "25130"
+    },
+    "warnings": [],
+    "synthetic": false
+   }
+  ],
+  "TR:YONETMELIK:ALKOL_TESIS_TEKNIK_SARTLAR": [
+   {
+    "regulation_id": "TR:YONETMELIK:ALKOL_TESIS_TEKNIK_SARTLAR",
+    "version_id": "20260930-d26494e97888",
+    "previous_version_id": null,
+    "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=6207&MevzuatTertip=5",
+    "directory": "MEVZUAT-7.5.6207/20260930-d26494e97888",
+    "raw_hash": "784ba7d10d1b518efb83f5cc670d33b18e008dedfd9ed407137f9c62726d6026",
+    "parsed_hash": "d26494e9788809c731d6ede6b071483ea02da74cc1d6aad05869a69d079ecac7",
+    "parser_version": "mevzuat-parser-v4",
+    "fetched_at": "2026-09-30T11:40:04.796420Z",
+    "title": "ALKOL VE ALKOLLÜ İÇKİ TESİSLERİNİN HAİZ OLMALARI GEREKEN TEKNİK ŞARTLAR, KURULMALARI, İŞLETİLMELERİ VE DENETLENMELERİNE İLİŞKİN USUL VE ESASLAR HAKKINDA YÖNETMELİK",
+    "articles": 29,
+    "repealed_articles": 0,
+    "publication_date": "2002-09-26",
+    "effective_date": "2002-09-26",
+    "catalogue": {
+     "title": "ALKOL VE ALKOLLÜ İÇKİ TESİSLERİNİN HAİZ OLMALARI GEREKEN TEKNİK ŞARTLAR, KURULMALARI, İŞLETİLMELERİ VE DENETLENMELERİNE İLİŞKİN USUL VE ESASLAR HAKKINDAKİ YÖNETMELİK",
+     "kind_name": "Kurum ve Kuruluş Yönetmelikleri",
+     "number": "6207",
+     "tertip": "5",
+     "gazette_date": "2002-09-26",
+     "gazette_number": "24888"
+    },
+    "warnings": [],
+    "synthetic": false
+   }
+  ],
+  "TR:YONETMELIK:AMBALAJ_ATIKLARI": [
+   {
+    "regulation_id": "TR:YONETMELIK:AMBALAJ_ATIKLARI",
+    "version_id": "20260930-e11acf13abef",
+    "previous_version_id": null,
+    "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=38745&MevzuatTertip=5",
+    "directory": "MEVZUAT-7.5.38745/20260930-e11acf13abef",
+    "raw_hash": "2e0dc4b33029b53c901cc9317a5142556f791c295e19c5c7751f257f9dddac34",
+    "parsed_hash": "e11acf13abefad6d71eacec9432db67624a3973592d5c28d43e08e29144d18e7",
+    "parser_version": "mevzuat-parser-v4",
+    "fetched_at": "2026-09-30T11:40:21.030473Z",
+    "title": "AMBALAJ ATIKLARININ KONTROLÜ YÖNETMELİĞİ",
+    "articles": 35,
+    "repealed_articles": 0,
+    "publication_date": "2021-06-26",
+    "effective_date": "2021-06-26",
+    "catalogue": {
+     "title": "AMBALAJ ATIKLARININ KONTROLÜ YÖNETMELİĞİ",
+     "kind_name": "Kurum ve Kuruluş Yönetmelikleri",
+     "number": "38745",
+     "tertip": "5",
+     "gazette_date": "2021-06-26",
+     "gazette_number": "31523"
+    },
+    "warnings": [],
+    "synthetic": false
+   }
+  ],
+  "TR:YONETMELIK:DOGAL_MINERALLI_SULAR": [
+   {
+    "regulation_id": "TR:YONETMELIK:DOGAL_MINERALLI_SULAR",
+    "version_id": "20260930-2a0a339b64b1",
+    "previous_version_id": null,
+    "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=4821&MevzuatTertip=5",
+    "directory": "MEVZUAT-7.5.4821/20260930-2a0a339b64b1",
+    "raw_hash": "76a5362503d5766dbab4f14ec6d447521bfab9c815eec84873bc325d298ecb44",
+    "parsed_hash": "2a0a339b64b12978d7e0d36fffae3f908e28aecb7088a30356a0ae8fca395fbd",
+    "parser_version": "mevzuat-parser-v4",
+    "fetched_at": "2026-09-30T11:40:09.216274Z",
+    "title": "DOĞAL MİNERALLİ SULAR HAKKINDA YÖNETMELİK",
+    "articles": 53,
+    "repealed_articles": 1,
+    "publication_date": "2004-12-01",
+    "effective_date": "2004-12-01",
+    "catalogue": {
+     "title": "DOĞAL MİNERALLİ SULAR HAKKINDA YÖNETMELİK",
+     "kind_name": "Kurum ve Kuruluş Yönetmelikleri",
+     "number": "4821",
+     "tertip": "5",
+     "gazette_date": "2004-12-01",
+     "gazette_number": "25657"
+    },
+    "warnings": [],
+    "synthetic": false
+   }
+  ],
+  "TR:YONETMELIK:GEKAP": [
+   {
+    "regulation_id": "TR:YONETMELIK:GEKAP",
+    "version_id": "20260930-ea756006c28a",
+    "previous_version_id": null,
+    "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=34147&MevzuatTertip=5",
+    "directory": "MEVZUAT-7.5.34147/20260930-ea756006c28a",
+    "raw_hash": "ed0c498a345607c5173949866f8edb93490069a0dc17fcc91f363eb85d9d040a",
+    "parsed_hash": "ea756006c28ab12fa159269007a36aca2b03cf4faad1924e4efdeccb024562e9",
+    "parser_version": "mevzuat-parser-v4",
+    "fetched_at": "2026-09-30T11:40:22.415224Z",
+    "title": "GERİ KAZANIM KATILIM PAYINA İLİŞKİN YÖNETMELİK",
+    "articles": 17,
+    "repealed_articles": 0,
+    "publication_date": "2019-12-31",
+    "effective_date": null,
+    "catalogue": {
+     "title": "GERİ KAZANIM KATILIM PAYINA İLİŞKİN YÖNETMELİK",
+     "kind_name": "Kurum ve Kuruluş Yönetmelikleri",
+     "number": "34147",
+     "tertip": "5",
+     "gazette_date": "2019-12-31",
+     "gazette_number": "30995 (4.Mükerrer)"
+    },
+    "warnings": [],
+    "synthetic": false
+   }
+  ],
+  "TR:YONETMELIK:GIDA_HIJYENI": [
+   {
+    "regulation_id": "TR:YONETMELIK:GIDA_HIJYENI",
+    "version_id": "20260930-aebe05d434a3",
+    "previous_version_id": null,
+    "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=15592&MevzuatTertip=5",
+    "directory": "MEVZUAT-7.5.15592/20260930-aebe05d434a3",
+    "raw_hash": "fae3e08ebcf3deed857a838f3846b6f095526e5d16135d3d53119bd4e76db378",
+    "parsed_hash": "aebe05d434a3818f6c7c2caa875c4930499593699e66ef4664e73f9f37bdaf02",
+    "parser_version": "mevzuat-parser-v4",
+    "fetched_at": "2026-09-30T11:40:16.822480Z",
+    "title": "GIDA HİJYENİ YÖNETMELİĞİ",
+    "articles": 31,
+    "repealed_articles": 0,
+    "publication_date": "2011-12-17",
+    "effective_date": "2011-12-17",
+    "catalogue": {
+     "title": "GIDA HİJYENİ YÖNETMELİĞİ",
+     "kind_name": "Kurum ve Kuruluş Yönetmelikleri",
+     "number": "15592",
+     "tertip": "5",
+     "gazette_date": "2011-12-17",
+     "gazette_number": "28145"
+    },
+    "warnings": [],
+    "synthetic": false
+   }
+  ],
+  "TR:YONETMELIK:GIDA_ISLETMELERI_KAYIT_ONAY": [
+   {
+    "regulation_id": "TR:YONETMELIK:GIDA_ISLETMELERI_KAYIT_ONAY",
+    "version_id": "20260930-57965927498e",
+    "previous_version_id": null,
+    "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=15594&MevzuatTertip=5",
+    "directory": "MEVZUAT-7.5.15594/20260930-57965927498e",
+    "raw_hash": "b1cd54c602c1d619302db9036b7c4c59613f3def190231155e429df2dfe254db",
+    "parsed_hash": "57965927498eaca9f63af3fbe03ac438afe7616bc3479d29e9dbc5576b399593",
+    "parser_version": "mevzuat-parser-v4",
+    "fetched_at": "2026-09-30T11:40:15.427106Z",
+    "title": "GIDA İŞLETMELERİNİN KAYIT VE ONAY İŞLEMLERİNE DAİR YÖNETMELİK",
+    "articles": 16,
+    "repealed_articles": 0,
+    "publication_date": "2011-12-17",
+    "effective_date": "2011-12-17",
+    "catalogue": {
+     "title": "GIDA İŞLETMELERİNİN KAYIT VE ONAY İŞLEMLERİNE DAİR YÖNETMELİK",
+     "kind_name": "Kurum ve Kuruluş Yönetmelikleri",
+     "number": "15594",
+     "tertip": "5",
+     "gazette_date": "2011-12-17",
+     "gazette_number": "28145"
+    },
+    "warnings": [],
+    "synthetic": false
+   }
+  ],
+  "TR:YONETMELIK:INSANI_TUKETIM_SULAR": [
+   {
+    "regulation_id": "TR:YONETMELIK:INSANI_TUKETIM_SULAR",
+    "version_id": "20260930-64c5c301da1c",
+    "previous_version_id": null,
+    "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=7510&MevzuatTertip=5",
+    "directory": "MEVZUAT-7.5.7510/20260930-64c5c301da1c",
+    "raw_hash": "f92552d662adc081ddae2212d9e83882515b7552f9b4ecad69399086f07dae55",
+    "parsed_hash": "64c5c301da1c4903dc953c6ea87216798f12e9a6bea69819fbb64e92c0047b7e",
+    "parser_version": "mevzuat-parser-v4",
+    "fetched_at": "2026-09-30T11:40:07.617924Z",
+    "title": "İNSANİ TÜKETİM AMAÇLI SULAR HAKKINDA YÖNETMELİK",
+    "articles": 60,
+    "repealed_articles": 3,
+    "publication_date": "2005-02-17",
+    "effective_date": "2005-02-17",
+    "catalogue": {
+     "title": "İNSANİ TÜKETİM AMAÇLI SULAR HAKKINDA YÖNETMELİK",
+     "kind_name": "Kurum ve Kuruluş Yönetmelikleri",
+     "number": "7510",
+     "tertip": "5",
+     "gazette_date": "2005-02-17",
+     "gazette_number": "25730"
+    },
+    "warnings": [],
+    "synthetic": false
+   }
+  ],
+  "TR:YONETMELIK:MESAFELI_SOZLESMELER": [
+   {
+    "regulation_id": "TR:YONETMELIK:MESAFELI_SOZLESMELER",
+    "version_id": "20260930-0041cce06b6f",
+    "previous_version_id": null,
+    "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=20237&MevzuatTertip=5",
+    "directory": "MEVZUAT-7.5.20237/20260930-0041cce06b6f",
+    "raw_hash": "7304421c442933856300b86b3c16ca27812003b33930f4b40256d1e62e0c05a5",
+    "parsed_hash": "0041cce06b6f618223d39163107a14e8fd850582ec09288914a95e1f670d4251",
+    "parser_version": "mevzuat-parser-v4",
+    "fetched_at": "2026-09-30T11:40:26.616151Z",
+    "title": "MESAFELİ SÖZLEŞMELER YÖNETMELİĞİ",
+    "articles": 25,
+    "repealed_articles": 0,
+    "publication_date": "2014-11-27",
+    "effective_date": null,
+    "catalogue": {
+     "title": "MESAFELİ SÖZLEŞMELER YÖNETMELİĞİ",
+     "kind_name": "Kurum ve Kuruluş Yönetmelikleri",
+     "number": "20237",
+     "tertip": "5",
+     "gazette_date": "2014-11-27",
+     "gazette_number": "29188"
+    },
+    "warnings": [],
+    "synthetic": false
+   }
+  ],
+  "TR:YONETMELIK:TGK_BESLENME_BEYANLARI": [
+   {
+    "regulation_id": "TR:YONETMELIK:TGK_BESLENME_BEYANLARI",
+    "version_id": "20260930-db22b9ab0c05",
+    "previous_version_id": null,
+    "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=40154&MevzuatTertip=5",
+    "directory": "MEVZUAT-7.5.40154/20260930-db22b9ab0c05",
+    "raw_hash": "d0fcad0f8c6cdcd28a7fd5abf6990af40c17760125b1ea88a60eae69d0cfdb09",
+    "parsed_hash": "db22b9ab0c05b5e359c25e12bc8174a2d691ccb7c13ce48a58cd566bb60cb7b4",
+    "parser_version": "mevzuat-parser-v4",
+    "fetched_at": "2026-09-30T11:40:19.617137Z",
+    "title": "TÜRK GIDA KODEKSİ BESLENME BEYANLARI YÖNETMELİĞİ",
+    "articles": 17,
+    "repealed_articles": 0,
+    "publication_date": "2023-04-20",
+    "effective_date": "2023-04-20",
+    "catalogue": {
+     "title": "TÜRK GIDA KODEKSİ BESLENME BEYANLARI YÖNETMELİĞİ",
+     "kind_name": "Kurum ve Kuruluş Yönetmelikleri",
+     "number": "40154",
+     "tertip": "5",
+     "gazette_date": "2023-04-20",
+     "gazette_number": "32169"
+    },
+    "warnings": [],
+    "synthetic": false
+   }
+  ],
+  "TR:YONETMELIK:TGK_ETIKETLEME": [
+   {
+    "regulation_id": "TR:YONETMELIK:TGK_ETIKETLEME",
+    "version_id": "20260930-975f2369d7e8",
+    "previous_version_id": null,
+    "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=23282&MevzuatTertip=5",
+    "directory": "MEVZUAT-7.5.23282/20260930-975f2369d7e8",
+    "raw_hash": "35831935173e271f3e70da8b5fff76a0931c218744c46644bca5c4a59c3e889c",
+    "parsed_hash": "975f2369d7e85c12888d9a6024bcec6a99977d1dc51925190481f3290f036184",
+    "parser_version": "mevzuat-parser-v4",
+    "fetched_at": "2026-09-30T11:40:18.239601Z",
+    "title": "TÜRK GIDA KODEKSİ GIDA ETİKETLEME VE TÜKETİCİLERİ BİLGİLENDİRME YÖNETMELİĞİ",
+    "articles": 58,
+    "repealed_articles": 0,
+    "publication_date": "2017-01-26",
+    "effective_date": "2017-01-26",
+    "catalogue": {
+     "title": "TÜRK GIDA KODEKSİ GIDA ETİKETLEME VE TÜKETİCİLERİ BİLGİLENDİRME YÖNETMELİĞİ",
+     "kind_name": "Kurum ve Kuruluş Yönetmelikleri",
+     "number": "23282",
+     "tertip": "5",
+     "gazette_date": "2017-01-26",
+     "gazette_number": "29960 Mükerrer"
+    },
+    "warnings": [],
+    "synthetic": false
+   }
+  ],
+  "TR:YONETMELIK:TICARI_REKLAM": [
+   {
+    "regulation_id": "TR:YONETMELIK:TICARI_REKLAM",
+    "version_id": "20260930-a21f046fc3a4",
+    "previous_version_id": null,
+    "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=20435&MevzuatTertip=5",
+    "directory": "MEVZUAT-7.5.20435/20260930-a21f046fc3a4",
+    "raw_hash": "b27fd42109115a080f0f7c458b89d6d4505dbda2c499a648d5ac1ebfac9eddc7",
+    "parsed_hash": "a21f046fc3a4270b3c59ee7e8d9121c7c908a23053417fceeeaadc1d028dff4f",
+    "parser_version": "mevzuat-parser-v4",
+    "fetched_at": "2026-09-30T11:40:25.178071Z",
+    "title": "TİCARİ REKLAM VE HAKSIZ TİCARİ UYGULAMALAR YÖNETMELİĞİ",
+    "articles": 42,
+    "repealed_articles": 1,
+    "publication_date": "2015-01-10",
+    "effective_date": null,
+    "catalogue": {
+     "title": "TİCARİ REKLAM VE HAKSIZ TİCARİ UYGULAMALAR YÖNETMELİĞİ",
+     "kind_name": "Kurum ve Kuruluş Yönetmelikleri",
+     "number": "20435",
+     "tertip": "5",
+     "gazette_date": "2015-01-10",
+     "gazette_number": "29232"
+    },
+    "warnings": [],
+    "synthetic": false
+   }
+  ]
+ }
+}
