@@ -31,3 +31,21 @@ venv/
 # Node dependencies and local logs
 node_modules/
 *.log
+
+# Local secrets
+.env
+.env.*
+
+# Python generated files
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Node dependencies and local logs
+node_modules/
+*.log
