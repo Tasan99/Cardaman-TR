@@ -14,7 +14,11 @@ import sys
 import time
 from pathlib import Path
 
+import logging
+
 from pypdf import PdfReader
+
+logging.getLogger('pypdf').setLevel(logging.ERROR)      # font-encoding notes are not errors
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'src'))
 from regchain.tr.compare import load_register                                  # noqa: E402
@@ -83,7 +87,7 @@ def write_register(root: Path, profile_id: str, company: str, documents: list[tu
                         'file': file, 'scope': {'policy_id': document_id, 'owner_level': 'GROUP'}})
     register = {'format': 'cardaman-tr-policy-register/1', 'profile_id': profile_id, 'synthetic': False,
                 'disclaimer': f'{company}: kamuya açık politika belgeleri, test girdisi olarak numaralı cümlelere ayrıldı. Şirketin iç prosedürü, kontrolü veya kanıtı değildir.',
-                'period': time.strftime('%Y-Q%q').replace('%q', str((time.localtime().tm_mon - 1) // 3 + 1)),
+                'period': f'{time.localtime().tm_year}-Q{(time.localtime().tm_mon - 1) // 3 + 1}',
                 'documents': records, 'controls': [], 'evidence': []}
     (directory / 'register.json').write_text(json.dumps(register, ensure_ascii=False, indent=2), encoding='utf-8')
     return directory
