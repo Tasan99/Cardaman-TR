@@ -51,3 +51,6 @@ id_rsa*
 
 # Self-test outputs (scripts/Test-TR.ps1)
 evaluation/selftest/
+
+# Third-party public documents used as test input (not redistributed)
+evaluation/external/
