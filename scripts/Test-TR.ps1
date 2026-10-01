@@ -16,18 +16,13 @@ $summary = @()
 $summary += "Cardaman TR self-test $stamp  commit $(git -C $root rev-parse --short HEAD)  branch $(git -C $root rev-parse --abbrev-ref HEAD)"
 
 function Run-Capture([string]$file, [string[]]$arguments) {
-    # python's own stdout+stderr into a UTF-8 file (PowerShell's > would write UTF-16)
-    $psi = New-Object System.Diagnostics.ProcessStartInfo
-    $psi.FileName = $py; $psi.Arguments = ($arguments | ForEach-Object { if ($_ -match '\s') { '"' + $_ + '"' } else { $_ } }) -join ' '
-    $psi.WorkingDirectory = "$root\backend"; $psi.UseShellExecute = $false; $psi.RedirectStandardOutput = $true; $psi.RedirectStandardError = $true
-    $psi.EnvironmentVariables['PYTHONIOENCODING'] = 'utf-8'; $psi.EnvironmentVariables['PYTHONUTF8'] = '1'; $psi.EnvironmentVariables['PYTHONPATH'] = "$root\backend\src"
-    foreach ($name in 'CARDAMAN_MODE', 'OLLAMA_BASE_URL', 'LLM_PROVIDER', 'LLM_MODEL', 'LLM_THINKING', 'JUDGE_MODEL', 'JUDGE_THINKING', 'JUDGE_NUM_CTX', 'EMBED_MODEL') {
-        $value = [Environment]::GetEnvironmentVariable($name)
-        if ($value) { $psi.EnvironmentVariables[$name] = $value }
-    }
-    $proc = [System.Diagnostics.Process]::Start($psi)
-    $stdout = $proc.StandardOutput.ReadToEnd(); $stderr = $proc.StandardError.ReadToEnd(); $proc.WaitForExit()
-    [System.IO.File]::WriteAllText($file, $stdout + $stderr, (New-Object System.Text.UTF8Encoding $false))
+    # python's stdout and stderr into files (no pipe buffers: a full suite writes far more than a pipe holds), joined as UTF-8
+    $quoted = $arguments | ForEach-Object { if ($_ -match '\s') { '"' + $_ + '"' } else { $_ } }
+    $proc = Start-Process -FilePath $py -ArgumentList $quoted -WorkingDirectory "$root\backend" -NoNewWindow -Wait -PassThru `
+        -RedirectStandardOutput "$file.out" -RedirectStandardError "$file.err"
+    $bytes = [System.IO.File]::ReadAllBytes("$file.out") + [System.IO.File]::ReadAllBytes("$file.err")
+    [System.IO.File]::WriteAllBytes($file, $bytes)
+    Remove-Item "$file.out", "$file.err" -ErrorAction SilentlyContinue
     return $proc.ExitCode
 }
 function Summarize([string]$kind, [string]$file) {
