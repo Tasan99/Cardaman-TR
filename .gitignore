@@ -1,0 +1,33 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+node_modules/
+.next/
+data/
+*.egg-info/
+
+# Built locally by scripts/Build-Launcher.ps1 (Cardaman.old.exe: the build a still-open window runs)
+Cardaman*.exe
+
+# Evaluation run outputs (manifests, packets, reports of local runs)
+evaluation/runs/
+
+# Local secrets
+.env
+.env.*
+
+# Python generated files
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Node dependencies and local logs
+node_modules/
+*.log

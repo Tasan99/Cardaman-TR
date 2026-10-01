@@ -1,0 +1,17 @@
+{
+  "format": "regchain-fca-snapshot-v1",
+  "parser_version": "fca-parser-v4",
+  "sources": [
+    {
+      "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=21&MevzuatNo=200713012&MevzuatTertip=5",
+      "requested_url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=21&MevzuatNo=200713012&MevzuatTertip=5",
+      "fetched_at": "2026-09-23T11:09:53.102656+00:00",
+      "media_type": "text/html",
+      "raw_hash": "61acc045320a4c28e64e1ab8e01df7e7d8af055fd8e00fd44a1cea72640be307",
+      "raw_file": "61acc045320a4c28e64e1ab8e01df7e7d8af055fd8e00fd44a1cea72640be307.html",
+      "parsed_hash": "202ee52b795d5ff00f7217275c42bae9345a6966302b06400e8bbdba40f42f24",
+      "parser_version": "mevzuat-parser-v2",
+      "title": "SU\u00c7 GEL\u0130RLER\u0130N\u0130N AKLANMASININ VE TER\u00d6R\u00dcN F\u0130NANSMANININ \u00d6NLENMES\u0130NE DA\u0130R TEDB\u0130RLER HAKKINDA Y\u00d6NETMEL\u0130K 24/2/2021 tarihli ve 31405 2. M\u00fckerrer say\u0131l\u0131 Resm\u00ee Gazete\u2019de yay\u0131mlanan 24/2/2021 tarihli ve 3580 say\u0131l\u0131 Cumhurba\u015fkan\u0131 Karar\u0131 uyar\u0131nca bu Y\u00f6netmelik Cumhurba\u015fkanl\u0131\u011f\u0131 Y\u00f6netmeli\u011fi b\u00f6l\u00fcm\u00fcne eklenmi\u015ftir."
+    }
+  ]
+}

@@ -1,0 +1,3609 @@
+{
+ "format": "cardaman-error-taxonomy-v1",
+ "created_at": "2026-09-24T12:14:18.507739+00:00",
+ "run": "C:\\Users\\tasan\\AppData\\Local\\Temp\\claude\\C--Users-tasan-OneDrive-Masa-st--Cardaman\\e6854f9b-1c16-4949-9e6b-0c96dd0541d8\\scratchpad\\oldrun\\20260923-181124-ollama-4b-8b-ollama",
+ "manifest_sha256": "77d976b9f0f30611478a23cc700050f37cef6e75f5c5f6f50536f13c7d0ee401",
+ "scored_against": "..\\evaluation\\datasets\\tr-aml-v1.json",
+ "sources": {
+  "C01": "packets re-paired with the dataset",
+  "C02": "packets re-paired with the dataset",
+  "C03": "packets re-paired with the dataset",
+  "C04": "packets re-paired with the dataset",
+  "C05": "packets re-paired with the dataset",
+  "C06": "packets re-paired with the dataset",
+  "C07": "packets re-paired with the dataset",
+  "C08": "packets re-paired with the dataset",
+  "C09": "packets re-paired with the dataset",
+  "C10": "packets re-paired with the dataset",
+  "C11": "packets re-paired with the dataset",
+  "C12": "packets re-paired with the dataset",
+  "C13": "packets re-paired with the dataset",
+  "C14": "packets re-paired with the dataset",
+  "C15": "packets re-paired with the dataset",
+  "C16": "packets re-paired with the dataset",
+  "C17": "packets re-paired with the dataset",
+  "C18": "packets re-paired with the dataset",
+  "C19": "packets re-paired with the dataset",
+  "C20": "packets re-paired with the dataset",
+  "C21": "packets re-paired with the dataset",
+  "C22": "packets re-paired with the dataset",
+  "C23": "packets re-paired with the dataset",
+  "C24": "packets re-paired with the dataset",
+  "C25": "packets re-paired with the dataset",
+  "C26": "packets re-paired with the dataset",
+  "C27": "packets re-paired with the dataset",
+  "C28": "packets re-paired with the dataset",
+  "C29": "packets re-paired with the dataset",
+  "C30": "packets re-paired with the dataset"
+ },
+ "cases": 30,
+ "packets": 30,
+ "taxonomy": [
+  "SUBJECT_ENTITY_MISMATCH",
+  "CUSTOMER_ENTITY_MISMATCH",
+  "GLOBAL_SCOPE_MISMATCH",
+  "EXEMPTION_MISSED",
+  "PARENT_CHILD_LEAKAGE",
+  "PROFILE_TOO_AMBIGUOUS",
+  "RULE_MODEL_DISAGREEMENT",
+  "MODEL_HALLUCINATION",
+  "RETRIEVAL_FAILURE",
+  "PARSER_EXTRACTION_ERROR",
+  "LABEL_AMBIGUITY",
+  "OTHER"
+ ],
+ "rules": "regchain.evaluation.taxonomy (module docstring)",
+ "counts": {
+  "applicability": {
+   "RULE_MODEL_DISAGREEMENT": 3,
+   "GLOBAL_SCOPE_MISMATCH": 14,
+   "PROFILE_TOO_AMBIGUOUS": 3,
+   "PARSER_EXTRACTION_ERROR": 1,
+   "SUBJECT_ENTITY_MISMATCH": 2
+  },
+  "coverage": {
+   "OTHER": 8,
+   "LABEL_AMBIGUITY": 1,
+   "MODEL_HALLUCINATION": 2
+  }
+ },
+ "applicability_errors": [
+  {
+   "case_id": "C03",
+   "where": "C03 md.8(1)",
+   "obligation_id": "2c2fbc08da3695b1856d3d31a83e7ad668850b56c7d98a24810084dad12ec399",
+   "obligation_key": "YONETMELIK:200713012/md.8/1/50e3f62cde54",
+   "expectation": {
+    "article": "8",
+    "clause": "(1)",
+    "action_keywords": [
+     "kimlik tespitinde"
+    ],
+    "entity_gate": "MATCH",
+    "required": true,
+    "notes": "Dernek müşterilerde alınacak bilgiler. Banka her tür müşteriye hizmet verir; dernek/vakıf/sendika müşterisi olabilir."
+   },
+   "company_profile": {
+    "id": "ornek-bank-tr",
+    "name": "Örnek Bank A.Ş.",
+    "licences": [
+     "5411 sayılı Bankacılık Kanunu kapsamında mevduat bankası faaliyet izni"
+    ],
+    "activities": [
+     "bankacılık, mevduat kabulü, kredi, ödeme hizmetleri"
+    ],
+    "customer_types": [
+     "tüm müşteri türleri: bireysel, ticari, kamu, dernek ve vakıflar"
+    ]
+   },
+   "regulation_basis": {
+    "scope_quotes": [
+     "(1) Kanunun uygulanmasında yükümlü, aşağıda sayılanlar ile bunların şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleridir: a) Bankalar."
+    ],
+    "subject_gate": null,
+    "basis": [
+     {
+      "condition": "Bankalar",
+      "company_fact": "Türkiye",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "dernek ve vakıflar",
+      "company_fact": "tüm müşteri türleri: bireysel, ticari, kamu, dernek ve vakıflar",
+      "match": "YES",
+      "exclusionary": null
+     }
+    ]
+   },
+   "child_clause": {
+    "provision": "Yönetmelik 200713012 md. 8",
+    "clause": "(1)",
+    "excerpt": "(1) (Değişik birinci cümle: 28/12/2009-2009/15720 K.) Derneklerin kimlik tespitinde; derneğin adı, amacı, kütük numarası, vergi kimlik numarası, açık adresi, telefon numarası, varsa faks numarası ve elektronik posta adresine ilişkin bilgiler ile derneği temsile yetkili kişinin adı, soyadı, doğum ta…",
+    "subject": "Dernekler"
+   },
+   "rule_decision": {
+    "rule_decision": "NO_OBJECTION",
+    "applicability_rule": "DOWNGRADED_BASIS_INCONSISTENT",
+    "decided_by": null,
+    "entity_gate": "MATCH",
+    "required_entities": [
+     "counterparty ASSOCIATION (\"dernek\", clause): MATCH"
+    ],
+    "gates": {},
+    "review_flags": []
+   },
+   "model_decision": {
+    "state": "UNKNOWN",
+    "provision_state": "UNKNOWN",
+    "mode": null
+   },
+   "taxonomy": "RULE_MODEL_DISAGREEMENT",
+   "rationale": "The model said DOES_NOT_APPLY against its own verified basis (downgraded to UNKNOWN); entity gate MATCH.",
+   "also": [
+    "MODEL_HALLUCINATION"
+   ],
+   "expected": "APPLIES",
+   "actual": "UNKNOWN",
+   "evidence": {
+    "positive": [
+     "Bankalar",
+     "dernek ve vakıflar"
+    ],
+    "negative": [],
+    "reason": "The regulatory duty specifically applies to associations (dernekler) and foundations (vakıflar) requiring identity verification. Örnek Bank A.Ş. is a bank licensed under the Banking Law, not an association or foundation. The provision explicitly names banks as subject to the duty, but the obligation in question is about verifying associations, not the bank's own operations. [Rule: the model answe…"
+   }
+  },
+  {
+   "case_id": "C03",
+   "where": "C03 md.8(3)",
+   "obligation_id": "62d2945748f425371bdc820cba4b3545e5ea51d221eb8d6604a4948360c19958",
+   "obligation_key": "YONETMELIK:200713012/md.8/3/fb18fde33f4a",
+   "expectation": {
+    "article": "8",
+    "clause": "(3)",
+    "action_keywords": [
+     "fotokopisi"
+    ],
+    "entity_gate": "MATCH",
+    "required": true,
+    "notes": "Teyide esas belgelerin fotokopisi (dernek/vakıf başlığı altında). Banka her tür müşteriye hizmet verir; dernek/vakıf/sendika müşterisi olabilir."
+   },
+   "company_profile": {
+    "id": "ornek-bank-tr",
+    "name": "Örnek Bank A.Ş.",
+    "licences": [
+     "5411 sayılı Bankacılık Kanunu kapsamında mevduat bankası faaliyet izni"
+    ],
+    "activities": [
+     "bankacılık, mevduat kabulü, kredi, ödeme hizmetleri"
+    ],
+    "customer_types": [
+     "tüm müşteri türleri: bireysel, ticari, kamu, dernek ve vakıflar"
+    ]
+   },
+   "regulation_basis": {
+    "scope_quotes": [
+     "(1) Kanunun uygulanmasında yükümlü, aşağıda sayılanlar ile bunların şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleridir: a) Bankalar."
+    ],
+    "subject_gate": null,
+    "basis": [
+     {
+      "condition": "Bankalar",
+      "company_fact": "Türkiye",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "dernek ve vakıflar",
+      "company_fact": "tüm müşteri türleri: bireysel, ticari, kamu, dernek ve vakıflar",
+      "match": "YES",
+      "exclusionary": null
+     }
+    ]
+   },
+   "child_clause": {
+    "provision": "Yönetmelik 200713012 md. 8",
+    "clause": "(3)",
+    "excerpt": "(3) Yetkililerce istenildiğinde sunulmak üzere teyide esas belgelerin asıllarının veya noterce onaylanmış suretlerinin ibrazı sonrası okunabilir fotokopisi veya elektronik görüntüsü alınır yahut kimliğe ilişkin bilgiler kaydedilir.",
+    "subject": "Yetkililer"
+   },
+   "rule_decision": {
+    "rule_decision": "NO_OBJECTION",
+    "applicability_rule": "DOWNGRADED_BASIS_INCONSISTENT",
+    "decided_by": null,
+    "entity_gate": "MATCH",
+    "required_entities": [
+     "counterparty ASSOCIATION (\"dernek\", heading): MATCH",
+     "counterparty FOUNDATION (\"vakıf\", heading): MATCH"
+    ],
+    "gates": {},
+    "review_flags": []
+   },
+   "model_decision": {
+    "state": "UNKNOWN",
+    "provision_state": "UNKNOWN",
+    "mode": null
+   },
+   "taxonomy": "RULE_MODEL_DISAGREEMENT",
+   "rationale": "The model said DOES_NOT_APPLY against its own verified basis (downgraded to UNKNOWN); entity gate MATCH.",
+   "also": [
+    "MODEL_HALLUCINATION"
+   ],
+   "expected": "APPLIES",
+   "actual": "UNKNOWN",
+   "evidence": {
+    "positive": [
+     "Bankalar",
+     "dernek ve vakıflar"
+    ],
+    "negative": [],
+    "reason": "The regulatory duty specifically applies to associations (dernekler) and foundations (vakıflar) requiring identity verification. Örnek Bank A.Ş. is a bank licensed under the Banking Law, not an association or foundation. The provision explicitly names banks as subject to the duty, but the obligation in question is about verifying associations, not the bank's own operations. [Rule: the model answe…"
+   }
+  },
+  {
+   "case_id": "C03",
+   "where": "C03 md.8(5)",
+   "obligation_id": "a27de5b8b44af28410d57443a224bde780e4c9761b8b0f1c57f87e4058dfe44e",
+   "obligation_key": "YONETMELIK:200713012/md.8/5/b39fac6d5168",
+   "expectation": {
+    "article": "8",
+    "clause": "(5)",
+    "action_keywords": [
+     "kimlik tespiti"
+    ],
+    "entity_gate": "MATCH",
+    "required": true,
+    "notes": "Yabancı dernek ve vakıfların Türkiye şube ve temsilcilikleri. Banka her tür müşteriye hizmet verir; dernek/vakıf/sendika müşterisi olabilir."
+   },
+   "company_profile": {
+    "id": "ornek-bank-tr",
+    "name": "Örnek Bank A.Ş.",
+    "licences": [
+     "5411 sayılı Bankacılık Kanunu kapsamında mevduat bankası faaliyet izni"
+    ],
+    "activities": [
+     "bankacılık, mevduat kabulü, kredi, ödeme hizmetleri"
+    ],
+    "customer_types": [
+     "tüm müşteri türleri: bireysel, ticari, kamu, dernek ve vakıflar"
+    ]
+   },
+   "regulation_basis": {
+    "scope_quotes": [
+     "(1) Kanunun uygulanmasında yükümlü, aşağıda sayılanlar ile bunların şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleridir: a) Bankalar."
+    ],
+    "subject_gate": null,
+    "basis": [
+     {
+      "condition": "Bankalar",
+      "company_fact": "Türkiye",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "dernek ve vakıflar",
+      "company_fact": "tüm müşteri türleri: bireysel, ticari, kamu, dernek ve vakıflar",
+      "match": "YES",
+      "exclusionary": null
+     }
+    ]
+   },
+   "child_clause": {
+    "provision": "Yönetmelik 200713012 md. 8",
+    "clause": "(5)",
+    "excerpt": "(5) Yabancı dernek ve vakıfların Türkiye’deki şube ve temsilciliklerinin kimlik tespiti, İçişleri Bakanlığındaki kayda ilişkin belgeler esas alınmak suretiyle yapılır.",
+    "subject": "Yabancı dernek ve vakıfların Türkiye’deki şube ve temsilciliklerinin"
+   },
+   "rule_decision": {
+    "rule_decision": "NO_OBJECTION",
+    "applicability_rule": "DOWNGRADED_BASIS_INCONSISTENT",
+    "decided_by": null,
+    "entity_gate": "MATCH",
+    "required_entities": [
+     "counterparty FOREIGN_ASSOCIATION_BRANCH (\"yabancı dernek\", clause): MATCH"
+    ],
+    "gates": {},
+    "review_flags": []
+   },
+   "model_decision": {
+    "state": "UNKNOWN",
+    "provision_state": "UNKNOWN",
+    "mode": null
+   },
+   "taxonomy": "RULE_MODEL_DISAGREEMENT",
+   "rationale": "The model said DOES_NOT_APPLY against its own verified basis (downgraded to UNKNOWN); entity gate MATCH.",
+   "also": [
+    "MODEL_HALLUCINATION"
+   ],
+   "expected": "APPLIES",
+   "actual": "UNKNOWN",
+   "evidence": {
+    "positive": [
+     "Bankalar",
+     "dernek ve vakıflar"
+    ],
+    "negative": [],
+    "reason": "The regulatory duty specifically applies to associations (dernekler) and foundations (vakıflar) requiring identity verification. Örnek Bank A.Ş. is a bank licensed under the Banking Law, not an association or foundation. The provision explicitly names banks as subject to the duty, but the obligation in question is about verifying associations, not the bank's own operations. [Rule: the model answe…"
+   }
+  },
+  {
+   "case_id": "C04",
+   "where": "C04 md.5(2)",
+   "obligation_id": "7249ba0da413852e2c45f33ffc4e73ad9327341fa5de43c02d4a1ca6c472d9fa",
+   "obligation_key": "YONETMELIK:200713012/md.5/2/3be5e5d03796",
+   "expectation": {
+    "article": "5",
+    "clause": "(2)",
+    "action_keywords": [
+     "işlem yapılmadan önce tamamlanır"
+    ],
+    "entity_gate": "ANY",
+    "required": true,
+    "notes": "Kimlik tespiti işlemden önce tamamlanır. Yönetmelik md. 4 yükümlü listesinde yer almayan kuruluş; genel ödevler bağlamaz (provizyon düzeyi karar)."
+   },
+   "company_profile": {
+    "id": "yesil-vadi-dernegi",
+    "name": "Yeşil Vadi Doğa Derneği",
+    "licences": [],
+    "activities": [
+     "dernek faaliyetleri, bağış toplama, doğa koruma projeleri"
+    ],
+    "customer_types": [
+     "üyeler ve bağışçılar"
+    ]
+   },
+   "regulation_basis": {
+    "scope_quotes": [],
+    "subject_gate": null,
+    "basis": []
+   },
+   "child_clause": {
+    "provision": "Yönetmelik 200713012 md. 5",
+    "clause": "(2)",
+    "excerpt": "(2) Kimlik tespiti, iş ilişkisi tesisinden veya işlem yapılmadan önce tamamlanır.",
+    "subject": "Kimlik tespiti"
+   },
+   "rule_decision": {
+    "rule_decision": "NO_RESTRICTION",
+    "applicability_rule": "NOT_ASSESSED",
+    "decided_by": null,
+    "entity_gate": "NOT_RESTRICTED",
+    "required_entities": [],
+    "gates": {},
+    "review_flags": []
+   },
+   "model_decision": {
+    "state": "UNKNOWN",
+    "provision_state": "UNKNOWN",
+    "mode": null
+   },
+   "taxonomy": "GLOBAL_SCOPE_MISMATCH",
+   "rationale": "Not an obliged party (the label: the company is not in the obliged-party list (md. 4)), yet UNKNOWN.",
+   "also": [
+    "MODEL_HALLUCINATION"
+   ],
+   "expected": "DOES_NOT_APPLY",
+   "actual": "UNKNOWN",
+   "evidence": {
+    "positive": [],
+    "negative": [],
+    "reason": "PROPOSAL_INVALID: manual analysis required"
+   }
+  },
+  {
+   "case_id": "C04",
+   "where": "C04 md.5(3)",
+   "obligation_id": "b96522b2307423600d42e6e6e5809d52f8c47b6a1dc9a9215e58379c79770f13",
+   "obligation_key": "YONETMELIK:200713012/md.5/3/1b411c03e0d4",
+   "expectation": {
+    "article": "5",
+    "clause": "(3)",
+    "action_keywords": [
+     "bilgi alınır"
+    ],
+    "entity_gate": "ANY",
+    "required": true,
+    "notes": "İş ilişkisinin amacı ve mahiyeti hakkında bilgi alınır. Yönetmelik md. 4 yükümlü listesinde yer almayan kuruluş; genel ödevler bağlamaz (provizyon düzeyi karar)."
+   },
+   "company_profile": {
+    "id": "yesil-vadi-dernegi",
+    "name": "Yeşil Vadi Doğa Derneği",
+    "licences": [],
+    "activities": [
+     "dernek faaliyetleri, bağış toplama, doğa koruma projeleri"
+    ],
+    "customer_types": [
+     "üyeler ve bağışçılar"
+    ]
+   },
+   "regulation_basis": {
+    "scope_quotes": [],
+    "subject_gate": null,
+    "basis": []
+   },
+   "child_clause": {
+    "provision": "Yönetmelik 200713012 md. 5",
+    "clause": "(3)",
+    "excerpt": "(3) (Değişik: 28/12/2009-2009/15720 K.) Sürekli iş ilişkisi tesisinde, iş ilişkisinin amacı ve mahiyeti hakkında bilgi alınır.",
+    "subject": "Sürekli iş ilişkisi tesisinde"
+   },
+   "rule_decision": {
+    "rule_decision": "NO_RESTRICTION",
+    "applicability_rule": "NOT_ASSESSED",
+    "decided_by": null,
+    "entity_gate": "NOT_RESTRICTED",
+    "required_entities": [],
+    "gates": {},
+    "review_flags": []
+   },
+   "model_decision": {
+    "state": "UNKNOWN",
+    "provision_state": "UNKNOWN",
+    "mode": null
+   },
+   "taxonomy": "GLOBAL_SCOPE_MISMATCH",
+   "rationale": "Not an obliged party (the label: the company is not in the obliged-party list (md. 4)), yet UNKNOWN.",
+   "also": [
+    "MODEL_HALLUCINATION"
+   ],
+   "expected": "DOES_NOT_APPLY",
+   "actual": "UNKNOWN",
+   "evidence": {
+    "positive": [],
+    "negative": [],
+    "reason": "PROPOSAL_INVALID: manual analysis required"
+   }
+  },
+  {
+   "case_id": "C04",
+   "where": "C04 md.28(2)",
+   "obligation_id": "755d793ce8404efc3a9fd66a371b9d30fca20f555bf64dd31ab49d0abe1e24b7",
+   "obligation_key": "YONETMELIK:200713012/md.28/2/512bda5ea851",
+   "expectation": {
+    "article": "28",
+    "clause": "(2)",
+    "action_keywords": [
+     "bildirilir"
+    ],
+    "entity_gate": "ANY",
+    "required": true,
+    "notes": "Şüpheli işlem en geç on iş günü içinde bildirilir. Yönetmelik md. 4 yükümlü listesinde yer almayan kuruluş; genel ödevler bağlamaz (provizyon düzeyi karar)."
+   },
+   "company_profile": {
+    "id": "yesil-vadi-dernegi",
+    "name": "Yeşil Vadi Doğa Derneği",
+    "licences": [],
+    "activities": [
+     "dernek faaliyetleri, bağış toplama, doğa koruma projeleri"
+    ],
+    "customer_types": [
+     "üyeler ve bağışçılar"
+    ]
+   },
+   "regulation_basis": {
+    "scope_quotes": [],
+    "subject_gate": null,
+    "basis": []
+   },
+   "child_clause": {
+    "provision": "Yönetmelik 200713012 md. 28",
+    "clause": "(2)",
+    "excerpt": "(2) Şüpheli işlemler, işleme ilişkin şüphenin oluştuğu tarihten itibaren en geç on iş günü içinde Başkanlığa bildirilir.",
+    "subject": "Şüpheli işlemler"
+   },
+   "rule_decision": {
+    "rule_decision": "NO_RESTRICTION",
+    "applicability_rule": "NOT_ASSESSED",
+    "decided_by": null,
+    "entity_gate": "NOT_RESTRICTED",
+    "required_entities": [],
+    "gates": {},
+    "review_flags": []
+   },
+   "model_decision": {
+    "state": "UNKNOWN",
+    "provision_state": "UNKNOWN",
+    "mode": null
+   },
+   "taxonomy": "GLOBAL_SCOPE_MISMATCH",
+   "rationale": "Not an obliged party (the label: the company is not in the obliged-party list (md. 4)), yet UNKNOWN.",
+   "also": [
+    "MODEL_HALLUCINATION"
+   ],
+   "expected": "DOES_NOT_APPLY",
+   "actual": "UNKNOWN",
+   "evidence": {
+    "positive": [],
+    "negative": [],
+    "reason": "PROPOSAL_INVALID: manual analysis required"
+   }
+  },
+  {
+   "case_id": "C05",
+   "where": "C05 md.46(1)",
+   "obligation_id": "f07459b69b0297bbf926c8ae9b4cce956b385d2049297ce130752e24b80ddd50",
+   "obligation_key": "YONETMELIK:200713012/md.46/1/de258aca97e0",
+   "expectation": {
+    "article": "46",
+    "clause": "(1)",
+    "action_keywords": [
+     "muhafaza etmek"
+    ],
+    "entity_gate": "ANY",
+    "required": true,
+    "notes": "Sekiz yıl muhafaza ve ibraz. Yönetmelik md. 4 yükümlü listesinde yer almayan kuruluş; genel ödevler bağlamaz (provizyon düzeyi karar)."
+   },
+   "company_profile": {
+    "id": "umut-vakfi",
+    "name": "Umut Eğitim Vakfı",
+    "licences": [],
+    "activities": [
+     "vakıf faaliyetleri, burs verme, eğitim projeleri"
+    ],
+    "customer_types": [
+     "burs alan öğrenciler ve bağışçılar"
+    ]
+   },
+   "regulation_basis": {
+    "scope_quotes": [],
+    "subject_gate": null,
+    "basis": []
+   },
+   "child_clause": {
+    "provision": "Yönetmelik 200713012 md. 46",
+    "clause": "(1)",
+    "excerpt": "(1) Yükümlüler her türlü ortamdaki, yükümlülüklerine ve işlemlerine ilişkin belgeleri düzenleme tarihinden, defter ve kayıtları ise son kayıt tarihinden; kimlik tespitine ilişkin belge ve kayıtları son işlem tarihinden itibaren sekiz yıl süre ile muhafaza etmek ve istenmesi halinde yetkililere ibra…",
+    "subject": "Yükümlüler"
+   },
+   "rule_decision": {
+    "rule_decision": "NO_RESTRICTION",
+    "applicability_rule": "NOT_ASSESSED",
+    "decided_by": null,
+    "entity_gate": "NOT_RESTRICTED",
+    "required_entities": [],
+    "gates": {},
+    "review_flags": []
+   },
+   "model_decision": {
+    "state": "UNKNOWN",
+    "provision_state": "UNKNOWN",
+    "mode": null
+   },
+   "taxonomy": "GLOBAL_SCOPE_MISMATCH",
+   "rationale": "Not an obliged party (the label: the company is not in the obliged-party list (md. 4)), yet UNKNOWN.",
+   "also": [
+    "MODEL_HALLUCINATION"
+   ],
+   "expected": "DOES_NOT_APPLY",
+   "actual": "UNKNOWN",
+   "evidence": {
+    "positive": [],
+    "negative": [],
+    "reason": "PROPOSAL_INVALID: manual analysis required"
+   }
+  },
+  {
+   "case_id": "C06",
+   "where": "C06 md.5(2)",
+   "obligation_id": "7249ba0da413852e2c45f33ffc4e73ad9327341fa5de43c02d4a1ca6c472d9fa",
+   "obligation_key": "YONETMELIK:200713012/md.5/2/3be5e5d03796",
+   "expectation": {
+    "article": "5",
+    "clause": "(2)",
+    "action_keywords": [
+     "işlem yapılmadan önce tamamlanır"
+    ],
+    "entity_gate": "ANY",
+    "required": true,
+    "notes": "Kimlik tespiti işlemden önce tamamlanır. Yönetmelik md. 4 yükümlü listesinde yer almayan kuruluş; genel ödevler bağlamaz (provizyon düzeyi karar)."
+   },
+   "company_profile": {
+    "id": "iaf-turkiye",
+    "name": "International Aid Foundation Türkiye Temsilciliği",
+    "licences": [],
+    "activities": [
+     "yabancı vakıf Türkiye temsilciliği, insani yardım programları"
+    ],
+    "customer_types": [
+     "yardım alan kişiler ve bağışçılar"
+    ]
+   },
+   "regulation_basis": {
+    "scope_quotes": [
+     "(2) (Ek: 28/12/2009-2009/15720 K.) Merkezi yurt dışında bulunan yükümlünün Türkiye’deki şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleri birinci fıkra kapsamında yükümlü sayılır.",
+     "kimliğini tespit etmek ve işlemin gerçek faydalanıcısının ortaya çıkarılması için gerekli tedbirleri almak zorundadır."
+    ],
+    "subject_gate": null,
+    "basis": [
+     {
+      "condition": "(2) (Ek: 28/12/2009-2009/15720 K.) Merkezi yurt dışında bulunan yükümlünün Türkiye’deki şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleri birinci fıkra kapsamında yükümlü sayılır.",
+      "company_fact": "jurisdictions: [\"Türkiye\"]",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "(2) (Ek: 28/12/2009-2009/15720 K.) Merkezi yurt dışında bulunan yükümlünün Türkiye’deki şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleri birinci fıkra kapsamında yükümlü sayılır.",
+      "company_fact": "activities: [\"yabancı vakıf Türkiye temsilciliği, insani yardım programları\"]",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "kimliğini tespit etmek ve işlemin gerçek faydalanıcısının ortaya çıkarılması için gerekli tedbirleri almak zorundadır.",
+      "company_fact": "products: [\"yardım programları, bağış kabulü\"]",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "kimliğini tespit etmek ve işlemin gerçek faydalanıcısının ortaya çıkarılması için gerekli tedbirleri almak zorundadır.",
+      "company_fact": "customer_types: [\"yardım alan kişiler ve bağışçılar\"]",
+      "match": "YES",
+      "exclusionary": null
+     }
+    ]
+   },
+   "child_clause": {
+    "provision": "Yönetmelik 200713012 md. 5",
+    "clause": "(2)",
+    "excerpt": "(2) Kimlik tespiti, iş ilişkisi tesisinden veya işlem yapılmadan önce tamamlanır.",
+    "subject": "Kimlik tespiti"
+   },
+   "rule_decision": {
+    "rule_decision": "NO_RESTRICTION",
+    "applicability_rule": "MODEL",
+    "decided_by": null,
+    "entity_gate": "NOT_RESTRICTED",
+    "required_entities": [],
+    "gates": {},
+    "review_flags": []
+   },
+   "model_decision": {
+    "state": "APPLIES",
+    "provision_state": "APPLIES",
+    "mode": null
+   },
+   "taxonomy": "GLOBAL_SCOPE_MISMATCH",
+   "rationale": "Not an obliged party (the label: the company is not in the obliged-party list (md. 4)), yet APPLIES.",
+   "also": [],
+   "expected": "DOES_NOT_APPLY",
+   "actual": "APPLIES",
+   "evidence": {
+    "positive": [
+     "(2) (Ek: 28/12/2009-2009/15720 K.) Merkezi yurt dışında bulunan yükümlünün Türkiye’deki şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleri …",
+     "(2) (Ek: 28/12/2009-2009/15720 K.) Merkezi yurt dışında bulunan yükümlünün Türkiye’deki şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleri …",
+     "kimliğini tespit etmek ve işlemin gerçek faydalanıcısının ortaya çıkarılması için gerekli tedbirleri almak zorundadır."
+    ],
+    "negative": [],
+    "reason": "The company is a representative office of a foreign entity (jurisdictions: Türkiye) operating in Turkey, which falls under the scope of the regulation as per s2. The provision (p0) explicitly requires identity verification for all listed entities, including representative offices of foreign entities. The company's activities (humanitarian aid programs) and products (donation acceptance) are subje…"
+   }
+  },
+  {
+   "case_id": "C06",
+   "where": "C06 md.5(3)",
+   "obligation_id": "b96522b2307423600d42e6e6e5809d52f8c47b6a1dc9a9215e58379c79770f13",
+   "obligation_key": "YONETMELIK:200713012/md.5/3/1b411c03e0d4",
+   "expectation": {
+    "article": "5",
+    "clause": "(3)",
+    "action_keywords": [
+     "bilgi alınır"
+    ],
+    "entity_gate": "ANY",
+    "required": true,
+    "notes": "İş ilişkisinin amacı ve mahiyeti hakkında bilgi alınır. Yönetmelik md. 4 yükümlü listesinde yer almayan kuruluş; genel ödevler bağlamaz (provizyon düzeyi karar)."
+   },
+   "company_profile": {
+    "id": "iaf-turkiye",
+    "name": "International Aid Foundation Türkiye Temsilciliği",
+    "licences": [],
+    "activities": [
+     "yabancı vakıf Türkiye temsilciliği, insani yardım programları"
+    ],
+    "customer_types": [
+     "yardım alan kişiler ve bağışçılar"
+    ]
+   },
+   "regulation_basis": {
+    "scope_quotes": [
+     "(2) (Ek: 28/12/2009-2009/15720 K.) Merkezi yurt dışında bulunan yükümlünün Türkiye’deki şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleri birinci fıkra kapsamında yükümlü sayılır.",
+     "kimliğini tespit etmek ve işlemin gerçek faydalanıcısının ortaya çıkarılması için gerekli tedbirleri almak zorundadır."
+    ],
+    "subject_gate": null,
+    "basis": [
+     {
+      "condition": "(2) (Ek: 28/12/2009-2009/15720 K.) Merkezi yurt dışında bulunan yükümlünün Türkiye’deki şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleri birinci fıkra kapsamında yükümlü sayılır.",
+      "company_fact": "jurisdictions: [\"Türkiye\"]",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "(2) (Ek: 28/12/2009-2009/15720 K.) Merkezi yurt dışında bulunan yükümlünün Türkiye’deki şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleri birinci fıkra kapsamında yükümlü sayılır.",
+      "company_fact": "activities: [\"yabancı vakıf Türkiye temsilciliği, insani yardım programları\"]",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "kimliğini tespit etmek ve işlemin gerçek faydalanıcısının ortaya çıkarılması için gerekli tedbirleri almak zorundadır.",
+      "company_fact": "products: [\"yardım programları, bağış kabulü\"]",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "kimliğini tespit etmek ve işlemin gerçek faydalanıcısının ortaya çıkarılması için gerekli tedbirleri almak zorundadır.",
+      "company_fact": "customer_types: [\"yardım alan kişiler ve bağışçılar\"]",
+      "match": "YES",
+      "exclusionary": null
+     }
+    ]
+   },
+   "child_clause": {
+    "provision": "Yönetmelik 200713012 md. 5",
+    "clause": "(3)",
+    "excerpt": "(3) (Değişik: 28/12/2009-2009/15720 K.) Sürekli iş ilişkisi tesisinde, iş ilişkisinin amacı ve mahiyeti hakkında bilgi alınır.",
+    "subject": "Sürekli iş ilişkisi tesisinde"
+   },
+   "rule_decision": {
+    "rule_decision": "NO_RESTRICTION",
+    "applicability_rule": "MODEL",
+    "decided_by": null,
+    "entity_gate": "NOT_RESTRICTED",
+    "required_entities": [],
+    "gates": {},
+    "review_flags": []
+   },
+   "model_decision": {
+    "state": "APPLIES",
+    "provision_state": "APPLIES",
+    "mode": null
+   },
+   "taxonomy": "GLOBAL_SCOPE_MISMATCH",
+   "rationale": "Not an obliged party (the label: the company is not in the obliged-party list (md. 4)), yet APPLIES.",
+   "also": [],
+   "expected": "DOES_NOT_APPLY",
+   "actual": "APPLIES",
+   "evidence": {
+    "positive": [
+     "(2) (Ek: 28/12/2009-2009/15720 K.) Merkezi yurt dışında bulunan yükümlünün Türkiye’deki şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleri …",
+     "(2) (Ek: 28/12/2009-2009/15720 K.) Merkezi yurt dışında bulunan yükümlünün Türkiye’deki şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleri …",
+     "kimliğini tespit etmek ve işlemin gerçek faydalanıcısının ortaya çıkarılması için gerekli tedbirleri almak zorundadır."
+    ],
+    "negative": [],
+    "reason": "The company is a representative office of a foreign entity (jurisdictions: Türkiye) operating in Turkey, which falls under the scope of the regulation as per s2. The provision (p0) explicitly requires identity verification for all listed entities, including representative offices of foreign entities. The company's activities (humanitarian aid programs) and products (donation acceptance) are subje…"
+   }
+  },
+  {
+   "case_id": "C06",
+   "where": "C06 md.8(1)",
+   "obligation_id": "2c2fbc08da3695b1856d3d31a83e7ad668850b56c7d98a24810084dad12ec399",
+   "obligation_key": "YONETMELIK:200713012/md.8/1/50e3f62cde54",
+   "expectation": {
+    "article": "8",
+    "clause": "(1)",
+    "action_keywords": [
+     "kimlik tespitinde"
+    ],
+    "entity_gate": "ANY",
+    "required": true,
+    "notes": "Dernek müşterilerde alınacak bilgiler. Yönetmelik md. 4 yükümlü listesinde yer almayan kuruluş; genel ödevler bağlamaz (provizyon düzeyi karar)."
+   },
+   "company_profile": {
+    "id": "iaf-turkiye",
+    "name": "International Aid Foundation Türkiye Temsilciliği",
+    "licences": [],
+    "activities": [
+     "yabancı vakıf Türkiye temsilciliği, insani yardım programları"
+    ],
+    "customer_types": [
+     "yardım alan kişiler ve bağışçılar"
+    ]
+   },
+   "regulation_basis": {
+    "scope_quotes": [
+     "(1) Kanunun uygulanmasında yükümlü, aşağıda sayılanlar ile bunların şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleridir:"
+    ],
+    "subject_gate": null,
+    "basis": [
+     {
+      "condition": "(5) Yabancı dernek ve vakıfların Türkiye’deki şube ve temsilciliklerinin kimlik tespiti, İçişleri Bakanlığındaki kayda ilişkin belgeler esas alınmak suretiyle yapılır.",
+      "company_fact": "jurisdictions: [\"Türkiye\"]",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "(5) Yabancı dernek ve vakıfların Türkiye’deki şube ve temsilciliklerinin kimlik tespiti, İçişleri Bakanlığındaki kayda ilişkin belgeler esas alınmak suretiyle yapılır.",
+      "company_fact": "activities: [\"yabancı vakıf Türkiye temsilciliği, insani yardım programları\"]",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "(5) Yabancı dernek ve vakıfların Türkiye’deki şube ve temsilciliklerinin kimlik tespiti, İçişleri Bakanlığındaki kayda ilişkin belgeler esas alınmak suretiyle yapılır.",
+      "company_fact": "products: [\"yardım programları, bağış kabulü\"]",
+      "match": "UNCLEAR",
+      "exclusionary": null
+     },
+     {
+      "condition": "(5) Yabancı dernek ve vakıfların Türkiye’deki şube ve temsilciliklerinin kimlik tespiti, İçişleri Bakanlığındaki kayda ilişkin belgeler esas alınmak suretiyle yapılır.",
+      "company_fact": "customer_types: [\"yardım alan kişiler ve bağışçılar\"]",
+      "match": "UNCLEAR",
+      "exclusionary": null
+     }
+    ]
+   },
+   "child_clause": {
+    "provision": "Yönetmelik 200713012 md. 8",
+    "clause": "(1)",
+    "excerpt": "(1) (Değişik birinci cümle: 28/12/2009-2009/15720 K.) Derneklerin kimlik tespitinde; derneğin adı, amacı, kütük numarası, vergi kimlik numarası, açık adresi, telefon numarası, varsa faks numarası ve elektronik posta adresine ilişkin bilgiler ile derneği temsile yetkili kişinin adı, soyadı, doğum ta…",
+    "subject": "Dernekler"
+   },
+   "rule_decision": {
+    "rule_decision": "UNDETERMINED",
+    "applicability_rule": "MODEL",
+    "decided_by": null,
+    "entity_gate": "UNDETERMINED",
+    "required_entities": [
+     "counterparty ASSOCIATION (\"dernek\", clause): UNDETERMINED"
+    ],
+    "gates": {},
+    "review_flags": []
+   },
+   "model_decision": {
+    "state": "APPLIES",
+    "provision_state": "APPLIES",
+    "mode": null
+   },
+   "taxonomy": "GLOBAL_SCOPE_MISMATCH",
+   "rationale": "Not an obliged party (the label: the company is not in the obliged-party list (md. 4)), yet APPLIES.",
+   "also": [
+    "PROFILE_TOO_AMBIGUOUS"
+   ],
+   "expected": "DOES_NOT_APPLY",
+   "actual": "APPLIES",
+   "evidence": {
+    "positive": [
+     "(5) Yabancı dernek ve vakıfların Türkiye’deki şube ve temsilciliklerinin kimlik tespiti, İçişleri Bakanlığındaki kayda ilişkin belgeler esas alınmak suretiyle …",
+     "(5) Yabancı dernek ve vakıfların Türkiye’deki şube ve temsilciliklerinin kimlik tespiti, İçişleri Bakanlığındaki kayda ilişkin belgeler esas alınmak suretiyle …"
+    ],
+    "negative": [],
+    "reason": "The company is a foreign foundation's representative office in Turkey (jurisdictions: Türkiye, activities: \"yabancı vakıf Türkiye temsilciliği\"). The regulatory duty explicitly applies to \"yabancı dernek ve vakıfların Türkiye’deki şube ve temsilciliklerinin\" (s2:5), which matches the company's entity type and jurisdiction."
+   }
+  },
+  {
+   "case_id": "C06",
+   "where": "C06 md.8(3)",
+   "obligation_id": "62d2945748f425371bdc820cba4b3545e5ea51d221eb8d6604a4948360c19958",
+   "obligation_key": "YONETMELIK:200713012/md.8/3/fb18fde33f4a",
+   "expectation": {
+    "article": "8",
+    "clause": "(3)",
+    "action_keywords": [
+     "fotokopisi"
+    ],
+    "entity_gate": "ANY",
+    "required": true,
+    "notes": "Teyide esas belgelerin fotokopisi (dernek/vakıf başlığı altında). Yönetmelik md. 4 yükümlü listesinde yer almayan kuruluş; genel ödevler bağlamaz (provizyon düzeyi karar)."
+   },
+   "company_profile": {
+    "id": "iaf-turkiye",
+    "name": "International Aid Foundation Türkiye Temsilciliği",
+    "licences": [],
+    "activities": [
+     "yabancı vakıf Türkiye temsilciliği, insani yardım programları"
+    ],
+    "customer_types": [
+     "yardım alan kişiler ve bağışçılar"
+    ]
+   },
+   "regulation_basis": {
+    "scope_quotes": [
+     "(1) Kanunun uygulanmasında yükümlü, aşağıda sayılanlar ile bunların şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleridir:"
+    ],
+    "subject_gate": null,
+    "basis": [
+     {
+      "condition": "(5) Yabancı dernek ve vakıfların Türkiye’deki şube ve temsilciliklerinin kimlik tespiti, İçişleri Bakanlığındaki kayda ilişkin belgeler esas alınmak suretiyle yapılır.",
+      "company_fact": "jurisdictions: [\"Türkiye\"]",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "(5) Yabancı dernek ve vakıfların Türkiye’deki şube ve temsilciliklerinin kimlik tespiti, İçişleri Bakanlığındaki kayda ilişkin belgeler esas alınmak suretiyle yapılır.",
+      "company_fact": "activities: [\"yabancı vakıf Türkiye temsilciliği, insani yardım programları\"]",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "(5) Yabancı dernek ve vakıfların Türkiye’deki şube ve temsilciliklerinin kimlik tespiti, İçişleri Bakanlığındaki kayda ilişkin belgeler esas alınmak suretiyle yapılır.",
+      "company_fact": "products: [\"yardım programları, bağış kabulü\"]",
+      "match": "UNCLEAR",
+      "exclusionary": null
+     },
+     {
+      "condition": "(5) Yabancı dernek ve vakıfların Türkiye’deki şube ve temsilciliklerinin kimlik tespiti, İçişleri Bakanlığındaki kayda ilişkin belgeler esas alınmak suretiyle yapılır.",
+      "company_fact": "customer_types: [\"yardım alan kişiler ve bağışçılar\"]",
+      "match": "UNCLEAR",
+      "exclusionary": null
+     }
+    ]
+   },
+   "child_clause": {
+    "provision": "Yönetmelik 200713012 md. 8",
+    "clause": "(3)",
+    "excerpt": "(3) Yetkililerce istenildiğinde sunulmak üzere teyide esas belgelerin asıllarının veya noterce onaylanmış suretlerinin ibrazı sonrası okunabilir fotokopisi veya elektronik görüntüsü alınır yahut kimliğe ilişkin bilgiler kaydedilir.",
+    "subject": "Yetkililer"
+   },
+   "rule_decision": {
+    "rule_decision": "UNDETERMINED",
+    "applicability_rule": "MODEL",
+    "decided_by": null,
+    "entity_gate": "UNDETERMINED",
+    "required_entities": [
+     "counterparty ASSOCIATION (\"dernek\", heading): UNDETERMINED",
+     "counterparty FOUNDATION (\"vakıf\", heading): UNDETERMINED"
+    ],
+    "gates": {},
+    "review_flags": []
+   },
+   "model_decision": {
+    "state": "APPLIES",
+    "provision_state": "APPLIES",
+    "mode": null
+   },
+   "taxonomy": "GLOBAL_SCOPE_MISMATCH",
+   "rationale": "Not an obliged party (the label: the company is not in the obliged-party list (md. 4)), yet APPLIES.",
+   "also": [
+    "PROFILE_TOO_AMBIGUOUS"
+   ],
+   "expected": "DOES_NOT_APPLY",
+   "actual": "APPLIES",
+   "evidence": {
+    "positive": [
+     "(5) Yabancı dernek ve vakıfların Türkiye’deki şube ve temsilciliklerinin kimlik tespiti, İçişleri Bakanlığındaki kayda ilişkin belgeler esas alınmak suretiyle …",
+     "(5) Yabancı dernek ve vakıfların Türkiye’deki şube ve temsilciliklerinin kimlik tespiti, İçişleri Bakanlığındaki kayda ilişkin belgeler esas alınmak suretiyle …"
+    ],
+    "negative": [],
+    "reason": "The company is a foreign foundation's representative office in Turkey (jurisdictions: Türkiye, activities: \"yabancı vakıf Türkiye temsilciliği\"). The regulatory duty explicitly applies to \"yabancı dernek ve vakıfların Türkiye’deki şube ve temsilciliklerinin\" (s2:5), which matches the company's entity type and jurisdiction."
+   }
+  },
+  {
+   "case_id": "C06",
+   "where": "C06 md.8(5)",
+   "obligation_id": "a27de5b8b44af28410d57443a224bde780e4c9761b8b0f1c57f87e4058dfe44e",
+   "obligation_key": "YONETMELIK:200713012/md.8/5/b39fac6d5168",
+   "expectation": {
+    "article": "8",
+    "clause": "(5)",
+    "action_keywords": [
+     "kimlik tespiti"
+    ],
+    "entity_gate": "ANY",
+    "required": true,
+    "notes": "Yabancı dernek ve vakıfların Türkiye şube ve temsilcilikleri. Yönetmelik md. 4 yükümlü listesinde yer almayan kuruluş; genel ödevler bağlamaz (provizyon düzeyi karar)."
+   },
+   "company_profile": {
+    "id": "iaf-turkiye",
+    "name": "International Aid Foundation Türkiye Temsilciliği",
+    "licences": [],
+    "activities": [
+     "yabancı vakıf Türkiye temsilciliği, insani yardım programları"
+    ],
+    "customer_types": [
+     "yardım alan kişiler ve bağışçılar"
+    ]
+   },
+   "regulation_basis": {
+    "scope_quotes": [
+     "(1) Kanunun uygulanmasında yükümlü, aşağıda sayılanlar ile bunların şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleridir:"
+    ],
+    "subject_gate": null,
+    "basis": [
+     {
+      "condition": "(5) Yabancı dernek ve vakıfların Türkiye’deki şube ve temsilciliklerinin kimlik tespiti, İçişleri Bakanlığındaki kayda ilişkin belgeler esas alınmak suretiyle yapılır.",
+      "company_fact": "jurisdictions: [\"Türkiye\"]",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "(5) Yabancı dernek ve vakıfların Türkiye’deki şube ve temsilciliklerinin kimlik tespiti, İçişleri Bakanlığındaki kayda ilişkin belgeler esas alınmak suretiyle yapılır.",
+      "company_fact": "activities: [\"yabancı vakıf Türkiye temsilciliği, insani yardım programları\"]",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "(5) Yabancı dernek ve vakıfların Türkiye’deki şube ve temsilciliklerinin kimlik tespiti, İçişleri Bakanlığındaki kayda ilişkin belgeler esas alınmak suretiyle yapılır.",
+      "company_fact": "products: [\"yardım programları, bağış kabulü\"]",
+      "match": "UNCLEAR",
+      "exclusionary": null
+     },
+     {
+      "condition": "(5) Yabancı dernek ve vakıfların Türkiye’deki şube ve temsilciliklerinin kimlik tespiti, İçişleri Bakanlığındaki kayda ilişkin belgeler esas alınmak suretiyle yapılır.",
+      "company_fact": "customer_types: [\"yardım alan kişiler ve bağışçılar\"]",
+      "match": "UNCLEAR",
+      "exclusionary": null
+     }
+    ]
+   },
+   "child_clause": {
+    "provision": "Yönetmelik 200713012 md. 8",
+    "clause": "(5)",
+    "excerpt": "(5) Yabancı dernek ve vakıfların Türkiye’deki şube ve temsilciliklerinin kimlik tespiti, İçişleri Bakanlığındaki kayda ilişkin belgeler esas alınmak suretiyle yapılır.",
+    "subject": "Yabancı dernek ve vakıfların Türkiye’deki şube ve temsilciliklerinin"
+   },
+   "rule_decision": {
+    "rule_decision": "UNDETERMINED",
+    "applicability_rule": "MODEL",
+    "decided_by": null,
+    "entity_gate": "UNDETERMINED",
+    "required_entities": [
+     "counterparty FOREIGN_ASSOCIATION_BRANCH (\"yabancı dernek\", clause): UNDETERMINED"
+    ],
+    "gates": {},
+    "review_flags": []
+   },
+   "model_decision": {
+    "state": "APPLIES",
+    "provision_state": "APPLIES",
+    "mode": null
+   },
+   "taxonomy": "GLOBAL_SCOPE_MISMATCH",
+   "rationale": "Not an obliged party (the label: the company is not in the obliged-party list (md. 4)), yet APPLIES.",
+   "also": [
+    "PARENT_CHILD_LEAKAGE",
+    "PROFILE_TOO_AMBIGUOUS"
+   ],
+   "expected": "DOES_NOT_APPLY",
+   "actual": "APPLIES",
+   "evidence": {
+    "positive": [
+     "(5) Yabancı dernek ve vakıfların Türkiye’deki şube ve temsilciliklerinin kimlik tespiti, İçişleri Bakanlığındaki kayda ilişkin belgeler esas alınmak suretiyle …",
+     "(5) Yabancı dernek ve vakıfların Türkiye’deki şube ve temsilciliklerinin kimlik tespiti, İçişleri Bakanlığındaki kayda ilişkin belgeler esas alınmak suretiyle …"
+    ],
+    "negative": [],
+    "reason": "The company is a foreign foundation's representative office in Turkey (jurisdictions: Türkiye, activities: \"yabancı vakıf Türkiye temsilciliği\"). The regulatory duty explicitly applies to \"yabancı dernek ve vakıfların Türkiye’deki şube ve temsilciliklerinin\" (s2:5), which matches the company's entity type and jurisdiction."
+   }
+  },
+  {
+   "case_id": "C07",
+   "where": "C07 md.5(2)",
+   "obligation_id": "7249ba0da413852e2c45f33ffc4e73ad9327341fa5de43c02d4a1ca6c472d9fa",
+   "obligation_key": "YONETMELIK:200713012/md.5/2/3be5e5d03796",
+   "expectation": {
+    "article": "5",
+    "clause": "(2)",
+    "action_keywords": [
+     "işlem yapılmadan önce tamamlanır"
+    ],
+    "entity_gate": "ANY",
+    "required": true,
+    "notes": "Kimlik tespiti işlemden önce tamamlanır. Yönetmelik md. 4 yükümlü listesinde yer almayan kuruluş; genel ödevler bağlamaz (provizyon düzeyi karar)."
+   },
+   "company_profile": {
+    "id": "anadolu-yazilim",
+    "name": "Anadolu Yazılım Ltd. Şti.",
+    "licences": [],
+    "activities": [
+     "yazılım geliştirme, bilişim danışmanlığı"
+    ],
+    "customer_types": [
+     "kurumsal müşteriler"
+    ]
+   },
+   "regulation_basis": {
+    "scope_quotes": [
+     "e) Daha önce elde edilen müşteri kimlik bilgilerinin yeterliliği ve doğruluğu konusunda şüphe olduğunda tutar gözetmeksizin, kimliğe ilişkin bilgileri almak ve bu bilgilerin doğruluğunu teyit etmek suretiyle"
+    ],
+    "subject_gate": null,
+    "basis": [
+     {
+      "condition": "(1) Kanunun uygulanmasında yükümlü, aşağıda sayılanlar ile bunların şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleridir",
+      "company_fact": "Türkiye",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "(1) Kanunun uygulanmasında yükümlü, aşağıda sayılanlar ile bunların şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleridir",
+      "company_fact": "yazılım geliştirme, bilişim danışmanlığı",
+      "match": "UNCLEAR",
+      "exclusionary": null
+     },
+     {
+      "condition": "(1) Kanunun uygulanmasında yükümlü, aşağıda sayılanlar ile bunların şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleridir",
+      "company_fact": "kurumsal yazılım lisansları, bakım hizmetleri",
+      "match": "UNCLEAR",
+      "exclusionary": null
+     },
+     {
+      "condition": "(1) Kanunun uygulanmasında yükümlü, aşağıda sayılanlar ile bunların şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleridir",
+      "company_fact": "kurumsal müşteriler",
+      "match": "UNCLEAR",
+      "exclusionary": null
+     }
+    ]
+   },
+   "child_clause": {
+    "provision": "Yönetmelik 200713012 md. 5",
+    "clause": "(2)",
+    "excerpt": "(2) Kimlik tespiti, iş ilişkisi tesisinden veya işlem yapılmadan önce tamamlanır.",
+    "subject": "Kimlik tespiti"
+   },
+   "rule_decision": {
+    "rule_decision": "NO_RESTRICTION",
+    "applicability_rule": "MODEL",
+    "decided_by": null,
+    "entity_gate": "NOT_RESTRICTED",
+    "required_entities": [],
+    "gates": {},
+    "review_flags": []
+   },
+   "model_decision": {
+    "state": "POSSIBLY_APPLIES",
+    "provision_state": "POSSIBLY_APPLIES",
+    "mode": null
+   },
+   "taxonomy": "GLOBAL_SCOPE_MISMATCH",
+   "rationale": "Not an obliged party (the label: the company is not in the obliged-party list (md. 4)), yet UNKNOWN.",
+   "also": [
+    "MODEL_HALLUCINATION"
+   ],
+   "expected": "DOES_NOT_APPLY",
+   "actual": "UNKNOWN",
+   "evidence": {
+    "positive": [
+     "(1) Kanunun uygulanmasında yükümlü, aşağıda sayılanlar ile bunların şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleridir"
+    ],
+    "negative": [],
+    "reason": "The company operates in Türkiye (jurisdiction) and provides corporate software licenses/maintenance services (products) to corporate clients (customer_types). While the scope text (md. 4) explicitly lists entities like banks, payment institutions, and crypto service providers as 'yükümlü', it does not directly include software development companies. However, the obligation's conditions (p0) apply…"
+   }
+  },
+  {
+   "case_id": "C07",
+   "where": "C07 md.5(3)",
+   "obligation_id": "b96522b2307423600d42e6e6e5809d52f8c47b6a1dc9a9215e58379c79770f13",
+   "obligation_key": "YONETMELIK:200713012/md.5/3/1b411c03e0d4",
+   "expectation": {
+    "article": "5",
+    "clause": "(3)",
+    "action_keywords": [
+     "bilgi alınır"
+    ],
+    "entity_gate": "ANY",
+    "required": true,
+    "notes": "İş ilişkisinin amacı ve mahiyeti hakkında bilgi alınır. Yönetmelik md. 4 yükümlü listesinde yer almayan kuruluş; genel ödevler bağlamaz (provizyon düzeyi karar)."
+   },
+   "company_profile": {
+    "id": "anadolu-yazilim",
+    "name": "Anadolu Yazılım Ltd. Şti.",
+    "licences": [],
+    "activities": [
+     "yazılım geliştirme, bilişim danışmanlığı"
+    ],
+    "customer_types": [
+     "kurumsal müşteriler"
+    ]
+   },
+   "regulation_basis": {
+    "scope_quotes": [
+     "e) Daha önce elde edilen müşteri kimlik bilgilerinin yeterliliği ve doğruluğu konusunda şüphe olduğunda tutar gözetmeksizin, kimliğe ilişkin bilgileri almak ve bu bilgilerin doğruluğunu teyit etmek suretiyle"
+    ],
+    "subject_gate": null,
+    "basis": [
+     {
+      "condition": "(1) Kanunun uygulanmasında yükümlü, aşağıda sayılanlar ile bunların şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleridir",
+      "company_fact": "Türkiye",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "(1) Kanunun uygulanmasında yükümlü, aşağıda sayılanlar ile bunların şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleridir",
+      "company_fact": "yazılım geliştirme, bilişim danışmanlığı",
+      "match": "UNCLEAR",
+      "exclusionary": null
+     },
+     {
+      "condition": "(1) Kanunun uygulanmasında yükümlü, aşağıda sayılanlar ile bunların şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleridir",
+      "company_fact": "kurumsal yazılım lisansları, bakım hizmetleri",
+      "match": "UNCLEAR",
+      "exclusionary": null
+     },
+     {
+      "condition": "(1) Kanunun uygulanmasında yükümlü, aşağıda sayılanlar ile bunların şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleridir",
+      "company_fact": "kurumsal müşteriler",
+      "match": "UNCLEAR",
+      "exclusionary": null
+     }
+    ]
+   },
+   "child_clause": {
+    "provision": "Yönetmelik 200713012 md. 5",
+    "clause": "(3)",
+    "excerpt": "(3) (Değişik: 28/12/2009-2009/15720 K.) Sürekli iş ilişkisi tesisinde, iş ilişkisinin amacı ve mahiyeti hakkında bilgi alınır.",
+    "subject": "Sürekli iş ilişkisi tesisinde"
+   },
+   "rule_decision": {
+    "rule_decision": "NO_RESTRICTION",
+    "applicability_rule": "MODEL",
+    "decided_by": null,
+    "entity_gate": "NOT_RESTRICTED",
+    "required_entities": [],
+    "gates": {},
+    "review_flags": []
+   },
+   "model_decision": {
+    "state": "POSSIBLY_APPLIES",
+    "provision_state": "POSSIBLY_APPLIES",
+    "mode": null
+   },
+   "taxonomy": "GLOBAL_SCOPE_MISMATCH",
+   "rationale": "Not an obliged party (the label: the company is not in the obliged-party list (md. 4)), yet UNKNOWN.",
+   "also": [
+    "MODEL_HALLUCINATION"
+   ],
+   "expected": "DOES_NOT_APPLY",
+   "actual": "UNKNOWN",
+   "evidence": {
+    "positive": [
+     "(1) Kanunun uygulanmasında yükümlü, aşağıda sayılanlar ile bunların şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleridir"
+    ],
+    "negative": [],
+    "reason": "The company operates in Türkiye (jurisdiction) and provides corporate software licenses/maintenance services (products) to corporate clients (customer_types). While the scope text (md. 4) explicitly lists entities like banks, payment institutions, and crypto service providers as 'yükümlü', it does not directly include software development companies. However, the obligation's conditions (p0) apply…"
+   }
+  },
+  {
+   "case_id": "C07",
+   "where": "C07 md.28(2)",
+   "obligation_id": "755d793ce8404efc3a9fd66a371b9d30fca20f555bf64dd31ab49d0abe1e24b7",
+   "obligation_key": "YONETMELIK:200713012/md.28/2/512bda5ea851",
+   "expectation": {
+    "article": "28",
+    "clause": "(2)",
+    "action_keywords": [
+     "bildirilir"
+    ],
+    "entity_gate": "ANY",
+    "required": true,
+    "notes": "Şüpheli işlem en geç on iş günü içinde bildirilir. Yönetmelik md. 4 yükümlü listesinde yer almayan kuruluş; genel ödevler bağlamaz (provizyon düzeyi karar)."
+   },
+   "company_profile": {
+    "id": "anadolu-yazilim",
+    "name": "Anadolu Yazılım Ltd. Şti.",
+    "licences": [],
+    "activities": [
+     "yazılım geliştirme, bilişim danışmanlığı"
+    ],
+    "customer_types": [
+     "kurumsal müşteriler"
+    ]
+   },
+   "regulation_basis": {
+    "scope_quotes": [
+     "(1) Bu Yönetmeliğin amacı, 11/10/2006 tarihli ve 5549 sayılı Suç Gelirlerinin Aklanmasının Önlenmesi Hakkında Kanunun uygulanmasına yönelik olarak; suç gelirlerinin aklanmasının ve terörün finansmanının önlenmesi amacıyla yükümlüler, yükümlülükler, yükümlülüklere uyumun denetimi, gümrük idaresine a…"
+    ],
+    "subject_gate": null,
+    "basis": [
+     {
+      "condition": "Kanunun uygulanmasında yükümlü, aşağıda sayılanlar ile bunların şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleridir",
+      "company_fact": "Türkiye",
+      "match": "YES",
+      "exclusionary": null
+     }
+    ]
+   },
+   "child_clause": {
+    "provision": "Yönetmelik 200713012 md. 28",
+    "clause": "(2)",
+    "excerpt": "(2) Şüpheli işlemler, işleme ilişkin şüphenin oluştuğu tarihten itibaren en geç on iş günü içinde Başkanlığa bildirilir.",
+    "subject": "Şüpheli işlemler"
+   },
+   "rule_decision": {
+    "rule_decision": "NO_RESTRICTION",
+    "applicability_rule": "DOWNGRADED_BASIS_INCONSISTENT",
+    "decided_by": null,
+    "entity_gate": "NOT_RESTRICTED",
+    "required_entities": [],
+    "gates": {},
+    "review_flags": []
+   },
+   "model_decision": {
+    "state": "UNKNOWN",
+    "provision_state": "UNKNOWN",
+    "mode": null
+   },
+   "taxonomy": "GLOBAL_SCOPE_MISMATCH",
+   "rationale": "Not an obliged party (the label: the company is not in the obliged-party list (md. 4)), yet UNKNOWN.",
+   "also": [
+    "MODEL_HALLUCINATION"
+   ],
+   "expected": "DOES_NOT_APPLY",
+   "actual": "UNKNOWN",
+   "evidence": {
+    "positive": [
+     "Kanunun uygulanmasında yükümlü, aşağıda sayılanlar ile bunların şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleridir"
+    ],
+    "negative": [],
+    "reason": "The company is a software development firm providing corporate software licenses and IT consulting services to corporate clients. The regulatory duty applies exclusively to financial institutions (banks, payment service providers, insurance companies, crypto asset service providers, etc.) listed in the scope. Software development companies are not included in the defined categories of entities su…"
+   }
+  },
+  {
+   "case_id": "C24",
+   "where": "C24 md.20(1)",
+   "obligation_id": "229687dea362875302e8bb782014c8a15e69f6a70ba7c582d36de51ac549b01e",
+   "obligation_key": "YONETMELIK:200713012/md.20/1/641daa2d2c7a",
+   "expectation": {
+    "article": "20",
+    "clause": "(1)",
+    "action_keywords": [
+     "tedbirleri almak"
+    ],
+    "entity_gate": "ANY",
+    "required": true,
+    "notes": "Finansal kuruluşlar: yeni teknoloji riskine karşı tedbir. Yönetmelik md. 4 yükümlü listesinde yer almayan kuruluş; genel ödevler bağlamaz (provizyon düzeyi karar)."
+   },
+   "company_profile": {
+    "id": "anadolu-yazilim",
+    "name": "Anadolu Yazılım Ltd. Şti.",
+    "licences": [],
+    "activities": [
+     "yazılım geliştirme, bilişim danışmanlığı"
+    ],
+    "customer_types": [
+     "kurumsal müşteriler"
+    ]
+   },
+   "regulation_basis": {
+    "scope_quotes": [
+     "(1) Kanunun uygulanmasında yükümlü, aşağıda sayılanlar ile bunların şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleridir:"
+    ],
+    "subject_gate": null,
+    "basis": [
+     {
+      "condition": "finansal olmayan belirli iş ve meslekler",
+      "company_fact": "Türkiye",
+      "match": "UNCLEAR",
+      "exclusionary": null
+     },
+     {
+      "condition": "Elektronik ticaret hizmet sağlayıcılar",
+      "company_fact": "yazılım geliştirme, bilişim danışmanlığı",
+      "match": "UNCLEAR",
+      "exclusionary": null
+     }
+    ]
+   },
+   "child_clause": {
+    "provision": "Yönetmelik 200713012 md. 20",
+    "clause": "(1)",
+    "excerpt": "(1) Finansal kuruluşlar ile finansal olmayan belirli iş ve meslekler, yeni ve gelişen teknolojilerin kullanımının, yeni dağıtım kanalları dâhil olmak üzere mevcut ve yeni ürün ile yeni iş uygulamalarının getirdiği imkânların aklama ve terörün finansmanı amacıyla kullanıl ması riskine karşı özel dik…",
+    "subject": "Finansal kuruluşlar"
+   },
+   "rule_decision": {
+    "rule_decision": "UNDETERMINED",
+    "applicability_rule": "MODEL",
+    "decided_by": null,
+    "entity_gate": "UNDETERMINED",
+    "required_entities": [
+     "obliged_party FINANCIAL_GENERIC (\"finansal kuruluş\", subject): UNDETERMINED"
+    ],
+    "gates": {},
+    "review_flags": []
+   },
+   "model_decision": {
+    "state": "POSSIBLY_APPLIES",
+    "provision_state": "POSSIBLY_APPLIES",
+    "mode": null
+   },
+   "taxonomy": "GLOBAL_SCOPE_MISMATCH",
+   "rationale": "Not an obliged party (the label: the company is not in the obliged-party list (md. 4)), yet UNKNOWN.",
+   "also": [
+    "PROFILE_TOO_AMBIGUOUS",
+    "MODEL_HALLUCINATION"
+   ],
+   "expected": "DOES_NOT_APPLY",
+   "actual": "UNKNOWN",
+   "evidence": {
+    "positive": [],
+    "negative": [],
+    "reason": "The company's activities (software development and IT consulting) may partially align with 'elektronik ticaret hizmet sağlayıcılar' in the scope, but the provision explicitly lists entities like payment service providers, crypto firms, and electronic commerce service providers. The company's non-financial status and software-centric activities could fall under 'finansal olmayan belirli iş ve mesl…"
+   }
+  },
+  {
+   "case_id": "C24",
+   "where": "C24 md.20(2)",
+   "obligation_id": "fa1da274f5e2cc178584652aca6e64e2f177ed7518730c7243411473293872a2",
+   "obligation_key": "YONETMELIK:200713012/md.20/2/b91539b422d7",
+   "expectation": {
+    "article": "20",
+    "clause": "(2)",
+    "action_keywords": [
+     "tedbirleri almak"
+    ],
+    "entity_gate": "ANY",
+    "required": true,
+    "notes": "Yüz yüze olmayan işlemlerde tedbir. Yönetmelik md. 4 yükümlü listesinde yer almayan kuruluş; genel ödevler bağlamaz (provizyon düzeyi karar)."
+   },
+   "company_profile": {
+    "id": "anadolu-yazilim",
+    "name": "Anadolu Yazılım Ltd. Şti.",
+    "licences": [],
+    "activities": [
+     "yazılım geliştirme, bilişim danışmanlığı"
+    ],
+    "customer_types": [
+     "kurumsal müşteriler"
+    ]
+   },
+   "regulation_basis": {
+    "scope_quotes": [
+     "(1) Kanunun uygulanmasında yükümlü, aşağıda sayılanlar ile bunların şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleridir:"
+    ],
+    "subject_gate": null,
+    "basis": [
+     {
+      "condition": "finansal olmayan belirli iş ve meslekler",
+      "company_fact": "Türkiye",
+      "match": "UNCLEAR",
+      "exclusionary": null
+     },
+     {
+      "condition": "Elektronik ticaret hizmet sağlayıcılar",
+      "company_fact": "yazılım geliştirme, bilişim danışmanlığı",
+      "match": "UNCLEAR",
+      "exclusionary": null
+     }
+    ]
+   },
+   "child_clause": {
+    "provision": "Yönetmelik 200713012 md. 20",
+    "clause": "(2)",
+    "excerpt": "(2) Finansal kuruluşlar ile finansal olmayan belirli iş ve meslekler yüz yüze olmayan işlemler yapılmasını mümkün kılan yöntem veya sistemleri kullanarak gerçekleştirilen sürekli iş ilişkisi tesisi, hesaba para yatırma, hesaptan para çekme ve elektronik transfer gibi işlemlere özel dikkat göstermek…",
+    "subject": "Finansal kuruluşlar"
+   },
+   "rule_decision": {
+    "rule_decision": "UNDETERMINED",
+    "applicability_rule": "MODEL",
+    "decided_by": null,
+    "entity_gate": "UNDETERMINED",
+    "required_entities": [
+     "obliged_party FINANCIAL_GENERIC (\"finansal kuruluş\", subject): UNDETERMINED"
+    ],
+    "gates": {},
+    "review_flags": []
+   },
+   "model_decision": {
+    "state": "POSSIBLY_APPLIES",
+    "provision_state": "POSSIBLY_APPLIES",
+    "mode": null
+   },
+   "taxonomy": "GLOBAL_SCOPE_MISMATCH",
+   "rationale": "Not an obliged party (the label: the company is not in the obliged-party list (md. 4)), yet UNKNOWN.",
+   "also": [
+    "PROFILE_TOO_AMBIGUOUS",
+    "MODEL_HALLUCINATION"
+   ],
+   "expected": "DOES_NOT_APPLY",
+   "actual": "UNKNOWN",
+   "evidence": {
+    "positive": [],
+    "negative": [],
+    "reason": "The company's activities (software development and IT consulting) may partially align with 'elektronik ticaret hizmet sağlayıcılar' in the scope, but the provision explicitly lists entities like payment service providers, crypto firms, and electronic commerce service providers. The company's non-financial status and software-centric activities could fall under 'finansal olmayan belirli iş ve mesl…"
+   }
+  },
+  {
+   "case_id": "C25",
+   "where": "C25 md.8(1)",
+   "obligation_id": "2c2fbc08da3695b1856d3d31a83e7ad668850b56c7d98a24810084dad12ec399",
+   "obligation_key": "YONETMELIK:200713012/md.8/1/50e3f62cde54",
+   "expectation": {
+    "article": "8",
+    "clause": "(1)",
+    "action_keywords": [
+     "kimlik tespitinde"
+    ],
+    "entity_gate": "UNDETERMINED",
+    "required": true,
+    "notes": "Dernek müşterilerde alınacak bilgiler. Çıplak \"tüzel kişi\" müşteri tabanı dernek/vakıf içerebilir de içermeyebilir de: dürüst cevap belirsiz."
+   },
+   "company_profile": {
+    "id": "kurumsalpay-tr",
+    "name": "KurumsalPay Ödeme Hizmetleri A.Ş.",
+    "licences": [
+     "6493 sayılı Kanun kapsamında ödeme kuruluşu faaliyet izni"
+    ],
+    "activities": [
+     "ödeme hizmetleri"
+    ],
+    "customer_types": [
+     "tüzel kişi müşteriler"
+    ]
+   },
+   "regulation_basis": {
+    "scope_quotes": [
+     "(1) Kanunun uygulanmasında yükümlü, aşağıda sayılanlar ile bunların şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleridir:"
+    ],
+    "subject_gate": null,
+    "basis": [
+     {
+      "condition": "şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleri",
+      "company_fact": "Türkiye",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "Ödeme kuruluşları ile elektronik para kuruluşları",
+      "company_fact": "ödeme hizmetleri",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "Ödeme kuruluşları ile elektronik para kuruluşları",
+      "company_fact": "6493 sayılı Kanun kapsamında ödeme kuruluşu faaliyet izni",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "Ödeme kuruluşları ile elektronik para kuruluşları",
+      "company_fact": "kurumsal ödeme çözümleri",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleri",
+      "company_fact": "tüzel kişi müşteriler",
+      "match": "NO",
+      "exclusionary": false
+     }
+    ]
+   },
+   "child_clause": {
+    "provision": "Yönetmelik 200713012 md. 8",
+    "clause": "(1)",
+    "excerpt": "(1) (Değişik birinci cümle: 28/12/2009-2009/15720 K.) Derneklerin kimlik tespitinde; derneğin adı, amacı, kütük numarası, vergi kimlik numarası, açık adresi, telefon numarası, varsa faks numarası ve elektronik posta adresine ilişkin bilgiler ile derneği temsile yetkili kişinin adı, soyadı, doğum ta…",
+    "subject": "Dernekler"
+   },
+   "rule_decision": {
+    "rule_decision": "UNDETERMINED",
+    "applicability_rule": "MODEL",
+    "decided_by": null,
+    "entity_gate": "UNDETERMINED",
+    "required_entities": [
+     "counterparty ASSOCIATION (\"dernek\", clause): UNDETERMINED"
+    ],
+    "gates": {},
+    "review_flags": []
+   },
+   "model_decision": {
+    "state": "DOES_NOT_APPLY",
+    "provision_state": "DOES_NOT_APPLY",
+    "mode": null
+   },
+   "taxonomy": "PROFILE_TOO_AMBIGUOUS",
+   "rationale": "The profile does not settle the clause (the clause gate read UNDETERMINED); predicted DOES_NOT_APPLY, labelled UNKNOWN.",
+   "also": [],
+   "expected": "UNKNOWN",
+   "actual": "DOES_NOT_APPLY",
+   "evidence": {
+    "positive": [
+     "şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleri",
+     "Ödeme kuruluşları ile elektronik para kuruluşları",
+     "Ödeme kuruluşları ile elektronik para kuruluşları"
+    ],
+    "negative": [
+     "şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleri"
+    ],
+    "reason": "The provision's duty applies to associations (dernekler) and foundations (vakıflar) requiring identity verification, but the company is a payment institution (ödeme kuruluşu) listed as a regulated entity under the scope. The obligation described in the provision is specific to associations and foundations, not payment service providers. While the company is subject to general anti-money launderin…"
+   }
+  },
+  {
+   "case_id": "C25",
+   "where": "C25 md.8(3)",
+   "obligation_id": "62d2945748f425371bdc820cba4b3545e5ea51d221eb8d6604a4948360c19958",
+   "obligation_key": "YONETMELIK:200713012/md.8/3/fb18fde33f4a",
+   "expectation": {
+    "article": "8",
+    "clause": "(3)",
+    "action_keywords": [
+     "fotokopisi"
+    ],
+    "entity_gate": "UNDETERMINED",
+    "required": true,
+    "notes": "Teyide esas belgelerin fotokopisi (dernek/vakıf başlığı altında). Çıplak \"tüzel kişi\" müşteri tabanı dernek/vakıf içerebilir de içermeyebilir de: dürüst cevap belirsiz."
+   },
+   "company_profile": {
+    "id": "kurumsalpay-tr",
+    "name": "KurumsalPay Ödeme Hizmetleri A.Ş.",
+    "licences": [
+     "6493 sayılı Kanun kapsamında ödeme kuruluşu faaliyet izni"
+    ],
+    "activities": [
+     "ödeme hizmetleri"
+    ],
+    "customer_types": [
+     "tüzel kişi müşteriler"
+    ]
+   },
+   "regulation_basis": {
+    "scope_quotes": [
+     "(1) Kanunun uygulanmasında yükümlü, aşağıda sayılanlar ile bunların şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleridir:"
+    ],
+    "subject_gate": null,
+    "basis": [
+     {
+      "condition": "şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleri",
+      "company_fact": "Türkiye",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "Ödeme kuruluşları ile elektronik para kuruluşları",
+      "company_fact": "ödeme hizmetleri",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "Ödeme kuruluşları ile elektronik para kuruluşları",
+      "company_fact": "6493 sayılı Kanun kapsamında ödeme kuruluşu faaliyet izni",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "Ödeme kuruluşları ile elektronik para kuruluşları",
+      "company_fact": "kurumsal ödeme çözümleri",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleri",
+      "company_fact": "tüzel kişi müşteriler",
+      "match": "NO",
+      "exclusionary": false
+     }
+    ]
+   },
+   "child_clause": {
+    "provision": "Yönetmelik 200713012 md. 8",
+    "clause": "(3)",
+    "excerpt": "(3) Yetkililerce istenildiğinde sunulmak üzere teyide esas belgelerin asıllarının veya noterce onaylanmış suretlerinin ibrazı sonrası okunabilir fotokopisi veya elektronik görüntüsü alınır yahut kimliğe ilişkin bilgiler kaydedilir.",
+    "subject": "Yetkililer"
+   },
+   "rule_decision": {
+    "rule_decision": "UNDETERMINED",
+    "applicability_rule": "MODEL",
+    "decided_by": null,
+    "entity_gate": "UNDETERMINED",
+    "required_entities": [
+     "counterparty ASSOCIATION (\"dernek\", heading): UNDETERMINED",
+     "counterparty FOUNDATION (\"vakıf\", heading): UNDETERMINED"
+    ],
+    "gates": {},
+    "review_flags": []
+   },
+   "model_decision": {
+    "state": "DOES_NOT_APPLY",
+    "provision_state": "DOES_NOT_APPLY",
+    "mode": null
+   },
+   "taxonomy": "PROFILE_TOO_AMBIGUOUS",
+   "rationale": "The profile does not settle the clause (the clause gate read UNDETERMINED); predicted DOES_NOT_APPLY, labelled UNKNOWN.",
+   "also": [],
+   "expected": "UNKNOWN",
+   "actual": "DOES_NOT_APPLY",
+   "evidence": {
+    "positive": [
+     "şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleri",
+     "Ödeme kuruluşları ile elektronik para kuruluşları",
+     "Ödeme kuruluşları ile elektronik para kuruluşları"
+    ],
+    "negative": [
+     "şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleri"
+    ],
+    "reason": "The provision's duty applies to associations (dernekler) and foundations (vakıflar) requiring identity verification, but the company is a payment institution (ödeme kuruluşu) listed as a regulated entity under the scope. The obligation described in the provision is specific to associations and foundations, not payment service providers. While the company is subject to general anti-money launderin…"
+   }
+  },
+  {
+   "case_id": "C25",
+   "where": "C25 md.8(5)",
+   "obligation_id": "a27de5b8b44af28410d57443a224bde780e4c9761b8b0f1c57f87e4058dfe44e",
+   "obligation_key": "YONETMELIK:200713012/md.8/5/b39fac6d5168",
+   "expectation": {
+    "article": "8",
+    "clause": "(5)",
+    "action_keywords": [
+     "kimlik tespiti"
+    ],
+    "entity_gate": "UNDETERMINED",
+    "required": true,
+    "notes": "Yabancı dernek ve vakıfların Türkiye şube ve temsilcilikleri. Çıplak \"tüzel kişi\" müşteri tabanı dernek/vakıf içerebilir de içermeyebilir de: dürüst cevap belirsiz."
+   },
+   "company_profile": {
+    "id": "kurumsalpay-tr",
+    "name": "KurumsalPay Ödeme Hizmetleri A.Ş.",
+    "licences": [
+     "6493 sayılı Kanun kapsamında ödeme kuruluşu faaliyet izni"
+    ],
+    "activities": [
+     "ödeme hizmetleri"
+    ],
+    "customer_types": [
+     "tüzel kişi müşteriler"
+    ]
+   },
+   "regulation_basis": {
+    "scope_quotes": [
+     "(1) Kanunun uygulanmasında yükümlü, aşağıda sayılanlar ile bunların şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleridir:"
+    ],
+    "subject_gate": null,
+    "basis": [
+     {
+      "condition": "şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleri",
+      "company_fact": "Türkiye",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "Ödeme kuruluşları ile elektronik para kuruluşları",
+      "company_fact": "ödeme hizmetleri",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "Ödeme kuruluşları ile elektronik para kuruluşları",
+      "company_fact": "6493 sayılı Kanun kapsamında ödeme kuruluşu faaliyet izni",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "Ödeme kuruluşları ile elektronik para kuruluşları",
+      "company_fact": "kurumsal ödeme çözümleri",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleri",
+      "company_fact": "tüzel kişi müşteriler",
+      "match": "NO",
+      "exclusionary": false
+     }
+    ]
+   },
+   "child_clause": {
+    "provision": "Yönetmelik 200713012 md. 8",
+    "clause": "(5)",
+    "excerpt": "(5) Yabancı dernek ve vakıfların Türkiye’deki şube ve temsilciliklerinin kimlik tespiti, İçişleri Bakanlığındaki kayda ilişkin belgeler esas alınmak suretiyle yapılır.",
+    "subject": "Yabancı dernek ve vakıfların Türkiye’deki şube ve temsilciliklerinin"
+   },
+   "rule_decision": {
+    "rule_decision": "UNDETERMINED",
+    "applicability_rule": "MODEL",
+    "decided_by": null,
+    "entity_gate": "UNDETERMINED",
+    "required_entities": [
+     "counterparty FOREIGN_ASSOCIATION_BRANCH (\"yabancı dernek\", clause): UNDETERMINED"
+    ],
+    "gates": {},
+    "review_flags": []
+   },
+   "model_decision": {
+    "state": "DOES_NOT_APPLY",
+    "provision_state": "DOES_NOT_APPLY",
+    "mode": null
+   },
+   "taxonomy": "PROFILE_TOO_AMBIGUOUS",
+   "rationale": "The profile does not settle the clause (the clause gate read UNDETERMINED); predicted DOES_NOT_APPLY, labelled UNKNOWN.",
+   "also": [],
+   "expected": "UNKNOWN",
+   "actual": "DOES_NOT_APPLY",
+   "evidence": {
+    "positive": [
+     "şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleri",
+     "Ödeme kuruluşları ile elektronik para kuruluşları",
+     "Ödeme kuruluşları ile elektronik para kuruluşları"
+    ],
+    "negative": [
+     "şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleri"
+    ],
+    "reason": "The provision's duty applies to associations (dernekler) and foundations (vakıflar) requiring identity verification, but the company is a payment institution (ödeme kuruluşu) listed as a regulated entity under the scope. The obligation described in the provision is specific to associations and foundations, not payment service providers. While the company is subject to general anti-money launderin…"
+   }
+  },
+  {
+   "case_id": "C26",
+   "where": "C26 md.27(3)",
+   "obligation_id": null,
+   "obligation_key": null,
+   "expectation": {
+    "article": "27",
+    "clause": "(3)",
+    "action_keywords": [
+     "bir arada"
+    ],
+    "entity_gate": "ANY",
+    "required": true,
+    "notes": "Birden çok işlem bir arada değerlendirilir. Yükümlü kuruluşun genel ödevi."
+   },
+   "company_profile": {
+    "id": "demopay-tr",
+    "name": "DemoPay Teknoloji A.Ş.",
+    "licences": [
+     "6493 sayılı Kanun kapsamında ödeme hizmetleri ve elektronik para faaliyeti"
+    ],
+    "activities": [
+     "ödeme hizmetleri, elektronik para, dijital cüzdan"
+    ],
+    "customer_types": [
+     "bireysel müşteriler, KOBİ'ler, üye işyerleri"
+    ]
+   },
+   "regulation_basis": {
+    "scope_quotes": [],
+    "subject_gate": null,
+    "basis": []
+   },
+   "child_clause": {
+    "provision": null,
+    "clause": null,
+    "excerpt": null,
+    "subject": null
+   },
+   "rule_decision": {
+    "rule_decision": null,
+    "applicability_rule": null,
+    "decided_by": null,
+    "entity_gate": null,
+    "required_entities": [],
+    "gates": {},
+    "review_flags": []
+   },
+   "model_decision": {
+    "state": null,
+    "provision_state": null,
+    "mode": null
+   },
+   "taxonomy": "PARSER_EXTRACTION_ERROR",
+   "rationale": "No extracted duty matched this required expectation (article, clause and action keywords).",
+   "also": [],
+   "expected": "APPLIES",
+   "actual": "NOT_EXTRACTED",
+   "evidence": {
+    "positive": [],
+    "negative": [],
+    "reason": null
+   }
+  },
+  {
+   "case_id": "C28",
+   "where": "C28 md.42(1)",
+   "obligation_id": "ac60afc0472911e1959f80d4ab62969e667a9cf5bc68a99435b7d484302c2589",
+   "obligation_key": "YONETMELIK:200713012/md.42/1/958392df7acb",
+   "expectation": {
+    "article": "42",
+    "clause": "(1)",
+    "action_keywords": [
+     "tutanağa"
+    ],
+    "entity_gate": "ANY",
+    "required": false,
+    "notes": "Gümrük idaresi: yolcu tutanağı; yükümlülerin ödevi değil. Çıkarıcının bunu aday saymaması hata değildir (C27 ile tutarlı), sayarsa DOES_NOT_APPLY beklenir. Yolcu tutanağı gümrük idaresinin işlemidir; yükümlülere ödev yüklemez (provizyon düzeyi karar)."
+   },
+   "company_profile": {
+    "id": "demopay-tr",
+    "name": "DemoPay Teknoloji A.Ş.",
+    "licences": [
+     "6493 sayılı Kanun kapsamında ödeme hizmetleri ve elektronik para faaliyeti"
+    ],
+    "activities": [
+     "ödeme hizmetleri, elektronik para, dijital cüzdan"
+    ],
+    "customer_types": [
+     "bireysel müşteriler, KOBİ'ler, üye işyerleri"
+    ]
+   },
+   "regulation_basis": {
+    "scope_quotes": [
+     "Sermaye piyasası aracı kurumları ve portföy yönetim şirketleri",
+     "Posta ve Telgraf Teşkilatı Anonim Şirketi ile kargo şirketleri.",
+     "Elektronik ticaret hizmet sağlayıcılar ile gerçekleştirilen işlemlerle sınırlı olarak orta, büyük veya çok büyük ölçekli elektronik ticaret aracı hizmet sağlayıcılar.",
+     "(1) Kendisinden açıklama talep edilen yolcu ile ilgili tespitler bir tutanağa bağlanır."
+    ],
+    "subject_gate": null,
+    "basis": [
+     {
+      "condition": "Kanunun uygulanmasında yükümlü, aşağıda sayılanlar ile bunların şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleridir",
+      "company_fact": "Türkiye",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "Ödeme kuruluşları ile elektronik para kuruluşları",
+      "company_fact": "ödeme hizmetleri, elektronik para, dijital cüzdan",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "Ödeme kuruluşları ile elektronik para kuruluşları",
+      "company_fact": "6493 sayılı Kanun kapsamında ödeme hizmetleri ve elektronik para faaliyeti",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "Ödeme kuruluşları ile elektronik para kuruluşları",
+      "company_fact": "dijital cüzdan, para transferi, sanal kart, üye işyeri ödemeleri",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "kargo şirketleri",
+      "company_fact": "bireysel müşteriler, KOBİ'ler, üye işyerleri",
+      "match": "UNCLEAR",
+      "exclusionary": null
+     },
+     {
+      "condition": "Yolcunun, 6 ncı maddede sayılan bir kimlik belgesi üzerinden tespit edilen kimlik bilgileri",
+      "company_fact": "Türkiye'de bireysel kullanıcılar ve üye işyerleri için dijital cüzdan, para transferi ve ödeme hizmetleri sunan senteti…",
+      "match": "UNCLEAR",
+      "exclusionary": null
+     }
+    ]
+   },
+   "child_clause": {
+    "provision": "Yönetmelik 200713012 md. 42",
+    "clause": "(1)",
+    "excerpt": "(1) Kendisinden açıklama talep edilen yolcu ile ilgili tespitler bir tutanağa bağlanır.",
+    "subject": "Kendisinden açıklama talep edilen yolcu"
+   },
+   "rule_decision": {
+    "rule_decision": "NO_RESTRICTION",
+    "applicability_rule": "MODEL",
+    "decided_by": null,
+    "entity_gate": "NOT_RESTRICTED",
+    "required_entities": [],
+    "gates": {},
+    "review_flags": []
+   },
+   "model_decision": {
+    "state": "POSSIBLY_APPLIES",
+    "provision_state": "POSSIBLY_APPLIES",
+    "mode": null
+   },
+   "taxonomy": "SUBJECT_ENTITY_MISMATCH",
+   "rationale": "The duty is addressed to an authority or another actor (subject \"Kendisinden açıklama talep edilen yolcu\"), not the company; predicted UNKNOWN.",
+   "also": [],
+   "expected": "DOES_NOT_APPLY",
+   "actual": "UNKNOWN",
+   "evidence": {
+    "positive": [
+     "Kanunun uygulanmasında yükümlü, aşağıda sayılanlar ile bunların şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleridir",
+     "Ödeme kuruluşları ile elektronik para kuruluşları",
+     "Ödeme kuruluşları ile elektronik para kuruluşları"
+    ],
+    "negative": [],
+    "reason": "The company is a payment institution (ödeme kuruluşları) under the scope's definition of 'yükümlü', which includes entities handling payment services and electronic money. However, the specific obligation in the provision relates to recording information about travelers (yolcu) during customs procedures, which is not explicitly linked to the company's stated activities (digital wallets, payment t…"
+   }
+  },
+  {
+   "case_id": "C28",
+   "where": "C28 md.42(3)",
+   "obligation_id": "34463bdea1f17ee6d35dfb8babbcfdf82b63120b3d8c11b68828fa52bc309a42",
+   "obligation_key": "YONETMELIK:200713012/md.42/3/0cb4057d83f2",
+   "expectation": {
+    "article": "42",
+    "clause": "(3)",
+    "action_keywords": [
+     "yeterli sayıda"
+    ],
+    "entity_gate": "ANY",
+    "required": false,
+    "notes": "Tutanak nüshaları; gümrük idaresi. Yolcu tutanağı gümrük idaresinin işlemidir; yükümlülere ödev yüklemez (provizyon düzeyi karar)."
+   },
+   "company_profile": {
+    "id": "demopay-tr",
+    "name": "DemoPay Teknoloji A.Ş.",
+    "licences": [
+     "6493 sayılı Kanun kapsamında ödeme hizmetleri ve elektronik para faaliyeti"
+    ],
+    "activities": [
+     "ödeme hizmetleri, elektronik para, dijital cüzdan"
+    ],
+    "customer_types": [
+     "bireysel müşteriler, KOBİ'ler, üye işyerleri"
+    ]
+   },
+   "regulation_basis": {
+    "scope_quotes": [
+     "Sermaye piyasası aracı kurumları ve portföy yönetim şirketleri",
+     "Posta ve Telgraf Teşkilatı Anonim Şirketi ile kargo şirketleri.",
+     "Elektronik ticaret hizmet sağlayıcılar ile gerçekleştirilen işlemlerle sınırlı olarak orta, büyük veya çok büyük ölçekli elektronik ticaret aracı hizmet sağlayıcılar.",
+     "(1) Kendisinden açıklama talep edilen yolcu ile ilgili tespitler bir tutanağa bağlanır."
+    ],
+    "subject_gate": null,
+    "basis": [
+     {
+      "condition": "Kanunun uygulanmasında yükümlü, aşağıda sayılanlar ile bunların şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleridir",
+      "company_fact": "Türkiye",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "Ödeme kuruluşları ile elektronik para kuruluşları",
+      "company_fact": "ödeme hizmetleri, elektronik para, dijital cüzdan",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "Ödeme kuruluşları ile elektronik para kuruluşları",
+      "company_fact": "6493 sayılı Kanun kapsamında ödeme hizmetleri ve elektronik para faaliyeti",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "Ödeme kuruluşları ile elektronik para kuruluşları",
+      "company_fact": "dijital cüzdan, para transferi, sanal kart, üye işyeri ödemeleri",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "kargo şirketleri",
+      "company_fact": "bireysel müşteriler, KOBİ'ler, üye işyerleri",
+      "match": "UNCLEAR",
+      "exclusionary": null
+     },
+     {
+      "condition": "Yolcunun, 6 ncı maddede sayılan bir kimlik belgesi üzerinden tespit edilen kimlik bilgileri",
+      "company_fact": "Türkiye'de bireysel kullanıcılar ve üye işyerleri için dijital cüzdan, para transferi ve ödeme hizmetleri sunan senteti…",
+      "match": "UNCLEAR",
+      "exclusionary": null
+     }
+    ]
+   },
+   "child_clause": {
+    "provision": "Yönetmelik 200713012 md. 42",
+    "clause": "(3)",
+    "excerpt": "(3) Tutanaklar ilgili merci ve taraflara verilecek örnekler de dikkate alınarak yeterli sayıda düzenlenir.",
+    "subject": "Tutanaklar"
+   },
+   "rule_decision": {
+    "rule_decision": "NO_RESTRICTION",
+    "applicability_rule": "MODEL",
+    "decided_by": null,
+    "entity_gate": "NOT_RESTRICTED",
+    "required_entities": [],
+    "gates": {},
+    "review_flags": []
+   },
+   "model_decision": {
+    "state": "POSSIBLY_APPLIES",
+    "provision_state": "POSSIBLY_APPLIES",
+    "mode": null
+   },
+   "taxonomy": "SUBJECT_ENTITY_MISMATCH",
+   "rationale": "The duty is addressed to an authority or another actor (subject \"Tutanaklar\"), not the company; predicted UNKNOWN.",
+   "also": [],
+   "expected": "DOES_NOT_APPLY",
+   "actual": "UNKNOWN",
+   "evidence": {
+    "positive": [
+     "Kanunun uygulanmasında yükümlü, aşağıda sayılanlar ile bunların şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleridir",
+     "Ödeme kuruluşları ile elektronik para kuruluşları",
+     "Ödeme kuruluşları ile elektronik para kuruluşları"
+    ],
+    "negative": [],
+    "reason": "The company is a payment institution (ödeme kuruluşları) under the scope's definition of 'yükümlü', which includes entities handling payment services and electronic money. However, the specific obligation in the provision relates to recording information about travelers (yolcu) during customs procedures, which is not explicitly linked to the company's stated activities (digital wallets, payment t…"
+   }
+  }
+ ],
+ "coverage_errors": [
+  {
+   "case_id": "C02",
+   "where": "C02 md.6(1)",
+   "obligation_id": "4915eebdcf38911f8e2494e3fafed16a8d9262f0ad26c77c9cd3627c149a530f",
+   "obligation_key": "YONETMELIK:200713012/md.6/1/cf8e22289b61",
+   "expectation": {
+    "article": "6",
+    "clause": "(1)",
+    "action_keywords": [
+     "kimlik tespitinde"
+    ],
+    "entity_gate": "MATCH",
+    "required": true,
+    "notes": "Gerçek kişi müşterilerde alınacak bilgiler. Gerçek kişi müşteri var."
+   },
+   "company_profile": {
+    "id": "parakart-tr",
+    "name": "ParaKart Elektronik Para A.Ş.",
+    "licences": [
+     "6493 sayılı Kanun kapsamında elektronik para kuruluşu faaliyet izni"
+    ],
+    "activities": [
+     "elektronik para ihracı, ön ödemeli kart"
+    ],
+    "customer_types": [
+     "bireysel müşteriler"
+    ]
+   },
+   "regulation_basis": {
+    "scope_quotes": [
+     "(1) Kanunun uygulanmasında yükümlü, aşağıda sayılanlar ile bunların şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleridir:"
+    ],
+    "subject_gate": null,
+    "basis": [
+     {
+      "condition": "Kanunun uygulanmasında yükümlü, aşağıda sayılanlar ile bunların şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleridir",
+      "company_fact": "Türkiye",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "Ödeme kuruluşları ile elektronik para kuruluşları",
+      "company_fact": "6493 sayılı Kanun kapsamında elektronik para kuruluşu faaliyet izni",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "Ödeme kuruluşları ile elektronik para kuruluşları",
+      "company_fact": "elektronik para ihracı, ön ödemeli kart",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "Gerçek kişilerin kimlik tespitinde; ilgilinin adı, soyadı, doğum tarihi, uyruğu, kimlik belgesinin türü ve numarası, adresi ve imza örneği, iş ve mesleğine ilişkin bilgiler, varsa telefon numarası, f…",
+      "company_fact": "bireysel müşteriler",
+      "match": "YES",
+      "exclusionary": null
+     }
+    ]
+   },
+   "child_clause": {
+    "provision": "Yönetmelik 200713012 md. 6",
+    "clause": "(1)",
+    "excerpt": "(1) (Değişik: 28/12/2009-2009/15720 K.) Gerçek kişilerin kimlik tespitinde; ilgilinin adı, soyadı, doğum tarihi, uyruğu, kimlik belgesinin türü ve numarası, adresi ve imza örneği, iş ve mesleğine ilişkin bilgiler, varsa telefon numarası, faks numarası, elektronik posta adresi ile Türk vatandaşları …",
+    "subject": "Gerçek kişilerin"
+   },
+   "rule_decision": {
+    "rule_decision": "NO_OBJECTION",
+    "applicability_rule": "MODEL",
+    "decided_by": null,
+    "entity_gate": "MATCH",
+    "required_entities": [
+     "counterparty INDIVIDUAL (\"gerçek kişi\", clause): MATCH"
+    ],
+    "gates": {},
+    "review_flags": []
+   },
+   "model_decision": {
+    "state": "APPLIES",
+    "provision_state": "APPLIES",
+    "mode": null
+   },
+   "taxonomy": "OTHER",
+   "rationale": "A passage judgement failed (ProviderFailure).",
+   "also": [],
+   "expected": {
+    "coverage": "COVERS_TEXT",
+    "conflict": false
+   },
+   "actual": {
+    "coverage": "UNKNOWN",
+    "conflict": false
+   },
+   "evidence": {
+    "expected_evidence": [
+     "Gerçek kişilerin kimlik tespitinde"
+    ],
+    "expected_passages": 1,
+    "expected_rank": 1,
+    "cited_expected": false,
+    "cited": [
+     {
+      "source_id": "7234ad8479a3b5e8dc28afe119b4c88ed31aa486a4f7e8604e863ef1134d0996",
+      "quote": "Yükümlü sıfatıyla Şirket, sürekli iş ilişkisi tesisinde tutar gözetmeksizin ve mevzuatta belirtilen tutarı aşan işlemlerde kimlik tespiti yapmak zorundadır."
+     }
+    ],
+    "judged": [
+     {
+      "source_id": "ab32f9b3c6337b4a2fa2d7a486f7c8447908d5e74ed38247cc6cc43a1d2ea49f",
+      "relation": "UNCLEAR"
+     },
+     {
+      "source_id": "cfe0c2031237195069cff9094395570a3e8ea23da57a195c6924ba7436fc316c",
+      "relation": "UNRELATED"
+     },
+     {
+      "source_id": "7234ad8479a3b5e8dc28afe119b4c88ed31aa486a4f7e8604e863ef1134d0996",
+      "relation": "PARTIAL"
+     },
+     {
+      "source_id": "c0fc37c4f737d6842847f9deb535f67150968a35eebc89a6fbc2df61b73f4f86",
+      "relation": "UNRELATED"
+     },
+     {
+      "source_id": "f62835193feb2e4c2094e4ef7d081c2c496e070d51154a55ac69f4c3f3284f23",
+      "relation": "UNRELATED"
+     },
+     {
+      "source_id": "5b8647000f3e2ef877a0d0bfca21a06853404135f38fb0820b5515722133054a",
+      "relation": "UNRELATED"
+     },
+     {
+      "source_id": "9fa124d7ff3dc98054b620ca2d0a1ffe15dd98519abca51f6bc58776c71f6bcb",
+      "relation": "UNRELATED"
+     },
+     {
+      "source_id": "75218d4807104a829feb767e3d32ddf5fd99ec8cbf47983d3d3404305170aa97",
+      "relation": "UNRELATED"
+     }
+    ],
+    "reason": "1 of 9 policy passages could not be judged and only 1 favourable passage(s) stand against them; manual review required."
+   }
+  },
+  {
+   "case_id": "C08",
+   "where": "C08 md.6(1)",
+   "obligation_id": "4915eebdcf38911f8e2494e3fafed16a8d9262f0ad26c77c9cd3627c149a530f",
+   "obligation_key": "YONETMELIK:200713012/md.6/1/cf8e22289b61",
+   "expectation": {
+    "article": "6",
+    "clause": "(1)",
+    "action_keywords": [
+     "kimlik tespitinde"
+    ],
+    "entity_gate": "MATCH",
+    "required": true,
+    "notes": "Gerçek kişi müşterilerde alınacak bilgiler. Gerçek kişi müşteri var."
+   },
+   "company_profile": {
+    "id": "cepodeme-tr",
+    "name": "CepÖdeme Ödeme Hizmetleri A.Ş.",
+    "licences": [
+     "6493 sayılı Kanun kapsamında ödeme kuruluşu faaliyet izni"
+    ],
+    "activities": [
+     "ödeme hizmetleri, para transferi"
+    ],
+    "customer_types": [
+     "yalnızca bireysel müşteriler"
+    ]
+   },
+   "regulation_basis": {
+    "scope_quotes": [
+     "(1) Kanunun uygulanmasında yükümlü, aşağıda sayılanlar ile bunların şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleridir:"
+    ],
+    "subject_gate": null,
+    "basis": [
+     {
+      "condition": "Kanunun uygulanmasında yükümlü, aşağıda sayılanlar ile bunların şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleridir",
+      "company_fact": "Türkiye",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "Ödeme kuruluşları ile elektronik para kuruluşları",
+      "company_fact": "ödeme hizmetleri, para transferi",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "Ödeme kuruluşları ile elektronik para kuruluşları",
+      "company_fact": "6493 sayılı Kanun kapsamında ödeme kuruluşu faaliyet izni",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "Gerçek kişilerin",
+      "company_fact": "yalnızca bireysel müşteriler",
+      "match": "YES",
+      "exclusionary": null
+     }
+    ]
+   },
+   "child_clause": {
+    "provision": "Yönetmelik 200713012 md. 6",
+    "clause": "(1)",
+    "excerpt": "(1) (Değişik: 28/12/2009-2009/15720 K.) Gerçek kişilerin kimlik tespitinde; ilgilinin adı, soyadı, doğum tarihi, uyruğu, kimlik belgesinin türü ve numarası, adresi ve imza örneği, iş ve mesleğine ilişkin bilgiler, varsa telefon numarası, faks numarası, elektronik posta adresi ile Türk vatandaşları …",
+    "subject": "Gerçek kişilerin"
+   },
+   "rule_decision": {
+    "rule_decision": "NO_OBJECTION",
+    "applicability_rule": "MODEL",
+    "decided_by": null,
+    "entity_gate": "MATCH",
+    "required_entities": [
+     "counterparty INDIVIDUAL (\"gerçek kişi\", clause): MATCH"
+    ],
+    "gates": {},
+    "review_flags": []
+   },
+   "model_decision": {
+    "state": "APPLIES",
+    "provision_state": "APPLIES",
+    "mode": null
+   },
+   "taxonomy": "OTHER",
+   "rationale": "The expected passage was retrieved at rank 1 and judged PARTIAL.",
+   "also": [],
+   "expected": {
+    "coverage": "COVERS_TEXT",
+    "conflict": false
+   },
+   "actual": {
+    "coverage": "PARTIAL",
+    "conflict": false
+   },
+   "evidence": {
+    "expected_evidence": [
+     "Gerçek kişilerin kimlik tespitinde"
+    ],
+    "expected_passages": 1,
+    "expected_rank": 1,
+    "cited_expected": true,
+    "cited": [
+     {
+      "source_id": "ab32f9b3c6337b4a2fa2d7a486f7c8447908d5e74ed38247cc6cc43a1d2ea49f",
+      "quote": "Gerçek kişilerin kimlik tespitinde; ilgilinin adı, soyadı, doğum tarihi, uyruğu, kimlik belgesinin türü ve numarası, adresi ve imza örneği ile iş ve mesleğine ilişkin bilgiler, Türk vatandaşları için…"
+     },
+     {
+      "source_id": "7234ad8479a3b5e8dc28afe119b4c88ed31aa486a4f7e8604e863ef1134d0996",
+      "quote": "Yükümlü sıfatıyla Şirket, sürekli iş ilişkisi tesisinde tutar gözetmeksizin ve mevzuatta belirtilen tutarı aşan işlemlerde kimlik tespiti yapmak zorundadır."
+     }
+    ],
+    "judged": [
+     {
+      "source_id": "ab32f9b3c6337b4a2fa2d7a486f7c8447908d5e74ed38247cc6cc43a1d2ea49f",
+      "relation": "PARTIAL"
+     },
+     {
+      "source_id": "cfe0c2031237195069cff9094395570a3e8ea23da57a195c6924ba7436fc316c",
+      "relation": "UNRELATED"
+     },
+     {
+      "source_id": "7234ad8479a3b5e8dc28afe119b4c88ed31aa486a4f7e8604e863ef1134d0996",
+      "relation": "PARTIAL"
+     },
+     {
+      "source_id": "c0fc37c4f737d6842847f9deb535f67150968a35eebc89a6fbc2df61b73f4f86",
+      "relation": "UNRELATED"
+     },
+     {
+      "source_id": "f62835193feb2e4c2094e4ef7d081c2c496e070d51154a55ac69f4c3f3284f23",
+      "relation": "UNRELATED"
+     },
+     {
+      "source_id": "5b8647000f3e2ef877a0d0bfca21a06853404135f38fb0820b5515722133054a",
+      "relation": "UNRELATED"
+     },
+     {
+      "source_id": "9fa124d7ff3dc98054b620ca2d0a1ffe15dd98519abca51f6bc58776c71f6bcb",
+      "relation": "UNRELATED"
+     },
+     {
+      "source_id": "75218d4807104a829feb767e3d32ddf5fd99ec8cbf47983d3d3404305170aa97",
+      "relation": "UNRELATED"
+     }
+    ],
+    "reason": "2 policy passage(s) cover part of this duty; none covers all of it."
+   }
+  },
+  {
+   "case_id": "C09",
+   "where": "C09 md.7(1)",
+   "obligation_id": "1ced03848263c0d3d563cad4014660a1d13b1532d198d2008f3ebd2d13c69077",
+   "obligation_key": "YONETMELIK:200713012/md.7/1/de27a2ef1794",
+   "expectation": {
+    "article": "7",
+    "clause": "(1)",
+    "action_keywords": [
+     "kimlik tespitinde"
+    ],
+    "entity_gate": "MATCH",
+    "required": true,
+    "notes": "Ticaret siciline kayıtlı tüzel kişilerde alınacak bilgiler. Ticaret siciline kayıtlı tüzel kişi müşteri var."
+   },
+   "company_profile": {
+    "id": "tahsilatpro-tr",
+    "name": "TahsilatPro Ödeme Hizmetleri A.Ş.",
+    "licences": [
+     "6493 sayılı Kanun kapsamında ödeme kuruluşu faaliyet izni"
+    ],
+    "activities": [
+     "ödeme hizmetleri, ticari tahsilat"
+    ],
+    "customer_types": [
+     "yalnızca tüzel kişi müşteriler: KOBİ'ler ve kurumsal şirketler"
+    ]
+   },
+   "regulation_basis": {
+    "scope_quotes": [
+     "(1) Kanunun uygulanmasında yükümlü, aşağıda sayılanlar ile bunların şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleridir:"
+    ],
+    "subject_gate": null,
+    "basis": [
+     {
+      "condition": "Kanunun uygulanmasında yükümlü, aşağıda sayılanlar ile bunların şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleridir",
+      "company_fact": "Türkiye",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "Ödeme kuruluşları ile elektronik para kuruluşları",
+      "company_fact": "ödeme hizmetleri, ticari tahsilat",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "Ödeme kuruluşları ile elektronik para kuruluşları",
+      "company_fact": "6493 sayılı Kanun kapsamında ödeme kuruluşu faaliyet izni",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "Ticaret siciline kayıtlı tüzel kişilerin kimlik tespitinde",
+      "company_fact": "yalnızca tüzel kişi müşteriler: KOBİ'ler ve kurumsal şirketler",
+      "match": "YES",
+      "exclusionary": null
+     }
+    ]
+   },
+   "child_clause": {
+    "provision": "Yönetmelik 200713012 md. 7",
+    "clause": "(1)",
+    "excerpt": "(1) (Değişik: 28/12/2009-2009/15720 K.) Ticaret siciline kayıtlı tüzel kişilerin kimlik tespitinde; tüzel kişinin unvanı, ticaret sicil numarası, vergi kimlik numarası, faaliyet konusu, açık adresi, telefon numarası, varsa faks numarası ve elektronik posta adresi ile tüzel kişiliği temsile yetkili …",
+    "subject": "Ticaret siciline kayıtlı tüzel kişiler"
+   },
+   "rule_decision": {
+    "rule_decision": "NO_OBJECTION",
+    "applicability_rule": "MODEL",
+    "decided_by": null,
+    "entity_gate": "MATCH",
+    "required_entities": [
+     "counterparty LEGAL_ENTITY (\"ticaret siciline kayıtlı\", clause): MATCH"
+    ],
+    "gates": {},
+    "review_flags": []
+   },
+   "model_decision": {
+    "state": "APPLIES",
+    "provision_state": "APPLIES",
+    "mode": null
+   },
+   "taxonomy": "OTHER",
+   "rationale": "The expected passage was retrieved at rank 1 and judged PARTIAL.",
+   "also": [],
+   "expected": {
+    "coverage": "COVERS_TEXT",
+    "conflict": false
+   },
+   "actual": {
+    "coverage": "PARTIAL",
+    "conflict": false
+   },
+   "evidence": {
+    "expected_evidence": [
+     "Ticaret siciline kayıtlı tüzel kişilerin kimlik tespitinde"
+    ],
+    "expected_passages": 1,
+    "expected_rank": 1,
+    "cited_expected": true,
+    "cited": [
+     {
+      "source_id": "cfe0c2031237195069cff9094395570a3e8ea23da57a195c6924ba7436fc316c",
+      "quote": "Ticaret siciline kayıtlı tüzel kişilerin kimlik tespitinde; tüzel kişinin unvanı, ticaret sicil numarası, vergi kimlik numarası, faaliyet konusu, açık adresi ve temsile yetkili kişinin kimlik bilgile…"
+     },
+     {
+      "source_id": "7234ad8479a3b5e8dc28afe119b4c88ed31aa486a4f7e8604e863ef1134d0996",
+      "quote": "Yükümlü sıfatıyla Şirket, sürekli iş ilişkisi tesisinde tutar gözetmeksizin ve mevzuatta belirtilen tutarı aşan işlemlerde kimlik tespiti yapmak zorundadır."
+     }
+    ],
+    "judged": [
+     {
+      "source_id": "cfe0c2031237195069cff9094395570a3e8ea23da57a195c6924ba7436fc316c",
+      "relation": "PARTIAL"
+     },
+     {
+      "source_id": "ab32f9b3c6337b4a2fa2d7a486f7c8447908d5e74ed38247cc6cc43a1d2ea49f",
+      "relation": "UNRELATED"
+     },
+     {
+      "source_id": "7234ad8479a3b5e8dc28afe119b4c88ed31aa486a4f7e8604e863ef1134d0996",
+      "relation": "PARTIAL"
+     },
+     {
+      "source_id": "f62835193feb2e4c2094e4ef7d081c2c496e070d51154a55ac69f4c3f3284f23",
+      "relation": "UNRELATED"
+     },
+     {
+      "source_id": "c0fc37c4f737d6842847f9deb535f67150968a35eebc89a6fbc2df61b73f4f86",
+      "relation": "UNRELATED"
+     },
+     {
+      "source_id": "5b8647000f3e2ef877a0d0bfca21a06853404135f38fb0820b5515722133054a",
+      "relation": "UNRELATED"
+     },
+     {
+      "source_id": "9fa124d7ff3dc98054b620ca2d0a1ffe15dd98519abca51f6bc58776c71f6bcb",
+      "relation": "UNRELATED"
+     },
+     {
+      "source_id": "75218d4807104a829feb767e3d32ddf5fd99ec8cbf47983d3d3404305170aa97",
+      "relation": "UNRELATED"
+     }
+    ],
+    "reason": "2 policy passage(s) cover part of this duty; none covers all of it."
+   }
+  },
+  {
+   "case_id": "C11",
+   "where": "C11 md.46(1)",
+   "obligation_id": "f07459b69b0297bbf926c8ae9b4cce956b385d2049297ce130752e24b80ddd50",
+   "obligation_key": "YONETMELIK:200713012/md.46/1/de258aca97e0",
+   "expectation": {
+    "article": "46",
+    "clause": "(1)",
+    "action_keywords": [
+     "muhafaza etmek"
+    ],
+    "entity_gate": "ANY",
+    "required": true,
+    "notes": "Sekiz yıl muhafaza ve ibraz. Yükümlü kuruluşun genel ödevi."
+   },
+   "company_profile": {
+    "id": "demopay-tr",
+    "name": "DemoPay Teknoloji A.Ş.",
+    "licences": [
+     "6493 sayılı Kanun kapsamında ödeme hizmetleri ve elektronik para faaliyeti"
+    ],
+    "activities": [
+     "ödeme hizmetleri, elektronik para, dijital cüzdan"
+    ],
+    "customer_types": [
+     "bireysel müşteriler, KOBİ'ler, üye işyerleri"
+    ]
+   },
+   "regulation_basis": {
+    "scope_quotes": [
+     "(1) Kanunun uygulanmasında yükümlü, aşağıda sayılanlar ile bunların şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleridir:"
+    ],
+    "subject_gate": null,
+    "basis": [
+     {
+      "condition": "Kanunun uygulanmasında yükümlü, aşağıda sayılanlar ile bunların şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleridir",
+      "company_fact": "Türkiye",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "Ödeme kuruluşları ile elektronik para kuruluşları",
+      "company_fact": "ödeme hizmetleri, elektronik para, dijital cüzdan",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "Ödeme kuruluşları ile elektronik para kuruluşları",
+      "company_fact": "6493 sayılı Kanun kapsamında ödeme hizmetleri ve elektronik para faaliyeti",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "Ödeme kuruluşları ile elektronik para kuruluşları",
+      "company_fact": "dijital cüzdan, para transferi, sanal kart, üye işyeri ödemeleri",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "Ödeme kuruluşları ile elektronik para kuruluşları",
+      "company_fact": "bireysel müşteriler, KOBİ'ler, üye işyerleri",
+      "match": "YES",
+      "exclusionary": null
+     }
+    ]
+   },
+   "child_clause": {
+    "provision": "Yönetmelik 200713012 md. 46",
+    "clause": "(1)",
+    "excerpt": "(1) Yükümlüler her türlü ortamdaki, yükümlülüklerine ve işlemlerine ilişkin belgeleri düzenleme tarihinden, defter ve kayıtları ise son kayıt tarihinden; kimlik tespitine ilişkin belge ve kayıtları son işlem tarihinden itibaren sekiz yıl süre ile muhafaza etmek ve istenmesi halinde yetkililere ibra…",
+    "subject": "Yükümlüler"
+   },
+   "rule_decision": {
+    "rule_decision": "NO_RESTRICTION",
+    "applicability_rule": "MODEL",
+    "decided_by": null,
+    "entity_gate": "NOT_RESTRICTED",
+    "required_entities": [],
+    "gates": {},
+    "review_flags": []
+   },
+   "model_decision": {
+    "state": "APPLIES",
+    "provision_state": "APPLIES",
+    "mode": null
+   },
+   "taxonomy": "OTHER",
+   "rationale": "The expected passage was retrieved at rank 1 and judged PARTIAL.",
+   "also": [],
+   "expected": {
+    "coverage": "COVERS_TEXT",
+    "conflict": false
+   },
+   "actual": {
+    "coverage": "PARTIAL",
+    "conflict": false
+   },
+   "evidence": {
+    "expected_evidence": [
+     "8 yıl boyunca saklanır"
+    ],
+    "expected_passages": 1,
+    "expected_rank": 1,
+    "cited_expected": true,
+    "cited": [
+     {
+      "source_id": "ab4d9dec60cb75479212e8370a55ec837f10edc9c4926141d459dff7548b0945",
+      "quote": "kimlik belgeleri için süre müşterinin son işleminden başlar"
+     }
+    ],
+    "judged": [
+     {
+      "source_id": "ab4d9dec60cb75479212e8370a55ec837f10edc9c4926141d459dff7548b0945",
+      "relation": "PARTIAL"
+     },
+     {
+      "source_id": "1b25052a22289f45f117e407e134ff6572a52c4d3da00de83f3c6e8e477ef1e1",
+      "relation": "UNRELATED"
+     },
+     {
+      "source_id": "dbaa385254689f2e45677e9c0501b93646d8f44d6764956cced205da9e7e37bf",
+      "relation": "UNRELATED"
+     },
+     {
+      "source_id": "dc73016f65437d098bdf62ba6b1ba650e94902124f379dc47de70bc1c964c6eb",
+      "relation": "UNRELATED"
+     },
+     {
+      "source_id": "3a05614a686a6f8be03fdbbffc9f909ff523a8253d0623ecd15b017f5704de10",
+      "relation": "UNRELATED"
+     },
+     {
+      "source_id": "81a07f9e3cea20c9b8b772acfce1f33fbdd84b4954c216e384546401b62e5cdb",
+      "relation": "UNRELATED"
+     },
+     {
+      "source_id": "5645b5d0f263eaa3d39a08c4e806a39b75ab3fee5fb8f83a4b7bde10ece45b4d",
+      "relation": "UNRELATED"
+     }
+    ],
+    "reason": "1 policy passage(s) cover part of this duty; none covers all of it."
+   }
+  },
+  {
+   "case_id": "C12",
+   "where": "C12 md.5(2)",
+   "obligation_id": "7249ba0da413852e2c45f33ffc4e73ad9327341fa5de43c02d4a1ca6c472d9fa",
+   "obligation_key": "YONETMELIK:200713012/md.5/2/3be5e5d03796",
+   "expectation": {
+    "article": "5",
+    "clause": "(2)",
+    "action_keywords": [
+     "işlem yapılmadan önce tamamlanır"
+    ],
+    "entity_gate": "ANY",
+    "required": true,
+    "notes": "Kimlik tespiti işlemden önce tamamlanır. Yükümlü kuruluşun genel ödevi."
+   },
+   "company_profile": {
+    "id": "demopay-tr",
+    "name": "DemoPay Teknoloji A.Ş.",
+    "licences": [
+     "6493 sayılı Kanun kapsamında ödeme hizmetleri ve elektronik para faaliyeti"
+    ],
+    "activities": [
+     "ödeme hizmetleri, elektronik para, dijital cüzdan"
+    ],
+    "customer_types": [
+     "bireysel müşteriler, KOBİ'ler, üye işyerleri"
+    ]
+   },
+   "regulation_basis": {
+    "scope_quotes": [
+     "e) (Değişik: 29/2/2016-2016/8566 K.) Ödeme kuruluşları ile elektronik para kuruluşları."
+    ],
+    "subject_gate": null,
+    "basis": [
+     {
+      "condition": "Yükümlüler ; a) Sürekli iş ilişkisi tesisinde tutar gözetmeksizin, b) İşlem tutarı ya da birbiriyle bağlantılı birden fazla işlemin toplam tutarı yüzseksenbeşbin TL (kripto varlık hizmet sağlayıcılar…",
+      "company_fact": "Türkiye",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "Ödeme kuruluşları ile elektronik para kuruluşları",
+      "company_fact": "ödeme hizmetleri, elektronik para, dijital cüzdan",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "Ödeme kuruluşları ile elektronik para kuruluşları",
+      "company_fact": "6493 sayılı Kanun kapsamında ödeme hizmetleri ve elektronik para faaliyeti",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "Kripto varlık hizmet sağlayıcılar",
+      "company_fact": "dijital cüzdan, para transferi, sanal kart, üye işyeri ödemeleri",
+      "match": "YES",
+      "exclusionary": null
+     }
+    ]
+   },
+   "child_clause": {
+    "provision": "Yönetmelik 200713012 md. 5",
+    "clause": "(2)",
+    "excerpt": "(2) Kimlik tespiti, iş ilişkisi tesisinden veya işlem yapılmadan önce tamamlanır.",
+    "subject": "Kimlik tespiti"
+   },
+   "rule_decision": {
+    "rule_decision": "NO_RESTRICTION",
+    "applicability_rule": "MODEL",
+    "decided_by": null,
+    "entity_gate": "NOT_RESTRICTED",
+    "required_entities": [],
+    "gates": {},
+    "review_flags": []
+   },
+   "model_decision": {
+    "state": "APPLIES",
+    "provision_state": "APPLIES",
+    "mode": null
+   },
+   "taxonomy": "LABEL_AMBIGUITY",
+   "rationale": "Disputed label: aml-partial.md: 5(2) is labelled PARTIAL and 5(3) is unasserted; the line between the two is disputed.",
+   "also": [
+    "OTHER"
+   ],
+   "expected": {
+    "coverage": "PARTIAL",
+    "conflict": false
+   },
+   "actual": {
+    "coverage": "NO_EVIDENCE",
+    "conflict": false
+   },
+   "evidence": {
+    "expected_evidence": [
+     "adı, soyadı ve kimlik numarası sisteme kaydedilir"
+    ],
+    "expected_passages": 1,
+    "expected_rank": 2,
+    "cited_expected": false,
+    "cited": [],
+    "judged": [
+     {
+      "source_id": "68b709e24d0e89a7eee5f78a589d05fc0c2d5ee680cefdc6fa5b4ce6edf9cbbe",
+      "relation": "UNRELATED"
+     },
+     {
+      "source_id": "dbf2228c1acd3f183b06a76ed89eeee7a16deb5f9e1f91fcca57f57e748a620b",
+      "relation": "UNRELATED"
+     },
+     {
+      "source_id": "ca54e5e7d5799af7db4a1806472df7fd8b3e5892e77e6520b66f4a84b428f4cf",
+      "relation": "UNRELATED"
+     },
+     {
+      "source_id": "929c1cb3445e24db0703132e35c6e048a0580f1424de1173e0270c3b759f8f32",
+      "relation": "UNRELATED"
+     }
+    ],
+    "reason": "None of the 4 policy passages read addresses this duty; that is not proof of a gap."
+   }
+  },
+  {
+   "case_id": "C12",
+   "where": "C12 md.46(1)",
+   "obligation_id": "f07459b69b0297bbf926c8ae9b4cce956b385d2049297ce130752e24b80ddd50",
+   "obligation_key": "YONETMELIK:200713012/md.46/1/de258aca97e0",
+   "expectation": {
+    "article": "46",
+    "clause": "(1)",
+    "action_keywords": [
+     "muhafaza etmek"
+    ],
+    "entity_gate": "ANY",
+    "required": true,
+    "notes": "Sekiz yıl muhafaza ve ibraz. Yükümlü kuruluşun genel ödevi."
+   },
+   "company_profile": {
+    "id": "demopay-tr",
+    "name": "DemoPay Teknoloji A.Ş.",
+    "licences": [
+     "6493 sayılı Kanun kapsamında ödeme hizmetleri ve elektronik para faaliyeti"
+    ],
+    "activities": [
+     "ödeme hizmetleri, elektronik para, dijital cüzdan"
+    ],
+    "customer_types": [
+     "bireysel müşteriler, KOBİ'ler, üye işyerleri"
+    ]
+   },
+   "regulation_basis": {
+    "scope_quotes": [
+     "(1) Kanunun uygulanmasında yükümlü, aşağıda sayılanlar ile bunların şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleridir:"
+    ],
+    "subject_gate": null,
+    "basis": [
+     {
+      "condition": "Kanunun uygulanmasında yükümlü, aşağıda sayılanlar ile bunların şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleridir",
+      "company_fact": "Türkiye",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "Ödeme kuruluşları ile elektronik para kuruluşları",
+      "company_fact": "ödeme hizmetleri, elektronik para, dijital cüzdan",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "Ödeme kuruluşları ile elektronik para kuruluşları",
+      "company_fact": "6493 sayılı Kanun kapsamında ödeme hizmetleri ve elektronik para faaliyeti",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "Ödeme kuruluşları ile elektronik para kuruluşları",
+      "company_fact": "dijital cüzdan, para transferi, sanal kart, üye işyeri ödemeleri",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "Ödeme kuruluşları ile elektronik para kuruluşları",
+      "company_fact": "bireysel müşteriler, KOBİ'ler, üye işyerleri",
+      "match": "YES",
+      "exclusionary": null
+     }
+    ]
+   },
+   "child_clause": {
+    "provision": "Yönetmelik 200713012 md. 46",
+    "clause": "(1)",
+    "excerpt": "(1) Yükümlüler her türlü ortamdaki, yükümlülüklerine ve işlemlerine ilişkin belgeleri düzenleme tarihinden, defter ve kayıtları ise son kayıt tarihinden; kimlik tespitine ilişkin belge ve kayıtları son işlem tarihinden itibaren sekiz yıl süre ile muhafaza etmek ve istenmesi halinde yetkililere ibra…",
+    "subject": "Yükümlüler"
+   },
+   "rule_decision": {
+    "rule_decision": "NO_RESTRICTION",
+    "applicability_rule": "MODEL",
+    "decided_by": null,
+    "entity_gate": "NOT_RESTRICTED",
+    "required_entities": [],
+    "gates": {},
+    "review_flags": []
+   },
+   "model_decision": {
+    "state": "APPLIES",
+    "provision_state": "APPLIES",
+    "mode": null
+   },
+   "taxonomy": "OTHER",
+   "rationale": "The expected passage was retrieved at rank 2 and judged NO_EVIDENCE without being cited.",
+   "also": [],
+   "expected": {
+    "coverage": "PARTIAL",
+    "conflict": false
+   },
+   "actual": {
+    "coverage": "NO_EVIDENCE",
+    "conflict": false
+   },
+   "evidence": {
+    "expected_evidence": [
+     "belge yönetim sisteminde saklanır"
+    ],
+    "expected_passages": 1,
+    "expected_rank": 2,
+    "cited_expected": false,
+    "cited": [],
+    "judged": [
+     {
+      "source_id": "dbf2228c1acd3f183b06a76ed89eeee7a16deb5f9e1f91fcca57f57e748a620b",
+      "relation": "UNRELATED"
+     },
+     {
+      "source_id": "68b709e24d0e89a7eee5f78a589d05fc0c2d5ee680cefdc6fa5b4ce6edf9cbbe",
+      "relation": "UNRELATED"
+     },
+     {
+      "source_id": "ca54e5e7d5799af7db4a1806472df7fd8b3e5892e77e6520b66f4a84b428f4cf",
+      "relation": "UNRELATED"
+     },
+     {
+      "source_id": "929c1cb3445e24db0703132e35c6e048a0580f1424de1173e0270c3b759f8f32",
+      "relation": "UNRELATED"
+     }
+    ],
+    "reason": "None of the 4 policy passages read addresses this duty; that is not proof of a gap."
+   }
+  },
+  {
+   "case_id": "C13",
+   "where": "C13 md.5(2)",
+   "obligation_id": "7249ba0da413852e2c45f33ffc4e73ad9327341fa5de43c02d4a1ca6c472d9fa",
+   "obligation_key": "YONETMELIK:200713012/md.5/2/3be5e5d03796",
+   "expectation": {
+    "article": "5",
+    "clause": "(2)",
+    "action_keywords": [
+     "işlem yapılmadan önce tamamlanır"
+    ],
+    "entity_gate": "ANY",
+    "required": true,
+    "notes": "Kimlik tespiti işlemden önce tamamlanır. Yükümlü kuruluşun genel ödevi."
+   },
+   "company_profile": {
+    "id": "demopay-tr",
+    "name": "DemoPay Teknoloji A.Ş.",
+    "licences": [
+     "6493 sayılı Kanun kapsamında ödeme hizmetleri ve elektronik para faaliyeti"
+    ],
+    "activities": [
+     "ödeme hizmetleri, elektronik para, dijital cüzdan"
+    ],
+    "customer_types": [
+     "bireysel müşteriler, KOBİ'ler, üye işyerleri"
+    ]
+   },
+   "regulation_basis": {
+    "scope_quotes": [
+     "e) (Değişik: 29/2/2016-2016/8566 K.) Ödeme kuruluşları ile elektronik para kuruluşları."
+    ],
+    "subject_gate": null,
+    "basis": [
+     {
+      "condition": "Yükümlüler ; a) Sürekli iş ilişkisi tesisinde tutar gözetmeksizin, b) İşlem tutarı ya da birbiriyle bağlantılı birden fazla işlemin toplam tutarı yüzseksenbeşbin TL (kripto varlık hizmet sağlayıcılar…",
+      "company_fact": "Türkiye",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "Ödeme kuruluşları ile elektronik para kuruluşları",
+      "company_fact": "ödeme hizmetleri, elektronik para, dijital cüzdan",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "Ödeme kuruluşları ile elektronik para kuruluşları",
+      "company_fact": "6493 sayılı Kanun kapsamında ödeme hizmetleri ve elektronik para faaliyeti",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "Kripto varlık hizmet sağlayıcılar",
+      "company_fact": "dijital cüzdan, para transferi, sanal kart, üye işyeri ödemeleri",
+      "match": "YES",
+      "exclusionary": null
+     }
+    ]
+   },
+   "child_clause": {
+    "provision": "Yönetmelik 200713012 md. 5",
+    "clause": "(2)",
+    "excerpt": "(2) Kimlik tespiti, iş ilişkisi tesisinden veya işlem yapılmadan önce tamamlanır.",
+    "subject": "Kimlik tespiti"
+   },
+   "rule_decision": {
+    "rule_decision": "NO_RESTRICTION",
+    "applicability_rule": "MODEL",
+    "decided_by": null,
+    "entity_gate": "NOT_RESTRICTED",
+    "required_entities": [],
+    "gates": {},
+    "review_flags": []
+   },
+   "model_decision": {
+    "state": "APPLIES",
+    "provision_state": "APPLIES",
+    "mode": null
+   },
+   "taxonomy": "OTHER",
+   "rationale": "The expected passage was retrieved at rank 4 and judged NO_EVIDENCE without being cited.",
+   "also": [],
+   "expected": {
+    "coverage": "CONFLICT",
+    "conflict": true
+   },
+   "actual": {
+    "coverage": "NO_EVIDENCE",
+    "conflict": false
+   },
+   "evidence": {
+    "expected_evidence": [
+     "bütün tutarlar için uygulanabilir"
+    ],
+    "expected_passages": 1,
+    "expected_rank": 4,
+    "cited_expected": false,
+    "cited": [],
+    "judged": [
+     {
+      "source_id": "ac22c10fb26bf2028c8c5965d79440ca2eb7936b945966304bf4846488dcf8da",
+      "relation": "UNRELATED"
+     },
+     {
+      "source_id": "02bbc5784c3a41f53b5d8b45c5676f6f438af5d42e58432086fb5b4e2f56dc36",
+      "relation": "UNRELATED"
+     },
+     {
+      "source_id": "4868d911ffffd779ede127303f076e9f76ec94d89306a9f3f52f8eaaf644bc77",
+      "relation": "UNRELATED"
+     },
+     {
+      "source_id": "fde349b8704d73e54ce9788800fba5ee39a658ccb46440fcf45a6d9a3c6c5e2f",
+      "relation": "UNRELATED"
+     },
+     {
+      "source_id": "5b957823ea1f3c85bb5fa6a64d8cb5e210e27d3c21096859f3ae847c2013e03b",
+      "relation": "UNRELATED"
+     }
+    ],
+    "reason": "None of the 5 policy passages read addresses this duty; that is not proof of a gap."
+   }
+  },
+  {
+   "case_id": "C14",
+   "where": "C14 md.26(2)",
+   "obligation_id": "2ba1eb278d2f197d4ec4a054335195a699c83d0699ac452fe38159e8a9a9ea3b",
+   "obligation_key": "YONETMELIK:200713012/md.26/2/61c486a057f6",
+   "expectation": {
+    "article": "26",
+    "clause": "(2)",
+    "action_keywords": [
+     "uygulayamazlar"
+    ],
+    "entity_gate": "ANY",
+    "required": true,
+    "notes": "Riskli durumlarda basitleştirilmiş tedbir yasağı. Yükümlü kuruluşun genel ödevi."
+   },
+   "company_profile": {
+    "id": "demopay-tr",
+    "name": "DemoPay Teknoloji A.Ş.",
+    "licences": [
+     "6493 sayılı Kanun kapsamında ödeme hizmetleri ve elektronik para faaliyeti"
+    ],
+    "activities": [
+     "ödeme hizmetleri, elektronik para, dijital cüzdan"
+    ],
+    "customer_types": [
+     "bireysel müşteriler, KOBİ'ler, üye işyerleri"
+    ]
+   },
+   "regulation_basis": {
+    "scope_quotes": [
+     "(Değişik: 29/2/2016-2016/8566 K.) Ödeme kuruluşları ile elektronik para kuruluşları."
+    ],
+    "subject_gate": null,
+    "basis": [
+     {
+      "condition": "Kanunun uygulanmasında yükümlü, aşağıda sayılanlar ile bunların şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleridir: a) Bankalar. b) Bankalar dışında banka kartı veya kredi kart…",
+      "company_fact": "Türkiye",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "Ödeme kuruluşları ile elektronik para kuruluşları",
+      "company_fact": "ödeme hizmetleri, elektronik para, dijital cüzdan",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "Ödeme kuruluşları ile elektronik para kuruluşları",
+      "company_fact": "6493 sayılı Kanun kapsamında ödeme hizmetleri ve elektronik para faaliyeti",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "Ödeme kuruluşları ile elektronik para kuruluşları",
+      "company_fact": "dijital cüzdan, para transferi, sanal kart, üye işyeri ödemeleri",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "Müşterinin 5018 sayılı Kanuna göre genel yönetim kapsamında olan kamu idaresi veya kamu kurumu niteliğindeki meslek kuruluşu olduğu işlemlerde",
+      "company_fact": "bireysel müşteriler, KOBİ'ler, üye işyerleri",
+      "match": "UNCLEAR",
+      "exclusionary": null
+     }
+    ]
+   },
+   "child_clause": {
+    "provision": "Yönetmelik 200713012 md. 26",
+    "clause": "(2)",
+    "excerpt": "(2) Yükümlüler işlem nedeniyle aklama veya terörün finansmanı riskinin oluşabileceği durumlarda, basitleştirilmiş tedbirleri uygulayamazlar ve işlemin 27 nci maddeye göre şüpheli işlem olabileceğini göz önünde bulundururlar.",
+    "subject": "Yükümlüler"
+   },
+   "rule_decision": {
+    "rule_decision": "NO_RESTRICTION",
+    "applicability_rule": "MODEL",
+    "decided_by": null,
+    "entity_gate": "NOT_RESTRICTED",
+    "required_entities": [],
+    "gates": {},
+    "review_flags": []
+   },
+   "model_decision": {
+    "state": "APPLIES",
+    "provision_state": "APPLIES",
+    "mode": null
+   },
+   "taxonomy": "MODEL_HALLUCINATION",
+   "rationale": "The judge claimed a conflict the label does not have.",
+   "also": [
+    "OTHER"
+   ],
+   "expected": {
+    "coverage": "COVERS_TEXT",
+    "conflict": false
+   },
+   "actual": {
+    "coverage": "CONFLICT",
+    "conflict": true
+   },
+   "evidence": {
+    "expected_evidence": [
+     "basitleştirilmiş tedbir uygulanmaz"
+    ],
+    "expected_passages": 1,
+    "expected_rank": 1,
+    "cited_expected": false,
+    "cited": [
+     {
+      "source_id": "fde349b8704d73e54ce9788800fba5ee39a658ccb46440fcf45a6d9a3c6c5e2f",
+      "quote": "Müşteri deneyimini hızlandırmak için, tek seferlik ve tutarı 15.000 TL'nin altında kalan havale işlemlerinde kimlik tespiti ve teyit adımı atlanır; müşteri yalnızca telefon numarasını doğrular."
+     }
+    ],
+    "judged": [
+     {
+      "source_id": "4868d911ffffd779ede127303f076e9f76ec94d89306a9f3f52f8eaaf644bc77",
+      "relation": "UNRELATED"
+     },
+     {
+      "source_id": "5b957823ea1f3c85bb5fa6a64d8cb5e210e27d3c21096859f3ae847c2013e03b",
+      "relation": "UNRELATED"
+     },
+     {
+      "source_id": "02bbc5784c3a41f53b5d8b45c5676f6f438af5d42e58432086fb5b4e2f56dc36",
+      "relation": "UNRELATED"
+     },
+     {
+      "source_id": "fde349b8704d73e54ce9788800fba5ee39a658ccb46440fcf45a6d9a3c6c5e2f",
+      "relation": "CONFLICTS"
+     },
+     {
+      "source_id": "ac22c10fb26bf2028c8c5965d79440ca2eb7936b945966304bf4846488dcf8da",
+      "relation": "UNRELATED"
+     }
+    ],
+    "reason": "1 policy passage(s), each judged on its own and confirmed on a second reading, conflict with this duty. 0 supporting passage(s) do not resolve that."
+   }
+  },
+  {
+   "case_id": "C15",
+   "where": "C15 md.5(2)",
+   "obligation_id": "7249ba0da413852e2c45f33ffc4e73ad9327341fa5de43c02d4a1ca6c472d9fa",
+   "obligation_key": "YONETMELIK:200713012/md.5/2/3be5e5d03796",
+   "expectation": {
+    "article": "5",
+    "clause": "(2)",
+    "action_keywords": [
+     "işlem yapılmadan önce tamamlanır"
+    ],
+    "entity_gate": "ANY",
+    "required": true,
+    "notes": "Kimlik tespiti işlemden önce tamamlanır. Yükümlü kuruluşun genel ödevi."
+   },
+   "company_profile": {
+    "id": "demopay-tr",
+    "name": "DemoPay Teknoloji A.Ş.",
+    "licences": [
+     "6493 sayılı Kanun kapsamında ödeme hizmetleri ve elektronik para faaliyeti"
+    ],
+    "activities": [
+     "ödeme hizmetleri, elektronik para, dijital cüzdan"
+    ],
+    "customer_types": [
+     "bireysel müşteriler, KOBİ'ler, üye işyerleri"
+    ]
+   },
+   "regulation_basis": {
+    "scope_quotes": [
+     "e) (Değişik: 29/2/2016-2016/8566 K.) Ödeme kuruluşları ile elektronik para kuruluşları."
+    ],
+    "subject_gate": null,
+    "basis": [
+     {
+      "condition": "Yükümlüler ; a) Sürekli iş ilişkisi tesisinde tutar gözetmeksizin, b) İşlem tutarı ya da birbiriyle bağlantılı birden fazla işlemin toplam tutarı yüzseksenbeşbin TL (kripto varlık hizmet sağlayıcılar…",
+      "company_fact": "Türkiye",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "Ödeme kuruluşları ile elektronik para kuruluşları",
+      "company_fact": "ödeme hizmetleri, elektronik para, dijital cüzdan",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "Ödeme kuruluşları ile elektronik para kuruluşları",
+      "company_fact": "6493 sayılı Kanun kapsamında ödeme hizmetleri ve elektronik para faaliyeti",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "Kripto varlık hizmet sağlayıcılar",
+      "company_fact": "dijital cüzdan, para transferi, sanal kart, üye işyeri ödemeleri",
+      "match": "YES",
+      "exclusionary": null
+     }
+    ]
+   },
+   "child_clause": {
+    "provision": "Yönetmelik 200713012 md. 5",
+    "clause": "(2)",
+    "excerpt": "(2) Kimlik tespiti, iş ilişkisi tesisinden veya işlem yapılmadan önce tamamlanır.",
+    "subject": "Kimlik tespiti"
+   },
+   "rule_decision": {
+    "rule_decision": "NO_RESTRICTION",
+    "applicability_rule": "MODEL",
+    "decided_by": null,
+    "entity_gate": "NOT_RESTRICTED",
+    "required_entities": [],
+    "gates": {},
+    "review_flags": []
+   },
+   "model_decision": {
+    "state": "APPLIES",
+    "provision_state": "APPLIES",
+    "mode": null
+   },
+   "taxonomy": "MODEL_HALLUCINATION",
+   "rationale": "The judge claimed PARTIAL where the label expects NO_EVIDENCE.",
+   "also": [],
+   "expected": {
+    "coverage": "NO_EVIDENCE",
+    "conflict": false
+   },
+   "actual": {
+    "coverage": "PARTIAL",
+    "conflict": false
+   },
+   "evidence": {
+    "expected_evidence": [],
+    "expected_passages": null,
+    "expected_rank": null,
+    "cited_expected": null,
+    "cited": [
+     {
+      "source_id": "422bb97dd590562a8b3098f54591042ca461ae9c8e8a5aa9667af7c507609197",
+      "quote": "Ziyaretçiler resepsiyonda kayıt altına alınır"
+     }
+    ],
+    "judged": [
+     {
+      "source_id": "4f6f21ce456117fc8d29ae86106ef4562502aeb960065ac2c0756b53f4b1849f",
+      "relation": "UNRELATED"
+     },
+     {
+      "source_id": "9bd38e6e71ef910e8b6f3ecb6150e419029ce502c673f6e924bee8f63c294ce5",
+      "relation": "UNRELATED"
+     },
+     {
+      "source_id": "422bb97dd590562a8b3098f54591042ca461ae9c8e8a5aa9667af7c507609197",
+      "relation": "PARTIAL"
+     },
+     {
+      "source_id": "4f2b1c94d605b24e200f0fee7f6933fee8af6dbb6030bb6aa26bceffad15da03",
+      "relation": "UNRELATED"
+     }
+    ],
+    "reason": "1 policy passage(s) cover part of this duty; none covers all of it."
+   }
+  },
+  {
+   "case_id": "C23",
+   "where": "C23 md.20(2)",
+   "obligation_id": "fa1da274f5e2cc178584652aca6e64e2f177ed7518730c7243411473293872a2",
+   "obligation_key": "YONETMELIK:200713012/md.20/2/b91539b422d7",
+   "expectation": {
+    "article": "20",
+    "clause": "(2)",
+    "action_keywords": [
+     "tedbirleri almak"
+    ],
+    "entity_gate": "ANY",
+    "required": true,
+    "notes": "Yüz yüze olmayan işlemlerde tedbir. Yükümlü kuruluşun genel ödevi."
+   },
+   "company_profile": {
+    "id": "demopay-tr",
+    "name": "DemoPay Teknoloji A.Ş.",
+    "licences": [
+     "6493 sayılı Kanun kapsamında ödeme hizmetleri ve elektronik para faaliyeti"
+    ],
+    "activities": [
+     "ödeme hizmetleri, elektronik para, dijital cüzdan"
+    ],
+    "customer_types": [
+     "bireysel müşteriler, KOBİ'ler, üye işyerleri"
+    ]
+   },
+   "regulation_basis": {
+    "scope_quotes": [
+     "(1) Kanunun uygulanmasında yükümlü, aşağıda sayılanlar ile bunların şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleridir:"
+    ],
+    "subject_gate": null,
+    "basis": [
+     {
+      "condition": "finansal olmayan belirli iş ve meslekler",
+      "company_fact": "Türkiye",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "yeni ve gelişen teknolojilerin kullanımının, yeni dağıtım kanalları dâhil olmak üzere mevcut ve yeni ürün ile yeni iş uygulamalarının getirdiği imkânların aklama ve terörün finansmanı amacıyla kullan…",
+      "company_fact": "ödeme hizmetleri, elektronik para, dijital cüzdan",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "Ödeme kuruluşları ile elektronik para kuruluşları",
+      "company_fact": "6493 sayılı Kanun kapsamında ödeme hizmetleri ve elektronik para faaliyeti",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "mevcut ve yeni ürün ile yeni iş uygulamalarının getirdiği imkânların aklama ve terörün finansmanı amacıyla kullanıl ması riskine karşı özel dikkat göstermek",
+      "company_fact": "dijital cüzdan, para transferi, sanal kart, üye işyeri ödemeleri",
+      "match": "YES",
+      "exclusionary": null
+     }
+    ]
+   },
+   "child_clause": {
+    "provision": "Yönetmelik 200713012 md. 20",
+    "clause": "(2)",
+    "excerpt": "(2) Finansal kuruluşlar ile finansal olmayan belirli iş ve meslekler yüz yüze olmayan işlemler yapılmasını mümkün kılan yöntem veya sistemleri kullanarak gerçekleştirilen sürekli iş ilişkisi tesisi, hesaba para yatırma, hesaptan para çekme ve elektronik transfer gibi işlemlere özel dikkat göstermek…",
+    "subject": "Finansal kuruluşlar"
+   },
+   "rule_decision": {
+    "rule_decision": "NO_OBJECTION",
+    "applicability_rule": "MODEL",
+    "decided_by": null,
+    "entity_gate": "MATCH",
+    "required_entities": [
+     "obliged_party FINANCIAL_GENERIC (\"finansal kuruluş\", subject): MATCH"
+    ],
+    "gates": {},
+    "review_flags": []
+   },
+   "model_decision": {
+    "state": "APPLIES",
+    "provision_state": "APPLIES",
+    "mode": null
+   },
+   "taxonomy": "OTHER",
+   "rationale": "The expected passage was retrieved at rank 1 and judged PARTIAL.",
+   "also": [],
+   "expected": {
+    "coverage": "COVERS_TEXT",
+    "conflict": false
+   },
+   "actual": {
+    "coverage": "PARTIAL",
+    "conflict": false
+   },
+   "evidence": {
+    "expected_evidence": [
+     "Yüz yüze olmayan işlemlerde"
+    ],
+    "expected_passages": 1,
+    "expected_rank": 1,
+    "cited_expected": true,
+    "cited": [
+     {
+      "source_id": "f62835193feb2e4c2094e4ef7d081c2c496e070d51154a55ac69f4c3f3284f23",
+      "quote": "Şirket, yeni ve gelişen teknolojilerin kullanımının, yeni dağıtım kanalları dâhil olmak üzere mevcut ve yeni ürün ile yeni iş uygulamalarının getirdiği imkânların aklama ve terörün finansmanı amacıyl…"
+     },
+     {
+      "source_id": "7234ad8479a3b5e8dc28afe119b4c88ed31aa486a4f7e8604e863ef1134d0996",
+      "quote": "Yükümlü sıfatıyla Şirket, sürekli iş ilişkisi tesisinde tutar gözetmeksizin ve mevzuatta belirtilen tutarı aşan işlemlerde kimlik tespiti yapmak zorundadır."
+     },
+     {
+      "source_id": "75218d4807104a829feb767e3d32ddf5fd99ec8cbf47983d3d3404305170aa97",
+      "quote": "işlemin şüpheli olup olmadığını değerlendirir"
+     },
+     {
+      "source_id": "7aed68a57c455ba10da444a7f0016d6e16faf142a312df6c8867f9bcd6669e92",
+      "quote": "Şüpheli işlemler, işleme ilişkin şüphenin oluştuğu tarihten itibaren en geç on iş günü içinde MASAK Başkanlığına bildirilir. Bildirim, şüpheyi doğuran bilgi ve belgelerle birlikte dosyalanır."
+     }
+    ],
+    "judged": [
+     {
+      "source_id": "f62835193feb2e4c2094e4ef7d081c2c496e070d51154a55ac69f4c3f3284f23",
+      "relation": "PARTIAL"
+     },
+     {
+      "source_id": "7234ad8479a3b5e8dc28afe119b4c88ed31aa486a4f7e8604e863ef1134d0996",
+      "relation": "PARTIAL"
+     },
+     {
+      "source_id": "75218d4807104a829feb767e3d32ddf5fd99ec8cbf47983d3d3404305170aa97",
+      "relation": "PARTIAL"
+     },
+     {
+      "source_id": "7aed68a57c455ba10da444a7f0016d6e16faf142a312df6c8867f9bcd6669e92",
+      "relation": "PARTIAL"
+     },
+     {
+      "source_id": "cfe0c2031237195069cff9094395570a3e8ea23da57a195c6924ba7436fc316c",
+      "relation": "UNRELATED"
+     },
+     {
+      "source_id": "c0fc37c4f737d6842847f9deb535f67150968a35eebc89a6fbc2df61b73f4f86",
+      "relation": "UNRELATED"
+     },
+     {
+      "source_id": "9fa124d7ff3dc98054b620ca2d0a1ffe15dd98519abca51f6bc58776c71f6bcb",
+      "relation": "UNRELATED"
+     },
+     {
+      "source_id": "5b8647000f3e2ef877a0d0bfca21a06853404135f38fb0820b5515722133054a",
+      "relation": "UNRELATED"
+     }
+    ],
+    "reason": "4 policy passage(s) cover part of this duty; none covers all of it."
+   }
+  },
+  {
+   "case_id": "C30",
+   "where": "C30 md.5(2)",
+   "obligation_id": "7249ba0da413852e2c45f33ffc4e73ad9327341fa5de43c02d4a1ca6c472d9fa",
+   "obligation_key": "YONETMELIK:200713012/md.5/2/3be5e5d03796",
+   "expectation": {
+    "article": "5",
+    "clause": "(2)",
+    "action_keywords": [
+     "işlem yapılmadan önce tamamlanır"
+    ],
+    "entity_gate": "ANY",
+    "required": true,
+    "notes": "Kimlik tespiti işlemden önce tamamlanır. Yükümlü kuruluşun genel ödevi."
+   },
+   "company_profile": {
+    "id": "ornek-bank-tr",
+    "name": "Örnek Bank A.Ş.",
+    "licences": [
+     "5411 sayılı Bankacılık Kanunu kapsamında mevduat bankası faaliyet izni"
+    ],
+    "activities": [
+     "bankacılık, mevduat kabulü, kredi, ödeme hizmetleri"
+    ],
+    "customer_types": [
+     "tüm müşteri türleri: bireysel, ticari, kamu, dernek ve vakıflar"
+    ]
+   },
+   "regulation_basis": {
+    "scope_quotes": [
+     "(1) Kanunun uygulanmasında yükümlü, aşağıda sayılanlar ile bunların şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleridir: a) Bankalar."
+    ],
+    "subject_gate": null,
+    "basis": [
+     {
+      "condition": "(1) Kanunun uygulanmasında yükümlü, aşağıda sayılanlar ile bunların şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleridir: a) Bankalar.",
+      "company_fact": "Türkiye",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "(1) Kanunun uygulanmasında yükümlü, aşağıda sayılanlar ile bunların şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleridir: a) Bankalar.",
+      "company_fact": "bankacılık, mevduat kabulü, kredi, ödeme hizmetleri",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "(1) Kanunun uygulanmasında yükümlü, aşağıda sayılanlar ile bunların şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleridir: a) Bankalar.",
+      "company_fact": "5411 sayılı Bankacılık Kanunu kapsamında mevduat bankası faaliyet izni",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "(1) Kanunun uygulanmasında yükümlü, aşağıda sayılanlar ile bunların şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleridir: a) Bankalar.",
+      "company_fact": "mevduat, kredi, kredi kartı, havale ve EFT",
+      "match": "YES",
+      "exclusionary": null
+     },
+     {
+      "condition": "(1) Kanunun uygulanmasında yükümlü, aşağıda sayılanlar ile bunların şube, acente, temsilci ve ticari vekilleri ile benzeri bağlı birimleridir: a) Bankalar.",
+      "company_fact": "tüm müşteri türleri: bireysel, ticari, kamu, dernek ve vakıflar",
+      "match": "YES",
+      "exclusionary": null
+     }
+    ]
+   },
+   "child_clause": {
+    "provision": "Yönetmelik 200713012 md. 5",
+    "clause": "(2)",
+    "excerpt": "(2) Kimlik tespiti, iş ilişkisi tesisinden veya işlem yapılmadan önce tamamlanır.",
+    "subject": "Kimlik tespiti"
+   },
+   "rule_decision": {
+    "rule_decision": "NO_RESTRICTION",
+    "applicability_rule": "MODEL",
+    "decided_by": null,
+    "entity_gate": "NOT_RESTRICTED",
+    "required_entities": [],
+    "gates": {},
+    "review_flags": []
+   },
+   "model_decision": {
+    "state": "APPLIES",
+    "provision_state": "APPLIES",
+    "mode": null
+   },
+   "taxonomy": "OTHER",
+   "rationale": "The expected passage was retrieved at rank 1 and judged NO_EVIDENCE.",
+   "also": [],
+   "expected": {
+    "coverage": "CONFLICT",
+    "conflict": true
+   },
+   "actual": {
+    "coverage": "NO_EVIDENCE",
+    "conflict": false
+   },
+   "evidence": {
+    "expected_evidence": [
+     "bütün tutarlar için uygulanabilir",
+     "işlem yapılmadan önce müşterinin kimliği"
+    ],
+    "expected_passages": 2,
+    "expected_rank": 1,
+    "cited_expected": true,
+    "cited": [
+     {
+      "source_id": "445fdf9dbb27de8b6378e757f17264a65a1ef148027339f6c65e190f0c9de1bb",
+      "quote": "işlem yapılmadan önce müşterinin kimliği kimlik belgesi ile tespit edilir ve teyit edilir; tamamlanmadan işlem gerçekleştirilmez."
+     }
+    ],
+    "judged": [
+     {
+      "source_id": "445fdf9dbb27de8b6378e757f17264a65a1ef148027339f6c65e190f0c9de1bb",
+      "relation": "SUPPORTS"
+     },
+     {
+      "source_id": "ac22c10fb26bf2028c8c5965d79440ca2eb7936b945966304bf4846488dcf8da",
+      "relation": "UNRELATED"
+     },
+     {
+      "source_id": "1c0e1f52ced6e23df7daf8dee8ea9186f7dc4bde978a937cbc93235b4817bc92",
+      "relation": "UNRELATED"
+     },
+     {
+      "source_id": "02bbc5784c3a41f53b5d8b45c5676f6f438af5d42e58432086fb5b4e2f56dc36",
+      "relation": "UNRELATED"
+     },
+     {
+      "source_id": "86aab09b6b37ef68110f6b1509dfed32a075cecee5757a6f406eb572994d2874",
+      "relation": "UNRELATED"
+     },
+     {
+      "source_id": "4868d911ffffd779ede127303f076e9f76ec94d89306a9f3f52f8eaaf644bc77",
+      "relation": "UNRELATED"
+     },
+     {
+      "source_id": "5b957823ea1f3c85bb5fa6a64d8cb5e210e27d3c21096859f3ae847c2013e03b",
+      "relation": "UNRELATED"
+     },
+     {
+      "source_id": "fde349b8704d73e54ce9788800fba5ee39a658ccb46440fcf45a6d9a3c6c5e2f",
+      "relation": "UNRELATED"
+     }
+    ],
+    "reason": "No written policy passage states this duty; 1 control register row(s) show operational evidence, which is not written policy coverage."
+   }
+  }
+ ],
+ "case_errors": [],
+ "unexpected_candidates": 1
+}
