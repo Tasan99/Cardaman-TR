@@ -41,7 +41,7 @@ from .profile import EnterpriseProfile, PolicyScope, policy_covers, product_alco
 DATA = Path(__file__).resolve().parent / 'data'
 REGISTERS = DATA / 'pilot_policies'
 OWNERSHIP = DATA / 'ownership.json'
-COMPARE_RULES_VERSION = 'tr-compare-rules-v2'
+COMPARE_RULES_VERSION = 'tr-compare-rules-v3'
 Relation = Literal['SUPPORTS', 'PARTIAL', 'CONFLICTS', 'UNRELATED', 'UNCLEAR']
 STATEMENT = re.compile(r'^\s*(\d{1,3})\.\s+(?=\S)')
 SALE_FAMILY = frozenset(SALES)
@@ -461,6 +461,25 @@ def deadlines(text: str) -> dict[str, float]:
     return out
 
 
+LIMIT_VERB = re.compile(r'(?:geçemez|aşamaz|geçmez|aşmaz|düşürülmez|düşemez|çıkamaz|çıkarılamaz|olamaz)\s*\.?\s*$')
+
+
+def limit_statement(policy: Frame) -> bool:
+    """A prohibition that only caps or floors a quantity ("... 4,8’i geçemez", "2 g/L’nin altına düşürülmez")."""
+    return policy.modality == 'MUST_NOT' and any(q.role == 'LIMIT' for q in policy.quantities) and bool(LIMIT_VERB.search(fold(blank_notes(policy.text))))
+
+
+def _same_property(duty_q, policy_q, policy: Frame) -> bool:
+    """The same attribute; or, for a property the text names ("kinin miktarı ... 85 mg/L"), the same property word before
+    the statement's number ("çözünmüş karbondioksit 2 g/L’nin altına düşürülmez" names none with "miktarı")."""
+    if duty_q.attribute == policy_q.attribute:
+        return True
+    if duty_q.attribute and duty_q.attribute.startswith('property:') and policy_q.attribute is None:
+        before = fold(policy.text)[max(0, policy_q.start - policy.start - 70):policy_q.start - policy.start]
+        return duty_q.attribute[len('property:'):] in before
+    return False
+
+
 def _minutes(match) -> int:
     return int(match.group(1)) * 60 + int(match.group(2))
 
@@ -530,10 +549,15 @@ def _relate_frame(duty: ExtractedObligation, policy: Frame, vocabulary, similari
     missing = []
     direction = lambda q: 'MAX' if q.comparator in ('le', 'lt') else 'MIN' if q.comparator in ('ge', 'gt') else 'EXACT'
     limits = [q for q in frame.quantities if q.role == 'LIMIT']
+    # a limit whose property neither the lexicon nor the text names, against a statement with a limit of the same unit:
+    # nobody can say whether they are about the same thing, so nothing is decided
+    unresolved = [q for q in limits if q.attribute is None and any(p.unit == q.unit and p.role == 'LIMIT' for p in policy.quantities)]
+    if unresolved and (shared or overlap >= 0.5):
+        return 'UNCLEAR', ['LIMIT_ATTRIBUTE_UNRESOLVED'], detail
     for quantity in (q for q in limits if q.attribute):
         # Only a limit in the same direction answers a limit: "1,0 mg/L’den fazla olan ürünlerde" selects products, it
         # does not cap them.
-        stated = [p for p in policy.quantities if p.attribute == quantity.attribute and p.unit == quantity.unit
+        stated = [p for p in policy.quantities if _same_property(quantity, p, policy) and p.unit == quantity.unit
                   and p.role == 'LIMIT' and direction(p) == direction(quantity)]
         if not stated:
             missing.append(f'LIMIT_MISSING:{quantity.attribute}')
@@ -544,7 +568,7 @@ def _relate_frame(duty: ExtractedObligation, policy: Frame, vocabulary, similari
         if relation == 'WEAKER':
             return 'CONFLICTS', ['LIMIT_WEAKER'], detail
     negative_duty = frame.modality == 'MUST_NOT'
-    positive_policy = policy.modality in ('MUST', 'MAY')
+    positive_policy = policy.modality in ('MUST', 'MAY') or (not negative_duty and limit_statement(policy))
     duty_places, policy_places = {m.id for m in frame.places}, {m.id for m in policy.places}
     duty_minor = any(m.id == 'MINOR' for m in frame.counterparties)
     policy_minor = any(m.id == 'MINOR' for m in policy.counterparties)
@@ -581,7 +605,12 @@ def _relate_frame(duty: ExtractedObligation, policy: Frame, vocabulary, similari
             return 'CONFLICTS', ['POLICY_PERMITS_PROHIBITED_ACT'], detail
         return 'UNRELATED', ['OTHER_CIRCUMSTANCE'], detail
     if not negative_duty and policy.modality == 'MUST_NOT':
-        return ('CONFLICTS', ['POLICY_NEGATES_DUTY'], detail) if overlap >= 0.6 else ('UNRELATED', ['OTHER_SUBJECT'], detail)
+        # "pH değeri 4,8’i geçemez", "100 mg/L’yi geçemez": a limit written as a prohibition is a limit, not the negation
+        # of a duty that sets one (found on the validation set: a false CONTRADICTED and a right one for the wrong reason)
+        if not limit_statement(policy):
+            return ('CONFLICTS', ['POLICY_NEGATES_DUTY'], detail) if overlap >= 0.6 else ('UNRELATED', ['OTHER_SUBJECT'], detail)
+        if any(q.attribute is None for q in limits):
+            return 'UNCLEAR', ['LIMIT_ATTRIBUTE_UNRESOLVED'], detail
     # -- a later deadline is a weaker rule: read on a statement the wording relates, or one a recorded similarity does -----
     common = len(wanted & offered)
     due, given = deadlines(frame.text), deadlines(policy.text)
@@ -665,7 +694,7 @@ def _relate_frame(duty: ExtractedObligation, policy: Frame, vocabulary, similari
     if missing or reasons:
         return 'PARTIAL', reasons + missing, detail
     basis = 'ACT_AND_POLARITY_MATCH' if worded else 'OUTRIGHT_BAN_OF_THE_ACT' if outright \
-        else 'PARTICULAR_STATED' if particular is not None else 'ACT_AND_PARTY_MATCH'
+        else 'PARTICULAR_STATED' if particular is not None else 'ACT_AND_PARTY_MATCH' if same_party else 'LIMIT_STATED'
     return 'SUPPORTS', [basis] + (['LIMIT_SAME_OR_STRICTER'] if detail.get('quantities') else []), detail
 
 
@@ -737,7 +766,8 @@ def combine_coverage(rule: str, reasons: list[str], model: str | None, adjudicat
         return rule, 'MODEL_PROPOSES_COVERED' if adjudicated else 'MODEL_PARAPHRASE_UNCONFIRMED', True
     if model == 'PARTIAL':
         if adjudicated and rule == 'NO_EVIDENCE':
-            return 'PARTIAL', 'SEMANTIC_ADJUDICATED', False
+            # measured right on the labelled sets; at corpus scale (146 brewer rows) not verified, so a proposal until it is
+            return rule, 'MODEL_PROPOSES_PARTIAL', True
         return rule, 'BOTH_READINGS' if rule == 'PARTIAL' else 'MODEL_PARTIAL_UNCONFIRMED', rule != 'PARTIAL'
     if rule == 'UNKNOWN' or model == 'UNKNOWN':
         return rule, 'RULE_ONLY', True
@@ -851,7 +881,7 @@ def compare_obligation(obligation: ExtractedObligation, decision, profile: Enter
     rule_coverage, basis, contested = coverage, 'RULE_ONLY', False
     if second is not None:
         coverage, basis, contested = combine_coverage(rule_coverage, coverage_reasons, second.get('coverage'), bool(second.get('adjudicated')))
-        if basis in ('MODEL_PARAPHRASE_UNCONFIRMED', 'MODEL_PROPOSES_COVERED', 'SEMANTIC_ADJUDICATED', 'MODEL_CONFLICT_UNCONFIRMED'):
+        if basis in ('MODEL_PARAPHRASE_UNCONFIRMED', 'MODEL_PROPOSES_COVERED', 'MODEL_PROPOSES_PARTIAL', 'SEMANTIC_ADJUDICATED', 'MODEL_CONFLICT_UNCONFIRMED'):
             known = {r.passage_id for r in related}
             related += [r for r in _model_readings(second, register, in_force) if r.passage_id not in known]
             kept = set(coverage_reasons) - ({'NO_RELATED_STATEMENT'} if coverage != rule_coverage or basis == 'MODEL_CONFLICT_UNCONFIRMED' else set())

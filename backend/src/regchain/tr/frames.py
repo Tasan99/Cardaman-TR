@@ -241,6 +241,12 @@ NON_DUTY_HEADINGS = (('tanım', 'DEFINITION'), ('amaç', 'SCOPE'), ('kapsam', 'S
 NUMBER = r'(\d+(?:[.,]\d+)?)'
 UNITS = (('mg/l', 'mg/L'), ('g/l', 'g/L'), ('mg/kg', 'mg/kg'), ('ml', 'ml'), ('mm', 'mm'), ('metre', 'm'), ('litre', 'L'))
 QUANTITY = re.compile(r'(?:%%\s*%s)|(?:%s\s*(mg/l|g/l|mg/kg|ml(?![%s])|mm(?![%s])|metre|litre))' % (NUMBER, NUMBER, LETTERS, LETTERS))
+# "pH değeri >3,8 - ≤ 4,8", "pH 4,8’i geçemez": a unitless property, read with its own name as the unit.
+PH = re.compile(r'(?<![%s])ph(?:\s+değeri)?\s*(?:>|≥|<|≤|=)?\s*%s(?:\s*[-–]\s*(?:>|≥|<|≤)?\s*%s)?' % (LETTERS, NUMBER, NUMBER))
+# A property named before its number ("kinin miktarı ... 85 mg/L", "karbondioksit miktarı en az 2 g/L") is the attribute of
+# that limit where the lexicon names none; two texts share it when they share the property word.
+PROPERTY_BEFORE = re.compile(r'([%s]{3,})\s+(?:miktarı|oranı|değeri|derecesi|içeriği)' % LETTERS)
+GENERIC_LIMIT_WORDS = frozenset({'alkol', 'bileşen', 'madde', 'ürün', 'gıda', 'toplam', 'net'})
 WORD_NUMBERS = {'yüz': 100.0, 'iki yüz': 200.0, 'beş yüz': 500.0, 'bin': 1000.0, 'elli': 50.0}
 WORD_QUANTITY = re.compile(r'(?<![%s])(yüz|iki yüz|beş yüz|bin|elli)\s+(metre)' % LETTERS)
 ATTRIBUTES = (('kafein', 'caffeine_mg_per_l', 'mg/L'), ('taurin', 'taurine_mg_per_l', 'mg/L'), ('inositol', 'inositol_mg_per_l', 'mg/L'),
@@ -425,9 +431,11 @@ def _quantities(folded: str, text: str, base: int) -> list[Quantity]:
     for start, end, value, unit in sorted(matches):
         before, after = folded[max(0, start - 60):start], folded[end:end + 40]
         if re.match(r'\s*[’\']?\s*(?:den|dan|ten|tan)\s+fazla\s+(?:ola(?:maz|mayacak)|kullanıla(?:maz)|içere(?:mez))', after) \
-                or re.search(r'en (?:fazla|çok)(?:\s+[%s]+){0,2}\s*$' % LETTERS, before) or re.match(r'\s*(?:[’\']?\s*(?:i|ı|u|ü|yi|yı)\s+)?(?:aşamaz|geçemez)', after):
+                or re.search(r'en (?:fazla|çok)(?:\s+[%s]+){0,2}\s*$' % LETTERS, before) or re.match(r'\s*(?:[’\']?\s*(?:i|ı|u|ü|yi|yı|yu|yü)\s+)?(?:aşamaz|geçemez|geçmez|aşmaz)', after) \
+                or re.match(r'\s*[’\']?\s*(?:nin|nın|nun|nün|in|ın|un|ün)\s+(?:üzerine|üstüne)\s+çık', after):
             comparator = 'le'
-        elif re.search(r'en az(?:\s+[%s]+){0,2}\s*$' % LETTERS, before) or re.match(r'\s*[’\']?\s*(?:den|dan|ten|tan)\s+az\s+ola(?:maz)', after):
+        elif re.search(r'en az(?:\s+[%s]+){0,2}\s*$' % LETTERS, before) or re.match(r'\s*[’\']?\s*(?:den|dan|ten|tan)\s+az\s+ola(?:maz)', after) \
+                or re.match(r'\s*[’\']?\s*(?:nin|nın|nun|nün|in|ın|un|ün)\s+altın(?:a|da)\s+(?:düş|ol|in)', after):
             comparator = 'ge'
         elif re.match(r'\s*[’\']?\s*(?:den|dan|ten|tan)\s+fazla', after):
             comparator = 'gt'
@@ -443,14 +451,37 @@ def _quantities(folded: str, text: str, base: int) -> list[Quantity]:
         attribute = None
         window = folded[max(0, start - 70):start] + ' ' + folded[end:end + 30]
         near = folded[max(0, start - 28):start]
+        named = [m for m in PROPERTY_BEFORE.finditer(folded[max(0, start - 70):start]) if m.group(1) not in GENERIC_LIMIT_WORDS]
         for word, name, wanted in ATTRIBUTES:
             if wanted == unit and (word in near or (attribute is None and word in window)):
+                # "etil alkol miktarı en çok 3,0 g/L, laktik asit miktarı en çok 0,6 g/L": the lexicon word of the first
+                # limit is in the window of the second; a property named nearer to the number is the second's
+                if named and word not in near and folded[max(0, start - 70):start].rfind(word) < named[-1].start():
+                    continue
                 attribute = name
                 if word in near:
                     break
+        if attribute is None and named:
+            attribute = f'property:{named[-1].group(1)[:6]}'
         role = 'CONDITION' if comparator in ('gt', 'lt') or (unit == '%' and re.match(r'\s*ve\s+daha\s+fazla', after)) else 'LIMIT'
         out.append(Quantity(attribute=attribute, value=value, unit=unit, comparator=comparator, text=text[start:end],
                             start=base + start, end=base + end, role=role))
+    for match in PH.finditer(folded):
+        low, high = match.group(1), match.group(2)
+        span = folded[match.start():match.end()]
+        after = folded[match.end():match.end() + 30]
+        if high:                                   # a range: the lower bound and the upper bound
+            out.append(Quantity(attribute='ph', value=float(low.replace(',', '.')), unit='pH', comparator='ge' if '>' in span.split(low)[0] + '≥' else 'ge',
+                                text=text[match.start():match.end()], start=base + match.start(), end=base + match.end(), role='LIMIT'))
+            out.append(Quantity(attribute='ph', value=float(high.replace(',', '.')), unit='pH', comparator='le',
+                                text=text[match.start():match.end()], start=base + match.start(), end=base + match.end(), role='LIMIT'))
+            continue
+        head = span[:span.rfind(low)]
+        comparator = 'le' if ('≤' in head or '<' in head or re.match(r'\s*[’\']?\s*(?:i|ı|u|ü|yi|yı|yu|yü)?\s*(?:geçemez|aşamaz|geçmez|aşmaz)', after)) \
+            else 'ge' if ('≥' in head or '>' in head or re.search(r'en az\s*$', folded[:match.start()]) or re.match(r'\s*[’\']?\s*(?:nin|nın|in|ın)\s+altın', after)) else 'eq'
+        if comparator != 'eq':
+            out.append(Quantity(attribute='ph', value=float(low.replace(',', '.')), unit='pH', comparator=comparator,
+                                text=text[match.start():match.end()], start=base + match.start(), end=base + match.end(), role='LIMIT'))
     return out
 
 

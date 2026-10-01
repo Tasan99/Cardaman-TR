@@ -37,11 +37,13 @@ LEAD = re.compile(r'^\s*(?:\(\d{1,2}\)|[a-zçğıöşü]{1,2}\))\s*')
 # 0.68 loses one of the 11, 0.62 adds two of the 33. The held-out cases were scored once with them.
 LEXICAL_FLOOR = 0.30
 SEMANTIC_FLOOR = 0.66
-# A lower semantic floor with a lexical anchor: at least two distinctive stems of the duty in the statement. Chosen on
-# DEV and HOLDOUT together (1 October 2026): of the gold statements the rules could not relate it reaches 7/7 and 8/9
-# (the floors above alone: 7/7 and 6/9) and admits 23 of 612 and 14 of 550 other pairs more.
+# A lower semantic floor with a lexical anchor: distinctive stems of the duty in the statement. Measured on DEV and
+# HOLDOUT together and on the whole corpus (1 October 2026): with two stems the gold statements the rules could not
+# relate are reached 7/7 and 8/9, but 19 % / 31 % of the corpus rows of two pilots are escalated; with three stems
+# 7/7 and 7/9, and 9.7 % / 17.0 % of the rows (no anchor: 6/9, 6.4 % / 10.1 %). Three: the missed statement and the
+# review load were weighed together, not the speed alone.
 ANCHOR_FLOOR = 0.55
-ANCHOR_STEMS = 2
+ANCHOR_STEMS = 3
 TOP_K = 3
 
 

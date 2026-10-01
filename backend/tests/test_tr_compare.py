@@ -433,7 +433,7 @@ class SecondReadingTests(unittest.TestCase):
                          ('PARTIAL', 'MODEL_PROPOSES_COVERED', True))
         # a PARTIAL it reads where the rules found nothing is taken: the gap stays open either way
         self.assertEqual(combine_coverage('NO_EVIDENCE', ['NO_RELATED_STATEMENT'], 'PARTIAL', adjudicated=True),
-                         ('PARTIAL', 'SEMANTIC_ADJUDICATED', False))
+                         ('NO_EVIDENCE', 'MODEL_PROPOSES_PARTIAL', True))
         # ... and never what the rules decided
         self.assertEqual(combine_coverage('PARTIAL', ['PLACE_MISSING:HEALTH_FACILITY'], 'COVERS_TEXT', adjudicated=True),
                          ('PARTIAL', 'RULE_ELEMENT_CHECK', False))
@@ -469,9 +469,9 @@ class SecondReadingTests(unittest.TestCase):
         self.assertEqual([(r.passage_id, r.reasons) for r in joined.readings if r.relation == 'SUPPORTS'], [('SOP-SALES-02#4', ['MODEL_READING'])])
         self.assertEqual(joined.mapping.status, 'NOT_COVERED')
         partial = row(*args, second={'coverage': 'PARTIAL', 'quotes': {'PARTIAL': [quote]}, 'adjudicated': True})
-        self.assertEqual((partial.document_coverage, partial.coverage_basis, partial.mapping.document_ids),
-                         ('PARTIAL', 'SEMANTIC_ADJUDICATED', ['SOP-SALES-02']))
-        self.assertNotIn('NO_RELATED_STATEMENT', partial.coverage_reasons)
+        # a PARTIAL only the model reads is a proposal too, with the statement on the row (146 brewer rows at corpus scale, unverified)
+        self.assertEqual((partial.document_coverage, partial.coverage_basis, partial.review_required), ('NO_EVIDENCE', 'MODEL_PROPOSES_PARTIAL', True))
+        self.assertEqual([r.passage_id for r in partial.readings if r.relation == 'PARTIAL'], ['SOP-SALES-02#4'])
 
     def test_a_profile_report_joins_each_row_with_the_reading_made_for_its_own_entity(self):
         selected = extract_regulation('TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM', REGISTRY, STORE, articles=['6'])[1]

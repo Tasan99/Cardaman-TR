@@ -48,3 +48,6 @@ evaluation/runs/
 id_rsa*
 *.pem
 !backend/src/regchain/ingestion/certs/*.pem
+
+# Self-test outputs (scripts/Test-TR.ps1)
+evaluation/selftest/

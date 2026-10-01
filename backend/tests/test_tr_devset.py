@@ -155,20 +155,29 @@ class RecordedPipelineTests(unittest.TestCase):
                         self.assertEqual(case['final'], case['rule'], case['case_id'])
                 m = result['metrics']
                 self.assertEqual(m['auto_false_covered'], 0)
-                self.assertEqual(m['adjudicated'], m['escalated'])                  # every escalated case has its record
+                # the run was recorded with two anchor stems; with three, fewer statements are candidates and an escalated
+                # case whose statements changed has no record and goes to a person (ADJUDICATION_UNRESOLVED), never through
+                self.assertLessEqual(m['adjudicated'], m['escalated'])
+                for case in result['cases']:
+                    if case['escalated'] and not case['adjudicated']:
+                        self.assertTrue(case['review'], case['case_id'])
                 self.assertEqual(m['calls_failed'], 0)
 
     def test_the_measured_numbers_are_pinned(self):
         m = {split: r['metrics'] for split, r in self.results.items()}
         self.assertEqual((m['DEV']['n'], m['HOLDOUT']['n'], m['VALIDATION']['n']), (45, 28, 42))
-        self.assertEqual((m['DEV']['rules_only_correct'], m['HOLDOUT']['rules_only_correct'], m['VALIDATION']['rules_only_correct']), (36, 19, 19))
-        self.assertGreaterEqual(m['DEV']['auto_correct'], 34)
+        # rules only: comparer v3 (limits written as prohibitions, properties named in the text, pH) on the unseen set 19 -> 22
+        self.assertEqual((m['DEV']['rules_only_correct'], m['HOLDOUT']['rules_only_correct'], m['VALIDATION']['rules_only_correct']), (36, 19, 22))
+        # automatic decisions: a PARTIAL only the model reads is a proposal now, so fewer are automatic and more go to a person
+        self.assertGreaterEqual(m['DEV']['auto_correct'], 30)
         self.assertGreaterEqual(m['HOLDOUT']['auto_correct'], 19)
-        self.assertGreaterEqual(m['VALIDATION']['auto_correct'], 25)
-        self.assertLessEqual(m['VALIDATION']['auto_wrong'], 6)
-        # the unseen set keeps the known limits visible: one contradiction the rules invent, one they miss
-        self.assertEqual((m['VALIDATION']['auto_false_contradicted'], m['VALIDATION']['auto_missed_contradictions']), (1, 1))
-        self.assertLessEqual(m['VALIDATION']['review_rate'], 0.30)
+        self.assertGreaterEqual(m['VALIDATION']['auto_correct'], 21)
+        self.assertLessEqual(m['VALIDATION']['auto_wrong'], 5)
+        for split in m:
+            self.assertEqual((m[split]['auto_false_covered'], m[split]['auto_false_contradicted']), (0, 0), split)
+        # the unseen set keeps a known limit visible: one contradiction the rules miss (a document not in force for the target)
+        self.assertEqual(m['VALIDATION']['auto_missed_contradictions'], 1)
+        self.assertLessEqual(m['VALIDATION']['review_rate'], 0.45)
 
 
 class ModelReadingScoreTests(unittest.TestCase):

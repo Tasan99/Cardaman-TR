@@ -111,3 +111,12 @@ backend/tests (1640 tests): 242 bilinen hata; identities and reasons identical t
 - YANLIŞ COVH-25: beklenen NOT_COVERED, kural NOT_COVERED, karar PARTIALLY_COVERED, öneri PARTIALLY_COVERED; SEMANTIC_ADJUDICATED; —
 - YANLIŞ COVH-26: beklenen COVERED, kural NOT_COVERED, karar PARTIALLY_COVERED, öneri PARTIALLY_COVERED; SEMANTIC_ADJUDICATED; —
 
+
+## 8. Devam (1 Ekim gece): sayısal motor, model-only PARTIAL, eskalasyon eşiği, çok motorlu katman
+
+- **Sayısal motor (tr-compare-rules-v3):** yasak biçiminde yazılmış limit ("pH 4,8'i geçemez", "100 mg/L'yi geçemez") artık olumsuzlama değil limit; metinde adı geçen nitelik ("kinin miktarı", "karbondioksit") limitin niteliği; pH kendi birimi; niteliği çözülemeyen limit kesin karar vermez (UNCLEAR → inceleme); art arda limitlerde ("etil alkol 3,0 g/L, laktik asit 0,6 g/L") sözlük niteliği sonraki sayıya yapışmıyor. Yalnız kurallar, VALIDATION: 19 → **22/42**; yanlış CONTRADICTED 1 → **0**; DEV 36, HOLDOUT 19 değişmedi. Korpus hüküm anlık görüntüsü değişmedi.
+- **Model-only PARTIAL:** artık öneri + REVIEW_REQUIRED (MODEL_PROPOSES_PARTIAL); karar kuralın sözünde kalıyor, kanıt satırda.
+- **Eskalasyon eşiği:** kaçırılan altın ifade ve inceleme yükü birlikte ölçüldü (korpus tablosu, model yok): 2 kök → bira %19,1 / alkolsüz %31,4 satır (HOLDOUT altın 8/9); **3 kök → %9,7 / %17,0 (7/9)**; çapasız → %6,4 / %10,1 (6/9). Üç kök seçildi.
+- **Kayıtlı koşunun (2 kök, run 8) bugünkü kodla tekrar oynatılması:** DEV otomatik 30 doğru / 2 yanlış, inceleme 13; HOLDOUT 19 / 2, inceleme 7; VALIDATION 21 / 5, inceleme 16; yanlış COVERED / CONTRADICTED her sette 0 / 0. Üç kökle aday kümesi değiştiği için bazı eskale vakaların kaydı yok; bunlar incelemeye gider (ADJUDICATION_UNRESOLVED), asla geçmez. Taze bir model koşusu `scripts/Test-TR.ps1 -WithModel` ile alınır.
+- **Çok motorlu katman (`tr/engines.py`):** profilin düştüğü her sektör paketi için bir SectorEngine (paketin taşıdığı mevzuat, çıkarım, yönlendirme, değerlendirme), ortak ExpertServices (korpus, sözlük, kayıtlı benzerlikler, hakem, doğrulama). Mevcut fonksiyonlar değişmedi; CLI: `python -m regchain.tr assess --profile ...`.
+- **Doğrulama seti bir kez ölçüldü** kuralı bu geliştirmelerle bozuldu (hataları okunarak düzeltildi); sonraki doğruluk iddiası için yeni, bağımsız uzman etiketli örnekler gerekir.

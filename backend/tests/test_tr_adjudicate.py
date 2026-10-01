@@ -270,13 +270,13 @@ class DecisionTests(unittest.TestCase):
         # the statement the model quoted is on the row for the person who confirms
         self.assertIn(('SOP-SALES-02#4', 'SUPPORTS', ['MODEL_READING']), [(r.passage_id, r.relation, r.reasons) for r in row.readings])
 
-    def test_a_part_the_model_reads_fills_what_the_rules_left_empty(self):
+    def test_a_part_only_the_model_reads_is_a_proposal_too(self):
         item, decision = duty(SALES_BYLAW, LICENCE, BREWER, 'ALC-INT-SALES')
         provider = Scripted({'judgements': [judgement(1, 'STATES_PART', 'tüketicilerin görebileceği bir yere asılır', missing=['okunabilecek'])]})
         row, assessment = assess_obligation(item, decision, BREWER, BREWER_REGISTER, REGISTRY, adjudicator=Adjudicator(provider), store=STORE)
         self.assertEqual((assessment.coverage, assessment.basis, assessment.decision, assessment.review_reasons, assessment.proposal),
-                         ('PARTIAL', 'SEMANTIC_ADJUDICATED', 'AUTO', [], None))
-        self.assertEqual((row.document_coverage, row.mapping.document_ids, row.review_required), ('PARTIAL', ['SOP-SALES-02'], False))
+                         ('NO_EVIDENCE', 'MODEL_PROPOSES_PARTIAL', 'REVIEW_REQUIRED', ['MODEL_PROPOSES_PARTIAL'], 'PARTIAL'))
+        self.assertEqual((row.document_coverage, row.mapping.status, row.review_required), ('NO_EVIDENCE', 'NOT_COVERED', True))
 
     def test_a_call_that_fails_leaves_the_row_open_and_is_counted(self):
         item, decision = duty(SALES_BYLAW, LICENCE, BREWER, 'ALC-INT-SALES')

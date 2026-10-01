@@ -147,6 +147,25 @@ def _domain(args, store: CorpusStore) -> int:
         _print({'profile_id': report.profile_id, 'register_synthetic': report.register_synthetic, 'summary': report.summary,
                 **({'selective': statistics} if statistics else {}), 'rows': rows})
         return 0
+    if args.command == 'assess':
+        # every sector engine the profile falls under, over the shared expert services; a recorded run replays without a model
+        from .engines import ExpertServices, assess_by_engine
+        profile = _profile(registry, args.profile)
+        services = ExpertServices.recorded(args.similarities, [Path(p) for p in args.adjudications], registry, store)
+        result = assess_by_engine(profile, services)
+        rows = {pack: [{'ref': r.provision_ref, 'target': r.target_id, 'status': r.mapping.status, 'document_coverage': r.document_coverage,
+                        'coverage_basis': r.coverage_basis, 'review_required': r.review_required, 'decision': a.decision,
+                        'review_reasons': a.review_reasons, 'proposal': a.proposal, 'applicability_basis': a.applicability_basis}
+                       for r, a in zip(report.rows, result['assessments'][pack]) if args.all or r.mapping.status != 'COVERED' or a.decision != 'AUTO']
+                for pack, report in result['reports'].items()}
+        payload = {'profile_id': profile.profile_id, 'version': result['version'],
+                   'engines': [e.model_dump(mode='json') for e in result['engines']], 'rows': rows}
+        if args.out:
+            Path(args.out).write_text(json.dumps(payload, ensure_ascii=False, indent=1), encoding='utf-8')
+            _print({k: v for k, v in payload.items() if k != 'rows'})
+        else:
+            _print(payload)
+        return 0
     if args.command == 'changes':
         from datetime import date
         from .change import impact, note_changes
@@ -235,6 +254,12 @@ def main(argv=None):
     gaps.add_argument('--embed', action='store_true', help='selective: compute the similarities with the local embedder (needs the model runtime)')
     gaps.add_argument('--adjudicate', action='store_true', help='selective: ask the strong local model about the escalated rows')
     gaps.add_argument('--quick', action='store_true', help='selective: the strong model without thinking')
+    assess = commands.add_parser('assess', help='every sector engine the profile falls under, over the shared expert services (engines.py)')
+    assess.add_argument('--profile', required=True)
+    assess.add_argument('--similarities', help='a recorded similarity table to replay (semantic.SimilarityTable)')
+    assess.add_argument('--adjudications', action='append', default=[], help='a recorded adjudication file to replay; repeat to name several')
+    assess.add_argument('--all', action='store_true', help='also list the covered, automatic rows')
+    assess.add_argument('--out', help='write the full result (rows included) to this file and print the engine summaries')
     changes = commands.add_parser('changes', help='clauses amended since a date, their duties and whom they reach')
     changes.add_argument('--regulation', required=True)
     changes.add_argument('--since', required=True, help='ISO date; amendment notes dated on or after it are read')
@@ -252,7 +277,7 @@ def main(argv=None):
     ai_parser.add_argument('--similarities', help='evaluate: a recorded similarity table; scores the selective pipeline')
     ai_parser.add_argument('--adjudications', action='append', default=[], help='evaluate: a recorded adjudication file; repeat to name several')
     ai_parser.add_argument('--wrong', action='store_true', help='evaluate: list every wrong result with its layer')
-    for sub_parser in (corpus, obligations, gaps, changes, ai_parser):
+    for sub_parser in (corpus, obligations, gaps, assess, changes, ai_parser):
         sub_parser.add_argument('--root', default=str(CORPUS), help='corpus directory (default: the packaged corpus)')
     for sub_parser in (obligations, gaps, ai_parser):
         sub_parser.add_argument('--article', action='append', default=[], help='article number; repeat to name several')

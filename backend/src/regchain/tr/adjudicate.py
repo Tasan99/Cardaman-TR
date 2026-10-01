@@ -42,7 +42,7 @@ from .packs import Registry
 from .semantic import Candidate, SimilarityTable, antecedent, candidates, duty_text, frame_text, lead_in, opposes
 
 ADJUDICATION_FORMAT = 'cardaman-tr-adjudications/1'
-ADJUDICATION_RULES_VERSION = 'tr-adjudication-v2'
+ADJUDICATION_RULES_VERSION = 'tr-adjudication-v3'
 REASONS = ('SEMANTIC_PARAPHRASE', 'POSSIBLE_CONFLICT', 'UNKNOWN_COVERAGE', 'READER_DISAGREEMENT')
 CLAUSE_REASONS = ('NESTED_EXCEPTION', 'MULTIPLE_ACTORS', 'CROSS_REFERENCE', 'UNCLEAR_ADDRESSEE', 'READER_DISAGREEMENT')
 RELATIONS = ('STATES_DUTY', 'STATES_PART', 'CONTRADICTS', 'UNRELATED')
@@ -380,8 +380,8 @@ def assess_obligation(obligation: ExtractedObligation, decision, profile, regist
     # nobody has to decide it); a model that contests a rule decision, proposes a coverage or a conflict alone, or was
     # asked and gave no usable answer, is not.
     open_points = []
-    if row.coverage_basis in ('MODEL_PROPOSES_COVERED', 'MODEL_CONFLICT_UNCONFIRMED', 'MODEL_SEES_GAP', 'MODEL_PARAPHRASE_UNCONFIRMED',
-                              'MODEL_PARTIAL_UNCONFIRMED'):
+    if row.coverage_basis in ('MODEL_PROPOSES_COVERED', 'MODEL_PROPOSES_PARTIAL', 'MODEL_CONFLICT_UNCONFIRMED', 'MODEL_SEES_GAP',
+                              'MODEL_PARAPHRASE_UNCONFIRMED', 'MODEL_PARTIAL_UNCONFIRMED'):
         open_points.append(row.coverage_basis)
     if score >= 2 and 'MODEL_CONFLICT_UNCONFIRMED' not in open_points:
         open_points.append('READER_DISAGREEMENT')
