@@ -23,6 +23,7 @@ and marks the row for review. The registers under data/pilot_policies are synthe
 """
 import json
 import re
+from functools import lru_cache
 from hashlib import sha256
 from pathlib import Path
 from typing import Literal
@@ -204,7 +205,14 @@ def ownership() -> dict:
 def passage_frames(passage: Passage) -> list[Frame]:
     """The statement read as the regulation is read: one frame per sentence, and per part of a sentence a semicolon
     separates ("... satılamaz ve sunulamaz; yaş konusunda tereddüt halinde kimlik belgesi istenir" is two statements,
-    and the polarity of the second is not the polarity of the first)."""
+    and the polarity of the second is not the polarity of the first). Read once per statement: a register of a few
+    hundred statements is compared with thousands of duties."""
+    return list(_passage_frames(passage.passage_id, passage.document_id, passage.text))
+
+
+@lru_cache(maxsize=4096)
+def _passage_frames(passage_id: str, document_id: str, text: str) -> tuple:
+    passage = Passage(passage_id=passage_id, document_id=document_id, number=0, text=text, start=0, end=len(text))
     frames, offset = [], 0
     for part in passage.text.split(';'):
         start = offset + (len(part) - len(part.lstrip()))
@@ -224,7 +232,7 @@ def passage_frames(passage: Passage) -> list[Frame]:
                 if modality == 'MUST':
                     frame = frame.model_copy(update={'modality': 'MUST', 'marker': f'{marker} (statement)'})
             frames.append(frame)
-    return frames
+    return tuple(frames)
 
 
 # -- element reading ---------------------------------------------------------------------------------

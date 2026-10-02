@@ -27,9 +27,10 @@ Selection = Literal['SELECTED', 'NOT_SELECTED', 'UNKNOWN']
 
 GATE_OF = {'entity_classes': 'ENTITY_CLASS', 'activity_classes': 'ACTIVITY_CLASS', 'facility_classes': 'FACILITY_CLASS',
            'license_classes': 'LICENSE_CLASS', 'product_classes': 'PRODUCT_CLASS',
-           'product_attributes': 'PRODUCT_ATTRIBUTE', 'alcohol_scope': 'ALCOHOL_SCOPE'}
+           'product_attributes': 'PRODUCT_ATTRIBUTE', 'alcohol_scope': 'ALCOHOL_SCOPE', 'sales_channels': 'SALES_CHANNEL'}
 CODE_OF = {'entity_classes': 'ENTITY', 'activity_classes': 'ACTIVITY', 'facility_classes': 'FACILITY',
-           'license_classes': 'LICENSE', 'product_classes': 'PRODUCT', 'product_attributes': 'PRODUCT_ATTRIBUTE'}
+           'license_classes': 'LICENSE', 'product_classes': 'PRODUCT', 'product_attributes': 'PRODUCT_ATTRIBUTE',
+           'sales_channels': 'SALES_CHANNEL'}
 GATE_STATUS = {'YES': 'MATCH', 'NO': 'MISMATCH', 'UNKNOWN': 'UNDETERMINED'}
 PRODUCT_DIMENSIONS = ('product_classes', 'product_attributes')
 
@@ -133,6 +134,7 @@ def _entity_facts(entity):
     licences_open = any(l.status == 'UNKNOWN' for l in entity.licenses)
     return {'entity_classes': (set(entity.entity_classes), entity.profile_complete),
             'activity_classes': (set(entity.activity_classes), entity.profile_complete),
+            'sales_channels': (set(entity.sales_channels), entity.profile_complete),
             'license_classes': ({l.license_class for l in entity.licenses if l.status == 'HELD'},
                                 entity.profile_complete and not licences_open)}
 
@@ -155,6 +157,8 @@ def _targets(profile: EnterpriseProfile, level: str) -> list[_Target]:
         for a in profile.activities:
             facts = _entity_facts(profile.entity(a.entity_id))
             facts['activity_classes'] = ({a.activity_class}, True)
+            if a.channels:
+                facts['sales_channels'] = (set(a.channels), True)
             out.append(_Target(level, a.activity_id, a.entity_id, facts, a.product_ids, bool(a.product_ids)))
         return out
     return [_Target(level, p.product_id, None, {}, [p.product_id], True) for p in profile.products]
@@ -255,7 +259,7 @@ def _decide(scope: ObligationScope, target: _Target, profile: EnterpriseProfile,
     for dimension, required in scope.constraints().items():
         if dimension in PRODUCT_DIMENSIONS:
             continue
-        values, complete = target.facts[dimension]
+        values, complete = target.facts.get(dimension, (set(), False))
         fact = _fact(values, complete, required)
         code = CODE_OF[dimension]
         gates.append(gate(GATE_OF[dimension], GATE_STATUS[fact], f'{dimension} {fact}', clear=fact != 'UNKNOWN',

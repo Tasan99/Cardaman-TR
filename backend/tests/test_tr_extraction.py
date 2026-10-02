@@ -282,5 +282,65 @@ class PredicateTests(unittest.TestCase):
         ObligationScope.model_validate(base | {'origin': 'EXTRACTED', 'quote': 'x'})
 
 
+class ChannelAndPackagingTests(unittest.TestCase):
+    """A duty written for a sales channel binds the entities that sell through it; a product duty written for a packaging
+    reaches the products in that packaging (sales_channels / product_attributes of the scope, 2 October 2026)."""
+
+    def test_a_duty_about_small_bottles_in_grocers_names_its_channels(self):
+        from regchain.tr.extraction import extract_regulation
+        frames, obligations = extract_regulation('TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM', REGISTRY, STORE, articles=['22'])
+        small = next(o for o in obligations if o.provision_ref == 'Yönetmelik 14646 md. 22/f.4/c.1')
+        self.assertEqual(small.scope.sales_channels, ['TRADITIONAL_RETAIL', 'MODERN_RETAIL'])
+        self.assertIn('SALES_CHANNEL_NAMED', small.flags)
+        # "toptan satış belgesi", "Kurumun internet sitesinde": a channel word in a licence's name or a web address is no channel
+        for obligation in obligations:
+            if obligation.provision_ref in ('Yönetmelik 14646 md. 22/f.1/c.1', 'Yönetmelik 14646 md. 22/f.2/c.1'):
+                self.assertEqual(obligation.scope.sales_channels, [], obligation.provision_ref)
+
+    def test_a_channel_duty_binds_the_entities_that_sell_through_it(self):
+        from regchain.tr.extraction import extract_regulation, route
+        profile = PROFILES['ALCOHOL_GROUP_EFES_TYPE']
+        obligations = extract_regulation('TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM', REGISTRY, STORE, articles=['22'])[1]
+        small = next(o for o in obligations if o.provision_ref == 'Yönetmelik 14646 md. 22/f.4/c.1')
+        decisions = {d.target_id: d for d in route(small, profile, REGISTRY, STORE)[0]}
+        selling = [e for e in profile.legal_entities if set(e.sales_channels) & {'TRADITIONAL_RETAIL', 'MODERN_RETAIL'}]
+        self.assertTrue(selling)
+        for entity in selling:                                  # PARTIAL where the product list is only partly in scope
+            self.assertIn(decisions[entity.entity_id].status, ('APPLIES', 'PARTIAL'), entity.entity_id)
+            self.assertIn('SALES_CHANNEL_MATCH', decisions[entity.entity_id].reason_codes)
+            self.assertIn('SALES_CHANNEL', [g['gate'] for g in decisions[entity.entity_id].gates])
+        silent = [e for e in profile.legal_entities if not e.sales_channels and e.profile_complete and e.entity_id in decisions]
+        for entity in silent:
+            self.assertEqual(decisions[entity.entity_id].status, 'DOES_NOT_APPLY', entity.entity_id)
+            self.assertIn('SALES_CHANNEL_MISMATCH', decisions[entity.entity_id].reason_codes)
+        # channels not stated: not NO
+        open_profile = profile.model_copy(update={'legal_entities': [e.model_copy(update={'sales_channels': [], 'profile_complete': False})
+                                                                      for e in profile.legal_entities]})
+        wanted = {e.entity_id for e in selling}
+        for decision in route(small, open_profile, REGISTRY, STORE)[0]:
+            if decision.target_id in wanted:
+                self.assertEqual(decision.status, 'UNKNOWN', decision.target_id)
+                self.assertIn(('SALES_CHANNEL', 'UNDETERMINED'), [(g['gate'], g['status']) for g in decision.gates])
+
+    def test_a_product_duty_about_glass_packaging_reaches_the_products_in_glass(self):
+        from regchain.tr.extraction import extract_regulation, route
+        obligations = extract_regulation('TR:YONETMELIK:INSANI_TUKETIM_SULAR', REGISTRY, STORE, articles=['34'])[1]
+        glass = next(o for o in obligations if o.provision_ref == 'Yönetmelik 7510 md. 34/f.4/b.c')
+        self.assertEqual((glass.scope.level, glass.scope.product_attributes), ('PRODUCT', ['GLASS_PACKAGING']))
+        profile = PROFILES['NON_ALCOHOL_GROUP_COCA_COLA_TYPE']
+        water = next(p for p in profile.products if p.product_class == 'PACKAGED_WATER')
+        in_glass = water.model_copy(update={'tags': [*water.tags, 'GLASS_PACKAGING'], 'tags_complete': True})
+        in_pet = water.model_copy(update={'tags': [t for t in water.tags if t != 'GLASS_PACKAGING'] + ['PET_PACKAGING'], 'tags_complete': True})
+        unknown = water.model_copy(update={'tags': [], 'tags_complete': False})
+        for product, expected in ((in_glass, 'APPLIES'), (in_pet, 'DOES_NOT_APPLY'), (unknown, 'UNKNOWN')):
+            trial = profile.model_copy(update={'products': [product if p.product_id == water.product_id else p for p in profile.products]})
+            decision = next(d for d in route(glass, trial, REGISTRY, STORE)[0] if d.target_id == water.product_id)
+            self.assertEqual(decision.status, expected, expected)
+        # a duty of the party that names a packaging is not narrowed by it
+        waste = extract_regulation('TR:YONETMELIK:AMBALAJ_ATIKLARI', REGISTRY, STORE, articles=['9'])[1]
+        deposit = next(o for o in waste if o.provision_ref == 'Yönetmelik 38745 md. 9/f.1/b.ç')
+        self.assertEqual((deposit.scope.level, deposit.scope.product_attributes), ('LEGAL_ENTITY', []))
+
+
 if __name__ == '__main__':
     unittest.main()

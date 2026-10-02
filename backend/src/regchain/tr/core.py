@@ -197,14 +197,14 @@ def version_chain(meta: RegulationMeta) -> list[RegulationVersion]:
 # The dimensions a scope may constrain at each level. A product-level duty (a label rule) cannot
 # depend on the facility or the entity: that would be a facility- or entity-level duty.
 LEVEL_DIMENSIONS = {
-    'LEGAL_ENTITY': ('entity_classes', 'activity_classes', 'license_classes', 'product_classes', 'product_attributes'),
+    'LEGAL_ENTITY': ('entity_classes', 'activity_classes', 'license_classes', 'product_classes', 'product_attributes', 'sales_channels'),
     'FACILITY': ('facility_classes', 'activity_classes', 'entity_classes', 'license_classes', 'product_classes',
-                 'product_attributes'),
-    'ACTIVITY': ('activity_classes', 'entity_classes', 'license_classes', 'product_classes', 'product_attributes'),
+                 'product_attributes', 'sales_channels'),
+    'ACTIVITY': ('activity_classes', 'entity_classes', 'license_classes', 'product_classes', 'product_attributes', 'sales_channels'),
     'PRODUCT': ('product_classes', 'product_attributes'),
 }
 DIMENSIONS = ('entity_classes', 'activity_classes', 'facility_classes', 'license_classes', 'product_classes',
-              'product_attributes')
+              'product_attributes', 'sales_channels')
 
 
 class ObligationScope(Strict):
@@ -229,6 +229,9 @@ class ObligationScope(Strict):
     license_classes: list[str] = []
     product_classes: list[str] = []
     product_attributes: list[str] = []
+    # The sales channels a duty is written for ("bakkal, market, süpermarket ... işyerlerinde", "mesafeli sözleşme"):
+    # an entity that sells through none of them is not bound; one whose channels are not stated answers UNKNOWN.
+    sales_channels: list[str] = []
     # Clause-level narrowing of an EXTRACTED scope (extraction.py); pack metadata leaves them empty.
     #   excluded_product_classes  classes the clause or the regulation's scope article leaves out ("sporcu içeceklerini kapsamaz")
     #   conditions                predicates over a product fact the clause states ("hacmen % 1,2’den fazla alkol içeren"),

@@ -366,11 +366,54 @@ def scopes_of(frame: Frame, regulation: RegulationScope, registry: Registry, ver
             else:
                 out.append(fallback(['ADDRESSEE_UNCLEAR']))
     multiple = len(out) > 1
+    channels, packaging = _channels(frame, registry), _packaging(frame, registry)
     built = []
     for fields, group, basis, scope_flags in out:
+        if channels and fields.get('level') in ('LEGAL_ENTITY', 'ACTIVITY', 'FACILITY') and fields.get('scope_status') != 'UNCLEAR':
+            fields = dict(fields, sales_channels=channels)
+            scope_flags = scope_flags + ['SALES_CHANNEL_NAMED']
+        # a packaging named in a product duty narrows the products ("cam ambalajlarda etiket bilgileri ... baskı"); in a duty of
+        # the party ("depozito yönetim sistemi ... için Ajansa kayıt") it says what the duty is about, not whom it binds
+        if packaging and fields.get('level') == 'PRODUCT' and fields.get('scope_status') != 'UNCLEAR':
+            fields = dict(fields, product_attributes=list(dict.fromkeys([*fields.get('product_attributes', []), *packaging])))
+            scope_flags = scope_flags + ['PACKAGING_NAMED']
         scope = ObligationScope(scope_id=_scope_id(frame, group, multiple), **fields)
         built.append((scope, group, basis, list(dict.fromkeys(scope_flags))))
     return built
+
+
+def _lexicon_hits(registry: Registry, key: str, folded: str) -> list[str]:
+    from .frames import lexicon
+    known = getattr(registry.vocabulary, key, {}) or {}
+    out = []
+    for entry in lexicon().data.get(key, []):
+        if entry['id'] in known and re.search(r'(?<![%s])(?:%s)' % (LETTERS, entry['pattern']), folded):
+            out.append(entry['id'])
+    return list(dict.fromkeys(out))
+
+
+def _own_text(frame: Frame) -> str:
+    """The clause without its exceptions, folded: what an exception names is not what the duty is about."""
+    chars = list(frame.text)
+    for rule in frame.exceptions:
+        a, b = rule.start - frame.start, rule.end - frame.start
+        if 0 <= a < b <= len(chars):
+            chars[a:b] = ' ' * (b - a)
+    carried = frame.chapeau if frame.marker.endswith(('(chapeau)', '(closing)')) else ''
+    return fold(carried + ' ' + ''.join(chars))
+
+
+def _channels(frame: Frame, registry: Registry) -> list[str]:
+    """The sales channels a duty about selling names (lexicon: sales_channels). Only a duty that governs a sale, or is
+    about distance selling, is narrowed: a channel word in a licence's name ("toptan satış belgesi") or in a web
+    address ("Kurumun internet sitesinde") is no channel of the duty."""
+    about_sale = any(m.id in SALES for m in governing(frame)) or frame.topic == 'ECOMMERCE'
+    return _lexicon_hits(registry, 'sales_channels', _own_text(frame)) if about_sale else []
+
+
+def _packaging(frame: Frame, registry: Registry) -> list[str]:
+    """The packaging a duty is written for (lexicon: product_tags): deposit-return packaging, glass, PET, a can."""
+    return _lexicon_hits(registry, 'product_tags', _own_text(frame))
 
 
 # The topic of a clause that names none of its own, from what the whole text is about (its printed title).
