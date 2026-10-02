@@ -1,0 +1,86 @@
+{
+ "tr-bev-pilot-alcohol-import": {
+  "packs": {
+   "BEVERAGE_ALCOHOL_TR": {
+    "old": 2102,
+    "mid": 2088,
+    "now": 2100,
+    "unknown_mid": 2427,
+    "unknown_now": 2428,
+    "gone": 4,
+    "added": 2
+   }
+  },
+  "old_status": {
+   "UNKNOWN": 2424,
+   "DOES_NOT_APPLY": 1370,
+   "APPLIES": 2092,
+   "PARTIAL": 10
+  },
+  "mid_status": {
+   "UNKNOWN": 2427,
+   "DOES_NOT_APPLY": 1384,
+   "APPLIES": 2078,
+   "PARTIAL": 10
+  }
+ },
+ "tr-bev-pilot-alcohol-integrated": {
+  "packs": {
+   "BEVERAGE_ALCOHOL_TR": {
+    "old": 3218,
+    "mid": 3172,
+    "now": 3209,
+    "unknown_mid": 3953,
+    "unknown_now": 3959,
+    "gone": 11,
+    "added": 2
+   },
+   "BEVERAGE_NON_ALCOHOL_TR": {
+    "old": 2462,
+    "mid": 2414,
+    "now": 2451,
+    "unknown_mid": 3366,
+    "unknown_now": 3372,
+    "gone": 11,
+    "added": 0
+   }
+  },
+  "old_status": {
+   "UNKNOWN": 7319,
+   "DOES_NOT_APPLY": 10612,
+   "PARTIAL": 510,
+   "APPLIES": 5170
+  },
+  "mid_status": {
+   "UNKNOWN": 7319,
+   "DOES_NOT_APPLY": 10706,
+   "PARTIAL": 512,
+   "APPLIES": 5074
+  }
+ },
+ "tr-bev-pilot-non-alcohol-bottler": {
+  "packs": {
+   "BEVERAGE_NON_ALCOHOL_TR": {
+    "old": 3409,
+    "mid": 3379,
+    "now": 3396,
+    "unknown_mid": 3091,
+    "unknown_now": 3095,
+    "gone": 14,
+    "added": 1
+   }
+  },
+  "old_status": {
+   "PARTIAL": 327,
+   "DOES_NOT_APPLY": 4465,
+   "UNKNOWN": 3088,
+   "APPLIES": 3082
+  },
+  "mid_status": {
+   "PARTIAL": 328,
+   "DOES_NOT_APPLY": 4487,
+   "UNKNOWN": 3091,
+   "APPLIES": 3051
+  }
+ }
+}
