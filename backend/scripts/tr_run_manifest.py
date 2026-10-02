@@ -44,6 +44,11 @@ files = [rec / 'similarities.json', *sorted(rec.glob('adjudicate-*.jsonl')), rec
          *sorted((data / 'packs').glob('*.json'))]
 registry, store = Registry.load(), CorpusStore()
 table = SimilarityTable.load(rec / 'similarities.json')
+try:                                                   # every label of the code, and whether its files match its record
+    from regchain.tr import rule_versions
+    rule_status = {f: {'label': s['label'], 'matches_record': s['matches']} for f, s in rule_versions.status().items()}
+except ImportError:                                    # a commit before data/rule_versions.json
+    rule_status = None
 manifest = {
     'label': sys.argv[2] if len(sys.argv) > 2 else '', 'recorded_at': time.strftime('%Y-%m-%d %H:%M:%S %z'),
     'code': {'commit': git('rev-parse', 'HEAD'), 'short': git('rev-parse', '--short', 'HEAD'), 'dirty': bool(git('status', '--porcelain', '--', '.')),
@@ -57,6 +62,7 @@ manifest = {
                       'compare': compare.COMPARE_RULES_VERSION, 'candidates': semantic.CANDIDATE_RULES_VERSION,
                       'adjudication': adjudicate.ADJUDICATION_RULES_VERSION, 'engines': engines.ENGINES_VERSION,
                       'qdms': getattr(qdms, 'QDMS_RULES_VERSION', None)},
+    'rule_version_record': rule_status,
     'inputs': {str(p.relative_to(src)): sha(p) for p in files if p.is_file()},
     'source_versions': {rid: {'version_id': v.version_id, 'parsed_hash': v.parsed_hash} if (v := store.head(rid)) else None
                         for rid in sorted(registry.regulations)},

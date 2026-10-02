@@ -197,8 +197,22 @@ def split_clauses(section: dict) -> list[Clause]:
                                       fikra=block['number'], sentence=position, start=lead[0] + a, end=lead[0] + b,
                                       text=text[lead[0] + a:lead[0] + b], numbered=numbered,
                                       reading=blank_notes(text[lead[0] + a:lead[0] + b])))
+        # A closing line that holds more than one sentence ("... seçimlik haklarından birini kullanabilir. Satıcı, ...
+        # yerine getirmekle yükümlüdür."): the list's sentence ends with the first; the next ones are sentences of the
+        # fıkra in their own right, numbered after the list's sentence.
+        closing = block['closing']
+        trailing = []
+        if closing is not None:
+            parts = sentence_spans(text[closing[0]:closing[1]])
+            if len(parts) > 1:
+                trailing = [(closing[0] + a, closing[0] + b) for a, b in parts[1:]]
+                closing = (closing[0] + parts[0][0], closing[0] + parts[0][1])
         for bent in block['bents']:
-            emit(bent['spans'][0][0], bent['spans'][-1][1], block['number'], bent['letter'], chapeau, block['closing'])
+            emit(bent['spans'][0][0], bent['spans'][-1][1], block['number'], bent['letter'], chapeau, closing)
+        for position, (a, b) in enumerate(trailing, len(sentences) + 1):
+            clauses.append(Clause(ref=f'{label}/f.{block["number"]}/c.{position}', label=label, heading=heading,
+                                  fikra=block['number'], sentence=position, start=a, end=b, text=text[a:b], numbered=numbered,
+                                  reading=blank_notes(text[a:b])))
     # Two lists under one fıkra repeat a bent letter; the second keeps its place with a counter, so every reference
     # names one clause.
     seen: dict[str, int] = {}

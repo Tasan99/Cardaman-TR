@@ -33,6 +33,8 @@ CODE_OF = {'entity_classes': 'ENTITY', 'activity_classes': 'ACTIVITY', 'facility
            'sales_channels': 'SALES_CHANNEL'}
 GATE_STATUS = {'YES': 'MATCH', 'NO': 'MISMATCH', 'UNKNOWN': 'UNDETERMINED'}
 PRODUCT_DIMENSIONS = ('product_classes', 'product_attributes')
+# The label of the routing rules (gates, Kleene facts, channel completeness): recorded in data/rule_versions.json.
+ROUTING_RULES_VERSION = 'tr-routing-v1'
 
 
 class PackSelection(Strict):

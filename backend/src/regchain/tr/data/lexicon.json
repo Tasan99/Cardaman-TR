@@ -26,7 +26,7 @@
   "authorities": [
     "bakanlık(?:ça|ca)?", "bakanlığ[a-zçğıöşü]*", "bakan(?:ı)?(?![a-zçğıöşü])", "kurum(?:ca|u|un)?(?![a-zçğıöşü])", "kurul(?:ca|u)?(?![a-zçğıöşü])", "ajans(?:ça|ın|tan|a)?(?![a-zçğıöşü])",
     "il müdürlü[a-zçğıöşü]*", "genel müdürlü[a-zçğıöşü]*", "cumhurbaşkan[a-zçğıöşü]*", "mülki amir[a-zçğıöşü]*", "belediye[a-zçğıöşü]*", "kolluk[a-zçğıöşü]*",
-    "yetkili merci[a-zçğıöşü]*", "yetkili makam[a-zçğıöşü]*", "inhisarlar idaresi[a-zçğıöşü]*", "idare(?:ce|si|nin)(?![a-zçğıöşü])", "reklam kurulu[a-zçğıöşü]*", "valili[kğ][a-zçğıöşü]*", "il özel idaresi[a-zçğıöşü]*", "tütün ve alkol piyasası düzenleme kurumu[a-zçğıöşü]*"
+    "yetkili merci[a-zçğıöşü]*", "yetkili makam[a-zçğıöşü]*", "inhisarlar idaresi[a-zçğıöşü]*", "idare(?:ce|si|nin)(?![a-zçğıöşü])", "reklam kurulu[a-zçğıöşü]*", "valili[kğ][a-zçğıöşü]*", "il özel idare[a-zçğıöşü]*", "tütün ve alkol piyasası düzenleme kurumu[a-zçğıöşü]*"
   ],
   "activities": [
     {"class": "ADVERTISING", "pattern": "reklam[a-zçğıöşü]*"},

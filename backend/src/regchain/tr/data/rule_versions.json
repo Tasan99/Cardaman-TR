@@ -1,0 +1,111 @@
+{
+ "format": "cardaman-tr-rule-versions/1",
+ "labels": {
+  "tr-frames-v1": {
+   "family": "frames",
+   "files": [
+    "frames.py",
+    "clauses.py",
+    "data/lexicon.json"
+   ],
+   "sha256": "2a358388ab9391c13b2a3d4687be4194950543f4cfd7994a9e74b9a3602ef9f1",
+   "recorded_on": "2c3d56a",
+   "recorded_at": "2026-10-02",
+   "note": "reconstructed from commit 2c3d56a: the content this label last named before its rules changed without a new label"
+  },
+  "tr-scope-rules-v1": {
+   "family": "scope",
+   "files": [
+    "extraction.py",
+    "data/lexicon.json"
+   ],
+   "sha256": "5e091d91bccd3b5f1fce18ac26540c5cea098435067f6a5acba18a90f5d64b06",
+   "recorded_on": "2c3d56a",
+   "recorded_at": "2026-10-02",
+   "note": "reconstructed from commit 2c3d56a: the content this label last named before its rules changed without a new label"
+  },
+  "tr-frames-v2": {
+   "family": "frames",
+   "files": [
+    "frames.py",
+    "clauses.py",
+    "data/lexicon.json"
+   ],
+   "sha256": "9d008d4a718814eaeccdd766b892d618fc64d77a2180b7fa6c953d147fc85aeb",
+   "recorded_on": "4dd6a49",
+   "recorded_at": "2026-10-02",
+   "note": "3 Oct 2026: first record of the current labels (frames v2: future tense, commitments, authority-only subjects, consumer subjects, two-sentence list closings; scope v2: sales channels, packaging; qdms v2: applicability reviews, ledger, cross-pack merge)"
+  },
+  "tr-scope-rules-v2": {
+   "family": "scope",
+   "files": [
+    "extraction.py",
+    "data/lexicon.json"
+   ],
+   "sha256": "31d13e5090cc774b114c3909ab6b11c771e5548474e411cae5aec7c972a22630",
+   "recorded_on": "4dd6a49",
+   "recorded_at": "2026-10-02",
+   "note": "3 Oct 2026: first record of the current labels (frames v2: future tense, commitments, authority-only subjects, consumer subjects, two-sentence list closings; scope v2: sales channels, packaging; qdms v2: applicability reviews, ledger, cross-pack merge)"
+  },
+  "tr-routing-v1": {
+   "family": "routing",
+   "files": [
+    "routing.py"
+   ],
+   "sha256": "c36cf51848fff7f022d199fe034d7f37de21affc8d6cbf19eee8eedfae1ccdcb",
+   "recorded_on": "4dd6a49",
+   "recorded_at": "2026-10-02",
+   "note": "3 Oct 2026: first record of the current labels (frames v2: future tense, commitments, authority-only subjects, consumer subjects, two-sentence list closings; scope v2: sales channels, packaging; qdms v2: applicability reviews, ledger, cross-pack merge)"
+  },
+  "tr-compare-rules-v4": {
+   "family": "compare",
+   "files": [
+    "compare.py"
+   ],
+   "sha256": "3053a48480d0794b4e6ee4d20095668e81180ab9d02ee29a1068933d05fb02fd",
+   "recorded_on": "4dd6a49",
+   "recorded_at": "2026-10-02",
+   "note": "3 Oct 2026: first record of the current labels (frames v2: future tense, commitments, authority-only subjects, consumer subjects, two-sentence list closings; scope v2: sales channels, packaging; qdms v2: applicability reviews, ledger, cross-pack merge)"
+  },
+  "tr-candidates-v2": {
+   "family": "candidates",
+   "files": [
+    "semantic.py"
+   ],
+   "sha256": "67d910c7eec91a9b249345d8b5bfa984033c755445d863b17e5fefa71e2dcca3",
+   "recorded_on": "4dd6a49",
+   "recorded_at": "2026-10-02",
+   "note": "3 Oct 2026: first record of the current labels (frames v2: future tense, commitments, authority-only subjects, consumer subjects, two-sentence list closings; scope v2: sales channels, packaging; qdms v2: applicability reviews, ledger, cross-pack merge)"
+  },
+  "tr-adjudication-v3": {
+   "family": "adjudication",
+   "files": [
+    "adjudicate.py"
+   ],
+   "sha256": "23d8f4255be36ae3c1cdcf24e9a7ccfcb7555c835b4fef6cbda7ccd4a5c4f0e0",
+   "recorded_on": "4dd6a49",
+   "recorded_at": "2026-10-02",
+   "note": "3 Oct 2026: first record of the current labels (frames v2: future tense, commitments, authority-only subjects, consumer subjects, two-sentence list closings; scope v2: sales channels, packaging; qdms v2: applicability reviews, ledger, cross-pack merge)"
+  },
+  "tr-decisions-v1": {
+   "family": "decisions",
+   "files": [
+    "decisions.py"
+   ],
+   "sha256": "c4448bd585d5a95c7d7d4463848f01a6c1bf501635e87dc620c048a5738af9c3",
+   "recorded_on": "4dd6a49",
+   "recorded_at": "2026-10-02",
+   "note": "3 Oct 2026: first record of the current labels (frames v2: future tense, commitments, authority-only subjects, consumer subjects, two-sentence list closings; scope v2: sales channels, packaging; qdms v2: applicability reviews, ledger, cross-pack merge)"
+  },
+  "tr-qdms-v2": {
+   "family": "qdms",
+   "files": [
+    "qdms.py"
+   ],
+   "sha256": "1dd325db2ddb6386362b1ccb30dcd0b749fb288a9affcc01e321e6a343693257",
+   "recorded_on": "4dd6a49",
+   "recorded_at": "2026-10-02",
+   "note": "3 Oct 2026: first record of the current labels (frames v2: future tense, commitments, authority-only subjects, consumer subjects, two-sentence list closings; scope v2: sales channels, packaging; qdms v2: applicability reviews, ledger, cross-pack merge)"
+  }
+ }
+}

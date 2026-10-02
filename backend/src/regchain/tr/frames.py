@@ -30,7 +30,7 @@ from .clauses import Clause, blank_notes, split_clauses
 
 LEXICON = Path(__file__).resolve().parent / 'data' / 'lexicon.json'
 LETTERS = 'a-zçğıöşüâîû'
-FRAME_RULES_VERSION = 'tr-frames-v1'
+FRAME_RULES_VERSION = 'tr-frames-v2'
 
 FrameKind = Literal['OBLIGATION', 'PROHIBITION', 'PERMISSION', 'EXCEPTION', 'DEFINITION', 'SCOPE', 'REFERENCE', 'DELEGATION',
                     'ENFORCEMENT', 'OTHER']
@@ -234,6 +234,10 @@ SUBMITTED = re.compile(r'(?<![%s])(?:onayına|görüşüne|incelemesine|bilgisin
 INFORMATION_GIVEN = re.compile(r'(?<![%s])bilgi[%s]*\s[^.;]{0,160}sunul' % (LETTERS, LETTERS))
 CONDITION_SUBJECT = re.compile(r'\s*(?:\(\d+\)\s*)?(?:[%s]+\s+){0,2}(?:şartı|koşulu),?\s[^.;]{0,120}(?<![%s])aranır\s*\.?\s*$' % (LETTERS, LETTERS))
 # Case endings an authority named as the subject of its own task does not carry ("Belediye ..., görüşünü alır").
+# "Tüketici, ... ödediği takdirde faiz artışından etkilenmez.": the consumer is the subject; the sentence states what the
+# consumer may do or what follows for the consumer, and binds no company - unless a company is its agent ("... satıcı
+# veya sağlayıcı tarafından bilgilendirilir").
+CONSUMER_SUBJECT = re.compile(r'\s*(?:\(\d+\)\s*)?(?:[%s]{1,2}\)\s+)?tüketici(?:ler)?\s*,' % LETTERS)
 CASE_ENDINGS = ('dan', 'den', 'tan', 'ten', 'nın', 'nin', 'nun', 'nün', 'ın', 'in', 'un', 'ün', 'na', 'ne', 'ya', 'ca', 'ce', 'ça', 'çe',
                 'da', 'de', 'ta', 'te')
 AGENTIVE = re.compile(r'^(?:ca|ce|ça|çe|nca|nce|larca|lerce|larınca|lerince)$')
@@ -356,12 +360,38 @@ def _plural_agreement(marker: str) -> bool:
     return word.endswith(('ler', 'lar')) and word[-4:-3] == 'r' and bool(AORIST.search(word[:-3]))
 
 
+def _authority_only_subject(lex: 'Lexicon', folded: str, opening: int) -> bool:
+    """The subject the sentence opens with, up to its comma, is made of authorities only: "Bakanlık, ...",
+    "İl özel idareleri ve belediyeler, ..." (an authority in another case or another party in it: not only authorities)."""
+    comma = folded.find(',', opening)
+    if comma == -1 or comma - opening > 80:
+        return False
+    segment = folded[opening:comma]
+    found = False
+    for pattern in lex.authorities:
+        for match in pattern.finditer(segment):
+            end = match.end()
+            while end < len(segment) and segment[end].isalpha():
+                end += 1
+            word = segment[match.start():end]
+            if word.endswith(('nın', 'nin', 'nun', 'nün', 'na', 'ne', 'ya', 'ye', 'da', 'de', 'ta', 'te', 'dan', 'den', 'ca', 'ce', 'ça', 'çe')) \
+                    and not word.endswith(('ler', 'lar', 'leri', 'ları')):
+                return False
+            segment = segment[:match.start()] + ' ' * (end - match.start()) + segment[end:]
+            found = True
+    rest = re.sub(r'(?<![%s])(?:ve|veya|ile|ya da|ya)(?![%s])' % (LETTERS, LETTERS), ' ', segment)
+    return found and not re.search(r'[%s]' % LETTERS, rest)
+
+
 def _authority_subject(lex: 'Lexicon', folded: str, modality, marker: str, passive: bool) -> bool:
     """"Belediye veya il özel idaresi, ruhsat vermeden önce, ... görüşünü alır.": an authority that opens the sentence
-    as the subject of an active verb does its own task."""
-    if modality != 'MUST' or passive or MUST_WORDS.search(marker):
+    as the subject of an active verb does its own task. With a duty word ("Bakanlık, ... tedbirleri almakla
+    yükümlüdür"), only a subject made of authorities alone is the authority's task."""
+    if modality != 'MUST' or passive:
         return False
     opening = re.match(r'\s*(?:\(\d+\)\s*)?(?:[%s]{1,2}\)\s+)?' % LETTERS, folded).end()
+    if MUST_WORDS.search(marker):
+        return _authority_only_subject(lex, folded, opening)
     for pattern in lex.authorities:
         match = pattern.match(folded, opening)
         if match:
@@ -639,6 +669,8 @@ def frame_of(clause: Clause, regulation_id: str, lex: Lexicon | None = None) -> 
     elif (REFERENCE.search(folded) and references or INTERNAL_REFERENCE.search(folded)) and modality != 'MUST_NOT':
         kind = 'REFERENCE'
     elif CONDITION_SUBJECT.match(folded) or CLASSIFICATION.search(folded):
+        kind = 'OTHER'
+    elif CONSUMER_SUBJECT.match(folded) and not TARAFINDAN.search(folded):
         kind = 'OTHER'
     elif modality == 'MUST_NOT':
         kind = 'PROHIBITION'

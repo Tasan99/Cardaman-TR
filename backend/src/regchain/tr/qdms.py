@@ -29,7 +29,7 @@ from .compare import GapReport, Register, ownership
 
 EXPORT_FORMAT = 'cardaman-tr-qdms-export/1'
 APPROVALS_FORMAT = 'cardaman-tr-qdms-approvals/1'
-QDMS_RULES_VERSION = 'tr-qdms-v1'
+QDMS_RULES_VERSION = 'tr-qdms-v2'
 # What each gap action asks the QDMS to open.
 QDMS_ACTION = {
     'UPDATE_DOCUMENT': ('DOCUMENT_CHANGE_REQUEST', 'REVISE_CONFLICTING_STATEMENT'),
