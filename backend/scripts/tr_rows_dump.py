@@ -46,7 +46,9 @@ for profile in load_pilot_profiles(registry.vocabulary).values():
                 decisions.append({'pack': engine.pack_id, 'obligation_id': obligation.obligation_id, 'target_id': d.target_id,
                                   'entity_id': d.entity_id, 'level': d.level, 'regulation_id': obligation.regulation_id,
                                   'ref': obligation.provision_ref, 'status': d.status, 'reasons': d.reason_codes,
-                                  'gates': [{k: v for k, v in g.items() if k in ('gate', 'status', 'required', 'stated', 'complete')} for g in d.gates],
+                                  'gates': [{'gate': g['gate'], 'status': g['status'],
+                                             **{k: v for k, v in (g.get('evidence') or {}).items() if k in ('required', 'stated', 'complete', 'conflicts')}}
+                                            for g in d.gates],
                                   'scope': {k: v for k, v in obligation.scope.model_dump().items()
                                             if k in ('level', 'sales_channels', 'product_attributes', 'product_classes', 'activity_classes',
                                                      'entity_classes', 'alcohol_scope', 'scope_status') and v},

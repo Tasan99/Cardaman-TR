@@ -186,6 +186,20 @@ class ApplicabilityReview(Strict):
     coverage_assessed: bool = False
 
 
+GATE_EVIDENCE = ('required', 'stated', 'complete', 'conflicts', 'matched', 'products', 'quotes')
+
+
+def flat_gate(gate: dict) -> dict:
+    """A routing gate with its evidence lifted beside its name: what the duty requires, what the profile states, whether
+    that list is complete. (pilot.applicability.gate keeps them under 'evidence', and leaves an empty list out: a gate
+    without 'stated' states nothing.)"""
+    out = {k: gate[k] for k in ('gate', 'status', 'reason') if k in gate}
+    evidence = gate.get('evidence') or {}
+    out.update({k: evidence[k] for k in GATE_EVIDENCE if k in evidence})
+    out.update({k: gate[k] for k in GATE_EVIDENCE if k in gate})
+    return out
+
+
 def review_type(reason_codes: list[str]) -> str:
     if 'GROUNDING_FAILED' in reason_codes:
         return 'CHECK_SOURCE_GROUNDING'
@@ -198,8 +212,7 @@ def review_type(reason_codes: list[str]) -> str:
 
 def applicability_review(obligation: ExtractedObligation, decision) -> ApplicabilityReview:
     """The review record of one UNKNOWN routing decision, from its gates and the clause it rests on."""
-    keep = ('gate', 'status', 'required', 'stated', 'complete', 'conflicts', 'matched', 'products', 'quotes')
-    gates = [{k: v for k, v in g.items() if k in keep} for g in decision.gates]
+    gates = [flat_gate(g) for g in decision.gates]
     validator = decision.audit.validator or {}
     frame = obligation.frame
     source = {'quote': obligation.text, 'conditions': [c.quote for c in frame.conditions], 'exceptions': [e.quote for e in frame.exceptions],

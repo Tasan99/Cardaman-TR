@@ -190,6 +190,11 @@ class UnknownApplicabilityTests(unittest.TestCase):
                                                             'CHECK_SOURCE_GROUNDING'))
             if item.uncertainty['review_type'] == 'COMPLETE_PROFILE_FACT':
                 self.assertTrue(item.uncertainty['missing_facts'], item.row_id)        # the missing fact is named
+                for fact in item.uncertainty['missing_facts']:
+                    if fact['gate'] not in ('PRODUCT_SCOPE', 'EXCEPTIONS'):
+                        # what the duty requires and whether the profile's list is complete, not only the gate's name
+                        self.assertIn('required', fact, item.row_id)
+                        self.assertIn('complete', fact, item.row_id)
             self.assertTrue(item.uncertainty['source_evidence']['quote'])
             self.assertEqual([a.qdms_type for a in item.required_actions][0] in ('PROFILE_DATA_REQUEST', 'APPLICABILITY_REVIEW_TASK'), True)
             self.assertEqual({a.state for a in item.required_actions}, {'DRAFT'})
