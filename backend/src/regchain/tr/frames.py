@@ -30,7 +30,7 @@ from .clauses import Clause, blank_notes, split_clauses
 
 LEXICON = Path(__file__).resolve().parent / 'data' / 'lexicon.json'
 LETTERS = 'a-zçğıöşüâîû'
-FRAME_RULES_VERSION = 'tr-frames-v2'
+FRAME_RULES_VERSION = 'tr-frames-v3'
 
 FrameKind = Literal['OBLIGATION', 'PROHIBITION', 'PERMISSION', 'EXCEPTION', 'DEFINITION', 'SCOPE', 'REFERENCE', 'DELEGATION',
                     'ENFORCEMENT', 'OTHER']
@@ -236,7 +236,7 @@ CONDITION_SUBJECT = re.compile(r'\s*(?:\(\d+\)\s*)?(?:[%s]+\s+){0,2}(?:şartı|k
 # Case endings an authority named as the subject of its own task does not carry ("Belediye ..., görüşünü alır").
 # "Tüketici, ... ödediği takdirde faiz artışından etkilenmez.": the consumer is the subject; the sentence states what the
 # consumer may do or what follows for the consumer, and binds no company - unless a company is its agent ("... satıcı
-# veya sağlayıcı tarafından bilgilendirilir").
+# veya sağlayıcı tarafından bilgilendirilir") or it is a passive prohibition ("... zorunda bırakılamaz").
 CONSUMER_SUBJECT = re.compile(r'\s*(?:\(\d+\)\s*)?(?:[%s]{1,2}\)\s+)?tüketici(?:ler)?\s*,' % LETTERS)
 CASE_ENDINGS = ('dan', 'den', 'tan', 'ten', 'nın', 'nin', 'nun', 'nün', 'ın', 'in', 'un', 'ün', 'na', 'ne', 'ya', 'ca', 'ce', 'ça', 'çe',
                 'da', 'de', 'ta', 'te')
@@ -670,7 +670,10 @@ def frame_of(clause: Clause, regulation_id: str, lex: Lexicon | None = None) -> 
         kind = 'REFERENCE'
     elif CONDITION_SUBJECT.match(folded) or CLASSIFICATION.search(folded):
         kind = 'OTHER'
-    elif CONSUMER_SUBJECT.match(folded) and not TARAFINDAN.search(folded):
+    elif CONSUMER_SUBJECT.match(folded) and not TARAFINDAN.search(folded) \
+            and not (passive and ABILITY_NEGATIVE.search(marker.split(' (')[0].split()[-1] if marker else '')):
+        # ... unless it is a passive prohibition: "Tüketici, ... kullanmak zorunda bırakılamaz", "... tüketiciden ... bedel
+        # talep edilemez" forbid the business to act, though they name no agent.
         kind = 'OTHER'
     elif modality == 'MUST_NOT':
         kind = 'PROHIBITION'

@@ -61,9 +61,19 @@ class ConsumerSubjectTests(unittest.TestCase):
         # a consumer-credit contract is no consumer subject
         self.assertNotEqual(read('(3) Tüketici kredisi sözleşmesi yazılı olarak kurulur.')[0], 'OTHER')
 
+    def test_a_passive_prohibition_about_the_consumer_binds_the_business(self):
+        # found on the rerun of 3 October: these name no agent, and the one they forbid to act is the business
+        self.assertEqual(read('Tüketici, sözleşmeyi sona erdirmek için sözleşmenin tesis edilmesini sağlayan yöntemden daha ağır '
+                              'koşullar içeren bir yöntem kullanmak zorunda bırakılamaz.')[0], 'PROHIBITION')
+        self.assertEqual(read('(10) Tüketici, tatil hakkını belirli bir dönem için kullanmayacağını tatilin başlayacağı tarihten en az '
+                              'doksan gün önce sağlayıcıya bildirirse, o dönem için tüketiciden herhangi bir isim altında bedel talep edilemez.')[0],
+                         'PROHIBITION')
+
     def test_on_the_corpus(self):
         self.assertNotIn('Kanun 6502 md. 26/f.2/c.4', obligations('TR:KANUN:6502', '26'))
         self.assertIn('Kanun 6502 md. 48/f.2/c.1', obligations('TR:KANUN:6502', '48'))
+        self.assertIn('Kanun 6502 md. 49/f.6/c.2', obligations('TR:KANUN:6502', '49'))
+        self.assertIn('Kanun 6502 md. 50/f.10', obligations('TR:KANUN:6502', '50'))
 
 
 class ListClosingTests(unittest.TestCase):

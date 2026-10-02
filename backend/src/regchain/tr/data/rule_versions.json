@@ -106,6 +106,18 @@
    "recorded_on": "4dd6a49",
    "recorded_at": "2026-10-02",
    "note": "3 Oct 2026: first record of the current labels (frames v2: future tense, commitments, authority-only subjects, consumer subjects, two-sentence list closings; scope v2: sales channels, packaging; qdms v2: applicability reviews, ledger, cross-pack merge)"
+  },
+  "tr-frames-v3": {
+   "family": "frames",
+   "files": [
+    "frames.py",
+    "clauses.py",
+    "data/lexicon.json"
+   ],
+   "sha256": "cdd7f0806ef6d7014f2b89d61dc235eda6dce5b28934482528c267effa36c966",
+   "recorded_on": "3caea6b",
+   "recorded_at": "2026-10-02",
+   "note": "3 Oct 2026: a passive prohibition about the consumer (\"... zorunda bırakılamaz\", \"... talep edilemez\") binds the business"
   }
  }
 }
