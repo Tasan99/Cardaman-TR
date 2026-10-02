@@ -1,0 +1,377 @@
+{
+ "bottler": {
+  "commit": "89a380a",
+  "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+  "records": 3095,
+  "by_cause": {
+   "SOURCE_NO_ADDRESSEE_STATUTE": 2180,
+   "COMPANY_FACT_MISSING": 895,
+   "SOURCE_ACTOR_WORD_WITHOUT_CLASS": 20
+  },
+  "by_pack": {
+   "BEVERAGE_NON_ALCOHOL_TR": 3095
+  },
+  "causes": {
+   "SOURCE_NO_ADDRESSEE_STATUTE": {
+    "records": 2180,
+    "unique_obligations": 436,
+    "unique_provisions": 436,
+    "targets": {
+     "NONALC-BOTTLING": 436,
+     "NONALC-DISTRIBUTION": 436,
+     "NONALC-SALES": 436,
+     "NONALC-ONLINE": 436,
+     "NONALC-BRAND": 436
+    },
+    "regulations": {
+     "TR:KANUN:6502": 1110,
+     "TR:KANUN:5996": 620,
+     "TR:KANUN:4760": 265,
+     "TR:KANUN:6563": 185
+    },
+    "missing_gates": {
+     "EXCEPTIONS": 385
+    },
+    "records_per_obligation": {
+     "5": 436
+    },
+    "source_hints_by_obligation": {
+     "SCOPE_ARTICLE_OR_CATALOGUE_ACTIVITIES": 436,
+     "IMPERSONAL_OR_PASSIVE": 434,
+     "AUTHORITY_NAMED": 94,
+     "CROSS_REFERENCE": 34,
+     "LIST_LEAD_IN": 15,
+     "PRIOR_SENTENCE_NAMES_A_PARTY": 12
+    },
+    "actor_words_unmapped": {
+     "WORKPLACE": 1
+    }
+   },
+   "COMPANY_FACT_MISSING": {
+    "records": 895,
+    "unique_obligations": 889,
+    "unique_provisions": 887,
+    "targets": {
+     "NONALC-BRAND": 887,
+     "NONALC-ICED-TEA": 1,
+     "NONALC-JUICE": 1,
+     "NONALC-DISTRIBUTION": 3,
+     "NONALC-SALES": 3
+    },
+    "regulations": {
+     "TR:YONETMELIK:INSANI_TUKETIM_SULAR": 255,
+     "TR:YONETMELIK:GIDA_HIJYENI": 151,
+     "TR:YONETMELIK:AMBALAJ_ATIKLARI": 88,
+     "TR:YONETMELIK:MESAFELI_SOZLESMELER": 77,
+     "TR:KANUN:6502": 72,
+     "TR:KANUN:5996": 47,
+     "TR:KANUN:6563": 43,
+     "TR:YONETMELIK:GEKAP": 43,
+     "TR:YONETMELIK:TGK_ETIKETLEME": 32,
+     "TR:YONETMELIK:GIDA_ISLETMELERI_KAYIT_ONAY": 30,
+     "TR:YONETMELIK:TICARI_REKLAM": 18,
+     "TR:KANUN:4760": 16,
+     "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER": 11,
+     "TR:TEBLIG:TGK_ENERJI_ICECEKLERI": 6,
+     "TR:TEBLIG:TGK_MEYVE_SUYU": 4,
+     "TR:YONETMELIK:TGK_BESLENME_BEYANLARI": 2
+    },
+    "missing_gates": {
+     "ACTIVITY_CLASS": 872,
+     "EXCEPTIONS": 108,
+     "ENTITY_CLASS": 15,
+     "SALES_CHANNEL": 6,
+     "PRODUCT_SCOPE": 2
+    },
+    "records_per_obligation": {
+     "1": 886,
+     "3": 3
+    },
+    "source_hints_by_obligation": {},
+    "actor_words_unmapped": {
+     "OPERATOR": 29,
+     "WORKPLACE": 10
+    }
+   },
+   "SOURCE_ACTOR_WORD_WITHOUT_CLASS": {
+    "records": 20,
+    "unique_obligations": 4,
+    "unique_provisions": 4,
+    "targets": {
+     "NONALC-BOTTLING": 4,
+     "NONALC-DISTRIBUTION": 4,
+     "NONALC-SALES": 4,
+     "NONALC-ONLINE": 4,
+     "NONALC-BRAND": 4
+    },
+    "regulations": {
+     "TR:KANUN:5996": 20
+    },
+    "missing_gates": {},
+    "records_per_obligation": {
+     "5": 4
+    },
+    "source_hints_by_obligation": {
+     "SCOPE_ARTICLE_OR_CATALOGUE_ACTIVITIES": 4,
+     "AUTHORITY_NAMED": 2,
+     "CROSS_REFERENCE": 1
+    },
+    "actor_words_unmapped": {
+     "WORKPLACE": 4
+    }
+   }
+  }
+ },
+ "alcohol-integrated": {
+  "commit": "89a380a",
+  "profile_id": "tr-bev-pilot-alcohol-integrated",
+  "records": 7331,
+  "by_cause": {
+   "SOURCE_NO_ADDRESSEE_STATUTE": 5508,
+   "COMPANY_FACT_MISSING": 1775,
+   "SOURCE_ACTOR_WORD_WITHOUT_CLASS": 48
+  },
+  "by_pack": {
+   "BEVERAGE_ALCOHOL_TR": 3959,
+   "BEVERAGE_NON_ALCOHOL_TR": 3372
+  },
+  "causes": {
+   "SOURCE_NO_ADDRESSEE_STATUTE": {
+    "records": 5508,
+    "unique_obligations": 482,
+    "unique_provisions": 482,
+    "targets": {
+     "ALC-INT-HOLDING": 918,
+     "ALC-INT-BREWING": 918,
+     "ALC-INT-MALT": 918,
+     "ALC-INT-DISTRIBUTION": 918,
+     "ALC-INT-SALES": 918,
+     "ALC-INT-EXPORT": 918
+    },
+    "regulations": {
+     "TR:KANUN:6502": 2664,
+     "TR:KANUN:5996": 1488,
+     "TR:KANUN:4760": 636,
+     "TR:KANUN:6563": 444,
+     "TR:KANUN:4250": 144,
+     "TR:KANUN:4733": 132
+    },
+    "missing_gates": {
+     "EXCEPTIONS": 942
+    },
+    "records_per_obligation": {
+     "6": 46,
+     "12": 436
+    },
+    "source_hints_by_obligation": {
+     "SCOPE_ARTICLE_OR_CATALOGUE_ACTIVITIES": 482,
+     "IMPERSONAL_OR_PASSIVE": 480,
+     "AUTHORITY_NAMED": 109,
+     "CROSS_REFERENCE": 50,
+     "LIST_LEAD_IN": 20,
+     "PRIOR_SENTENCE_NAMES_A_PARTY": 13
+    },
+    "actor_words_unmapped": {
+     "WORKPLACE": 1
+    }
+   },
+   "COMPANY_FACT_MISSING": {
+    "records": 1775,
+    "unique_obligations": 1037,
+    "unique_provisions": 1037,
+    "targets": {
+     "ALC-INT-EXPORT": 1763,
+     "ALC-INT-DISTRIBUTION": 6,
+     "ALC-INT-SALES": 6
+    },
+    "regulations": {
+     "TR:YONETMELIK:GIDA_HIJYENI": 302,
+     "TR:YONETMELIK:TICARI_REKLAM": 278,
+     "TR:YONETMELIK:AMBALAJ_ATIKLARI": 176,
+     "TR:YONETMELIK:MESAFELI_SOZLESMELER": 154,
+     "TR:KANUN:6502": 146,
+     "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM": 145,
+     "TR:KANUN:5996": 86,
+     "TR:KANUN:6563": 86,
+     "TR:YONETMELIK:GEKAP": 86,
+     "TR:YONETMELIK:ALKOL_TESIS_TEKNIK_SARTLAR": 78,
+     "TR:YONETMELIK:TGK_ETIKETLEME": 62,
+     "TR:YONETMELIK:GIDA_ISLETMELERI_KAYIT_ONAY": 60,
+     "TR:YONETMELIK:ALKOL_IC_DIS_TICARET": 48,
+     "TR:KANUN:4250": 26,
+     "TR:KANUN:4760": 24,
+     "TR:TEBLIG:TGK_BIRA": 10,
+     "TR:KANUN:4733": 4,
+     "TR:YONETMELIK:TGK_BESLENME_BEYANLARI": 4
+    },
+    "missing_gates": {
+     "ACTIVITY_CLASS": 1733,
+     "EXCEPTIONS": 186,
+     "SALES_CHANNEL": 87,
+     "ENTITY_CLASS": 30
+    },
+    "records_per_obligation": {
+     "1": 311,
+     "2": 723,
+     "6": 3
+    },
+    "source_hints_by_obligation": {},
+    "actor_words_unmapped": {
+     "WORKPLACE": 22,
+     "FIRM": 15,
+     "OPERATOR": 2
+    }
+   },
+   "SOURCE_ACTOR_WORD_WITHOUT_CLASS": {
+    "records": 48,
+    "unique_obligations": 4,
+    "unique_provisions": 4,
+    "targets": {
+     "ALC-INT-HOLDING": 8,
+     "ALC-INT-BREWING": 8,
+     "ALC-INT-MALT": 8,
+     "ALC-INT-DISTRIBUTION": 8,
+     "ALC-INT-SALES": 8,
+     "ALC-INT-EXPORT": 8
+    },
+    "regulations": {
+     "TR:KANUN:5996": 48
+    },
+    "missing_gates": {},
+    "records_per_obligation": {
+     "12": 4
+    },
+    "source_hints_by_obligation": {
+     "SCOPE_ARTICLE_OR_CATALOGUE_ACTIVITIES": 4,
+     "AUTHORITY_NAMED": 2,
+     "CROSS_REFERENCE": 1
+    },
+    "actor_words_unmapped": {
+     "WORKPLACE": 4
+    }
+   }
+  }
+ },
+ "alcohol-import": {
+  "commit": "89a380a",
+  "profile_id": "tr-bev-pilot-alcohol-import",
+  "records": 2428,
+  "by_cause": {
+   "SOURCE_NO_ADDRESSEE_STATUTE": 1446,
+   "COMPANY_FACT_MISSING": 970,
+   "SOURCE_ACTOR_WORD_WITHOUT_CLASS": 12
+  },
+  "by_pack": {
+   "BEVERAGE_ALCOHOL_TR": 2428
+  },
+  "causes": {
+   "SOURCE_NO_ADDRESSEE_STATUTE": {
+    "records": 1446,
+    "unique_obligations": 482,
+    "unique_provisions": 482,
+    "targets": {
+     "ALC-IMP-BREWING": 482,
+     "ALC-IMP-TRADING": 482,
+     "ALC-IMP-MARKETING": 482
+    },
+    "regulations": {
+     "TR:KANUN:6502": 666,
+     "TR:KANUN:5996": 372,
+     "TR:KANUN:4760": 159,
+     "TR:KANUN:6563": 111,
+     "TR:KANUN:4250": 72,
+     "TR:KANUN:4733": 66
+    },
+    "missing_gates": {
+     "EXCEPTIONS": 240
+    },
+    "records_per_obligation": {
+     "3": 482
+    },
+    "source_hints_by_obligation": {
+     "SCOPE_ARTICLE_OR_CATALOGUE_ACTIVITIES": 482,
+     "IMPERSONAL_OR_PASSIVE": 480,
+     "AUTHORITY_NAMED": 109,
+     "CROSS_REFERENCE": 50,
+     "LIST_LEAD_IN": 20,
+     "PRIOR_SENTENCE_NAMES_A_PARTY": 13
+    },
+    "actor_words_unmapped": {
+     "WORKPLACE": 1
+    }
+   },
+   "COMPANY_FACT_MISSING": {
+    "records": 970,
+    "unique_obligations": 967,
+    "unique_provisions": 967,
+    "targets": {
+     "ALC-IMP-MARKETING": 965,
+     "ALC-IMP-WINE": 2,
+     "ALC-IMP-TRADING": 3
+    },
+    "regulations": {
+     "TR:YONETMELIK:GIDA_HIJYENI": 151,
+     "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM": 142,
+     "TR:YONETMELIK:ALKOL_TESIS_TEKNIK_SARTLAR": 88,
+     "TR:YONETMELIK:AMBALAJ_ATIKLARI": 88,
+     "TR:YONETMELIK:ALKOL_IC_DIS_TICARET": 84,
+     "TR:YONETMELIK:MESAFELI_SOZLESMELER": 77,
+     "TR:KANUN:6502": 72,
+     "TR:KANUN:5996": 47,
+     "TR:YONETMELIK:GEKAP": 43,
+     "TR:KANUN:6563": 40,
+     "TR:YONETMELIK:TGK_ETIKETLEME": 33,
+     "TR:YONETMELIK:GIDA_ISLETMELERI_KAYIT_ONAY": 30,
+     "TR:KANUN:4250": 24,
+     "TR:YONETMELIK:TICARI_REKLAM": 18,
+     "TR:KANUN:4760": 16,
+     "TR:TEBLIG:TGK_BIRA": 10,
+     "TR:KANUN:4733": 5,
+     "TR:YONETMELIK:TGK_BESLENME_BEYANLARI": 2
+    },
+    "missing_gates": {
+     "ACTIVITY_CLASS": 950,
+     "EXCEPTIONS": 114,
+     "SALES_CHANNEL": 41,
+     "ENTITY_CLASS": 15,
+     "PRODUCT_SCOPE": 2
+    },
+    "records_per_obligation": {
+     "1": 964,
+     "2": 3
+    },
+    "source_hints_by_obligation": {},
+    "actor_words_unmapped": {
+     "FIRM": 25,
+     "WORKPLACE": 22,
+     "OPERATOR": 2
+    }
+   },
+   "SOURCE_ACTOR_WORD_WITHOUT_CLASS": {
+    "records": 12,
+    "unique_obligations": 4,
+    "unique_provisions": 4,
+    "targets": {
+     "ALC-IMP-BREWING": 4,
+     "ALC-IMP-TRADING": 4,
+     "ALC-IMP-MARKETING": 4
+    },
+    "regulations": {
+     "TR:KANUN:5996": 12
+    },
+    "missing_gates": {},
+    "records_per_obligation": {
+     "3": 4
+    },
+    "source_hints_by_obligation": {
+     "SCOPE_ARTICLE_OR_CATALOGUE_ACTIVITIES": 4,
+     "AUTHORITY_NAMED": 2,
+     "CROSS_REFERENCE": 1
+    },
+    "actor_words_unmapped": {
+     "WORKPLACE": 4
+    }
+   }
+  }
+ }
+}

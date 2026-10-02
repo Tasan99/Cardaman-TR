@@ -1,0 +1,167 @@
+{
+ "label": "current head",
+ "recorded_at": "2026-10-02 20:46:58 +0300",
+ "code": {
+  "commit": "89a380a593b3773782080ed705163f202367eed4",
+  "short": "89a380a",
+  "dirty": false,
+  "src": "C:\\dev\\Cardaman\\backend\\src",
+  "python": "3.13.12"
+ },
+ "model": "none: recorded adjudications replayed (qwen3:8b records of run 8); no embedder call (recorded table)",
+ "similarity_table": {
+  "file": "C:\\dev\\Cardaman\\backend\\src\\regchain\\tr\\data\\evaluation\\recorded\\20261001\\similarities.json",
+  "sha256": "9be4250dd79759b1f07cedce7ed8e1c3cf774ff137b74312a3a95739601cdbda",
+  "model_version": "bge-m3:latest@7907646426070047a77226ac3e684fbbe8410524f7b4a74d02837e43f2146bab",
+  "duties": 91
+ },
+ "settings": {
+  "LEXICAL_FLOOR": 0.3,
+  "SEMANTIC_FLOOR": 0.66,
+  "ANCHOR_FLOOR": 0.55,
+  "ANCHOR_STEMS": 3,
+  "TOP_K": 3,
+  "SEMANTIC_RELEVANCE": 0.7
+ },
+ "rule_versions": {
+  "frames": "tr-frames-v1",
+  "extraction": "tr-scope-rules-v1",
+  "compare": "tr-compare-rules-v4",
+  "candidates": "tr-candidates-v2",
+  "adjudication": "tr-adjudication-v3",
+  "engines": "tr-engines-v1",
+  "qdms": "tr-qdms-v1"
+ },
+ "inputs": {
+  "regchain\\tr\\data\\evaluation\\recorded\\20261001\\similarities.json": "9be4250dd79759b1f07cedce7ed8e1c3cf774ff137b74312a3a95739601cdbda",
+  "regchain\\tr\\data\\evaluation\\recorded\\20261001\\adjudicate-dev.jsonl": "24377e1b450e27afde1c8ccf5d333df6b325a8f41e725f505a014702e4d5c23e",
+  "regchain\\tr\\data\\evaluation\\recorded\\20261001\\adjudicate-holdout.jsonl": "1376876165480ea947793e9247dfa4e607508ad66ba550e788caf6a6f1a7e4f4",
+  "regchain\\tr\\data\\evaluation\\recorded\\20261001\\adjudicate-validation.jsonl": "24f12820d64d9cb684fabdafb27743521b9deb4197130c7fb621c6176c7cbd0a",
+  "regchain\\tr\\data\\evaluation\\recorded\\20261001\\FROZEN.json": "5bedef52607ea6d4b132ed39128b3a8c38b2123af1b747b92c9654b8a03e29c3",
+  "regchain\\tr\\data\\lexicon.json": "4f346d44b175e0f2df238ee2d1d00b71cfa86edf9f59c1e4a23f540a1f288cec",
+  "regchain\\tr\\data\\regulations.json": "3d5cc4e2bf2cbbee357b71d9b5221026026eb030cc576b5b63e8eaf3c8ebc777",
+  "regchain\\tr\\data\\scopes.json": "e48a8ceb2ec7d7333577bb2ea432e677d1b3bd85cd7c59970acb7e082c4c2ded",
+  "regchain\\tr\\data\\vocabulary.json": "b4c47f209c510468eaed365785575109e77d74a848d9efcfb3fb895cc1f19f62",
+  "regchain\\tr\\data\\ownership.json": "db162fda214a26fb09a6687e072956e3248d45720f175eed56e352813e003fdd",
+  "regchain\\tr\\data\\pilot_profiles\\alcohol_group_brewer_importer.json": "8bdeee6c66bb1a3b6a5c19d8fcc42b5a4b7887fceda2cce8191b2f233a4412c3",
+  "regchain\\tr\\data\\pilot_profiles\\alcohol_group_integrated_brewer.json": "276c9cbda8999d90992b22ebed2181e9508e0b0681c4a35ca2f5331726f85686",
+  "regchain\\tr\\data\\pilot_profiles\\non_alcohol_group_bottler.json": "1462108172e7bb1ffd9896b367b482eed8fd170f9eec58cf767d527c96004054",
+  "regchain\\tr\\data\\pilot_policies\\tr-bev-pilot-alcohol-import\\documents\\POL-COM-11-ticari-iletisim.md": "cb52cd35303a4007b40dad4ca72d0d5549b624366e93131282c0af146e2558f8",
+  "regchain\\tr\\data\\pilot_policies\\tr-bev-pilot-alcohol-import\\documents\\POL-ENV-14-ambalaj-sorumlulugu.md": "ee6f29155cd111292348282a19df44f89c3654e7e9abea04161b3e0012465592",
+  "regchain\\tr\\data\\pilot_policies\\tr-bev-pilot-alcohol-import\\documents\\SOP-HR-15-istihdam.md": "632f35fc8cf9d9b8da767adbf4044ea26eae78a0473261258d0d20beee6641f7",
+  "regchain\\tr\\data\\pilot_policies\\tr-bev-pilot-alcohol-import\\documents\\SOP-LOG-12-dagitim-bayi.md": "44b30af7cbe9698f42942a4f00fca8a2476541f82c1ffb7109a54786ebb88d14",
+  "regchain\\tr\\data\\pilot_policies\\tr-bev-pilot-alcohol-import\\documents\\SPEC-LBL-13-etiket-uygunluk.md": "fd193a070e73da7aed6e932b369744c91098a7d174f9ae73abc3aa7010c05910",
+  "regchain\\tr\\data\\pilot_policies\\tr-bev-pilot-alcohol-import\\register.json": "537ade092c54cb9ffe6fb8abb807156c3bf7b034c8c05b4a1e3c70a1e85fc7f0",
+  "regchain\\tr\\data\\pilot_policies\\tr-bev-pilot-alcohol-integrated\\documents\\POL-ENV-05-ambalaj-atik.md": "5bba18095e401c9450eb6052a9da77982c1b2545ee9445fd807c634ad925d8b8",
+  "regchain\\tr\\data\\pilot_policies\\tr-bev-pilot-alcohol-integrated\\documents\\POL-MKT-01-sorumlu-pazarlama.md": "908db0ee0a7456640f89e722e9fec673d8a198156f68f9450086b784c26d96e1",
+  "regchain\\tr\\data\\pilot_policies\\tr-bev-pilot-alcohol-integrated\\documents\\SOP-HR-04-ise-alim.md": "bea4083dbc67d9fb8dbb3c66401ab14c08b0c23afc8a8b0504e8e8dde3cf727b",
+  "regchain\\tr\\data\\pilot_policies\\tr-bev-pilot-alcohol-integrated\\documents\\SOP-SALES-02-satis-noktasi.md": "bed99ab48c0594e3e9a041eb833fbe78bee43959e1ccb2ff0a05e5815d64ad2d",
+  "regchain\\tr\\data\\pilot_policies\\tr-bev-pilot-alcohol-integrated\\documents\\SPEC-LABEL-03-etiket-sartnamesi.md": "7048a91caefecb50069c4b0679aafde8549b363b36ec346923ac06d55feb2810",
+  "regchain\\tr\\data\\pilot_policies\\tr-bev-pilot-alcohol-integrated\\register.json": "57b10395159c3c978672f8f26c9f850f484a12fabc999b08d87c675e7cee13c3",
+  "regchain\\tr\\data\\pilot_policies\\tr-bev-pilot-non-alcohol-bottler\\documents\\POL-ENV-03-ambalaj-atik.md": "31a65da22a175eed8798f3193bbeeec6f017916dc9a8f1e2e0354a9dc2a2dc5c",
+  "regchain\\tr\\data\\pilot_policies\\tr-bev-pilot-non-alcohol-bottler\\documents\\POL-MKT-02-pazarlama.md": "ba6611cd4a0f2bf27b1bb532e31a5564f99634aa422576f2e40703d58c4453bc",
+  "regchain\\tr\\data\\pilot_policies\\tr-bev-pilot-non-alcohol-bottler\\documents\\SOP-WATER-04-su-dolum.md": "b55d994004ae19f6cea64c3d8f94d5d37e02c9d62f9b4bd893d2b20a03afc1d3",
+  "regchain\\tr\\data\\pilot_policies\\tr-bev-pilot-non-alcohol-bottler\\documents\\SPEC-ENERGY-01-enerji-icecegi.md": "064622b9e88293d33cc4d7acb95af60546dac402558e1a278a9f0713da006f24",
+  "regchain\\tr\\data\\pilot_policies\\tr-bev-pilot-non-alcohol-bottler\\documents\\SPEC-LABEL-02-etiket-sartnamesi.md": "43a01e1be5ea9bc870eb1e2c693d910274c9bb1826e1e6d69919e77c3fffa58f",
+  "regchain\\tr\\data\\pilot_policies\\tr-bev-pilot-non-alcohol-bottler\\register.json": "b1ee7a15bddea4818958ba8b48fe9d7d289bd927ea2016329127314d52ec8900",
+  "regchain\\tr\\data\\packs\\beverage_alcohol_tr.json": "c885bb212384bf5e3efaa84fb0ef2070ff129635a8e093458f8fb9094b3a8d10",
+  "regchain\\tr\\data\\packs\\beverage_non_alcohol_tr.json": "a043089cb801b4c305d98b94a6e55a14775b79d3b47fbd83edf0fe16d0606015",
+  "regchain\\tr\\data\\packs\\tr_food_beverage_common.json": "2a403bc0a5a6d0f063df2d013d22710bd7ec22b233aaca247b328afb779bd4a8"
+ },
+ "source_versions": {
+  "TR:KANUN:4250": {
+   "version_id": "20260930-609a640503b1",
+   "parsed_hash": "609a640503b1c01e2324da2f5ebaa1fb657faceb80130888028c79fb7df10414"
+  },
+  "TR:KANUN:4733": {
+   "version_id": "20260930-3a7b43cd61dd",
+   "parsed_hash": "3a7b43cd61dd226cc885c1aeead915e8596fd51b53a67407726c291d14454313"
+  },
+  "TR:KANUN:4760": {
+   "version_id": "20260930-8f6d8e7b6499",
+   "parsed_hash": "8f6d8e7b64990ec5dd4d951698665df2cdc409f91bb63136e1efca90a4e50f64"
+  },
+  "TR:KANUN:5549": null,
+  "TR:KANUN:5996": {
+   "version_id": "20260930-f72824ca4517",
+   "parsed_hash": "f72824ca4517889b89625c7941f7afdf4368931b815d77bcb6ef1542faa43640"
+  },
+  "TR:KANUN:6502": {
+   "version_id": "20260930-913bb5070a05",
+   "parsed_hash": "913bb5070a050690b7980a0a5340f0b473dc918c076e4c483741b5ee4d694dca"
+  },
+  "TR:KANUN:6563": {
+   "version_id": "20260930-69a0a900e361",
+   "parsed_hash": "69a0a900e36171dd3a1dee7e23df091a1cb66b75381243efedf34b60f4de6ce0"
+  },
+  "TR:TEBLIG:TGK_ALKOLSUZ_ICECEKLER": {
+   "version_id": "20260930-af75cffb8bb3",
+   "parsed_hash": "af75cffb8bb3a19093899070897df6b65026b2ed3750210d6adbc28187018793"
+  },
+  "TR:TEBLIG:TGK_BIRA": {
+   "version_id": "20260930-120006ce15d8",
+   "parsed_hash": "120006ce15d8fd1514f37fae94704eeb203497180863cf48ca899c046372e39f"
+  },
+  "TR:TEBLIG:TGK_ENERJI_ICECEKLERI": {
+   "version_id": "20260930-85e33626fdc8",
+   "parsed_hash": "85e33626fdc88a26e2a65603ea7bb176d1e75aec129cd42ee416ce0b968cdc5f"
+  },
+  "TR:TEBLIG:TGK_MEYVE_SUYU": {
+   "version_id": "20260930-1be9140f1fc0",
+   "parsed_hash": "1be9140f1fc0a80db128d42e6e047607b13c6d37003aa0d7012c6a0ba42d8288"
+  },
+  "TR:YONETMELIK:ALKOLLU_ICKI_SATIS_SUNUM": {
+   "version_id": "20260930-07cd0ca24a1f",
+   "parsed_hash": "07cd0ca24a1f78ae445925c0684939e077b7789a5b9d7b365f12d6b65314643c"
+  },
+  "TR:YONETMELIK:ALKOL_IC_DIS_TICARET": {
+   "version_id": "20260930-c3d5ba94a7b1",
+   "parsed_hash": "c3d5ba94a7b12664cb5d91f53af10f14cf3f0ca611bbf18e1e26ab33ff2b328e"
+  },
+  "TR:YONETMELIK:ALKOL_TESIS_TEKNIK_SARTLAR": {
+   "version_id": "20260930-d26494e97888",
+   "parsed_hash": "d26494e9788809c731d6ede6b071483ea02da74cc1d6aad05869a69d079ecac7"
+  },
+  "TR:YONETMELIK:AMBALAJ_ATIKLARI": {
+   "version_id": "20260930-e11acf13abef",
+   "parsed_hash": "e11acf13abefad6d71eacec9432db67624a3973592d5c28d43e08e29144d18e7"
+  },
+  "TR:YONETMELIK:DOGAL_MINERALLI_SULAR": {
+   "version_id": "20260930-2a0a339b64b1",
+   "parsed_hash": "2a0a339b64b12978d7e0d36fffae3f908e28aecb7088a30356a0ae8fca395fbd"
+  },
+  "TR:YONETMELIK:GEKAP": {
+   "version_id": "20260930-ea756006c28a",
+   "parsed_hash": "ea756006c28ab12fa159269007a36aca2b03cf4faad1924e4efdeccb024562e9"
+  },
+  "TR:YONETMELIK:GIDA_HIJYENI": {
+   "version_id": "20260930-aebe05d434a3",
+   "parsed_hash": "aebe05d434a3818f6c7c2caa875c4930499593699e66ef4664e73f9f37bdaf02"
+  },
+  "TR:YONETMELIK:GIDA_ISLETMELERI_KAYIT_ONAY": {
+   "version_id": "20260930-57965927498e",
+   "parsed_hash": "57965927498eaca9f63af3fbe03ac438afe7616bc3479d29e9dbc5576b399593"
+  },
+  "TR:YONETMELIK:INSANI_TUKETIM_SULAR": {
+   "version_id": "20260930-64c5c301da1c",
+   "parsed_hash": "64c5c301da1c4903dc953c6ea87216798f12e9a6bea69819fbb64e92c0047b7e"
+  },
+  "TR:YONETMELIK:MESAFELI_SOZLESMELER": {
+   "version_id": "20260930-0041cce06b6f",
+   "parsed_hash": "0041cce06b6f618223d39163107a14e8fd850582ec09288914a95e1f670d4251"
+  },
+  "TR:YONETMELIK:TEDBIRLER_200713012": null,
+  "TR:YONETMELIK:TGK_BESLENME_BEYANLARI": {
+   "version_id": "20260930-db22b9ab0c05",
+   "parsed_hash": "db22b9ab0c05b5e359c25e12bc8174a2d691ccb7c13ce48a58cd566bb60cb7b4"
+  },
+  "TR:YONETMELIK:TGK_ETIKETLEME": {
+   "version_id": "20260930-975f2369d7e8",
+   "parsed_hash": "975f2369d7e85c12888d9a6024bcec6a99977d1dc51925190481f3290f036184"
+  },
+  "TR:YONETMELIK:TICARI_REKLAM": {
+   "version_id": "20260930-a21f046fc3a4",
+   "parsed_hash": "a21f046fc3a4270b3c59ee7e8d9121c7c908a23053417fceeeaadc1d028dff4f"
+  }
+ }
+}

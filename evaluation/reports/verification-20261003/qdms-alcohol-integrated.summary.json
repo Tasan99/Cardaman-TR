@@ -1,0 +1,71 @@
+{
+  "profile_id": "tr-bev-pilot-alcohol-integrated",
+  "register_synthetic": true,
+  "summary": {
+    "rows": 3199,
+    "by_layer": {
+      "REGULATION": 3199
+    },
+    "by_policy_status": {
+      "CONTRADICTED": 23,
+      "NOT_COVERED": 3158,
+      "PARTIALLY_COVERED": 18
+    },
+    "by_decision": {
+      "AUTO": 3096,
+      "REVIEW_REQUIRED": 103
+    },
+    "by_approval": {
+      "PENDING": 3199
+    },
+    "actions": 3302,
+    "actions_by_type": {
+      "COMPLIANCE_REVIEW_TASK": 103,
+      "CONTROL_DEFINITION_REQUEST": 3,
+      "DOCUMENT_CHANGE_REQUEST": 3189,
+      "EVIDENCE_REQUEST": 7
+    },
+    "actions_by_state": {
+      "DRAFT": 3302
+    },
+    "actions_by_department": {
+      "COMPLIANCE": 201,
+      "ECOMMERCE": 79,
+      "ENVIRONMENT": 243,
+      "FOOD_SAFETY": 396,
+      "HR": 30,
+      "LEGAL": 230,
+      "MANUFACTURING": 187,
+      "MARKETING": 518,
+      "QUALITY": 826,
+      "RND": 96,
+      "SALES": 307,
+      "SUPPLY_CHAIN": 189
+    },
+    "applicability_reviews": 3959,
+    "applicability_reviews_by_type": {
+      "CLARIFY_REGULATORY_SCOPE": 2916,
+      "COMPLETE_PROFILE_FACT": 1043
+    },
+    "applicability_reviews_by_approval": {
+      "PENDING": 3959
+    },
+    "applicability_actions_by_state": {
+      "DRAFT": 3959
+    },
+    "ready_for_qdms": 0,
+    "ledger": {
+      "APPLICABILITY_REVIEW": 3959,
+      "EXCLUDED_COVERED_AUTO": 13,
+      "EXPORTED": 3199,
+      "MERGED_SAME_DUTY_AND_TARGET": 5820
+    }
+  },
+  "files": {
+    "json": "C:\\dev\\Cardaman\\evaluation\\runs\\20261003-verification\\qdms-tr-bev-pilot-alcohol-integrated\\export.json",
+    "csv": "C:\\dev\\Cardaman\\evaluation\\runs\\20261003-verification\\qdms-tr-bev-pilot-alcohol-integrated\\export.csv",
+    "reviews_csv": "C:\\dev\\Cardaman\\evaluation\\runs\\20261003-verification\\qdms-tr-bev-pilot-alcohol-integrated\\applicability-reviews.csv",
+    "template": "C:\\dev\\Cardaman\\evaluation\\runs\\20261003-verification\\qdms-tr-bev-pilot-alcohol-integrated\\approvals-template.json",
+    "ready": "C:\\dev\\Cardaman\\evaluation\\runs\\20261003-verification\\qdms-tr-bev-pilot-alcohol-integrated\\ready-actions.json"
+  }
+}

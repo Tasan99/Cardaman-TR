@@ -1,0 +1,70 @@
+{
+  "profile_id": "tr-bev-pilot-alcohol-import",
+  "register_synthetic": true,
+  "summary": {
+    "rows": 2081,
+    "by_layer": {
+      "REGULATION": 2081
+    },
+    "by_policy_status": {
+      "CONTRADICTED": 8,
+      "NOT_COVERED": 2058,
+      "PARTIALLY_COVERED": 15
+    },
+    "by_decision": {
+      "AUTO": 2027,
+      "REVIEW_REQUIRED": 54
+    },
+    "by_approval": {
+      "PENDING": 2081
+    },
+    "actions": 2136,
+    "actions_by_type": {
+      "COMPLIANCE_REVIEW_TASK": 54,
+      "CONTROL_DEFINITION_REQUEST": 10,
+      "DOCUMENT_CHANGE_REQUEST": 2071,
+      "NONCONFORMITY": 1
+    },
+    "actions_by_state": {
+      "DRAFT": 2136
+    },
+    "actions_by_department": {
+      "COMPLIANCE": 121,
+      "ECOMMERCE": 16,
+      "ENVIRONMENT": 228,
+      "FOOD_SAFETY": 224,
+      "HR": 16,
+      "LEGAL": 133,
+      "MANUFACTURING": 123,
+      "MARKETING": 229,
+      "QUALITY": 627,
+      "RND": 72,
+      "SALES": 169,
+      "SUPPLY_CHAIN": 178
+    },
+    "applicability_reviews": 2428,
+    "applicability_reviews_by_type": {
+      "CLARIFY_REGULATORY_SCOPE": 1458,
+      "COMPLETE_PROFILE_FACT": 970
+    },
+    "applicability_reviews_by_approval": {
+      "PENDING": 2428
+    },
+    "applicability_actions_by_state": {
+      "DRAFT": 2428
+    },
+    "ready_for_qdms": 0,
+    "ledger": {
+      "APPLICABILITY_REVIEW": 2428,
+      "EXCLUDED_COVERED_AUTO": 19,
+      "EXPORTED": 2081
+    }
+  },
+  "files": {
+    "json": "C:\\dev\\Cardaman\\evaluation\\runs\\20261003-verification\\qdms-tr-bev-pilot-alcohol-import\\export.json",
+    "csv": "C:\\dev\\Cardaman\\evaluation\\runs\\20261003-verification\\qdms-tr-bev-pilot-alcohol-import\\export.csv",
+    "reviews_csv": "C:\\dev\\Cardaman\\evaluation\\runs\\20261003-verification\\qdms-tr-bev-pilot-alcohol-import\\applicability-reviews.csv",
+    "template": "C:\\dev\\Cardaman\\evaluation\\runs\\20261003-verification\\qdms-tr-bev-pilot-alcohol-import\\approvals-template.json",
+    "ready": "C:\\dev\\Cardaman\\evaluation\\runs\\20261003-verification\\qdms-tr-bev-pilot-alcohol-import\\ready-actions.json"
+  }
+}

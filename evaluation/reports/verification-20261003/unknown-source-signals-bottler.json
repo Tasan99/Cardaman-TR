@@ -1,0 +1,169 @@
+{
+ "IMPERSONAL_NO_PARTY_FOUND": {
+  "obligations": 314,
+  "records": 1570,
+  "examples": [
+   {
+    "ref": "Kanun 5996 md. 4/f.6",
+    "marker": "yükümlüdür",
+    "text": "(6) Bir yerde bulaşıcı hayvan hastalığı ya da sebebi belli olmayan hayvan ölümlerinden haberdar olan ilgililer, durumu Bakanlığa ihbar etmekle yükümlüdür."
+   },
+   {
+    "ref": "Kanun 5996 md. 5/f.2",
+    "marker": "ödenir",
+    "text": "(2) İhbarı mecburî bir hastalığa karşı koruma sağlamak amacıyla, resmî veteriner hekim veya sorumluluğundaki yardımcı sağlık personeli ile yetkilendirilmiş veteriner hekim tarafından yapılan aşı ve se"
+   },
+   {
+    "ref": "Kanun 5996 md. 9/f.2",
+    "marker": "getirilir",
+    "text": "(2) Hayvanların kesimi ve hastalık kontrolü amacıyla itlafı, hayvanlarda heyecan, acı ve ıstırap oluşturmadan, uygun araçlar kullanılarak yerine getirilir."
+   },
+   {
+    "ref": "Kanun 5996 md. 9/f.3/c.1",
+    "marker": "yasaktır",
+    "text": "(3) Hayvanlara ötenazi yapmak yasaktır."
+   }
+  ]
+ },
+ "AUTHORITY_TASK_READ_AS_COMPANY_DUTY": {
+  "obligations": 55,
+  "records": 275,
+  "examples": [
+   {
+    "ref": "Kanun 5996 md. 4/f.1/b.a",
+    "marker": "yükümlüdür",
+    "text": "a) Bakanlık, ihbarı mecburî bir hastalığın varlığı veya şüphesi ya da yeni bir salgın durumunda, inceleme yapmak, teşhis etmek, gerekli kontrol ve koruma tedbirlerini almakla yükümlüdür."
+   },
+   {
+    "ref": "Kanun 5996 md. 4/f.8",
+    "marker": "yükümlüdür",
+    "text": "(8) İl özel idareleri ve belediyeler, hayvan hastalıkları ile mücadele ve kontrollerde Bakanlığa yardımcı olmakla yükümlüdür."
+   },
+   {
+    "ref": "Kanun 5996 md. 5/f.5/c.2",
+    "marker": "alınır",
+    "text": "Tazminatların ödenmesine ilişkin usul ve esasların belirlenmesinde Maliye Bakanlığının görüşü alınır."
+   },
+   {
+    "ref": "Kanun 5996 md. 8/f.1/c.2",
+    "marker": "zorunludur",
+    "text": "Bu hususlarla ilgili Bakanlıkça belirlenen şartlara uyulması zorunludur."
+   }
+  ]
+ },
+ "NAMED_PARTY_WITHOUT_VOCABULARY_CLASS": {
+  "obligations": 20,
+  "records": 100,
+  "examples": [
+   {
+    "ref": "Kanun 5996 md. 5/f.4/c.1",
+    "marker": "belirlenir",
+    "text": "(4) Tazminatlar, işletmenin bulunduğu mahallin rayiç bedelleri dikkate alınarak yerel kıymet takdir komisyonu tarafından belirlenir."
+   },
+   {
+    "ref": "Kanun 5996 md. 9/f.1",
+    "marker": "yükümlüdür",
+    "text": "(1) Hayvan sahipleri veya bakımından sorumlu kişiler, hayvan refahının sağlanması amacıyla, hayvanların barınma, bakım, beslenme, sağlık ve diğer ihtiyaçlarını karşılamak, sorumluluklarındaki hayvanla"
+   },
+   {
+    "ref": "Kanun 5996 md. 12/f.10/c.4",
+    "marker": "ettirilir",
+    "text": "Hatası giderilemeyecek ürünler, masrafı sahibine ait olmak üzere derhal imha ettirilir."
+   },
+   {
+    "ref": "Kanun 5996 md. 12/f.16",
+    "marker": "zorundadır",
+    "text": "(16) Ülkemizdeki hayvanlara uygulanmak üzere ithal edilecek veteriner biyolojik ürünlerdeki suşlar, ülkemizde bulunan hastalık yapan antijenik suşlarla uyumlu olmak zorundadır."
+   }
+  ]
+ },
+ "CONSUMER_RIGHT_OR_CONSUMER_SUBJECT": {
+  "obligations": 19,
+  "records": 95,
+  "examples": [
+   {
+    "ref": "Kanun 6502 md. 22/f.3/c.1",
+    "marker": "olmaz",
+    "text": "(3) Tüketici kredisi sözleşmesi yazılı veya mesafeli olarak kurulmadıkça geçerli olmaz."
+   },
+   {
+    "ref": "Kanun 6502 md. 25/f.2/c.1",
+    "marker": "kullanılır",
+    "text": "(2) Tüketici kredisi sözleşmelerinde, akdî faiz, efektif yıllık faiz veya kredinin toplam maliyetinin yer almaması durumunda, kredi tutarı faizsiz olarak sözleşme süresinin sonuna kadar kullanılır."
+   },
+   {
+    "ref": "Kanun 6502 md. 26/f.2/c.4",
+    "marker": "etkilenmez",
+    "text": "Tüketici, bildirim tarihinden itibaren en geç altmış gün içinde borcun tamamını ödediği ve kredi kullanmaya son verdiği takdirde faiz artışından etkilenmez."
+   },
+   {
+    "ref": "Kanun 6502 md. 29/f.3",
+    "marker": "bağlanamaz",
+    "text": "(3) Tüketici kredisi sözleşmesi, kredi ile ilgili olanlar hariç yan finansal ürün ve hizmetlerin satın alınması şartına bağlanamaz."
+   }
+  ]
+ },
+ "LEGAL_CONSEQUENCE_OR_REFERENCE_NOT_A_DUTY": {
+  "obligations": 17,
+  "records": 85,
+  "examples": [
+   {
+    "ref": "Kanun 5996 md. 12/f.9",
+    "marker": "uygulanır",
+    "text": "(9) Veteriner biyolojik ürün üretilen yerlerde, sağlık koruma bandı uygulanır."
+   },
+   {
+    "ref": "Kanun 5996 md. 14/f.3/c.1",
+    "marker": "uygulanır",
+    "text": "(3) Veteriner biyolojik ürünleri, veteriner hekim veya yardımcı sağlık personeli tarafından uygulanır."
+   },
+   {
+    "ref": "Kanun 5996 md. 31/f.5",
+    "marker": "uygulanır",
+    "text": "(5) Bu Kanun kapsamında öngörülen gıda kontrolü ile ilgili düzenlemeler, gıda ile temas eden madde ve malzemeler ile bu işle iştigal eden işyerleri için de uygulanır."
+   },
+   {
+    "ref": "Kanun 5996 md. 34/f.5/c.3",
+    "marker": "uygulanır",
+    "text": "Bu önlemler, insan, bitki ve hayvan sağlığı ile çevre için doğrudan ya da dolaylı herhangi bir olumsuz etkiye sebep olmayacak şekilde uygulanır."
+   }
+  ]
+ },
+ "LIST_ITEM_ADDRESSEE_IN_LEAD_IN_OR_CLOSING": {
+  "obligations": 14,
+  "records": 70,
+  "examples": [
+   {
+    "ref": "Kanun 6502 md. 11/f.1/b.a",
+    "marker": "yükümlüdür (closing)",
+    "text": "a) Satılanı geri vermeye hazır olduğunu bildirerek sözleşmeden dönme,"
+   },
+   {
+    "ref": "Kanun 6502 md. 11/f.1/b.b",
+    "marker": "yükümlüdür (closing)",
+    "text": "b) Satılanı alıkoyup ayıp oranında satış bedelinden indirim isteme,"
+   },
+   {
+    "ref": "Kanun 6502 md. 11/f.1/b.c",
+    "marker": "yükümlüdür (closing)",
+    "text": "c) Aşırı bir masraf gerektirmediği takdirde, bütün masrafları satıcıya ait olmak üzere satılanın ücretsiz onarılmasını isteme,"
+   },
+   {
+    "ref": "Kanun 6502 md. 11/f.1/b.ç",
+    "marker": "yükümlüdür (closing)",
+    "text": "ç) İmkân varsa, satılanın ayıpsız bir misli ile değiştirilmesini isteme,"
+   }
+  ]
+ },
+ "ADDRESSEE_IN_PRIOR_SENTENCE_BY_ANAPHORA": {
+  "obligations": 1,
+  "records": 5,
+  "examples": [
+   {
+    "ref": "Kanun 6502 md. 10/f.3/c.2",
+    "marker": "zorunludur",
+    "text": "Bu etiketin tüketiciye verilmesi veya ayıba ilişkin açıklayıcı bilginin tüketiciye verilen fatura, fiş veya satış belgesi üzerinde açıkça gösterilmesi zorunludur."
+   }
+  ]
+ }
+}

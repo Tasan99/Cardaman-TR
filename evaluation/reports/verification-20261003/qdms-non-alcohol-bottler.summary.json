@@ -1,0 +1,72 @@
+{
+  "profile_id": "tr-bev-pilot-non-alcohol-bottler",
+  "register_synthetic": true,
+  "summary": {
+    "rows": 3365,
+    "by_layer": {
+      "REGULATION": 3365
+    },
+    "by_policy_status": {
+      "CONTRADICTED": 1,
+      "NOT_COVERED": 3339,
+      "PARTIALLY_COVERED": 21,
+      "UNKNOWN": 4
+    },
+    "by_decision": {
+      "AUTO": 3201,
+      "REVIEW_REQUIRED": 164
+    },
+    "by_approval": {
+      "PENDING": 3365
+    },
+    "actions": 3527,
+    "actions_by_type": {
+      "COMPLIANCE_REVIEW_TASK": 164,
+      "CONTROL_DEFINITION_REQUEST": 1,
+      "DOCUMENT_CHANGE_REQUEST": 3357,
+      "EVIDENCE_REQUEST": 3,
+      "NONCONFORMITY": 2
+    },
+    "actions_by_state": {
+      "DRAFT": 3527
+    },
+    "actions_by_department": {
+      "COMPLIANCE": 329,
+      "ECOMMERCE": 148,
+      "ENVIRONMENT": 332,
+      "FOOD_SAFETY": 340,
+      "HR": 20,
+      "LEGAL": 93,
+      "MANUFACTURING": 140,
+      "MARKETING": 595,
+      "QUALITY": 1106,
+      "RND": 91,
+      "SALES": 175,
+      "SUPPLY_CHAIN": 158
+    },
+    "applicability_reviews": 3095,
+    "applicability_reviews_by_type": {
+      "CLARIFY_REGULATORY_SCOPE": 2200,
+      "COMPLETE_PROFILE_FACT": 895
+    },
+    "applicability_reviews_by_approval": {
+      "PENDING": 3095
+    },
+    "applicability_actions_by_state": {
+      "DRAFT": 3095
+    },
+    "ready_for_qdms": 0,
+    "ledger": {
+      "APPLICABILITY_REVIEW": 3095,
+      "EXCLUDED_COVERED_AUTO": 31,
+      "EXPORTED": 3365
+    }
+  },
+  "files": {
+    "json": "C:\\dev\\Cardaman\\evaluation\\runs\\20261003-verification\\qdms-tr-bev-pilot-non-alcohol-bottler\\export.json",
+    "csv": "C:\\dev\\Cardaman\\evaluation\\runs\\20261003-verification\\qdms-tr-bev-pilot-non-alcohol-bottler\\export.csv",
+    "reviews_csv": "C:\\dev\\Cardaman\\evaluation\\runs\\20261003-verification\\qdms-tr-bev-pilot-non-alcohol-bottler\\applicability-reviews.csv",
+    "template": "C:\\dev\\Cardaman\\evaluation\\runs\\20261003-verification\\qdms-tr-bev-pilot-non-alcohol-bottler\\approvals-template.json",
+    "ready": "C:\\dev\\Cardaman\\evaluation\\runs\\20261003-verification\\qdms-tr-bev-pilot-non-alcohol-bottler\\ready-actions.json"
+  }
+}
