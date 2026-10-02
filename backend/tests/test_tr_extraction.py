@@ -309,10 +309,15 @@ class ChannelAndPackagingTests(unittest.TestCase):
             self.assertIn(decisions[entity.entity_id].status, ('APPLIES', 'PARTIAL'), entity.entity_id)
             self.assertIn('SALES_CHANNEL_MATCH', decisions[entity.entity_id].reason_codes)
             self.assertIn('SALES_CHANNEL', [g['gate'] for g in decisions[entity.entity_id].gates])
-        silent = [e for e in profile.legal_entities if not e.sales_channels and e.profile_complete and e.entity_id in decisions]
-        for entity in silent:
-            self.assertEqual(decisions[entity.entity_id].status, 'DOES_NOT_APPLY', entity.entity_id)
-            self.assertIn('SALES_CHANNEL_MISMATCH', decisions[entity.entity_id].reason_codes)
+        # profile_complete does not make the channel list complete: no entity of the pilot is ruled out by its channels
+        for decision in decisions.values():
+            self.assertNotIn('SALES_CHANNEL_MISMATCH', decision.reason_codes, decision.target_id)
+        # a channel list stated complete without the channel rules the entity out on that gate alone
+        closed = profile.model_copy(update={'legal_entities': [
+            e.model_copy(update={'sales_channels': ['ON_PREMISE'], 'sales_channels_complete': True}) if e.entity_id == selling[0].entity_id else e
+            for e in profile.legal_entities]})
+        closed_decision = next(d for d in route(small, closed, REGISTRY, STORE)[0] if d.target_id == selling[0].entity_id)
+        self.assertEqual((closed_decision.status, closed_decision.reason_codes), ('DOES_NOT_APPLY', ['SALES_CHANNEL_MISMATCH']))
         # channels not stated: not NO
         open_profile = profile.model_copy(update={'legal_entities': [e.model_copy(update={'sales_channels': [], 'profile_complete': False})
                                                                       for e in profile.legal_entities]})
@@ -341,6 +346,37 @@ class ChannelAndPackagingTests(unittest.TestCase):
         deposit = next(o for o in waste if o.provision_ref == 'Yönetmelik 38745 md. 9/f.1/b.ç')
         self.assertEqual((deposit.scope.level, deposit.scope.product_attributes), ('LEGAL_ENTITY', []))
 
+
+
+class ExclusionAgainstSourceTests(unittest.TestCase):
+    """Every channel or packaging constraint is checked against what the clause itself requires (3 October 2026: the
+    exclusions of the self-test run of 2 October, read one by one against their source text)."""
+
+    def scope_of(self, regulation_id, article, ref):
+        obligations = extract_regulation(regulation_id, REGISTRY, STORE, articles=[article])[1]
+        return next(o for o in obligations if o.provision_ref == ref).scope
+
+    def test_a_distance_contract_is_not_an_online_sale(self):
+        # "mesafeli sözleşme" is any contract made by means of distance communication: telephone and voice included
+        for regulation_id, article, ref in (('TR:YONETMELIK:MESAFELI_SOZLESMELER', '8', 'Yönetmelik 20237 md. 8/f.2'),
+                                            ('TR:YONETMELIK:MESAFELI_SOZLESMELER', '6', 'Yönetmelik 20237 md. 6/f.3'),
+                                            ('TR:YONETMELIK:MESAFELI_SOZLESMELER', '5', 'Yönetmelik 20237 md. 5/f.1/b.a'),
+                                            ('TR:KANUN:6502', '48', 'Kanun 6502 md. 48/f.2/c.1')):
+            self.assertNotIn('ONLINE', self.scope_of(regulation_id, article, ref).sales_channels, ref)
+        # electronic commerce is
+        self.assertEqual(self.scope_of('TR:KANUN:6563', 'Ek 2', 'Kanun 6563 md. Ek 2/f.1/b.a/c.1').sales_channels, ['ONLINE'])
+
+    def test_a_deposit_scheme_is_not_returnable_packaging(self):
+        # the deposit management system covers single-use beverage packaging (PET, can, glass); RETURNABLE_PACKAGING is refillable
+        for article, ref in (('14', 'Yönetmelik 38745 md. 14/f.3/c.2'), ('15', 'Yönetmelik 38745 md. 15/f.4/c.2')):
+            self.assertNotIn('RETURNABLE_PACKAGING', self.scope_of('TR:YONETMELIK:AMBALAJ_ATIKLARI', article, ref).product_attributes, ref)
+
+    def test_a_kiosk_as_a_kind_of_food_business_is_not_a_sales_channel(self):
+        self.assertEqual(self.scope_of('TR:YONETMELIK:GIDA_HIJYENI', '11', 'Yönetmelik 15592 md. 11/f.3/c.3').sales_channels, [])
+
+    def test_a_clause_written_for_glass_bottles_keeps_its_glass_condition(self):
+        self.assertEqual(self.scope_of('TR:YONETMELIK:TGK_ETIKETLEME', '19', 'Yönetmelik 23282 md. 19/f.1').product_attributes, ['GLASS_PACKAGING'])
+        self.assertIn('GLASS_PACKAGING', self.scope_of('TR:YONETMELIK:INSANI_TUKETIM_SULAR', '34', 'Yönetmelik 7510 md. 34/f.4/b.c').product_attributes)
 
 if __name__ == '__main__':
     unittest.main()

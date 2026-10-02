@@ -153,7 +153,7 @@ class FileTests(unittest.TestCase):
             self.assertEqual({l['action_state'] for l in lines if l['action_type']}, {'DRAFT'})
             self.assertEqual(json.loads(paths['ready'].read_text(encoding='utf-8')), [])
             template = json.loads(paths['template'].read_text(encoding='utf-8'))
-            self.assertEqual(len(template['entries']), len(result.rows))
+            self.assertEqual(len(template['entries']), len(result.rows) + len(result.applicability_reviews))
             self.assertEqual(qdms.load_approvals(paths['template']).entries, [])
             template['entries'][0].update({'decision': 'APPROVED', 'approver': 'kalite.muduru', 'decided_at': '2026-10-02T14:00:00+00:00'})
             filled = Path(directory) / 'filled.json'
@@ -161,6 +161,91 @@ class FileTests(unittest.TestCase):
             approved, problems = qdms.apply_approvals(result, qdms.load_approvals(filled))
             self.assertEqual(problems, [])
             self.assertEqual({a['row_id'] for a in qdms.ready_actions(approved)}, {result.rows[0].row_id})
+
+
+class UnknownApplicabilityTests(unittest.TestCase):
+    """A duty whose applicability is UNKNOWN is neither lost nor turned into a policy action: routing -> report ->
+    analysis statistics -> QDMS review section -> CSV -> approval, the same records all the way."""
+
+    def test_every_unknown_decision_reaches_the_report_and_the_export_as_a_review(self):
+        from regchain.tr.extraction import route
+        unknown = {(o.obligation_id, d.target_id) for o in OBLIGATIONS for d in route(o, BREWER, REGISTRY, STORE)[0] if d.status == 'UNKNOWN'}
+        self.assertTrue(unknown, 'the fixture needs an UNKNOWN decision')
+        self.assertEqual({(r.obligation_id, r.target_id) for r in REPORT.applicability_reviews}, unknown)
+        self.assertEqual(REPORT.summary['applicability_unknown'], len(unknown))
+        result = export()
+        self.assertEqual({r.row_id for r in result.applicability_reviews}, {f'APPLICABILITY:{o}:{t}' for o, t in unknown})
+        self.assertEqual(result.summary['applicability_reviews'], len(unknown))
+        # kept apart from the policy rows: no policy status, no coverage, no document change
+        policy_keys = {r.row_id for r in result.rows}
+        self.assertFalse(policy_keys & {f'{o}:{t}' for o, t in unknown})
+        for item in result.applicability_reviews:
+            self.assertEqual(item.applicability['status'], 'UNKNOWN')
+            self.assertFalse(item.coverage_assessed)
+            self.assertTrue(item.entity['entity_ids'])
+            self.assertTrue(item.provision['regulation_id'] and item.provision['provision_ref'] and item.provision['quote'])
+            self.assertEqual(item.provision['version_id'], STORE.head(item.provision['regulation_id']).version_id)
+            self.assertTrue(item.applicability['reason_codes'])
+            self.assertIn(item.uncertainty['review_type'], ('COMPLETE_PROFILE_FACT', 'RESOLVE_PROFILE_CONFLICT', 'CLARIFY_REGULATORY_SCOPE',
+                                                            'CHECK_SOURCE_GROUNDING'))
+            if item.uncertainty['review_type'] == 'COMPLETE_PROFILE_FACT':
+                self.assertTrue(item.uncertainty['missing_facts'], item.row_id)        # the missing fact is named
+            self.assertTrue(item.uncertainty['source_evidence']['quote'])
+            self.assertEqual([a.qdms_type for a in item.required_actions][0] in ('PROFILE_DATA_REQUEST', 'APPLICABILITY_REVIEW_TASK'), True)
+            self.assertEqual({a.state for a in item.required_actions}, {'DRAFT'})
+            self.assertEqual(item.human_approval.status, 'PENDING')
+        self.assertNotIn('NONCONFORMITY', {a.qdms_type for r in result.applicability_reviews for a in r.required_actions})
+        self.assertNotIn('DOCUMENT_CHANGE_REQUEST', {a.qdms_type for r in result.applicability_reviews for a in r.required_actions})
+        self.assertEqual(qdms.ready_actions(result), [])
+
+    def test_the_review_section_is_written_and_approved_like_the_rows(self):
+        result = export()
+        item = result.applicability_reviews[0]
+        with tempfile.TemporaryDirectory() as directory:
+            paths = qdms.write(result, Path(directory))
+            with paths['reviews_csv'].open(encoding='utf-8-sig', newline='') as handle:
+                lines = list(csv.DictReader(handle, delimiter=';'))
+            self.assertEqual(len(lines), len(result.applicability_reviews))
+            self.assertEqual({l['applicability'] for l in lines}, {'UNKNOWN'})
+            self.assertEqual(qdms.load_export(paths['json']).applicability_reviews, result.applicability_reviews)
+        approved, problems = qdms.apply_approvals(result, qdms.Approvals.model_validate(
+            {'format': qdms.APPROVALS_FORMAT, 'profile_id': BREWER.profile_id, 'entries': [entry(item, 'APPROVED')]}))
+        self.assertEqual(problems, [])
+        ready = qdms.ready_actions(approved)
+        self.assertEqual([a['row_id'] for a in ready], [item.row_id])
+        self.assertIn(ready[0]['qdms_type'], ('PROFILE_DATA_REQUEST', 'APPLICABILITY_REVIEW_TASK'))
+
+    def test_the_analysis_statistics_count_them(self):
+        from regchain.tr.adjudicate import assess_profile as assess
+        _, _, stats = assess(BREWER, OBLIGATIONS, REGISTER, REGISTRY, STORE)
+        self.assertEqual(stats['applicability_unknown'], len(REPORT.applicability_reviews))
+        self.assertEqual(sum(stats['applicability_unknown_by_type'].values()), stats['applicability_unknown'])
+
+
+class LedgerTests(unittest.TestCase):
+    """Every analysis row is accounted for: exported, merged with the same duty and target from another pack, left out as
+    covered with no action, or an applicability review. The counts reconcile per pack."""
+
+    def test_two_packs_reading_the_same_duty_on_the_same_target_give_one_row(self):
+        reports = {'PACK_A': REPORT, 'PACK_B': REPORT}
+        result = qdms.export_rows(BREWER, REGISTER, REGISTRY, reports, {'PACK_A': ASSESSMENTS, 'PACK_B': ASSESSMENTS}, generated_at=WHEN, store=STORE)
+        single = export()
+        self.assertEqual([r.row_id for r in result.rows], [r.row_id for r in single.rows])
+        self.assertTrue(all(r.packs == ['PACK_A', 'PACK_B'] for r in result.rows))
+        self.assertEqual(len({r.row_id for r in result.rows}), len(result.rows))
+        self.assertEqual(len({r.row_id for r in result.applicability_reviews}), len(result.applicability_reviews))
+        for pack in reports:
+            entries = [e for e in result.ledger if e['pack'] == pack]
+            policy = [e for e in entries if not e['row_id'].startswith('APPLICABILITY:')]
+            self.assertEqual(len(policy), len(REPORT.rows), pack)                   # every analysis row, once
+            self.assertEqual(len(entries) - len(policy), len(REPORT.applicability_reviews), pack)
+        outcomes = result.summary['ledger']
+        covered_auto = sum(r.mapping.status == 'COVERED' and a.decision == 'AUTO' and not r.actions for r, a in zip(REPORT.rows, ASSESSMENTS))
+        self.assertEqual(outcomes['EXCLUDED_COVERED_AUTO'], 2 * covered_auto)
+        self.assertEqual(outcomes['EXPORTED'], len(result.rows))
+        self.assertEqual(outcomes['APPLICABILITY_REVIEW'], len(result.applicability_reviews))
+        self.assertEqual(outcomes['MERGED_SAME_DUTY_AND_TARGET'], len(result.rows) + len(result.applicability_reviews))
+        self.assertEqual(sum(outcomes.values()), 2 * (len(REPORT.rows) + len(REPORT.applicability_reviews)))
 
 
 class DecisionLayerExportTests(unittest.TestCase):

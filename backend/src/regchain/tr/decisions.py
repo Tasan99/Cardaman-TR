@@ -358,10 +358,13 @@ def assess_decision(record: DecisionRecord, profile: EnterpriseProfile, registry
     layered = LayeredStore(corpus, decisions)
     bound = addressees_of(record, profile, named)
     frames, obligations = decision_obligations(record, decisions, registry)
-    rows, assessments = [], []
+    from .compare import applicability_review, review_summary
+    rows, assessments, reviews = [], [], []
     for obligation in obligations:
         for decision in route(obligation, profile, view, layered)[0]:
             decision = addressed(decision, bound)
+            if decision.status == 'UNKNOWN':
+                reviews.append(applicability_review(obligation, decision))
             if decision.status != 'APPLIES':
                 continue
             row, assessment = assess_obligation(obligation, decision, profile, register, view, table, adjudicator, False, layered)
@@ -373,8 +376,9 @@ def assess_decision(record: DecisionRecord, profile: EnterpriseProfile, registry
     for row in rows:
         counts[row.mapping.status] = counts.get(row.mapping.status, 0) + 1
     summary = {'rows': len(rows), 'by_status': dict(sorted(counts.items())), 'review_required': len(rows),
-               'rules_version': COMPARE_RULES_VERSION}
-    report = GapReport(profile_id=profile.profile_id, register_synthetic=register.synthetic, rows=rows, summary=summary)
+               'rules_version': COMPARE_RULES_VERSION, **review_summary(reviews)}
+    report = GapReport(profile_id=profile.profile_id, register_synthetic=register.synthetic, rows=rows, summary=summary,
+                       applicability_reviews=reviews)
     by_kind: dict[str, int] = {}
     for frame in frames:
         by_kind[frame.kind] = by_kind.get(frame.kind, 0) + 1

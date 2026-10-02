@@ -118,12 +118,12 @@
     {"id": "NUTRITION_DECLARATION", "pattern": "beslenme bildirim[a-zçğıöşü]*"}
   ],
   "sales_channels": [
-    {"id": "TRADITIONAL_RETAIL", "pattern": "bakkal[a-zçğıöşü]*|büfe[a-zçğıöşü]*|kuruyemişçi[a-zçğıöşü]*"},
+    {"id": "TRADITIONAL_RETAIL", "pattern": "bakkal[a-zçğıöşü]*|kuruyemişçi[a-zçğıöşü]*"},
     {"id": "MODERN_RETAIL", "pattern": "süpermarket[a-zçğıöşü]*|hipermarket[a-zçğıöşü]*|zincir market[a-zçğıöşü]*|market zincir[a-zçğıöşü]*"},
-    {"id": "ONLINE", "pattern": "mesafeli (?:sözleşme|satış)[a-zçğıöşü]*|e-ticaret[a-zçğıöşü]*|elektronik ticaret[a-zçğıöşü]*|internet (?:üzerinden|aracılığıyla|yoluyla|ortamında) (?:satış|satıl|sunul|teslim)[a-zçğıöşü]*|çevrim ?içi satış[a-zçğıöşü]*"}
+    {"id": "ONLINE", "pattern": "e-ticaret[a-zçğıöşü]*|elektronik ticaret[a-zçğıöşü]*|internet (?:üzerinden|aracılığıyla|yoluyla|ortamında) (?:satış|satıl|sunul|teslim)[a-zçğıöşü]*|çevrim ?içi satış[a-zçğıöşü]*"}
   ],
   "product_tags": [
-    {"id": "RETURNABLE_PACKAGING", "pattern": "depozito[a-zçğıöşü]*|iade edilebilir ambalaj[a-zçğıöşü]*|geri dönüşlü ambalaj[a-zçğıöşü]*"},
+    {"id": "RETURNABLE_PACKAGING", "pattern": "iade edilebilir ambalaj[a-zçğıöşü]*|geri dönüşlü ambalaj[a-zçğıöşü]*"},
     {"id": "GLASS_PACKAGING", "pattern": "cam (?:şişe|ambalaj|kavanoz)[a-zçğıöşü]*"},
     {"id": "PET_PACKAGING", "pattern": "pet (?:şişe|ambalaj)[a-zçğıöşü]*|plastik (?:şişe|ambalaj)[a-zçğıöşü]*"},
     {"id": "CAN_PACKAGING", "pattern": "metal kutu[a-zçğıöşü]*|alüminyum kutu[a-zçğıöşü]*|teneke kutu[a-zçğıöşü]*"}

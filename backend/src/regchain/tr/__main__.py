@@ -162,11 +162,12 @@ def _domain(args, store: CorpusStore) -> int:
                         'review_reasons': a.review_reasons, 'proposal': a.proposal, 'applicability_basis': a.applicability_basis}
                        for r, a in zip(report.rows, result['assessments'][pack]) if args.all or r.mapping.status != 'COVERED' or a.decision != 'AUTO']
                 for pack, report in result['reports'].items()}
+        reviews = {pack: [r.model_dump(mode='json') for r in report.applicability_reviews] for pack, report in result['reports'].items()}
         payload = {'profile_id': profile.profile_id, 'version': result['version'],
-                   'engines': [e.model_dump(mode='json') for e in result['engines']], 'rows': rows}
+                   'engines': [e.model_dump(mode='json') for e in result['engines']], 'rows': rows, 'applicability_reviews': reviews}
         if args.out:
             Path(args.out).write_text(json.dumps(payload, ensure_ascii=False, indent=1), encoding='utf-8')
-            _print({k: v for k, v in payload.items() if k != 'rows'})
+            _print({k: v for k, v in payload.items() if k not in ('rows', 'applicability_reviews')})
         else:
             _print(payload)
         return 0

@@ -154,12 +154,82 @@ class GapRow(Strict):
     review_required: bool = False
 
 
+# What a person has to do about a duty whose applicability is UNKNOWN. Never a nonconformity, never a policy action.
+REVIEW_TYPES = {
+    'CHECK_SOURCE_GROUNDING': 'the clause the duty rests on is not an exact span of the stored text',
+    'CLARIFY_REGULATORY_SCOPE': 'the clause does not say whom it binds',
+    'RESOLVE_PROFILE_CONFLICT': 'the company profile contradicts itself on a fact the duty turns on',
+    'COMPLETE_PROFILE_FACT': 'the company profile does not state a fact the duty turns on',
+}
+
+
+class ApplicabilityReview(Strict):
+    """One duty on one target whose applicability is UNKNOWN: what is missing, what is known, what a person must do.
+    Its policy coverage is not assessed: whether a policy covers a duty is asked once the duty is known to apply."""
+    review_id: str
+    obligation_id: str
+    regulation_id: str
+    provision_ref: str
+    version_id: str
+    topic: str
+    modality: str
+    quote: str
+    level: str
+    target_id: str
+    entity_id: str | None = None
+    applicability: Literal['UNKNOWN'] = 'UNKNOWN'
+    reason_codes: list[str]
+    review_type: str
+    missing_facts: list[dict] = []          # undetermined gates: what the duty needs, what the profile states, complete or not
+    company_evidence: list[dict] = []       # decided gates: the company facts already known
+    source_evidence: dict = {}              # the clause, its conditions and exceptions, its flags, whether it is grounded
+    coverage_assessed: bool = False
+
+
+def review_type(reason_codes: list[str]) -> str:
+    if 'GROUNDING_FAILED' in reason_codes:
+        return 'CHECK_SOURCE_GROUNDING'
+    if 'REGULATORY_SCOPE_UNCLEAR' in reason_codes:
+        return 'CLARIFY_REGULATORY_SCOPE'
+    if any(code.endswith('_PROFILE_CONFLICT') for code in reason_codes):
+        return 'RESOLVE_PROFILE_CONFLICT'
+    return 'COMPLETE_PROFILE_FACT'
+
+
+def applicability_review(obligation: ExtractedObligation, decision) -> ApplicabilityReview:
+    """The review record of one UNKNOWN routing decision, from its gates and the clause it rests on."""
+    keep = ('gate', 'status', 'required', 'stated', 'complete', 'conflicts', 'matched', 'products', 'quotes')
+    gates = [{k: v for k, v in g.items() if k in keep} for g in decision.gates]
+    validator = decision.audit.validator or {}
+    frame = obligation.frame
+    source = {'quote': obligation.text, 'conditions': [c.quote for c in frame.conditions], 'exceptions': [e.quote for e in frame.exceptions],
+              'scope_status': obligation.scope.scope_status, 'flags': list(obligation.flags), 'grounded': validator.get('grounded'),
+              'scope': {k: v for k, v in obligation.scope.constraints().items()}}
+    return ApplicabilityReview(review_id=f'{obligation.obligation_id}:{decision.target_id}', obligation_id=obligation.obligation_id,
+                               regulation_id=obligation.regulation_id, provision_ref=obligation.provision_ref, version_id=obligation.version_id,
+                               topic=obligation.topic, modality=obligation.modality, quote=obligation.text, level=decision.level,
+                               target_id=decision.target_id, entity_id=decision.entity_id, reason_codes=list(decision.reason_codes),
+                               review_type=review_type(decision.reason_codes),
+                               missing_facts=[g for g in gates if g.get('status') == 'UNDETERMINED'],
+                               company_evidence=[g for g in gates if g.get('status') in ('MATCH', 'MISMATCH')], source_evidence=source)
+
+
+def review_summary(reviews: list[ApplicabilityReview]) -> dict:
+    by_type: dict[str, int] = {}
+    for review in reviews:
+        by_type[review.review_type] = by_type.get(review.review_type, 0) + 1
+    return {'applicability_unknown': len(reviews), 'applicability_unknown_by_type': dict(sorted(by_type.items())),
+            'applicability_unknown_obligations': len({r.obligation_id for r in reviews})}
+
+
 class GapReport(Strict):
     profile_id: str
     register_synthetic: bool
     rules_version: str = COMPARE_RULES_VERSION
     rows: list[GapRow]
     summary: dict
+    # Duties whose applicability is UNKNOWN on a target: not gap rows (nothing is compared), kept for a person.
+    applicability_reviews: list[ApplicabilityReview] = []
 
 
 # -- register ----------------------------------------------------------------------------------------
@@ -943,13 +1013,15 @@ def compare_profile(profile: EnterpriseProfile, obligations: list[ExtractedOblig
     for its own entity, because the documents in force differ from entity to entity."""
     from .extraction import route
     store = store or CorpusStore()
-    rows = []
+    rows, reviews = [], []
     for obligation in obligations:
         decisions, _ = route(obligation, profile, registry, store)
         for decision in decisions:
             if decision.status in ('APPLIES', 'PARTIAL'):
                 reading = ((second or {}).get(decision.entity_id) or {}).get(obligation.provision_ref)
                 rows.append(compare_obligation(obligation, decision, profile, register, registry, reading))
+            elif decision.status == 'UNKNOWN':
+                reviews.append(applicability_review(obligation, decision))
     counts: dict[str, int] = {}
     for row in rows:
         counts[row.mapping.status] = counts.get(row.mapping.status, 0) + 1
@@ -959,5 +1031,6 @@ def compare_profile(profile: EnterpriseProfile, obligations: list[ExtractedOblig
             departments[action['department']] = departments.get(action['department'], 0) + 1
     summary = {'rows': len(rows), 'by_status': dict(sorted(counts.items())), 'open_actions_by_department': dict(sorted(departments.items())),
                'product_nonconformities': sum(1 for r in rows for f in r.product_findings if f.result == 'EXCEEDS_LIMIT'),
-               'review_required': sum(r.review_required for r in rows)}
-    return GapReport(profile_id=profile.profile_id, register_synthetic=register.synthetic, rows=rows, summary=summary)
+               'review_required': sum(r.review_required for r in rows), **review_summary(reviews)}
+    return GapReport(profile_id=profile.profile_id, register_synthetic=register.synthetic, rows=rows, summary=summary,
+                     applicability_reviews=reviews)

@@ -80,6 +80,10 @@ class Activity(Strict):
     facility_id: str | None = None
     product_ids: list[str] = []
     channels: list[str] = []
+    # True only when `channels` lists every channel this activity uses; a list that does not say so names channels the
+    # activity uses and rules none out. The basis says where the completeness comes from (who stated it, which record).
+    channels_complete: bool = False
+    channels_basis: str = ''
 
 
 class LegalEntity(Strict):
@@ -90,6 +94,10 @@ class LegalEntity(Strict):
     licenses: list[License] = []
     product_ids: list[str] = []
     sales_channels: list[str] = []
+    # True only when `sales_channels` lists every channel the entity sells through. profile_complete does not cover the
+    # channels: a profile without this field (every profile written before 3 October 2026) has an open channel list.
+    sales_channels_complete: bool = False
+    sales_channels_basis: str = ''
     # The board decisions (tr/decisions.py ids, TR:KURUL_KARARI:...) this entity is an addressee of, as the company states
     # them: a decision's duties bind these entities and no other.
     bound_by_decisions: list[str] = []

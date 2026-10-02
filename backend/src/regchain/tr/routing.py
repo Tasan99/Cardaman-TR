@@ -122,44 +122,74 @@ def select_packs(profile: EnterpriseProfile, registry: Registry) -> list[PackSel
 
 # -- targets ---------------------------------------------------------------------------------------
 class _Target:
-    """What one target states for each dimension: (values, complete). A licence stated as UNKNOWN
-    leaves the licence list open even on a complete profile; APPLIED or NOT_HELD is a known absence."""
+    """What one target states for each dimension: (values, complete) or (values, complete, ceiling). A licence stated
+    as UNKNOWN leaves the licence list open even on a complete profile; APPLIED or NOT_HELD is a known absence. A ceiling
+    is what the target's entity states in full: a value outside it is ruled out even where the target's own list is open.
+    `conflicts` names, per dimension, the stated values a complete list contradicts."""
 
-    def __init__(self, level, target_id, entity_id, facts, products, products_complete):
+    def __init__(self, level, target_id, entity_id, facts, products, products_complete, conflicts=None):
         self.level, self.target_id, self.entity_id = level, target_id, entity_id
         self.facts, self.products, self.products_complete = facts, products, products_complete
+        self.conflicts = conflicts or {}
 
 
-def _entity_facts(entity):
+# An activity class that is itself a sales channel: an entity that sells online cannot have a complete channel list
+# without ONLINE. Used only to find a contradiction, never to add a channel.
+IMPLIED_CHANNELS = {'ECOMMERCE_SALE': 'ONLINE'}
+
+
+def _channel_facts(entity, profile=None) -> tuple[set, bool, list[str]]:
+    """(channels known to be used, list complete, contradicted channels). The entity's own list and the channels its
+    activity records name are known; the list rules others out only when stated complete (sales_channels_complete, never
+    profile_complete) and nothing in the profile contradicts it."""
+    stated = set(entity.sales_channels)
+    by_activities = {c for a in (profile.activities if profile is not None else ()) if a.entity_id == entity.entity_id for c in a.channels}
+    implied = {IMPLIED_CHANNELS[c] for c in entity.activity_classes if c in IMPLIED_CHANNELS}
+    conflicts = sorted((by_activities | implied) - stated) if entity.sales_channels_complete else []
+    return stated | by_activities, entity.sales_channels_complete and not conflicts, conflicts
+
+
+def _entity_facts(entity, profile=None):
     licences_open = any(l.status == 'UNKNOWN' for l in entity.licenses)
+    channels, channels_complete, _ = _channel_facts(entity, profile)
     return {'entity_classes': (set(entity.entity_classes), entity.profile_complete),
             'activity_classes': (set(entity.activity_classes), entity.profile_complete),
-            'sales_channels': (set(entity.sales_channels), entity.profile_complete),
+            'sales_channels': (channels, channels_complete),
             'license_classes': ({l.license_class for l in entity.licenses if l.status == 'HELD'},
                                 entity.profile_complete and not licences_open)}
 
 
+def _entity_conflicts(entity, profile) -> dict[str, list[str]]:
+    conflicts = _channel_facts(entity, profile)[2]
+    return {'sales_channels': conflicts} if conflicts else {}
+
+
 def _targets(profile: EnterpriseProfile, level: str) -> list[_Target]:
     if level == 'LEGAL_ENTITY':
-        return [_Target(level, e.entity_id, e.entity_id, _entity_facts(e), e.product_ids, profile.products_complete)
-                for e in profile.legal_entities]
+        return [_Target(level, e.entity_id, e.entity_id, _entity_facts(e, profile), e.product_ids, profile.products_complete,
+                        _entity_conflicts(e, profile)) for e in profile.legal_entities]
     if level == 'FACILITY':
         out = []
         for f in profile.facilities:
-            facts = _entity_facts(profile.entity(f.entity_id))
+            owner = profile.entity(f.entity_id)
+            facts = _entity_facts(owner, profile)
             facts |= {'facility_classes': (set(f.facility_classes), True),
                       'activity_classes': (set(f.activity_classes), f.activities_complete)}
             out.append(_Target(level, f.facility_id, f.entity_id, facts, f.product_ids,
-                               profile.products_complete and f.activities_complete))
+                               profile.products_complete and f.activities_complete, _entity_conflicts(owner, profile)))
         return out
     if level == 'ACTIVITY':
         out = []
         for a in profile.activities:
-            facts = _entity_facts(profile.entity(a.entity_id))
+            owner = profile.entity(a.entity_id)
+            facts = _entity_facts(owner, profile)
             facts['activity_classes'] = ({a.activity_class}, True)
             if a.channels:
-                facts['sales_channels'] = (set(a.channels), True)
-            out.append(_Target(level, a.activity_id, a.entity_id, facts, a.product_ids, bool(a.product_ids)))
+                # the activity's own list; what its entity states in full is the ceiling of what the activity can use
+                entity_channels, entity_complete = facts['sales_channels']
+                facts['sales_channels'] = (set(a.channels), a.channels_complete, entity_channels if entity_complete else None)
+            out.append(_Target(level, a.activity_id, a.entity_id, facts, a.product_ids, bool(a.product_ids),
+                               _entity_conflicts(owner, profile)))
         return out
     return [_Target(level, p.product_id, None, {}, [p.product_id], True) for p in profile.products]
 
@@ -259,13 +289,20 @@ def _decide(scope: ObligationScope, target: _Target, profile: EnterpriseProfile,
     for dimension, required in scope.constraints().items():
         if dimension in PRODUCT_DIMENSIONS:
             continue
-        values, complete = target.facts.get(dimension, (set(), False))
+        stated_fact = target.facts.get(dimension, (set(), False))
+        values, complete = stated_fact[0], stated_fact[1]
+        ceiling = stated_fact[2] if len(stated_fact) > 2 else None
         fact = _fact(values, complete, required)
+        if fact == 'UNKNOWN' and ceiling is not None and not ceiling & set(required):
+            fact = 'NO'                                   # the entity states in full that it does not use it
         code = CODE_OF[dimension]
+        conflict = target.conflicts.get(dimension, [])
+        extra = {'conflicts': conflict} if conflict else {}
         gates.append(gate(GATE_OF[dimension], GATE_STATUS[fact], f'{dimension} {fact}', clear=fact != 'UNKNOWN',
-                          required=sorted(required), stated=sorted(values), complete=complete))
+                          required=sorted(required), stated=sorted(values), complete=complete, **extra))
         {'YES': yes, 'NO': no, 'UNKNOWN': unknown}[fact].append(
-            f'{code}_MATCH' if fact == 'YES' else f'{code}_MISMATCH' if fact == 'NO' else 'PROFILE_INCOMPLETE')
+            f'{code}_MATCH' if fact == 'YES' else f'{code}_MISMATCH' if fact == 'NO'
+            else f'{code}_PROFILE_CONFLICT' if conflict else 'PROFILE_INCOMPLETE')
 
     matched, partial = [], False
     if _constrains_products(scope):

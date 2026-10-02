@@ -14,7 +14,9 @@ except ValueError:
 if kind == 'assess':
     print(' ; '.join(f"{e['pack_id']}: rows {e['statistics']['rows']} escalated {e['statistics']['escalated_rows']} "
                      f"review {e['statistics']['decision_review_rows']} by-scope {e['statistics']['rows_applying_by_regulation_scope']} "
-                     f"not-verified {e['statistics']['rows_not_verified']}" for e in data['engines']))
+                     f"not-verified {e['statistics']['rows_not_verified']} "
+                     f"applicability-unknown {e['statistics'].get('applicability_unknown', 'n/a')} {e['statistics'].get('applicability_unknown_by_type', '')}"
+                     for e in data['engines']))
 elif kind == 'evaluate':
     c, p = data['clauses'], data.get('pipeline', {})
     print('kind DEV', c['DEV']['tasks']['OBLIGATION_EXTRACTION/rule']['accuracy'], 'HOLDOUT', c['HOLDOUT']['tasks']['OBLIGATION_EXTRACTION/rule']['accuracy'],
@@ -22,7 +24,8 @@ elif kind == 'evaluate':
           '| pipeline', {s: {k: p[s]['metrics'][k] for k in ('auto_correct', 'auto_wrong', 'review_required', 'strict_accuracy', 'auto_false_covered', 'auto_false_contradicted')} for s in p})
 elif kind == 'qdms':
     s = data['summary']
-    print({k: s[k] for k in ('rows', 'by_policy_status', 'by_decision', 'actions', 'actions_by_state', 'ready_for_qdms')})
+    print({k: s.get(k) for k in ('rows', 'by_policy_status', 'by_decision', 'actions', 'actions_by_state', 'ready_for_qdms',
+                                  'applicability_reviews', 'applicability_reviews_by_type')})
 elif kind == 'live':
     s = data.get('selective', {})
     print({k: s.get(k) for k in ('rows', 'escalated_rows', 'adjudications', 'calls_failed', 'calls_without_thinking', 'decision_review_rows', 'model_ms_per_call', 'model_ms_per_obligation')})

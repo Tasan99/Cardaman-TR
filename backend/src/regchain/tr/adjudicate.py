@@ -409,10 +409,10 @@ def assess_obligation(obligation: ExtractedObligation, decision, profile, regist
 def assess_profile(profile, obligations: list[ExtractedObligation], register: Register, registry: Registry, store: CorpusStore | None = None,
                    table: SimilarityTable | None = None, adjudicator: Adjudicator | None = None, contested: set[str] = frozenset()):
     """(gap report, assessments, statistics) for every obligation on every target it applies to."""
-    from .compare import COMPARE_RULES_VERSION
+    from .compare import COMPARE_RULES_VERSION, applicability_review, review_summary
     from .extraction import route
     store = store or CorpusStore()
-    rows, assessments = [], []
+    rows, assessments, reviews = [], [], []
     for obligation in obligations:
         decisions, _ = route(obligation, profile, registry, store)
         for decision in decisions:
@@ -421,13 +421,18 @@ def assess_profile(profile, obligations: list[ExtractedObligation], register: Re
                                                     obligation.provision_ref in contested, store)
                 rows.append(row)
                 assessments.append(assessment)
+            elif decision.status == 'UNKNOWN':
+                reviews.append(applicability_review(obligation, decision))
     counts: dict[str, int] = {}
     for row in rows:
         counts[row.mapping.status] = counts.get(row.mapping.status, 0) + 1
+    unknown = review_summary(reviews)
     report = GapReport(profile_id=profile.profile_id, register_synthetic=register.synthetic, rows=rows,
                        summary={'rows': len(rows), 'by_status': dict(sorted(counts.items())),
-                                'review_required': sum(r.review_required for r in rows), 'rules_version': COMPARE_RULES_VERSION})
-    return report, assessments, statistics(assessments, len({o.obligation_id for o in obligations}))
+                                'review_required': sum(r.review_required for r in rows), 'rules_version': COMPARE_RULES_VERSION,
+                                **unknown},
+                       applicability_reviews=reviews)
+    return report, assessments, {**statistics(assessments, len({o.obligation_id for o in obligations})), **unknown}
 
 
 def statistics(assessments: list[Assessment], obligations: int | None = None) -> dict:
