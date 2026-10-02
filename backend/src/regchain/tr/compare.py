@@ -41,14 +41,19 @@ from .profile import EnterpriseProfile, PolicyScope, policy_covers, product_alco
 DATA = Path(__file__).resolve().parent / 'data'
 REGISTERS = DATA / 'pilot_policies'
 OWNERSHIP = DATA / 'ownership.json'
-COMPARE_RULES_VERSION = 'tr-compare-rules-v3'
+COMPARE_RULES_VERSION = 'tr-compare-rules-v4'
 Relation = Literal['SUPPORTS', 'PARTIAL', 'CONFLICTS', 'UNRELATED', 'UNCLEAR']
 STATEMENT = re.compile(r'^\s*(\d{1,3})\.\s+(?=\S)')
 SALE_FAMILY = frozenset(SALES)
 CLOCK = re.compile(r'(\d{1,2})[:.](\d{2})')
 STOPWORDS = frozenset('''bir bu ve veya ile için olan olarak olup gibi kadar üzere göre her hiçbir tüm diğer ilgili ise ancak ayrıca
 yapılır yapılamaz yapılmaz edilir edilemez edilmez olamaz olmalıdır zorunludur yer alır alan bulunur şekilde hariç dâhil dahil
-üzerine üzerinde içinde tarafından yalnızca sadece önce sonra surette suretle olursa olsun amaçla hiçbir türlü nevi edilen yapılan'''.split())
+üzerine üzerinde içinde tarafından yalnızca sadece önce sonra surette suretle olursa olsun amaçla hiçbir türlü nevi edilen yapılan
+gerekli gerekir gereken gerekmektedir gerekliliklerinin uygun uygunluk uygunluğu mevzuat mevzuata mevzuatına amaç amaçlarına amacıyla
+prosedür prosedürleri esas esaslar esaslara esastır belirlenen belirtilen değer değeri değerler hususlar hususunda husus kapsamında
+yönetmelik yönetmeliğin yönetmelikte tebliğ tebliğin kanun kanunun madde maddenin fıkra fıkrası bent hüküm hükümleri hükümlerine
+dikkate sağlanır sağlar sağlamak sağlanması yerine getirir getirmek yükümlüdür yükümlüdürler sorumludur uygulanır uygulamak uygulanması
+durumunda durumlarda halinde hallerde takdirde kaydıyla şartıyla koşuluyla yeterli'''.split())
 
 
 class DocumentRecord(Strict):
@@ -226,6 +231,7 @@ def passage_frames(passage: Passage) -> list[Frame]:
 # "her ne surette olursa olsun" bans the act outright. "hiçbir", "her türlü", "her nevi" quantify the noun next to them:
 # they make the ban absolute only where that noun is the act itself ("hiçbir etkinliğe", "marka ... hiçbir işareti"), not
 # where it is the medium of a qualified act ("Her türlü iletişim aracında ... örtülü reklam yapılması yasaktır").
+BRAND_WORD = re.compile(r'(?<![%s])(?:marka|logo|amblem|ticaret unvan)[%s]*' % (LETTERS, LETTERS))
 ABSOLUTE = re.compile(r'(?:her ne|hangi) (?:surette|suretle|amaçla|şekilde|gerekçeyle|nedenle|sebeple) olursa olsun')
 QUANTIFIER = re.compile(r'(?<![%s])(?:hiçbir|her türlü|her nevi)(?![%s])' % (LETTERS, LETTERS))
 QUANTIFIER_REACH = 30
@@ -542,6 +548,7 @@ def _relate_frame(duty: ExtractedObligation, policy: Frame, vocabulary, similari
     attributes = {q.attribute for q in frame.quantities if q.attribute}
     same_attribute = attributes & {q.attribute for q in policy.quantities if q.attribute}
     compatible = _products_compatible(duty, policy, vocabulary)
+    common = len(wanted & offered)
     detail = {'duty_acts': sorted(duty_acts), 'policy_acts': sorted(policy_acts), 'containment': round(overlap, 2)}
     if not compatible:
         return 'UNRELATED', ['OTHER_PRODUCT'], detail
@@ -595,24 +602,32 @@ def _relate_frame(duty: ExtractedObligation, policy: Frame, vocabulary, similari
         # consumer law were called contradicted by the statement that sends advertisements to legal review.)
         permits = policy.modality == 'MAY'
         does = shared if permits else _same_act(duty_acts, _acts(policy, 'none'))
-        if absolute_ban(frame) and (does or (permits and named and policy.products)):
+        # ... and only where the statement is about the duty's subject: its products, or at least two of its distinctive
+        # words. "sivil toplum kuruluşları ... projelere girişebilir, sponsor olabilir" in a code of ethics shares one act
+        # word with the ban on sponsoring under an alcohol brand and nothing else (found on real public documents).
+        # a brand, logo or trade name of the company is its product's: "Markalarımız ... sponsor olabilir" is about the beer
+        branded = bool(BRAND_WORD.search(fold(policy.text)))
+        about = bool(policy.products) or branded or common >= 2
+        if absolute_ban(frame) and about and (does or (permits and named and policy.products)):
             if any(e.effect == 'PERMITS' and not e.predicate for e in frame.exceptions) and policy.conditions:
                 return 'UNCLEAR', ['POLICY_MAY_FALL_UNDER_EXCEPTION'], detail
             return 'CONFLICTS', ['POLICY_PERMITS_PROHIBITED_ACT'], detail
         # A prohibition with its own qualifiers is contradicted only by a statement that repeats them: the same act and
         # most of the distinctive wording, at least three words of it.
-        if does and overlap >= 0.6 and len(wanted & offered) >= 3:
+        if does and overlap >= 0.6 and common >= 3:
             return 'CONFLICTS', ['POLICY_PERMITS_PROHIBITED_ACT'], detail
         return 'UNRELATED', ['OTHER_CIRCUMSTANCE'], detail
     if not negative_duty and policy.modality == 'MUST_NOT':
         # "pH değeri 4,8’i geçemez", "100 mg/L’yi geçemez": a limit written as a prohibition is a limit, not the negation
         # of a duty that sets one (found on the validation set: a false CONTRADICTED and a right one for the wrong reason)
         if not limit_statement(policy):
-            return ('CONFLICTS', ['POLICY_NEGATES_DUTY'], detail) if overlap >= 0.6 else ('UNRELATED', ['OTHER_SUBJECT'], detail)
+            # a negation needs most of the duty's words and at least three of them, and no act the duty does not govern:
+            # "alkollü araç kullanmamalıdırlar" shares two words with "biralarda kullanılan su ... mevzuata uygun olmalıdır"
+            negates = overlap >= 0.6 and common >= 3 and len(wanted) >= 3 and (not duty_acts or not policy_acts or shared)
+            return ('CONFLICTS', ['POLICY_NEGATES_DUTY'], detail) if negates else ('UNRELATED', ['OTHER_SUBJECT'], detail)
         if any(q.attribute is None for q in limits):
             return 'UNCLEAR', ['LIMIT_ATTRIBUTE_UNRESOLVED'], detail
     # -- a later deadline is a weaker rule: read on a statement the wording relates, or one a recorded similarity does -----
-    common = len(wanted & offered)
     due, given = deadlines(frame.text), deadlines(policy.text)
     late = [kind for kind in due if kind in given and given[kind] > due[kind]]
     if late and not negative_duty and policy.modality == 'MUST' and common >= 2 \
@@ -636,7 +651,9 @@ def _relate_frame(duty: ExtractedObligation, policy: Frame, vocabulary, similari
     detail['segments'] = [round(v, 2) for v in stated]
     # Relevant: the same measured property; or the same act (or, for a rule that names none, the wording) with enough
     # of the distinctive wording: half of the clause, or most of one predicate of at least three words.
-    if len(wanted) <= 2:
+    if len(wanted) < 2:
+        carried = False                                            # one word ("pH değeri ... olmalıdır") relates nothing
+    elif len(wanted) <= 2:
         carried = common == len(wanted) and common > 0             # "Gıdanın net miktarı.": both words, not one of them
     elif len(wanted) <= 4:
         carried = overlap >= 0.75
