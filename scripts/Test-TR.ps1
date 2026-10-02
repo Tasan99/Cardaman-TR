@@ -54,6 +54,11 @@ Run-Capture "$out\4-evaluate.json" @('-m', 'regchain.tr', 'ai', 'evaluate', '--s
     '--adjudications', "$rec\adjudicate-dev.jsonl", '--adjudications', "$rec\adjudicate-holdout.jsonl", '--adjudications', "$rec\adjudicate-validation.jsonl") | Out-Null
 $summary += "4 evaluate: " + (Summarize 'evaluate' "$out\4-evaluate.json")
 
+# 4b. the QDMS export of one pilot (every action DRAFT until a person approves its row) - about 1 minute
+Run-Capture "$out\4b-qdms.summary.json" @('-m', 'regchain.tr', 'qdms', 'export', '--profile', 'tr-bev-pilot-non-alcohol-bottler',
+    '--out', "$out\4b-qdms") | Out-Null
+$summary += "4b qdms export: " + (Summarize 'qdms' "$out\4b-qdms.summary.json")
+
 # 5. optional: a live leg with the local models (embeddings + strong-model adjudication) on one pilot - GPU, 10-60 minutes
 if ($WithModel) {
     $env:CARDAMAN_MODE = 'development'; $env:OLLAMA_BASE_URL = 'http://localhost:11434'

@@ -20,6 +20,9 @@ elif kind == 'evaluate':
     print('kind DEV', c['DEV']['tasks']['OBLIGATION_EXTRACTION/rule']['accuracy'], 'HOLDOUT', c['HOLDOUT']['tasks']['OBLIGATION_EXTRACTION/rule']['accuracy'],
           '| coverage rules DEV', data['coverage']['tasks']['POLICY_COVERAGE/rule']['accuracy'], 'HOLDOUT', data['coverage_holdout']['tasks']['POLICY_COVERAGE/rule']['accuracy'],
           '| pipeline', {s: {k: p[s]['metrics'][k] for k in ('auto_correct', 'auto_wrong', 'review_required', 'strict_accuracy', 'auto_false_covered', 'auto_false_contradicted')} for s in p})
+elif kind == 'qdms':
+    s = data['summary']
+    print({k: s[k] for k in ('rows', 'by_policy_status', 'by_decision', 'actions', 'actions_by_state', 'ready_for_qdms')})
 elif kind == 'live':
     s = data.get('selective', {})
     print({k: s.get(k) for k in ('rows', 'escalated_rows', 'adjudications', 'calls_failed', 'calls_without_thinking', 'decision_review_rows', 'model_ms_per_call', 'model_ms_per_obligation')})

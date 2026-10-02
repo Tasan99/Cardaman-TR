@@ -9,6 +9,9 @@ gaps             obligation -> policy -> control -> evidence -> gap for a pilot 
                  with --engine, joined with the model judgements of recorded engine runs for the same entity
 changes          the clauses an amendment touched since a date, the duties they carry and, with --profile, whom they reach
 decisions        a stored board decision (tr/decisions.py: text, items, duties); with --profile, bound to its addressee entities and assessed
+qdms export      the gap rows of a profile (sector engines, and --decision layers) as QDMS change requests: JSON, CSV, an approvals
+                 template; every action stays DRAFT until a person approves its row
+qdms approve     apply a filled approvals file to an export: approved rows' actions become READY_FOR_QDMS (ready-actions.json)
 ai units         the reading units of some articles (what a model is given)
 ai compare       rule reader against a recorded model reading: agreement, and the layer of every disagreement
 ai evaluate      BEVERAGE_TR_DEV_V2 (developer labels, INDICATIVE): tasks, contrast pairs, wrong results by layer
@@ -199,6 +202,42 @@ def _domain(args, store: CorpusStore) -> int:
         else:
             _print(payload)
         return 0
+    if args.command == 'qdms':
+        from . import qdms as q
+        out = Path(args.out)
+        if out.exists() and any(out.iterdir()):
+            raise SystemExit(f'{out} is not empty; an export is never overwritten')
+        if args.action == 'approve':
+            if not args.export or not args.approvals:
+                raise SystemExit('approve needs --export and --approvals')
+            export, problems = q.apply_approvals(q.load_export(Path(args.export)), q.load_approvals(Path(args.approvals)))
+            paths = q.write(export, out)
+            (out / 'approval-problems.json').write_text(json.dumps(problems, ensure_ascii=False, indent=1), encoding='utf-8')
+            _print({'summary': export.summary, 'problems': problems, 'files': {k: str(v) for k, v in paths.items()}})
+            return 1 if problems else 0
+        if not args.profile:
+            raise SystemExit('export needs --profile')
+        from .compare import load_register
+        from .engines import ExpertServices, assess_by_engine
+        profile = _profile(registry, args.profile)
+        register = load_register(profile.profile_id)
+        services = ExpertServices.recorded(args.similarities, [Path(p) for p in args.adjudications], registry, store)
+        result = assess_by_engine(profile, services, register)
+        export = q.export_rows(profile, register, registry, result['reports'], result['assessments'], args.all, store=store)
+        if args.decision:
+            from .decisions import DECISIONS, DecisionStore, LayeredStore, assess_decision, decision_meta, registry_with
+            decisions = DecisionStore(Path(args.decisions_root) if args.decisions_root else DECISIONS)
+            for decision_id in args.decision:
+                record = decisions.record(decision_id)
+                report, assessments, _ = assess_decision(record, profile, registry, store, decisions, register, services.table,
+                                                         services.adjudicator, named=args.addressee)
+                layer = q.export_rows(profile, register, registry_with(registry, [decision_meta(record)]), {decision_id: report},
+                                      {decision_id: assessments}, True, 'DECISION', store=LayeredStore(store, decisions))
+                export = q.merge(export, layer)
+        paths = q.write(export, out)
+        _print({'profile_id': export.profile_id, 'register_synthetic': export.register_synthetic, 'summary': export.summary,
+                'files': {k: str(v) for k, v in paths.items()}})
+        return 0
     if args.command == 'changes':
         from datetime import date
         from .change import impact, note_changes
@@ -301,6 +340,18 @@ def main(argv=None):
     decisions.add_argument('--similarities', help='a recorded similarity table to replay')
     decisions.add_argument('--adjudications', action='append', default=[], help='a recorded adjudication file to replay; repeat to name several')
     decisions.add_argument('--out', help='write the full result (rows included) to this file and print the run record')
+    qdms = commands.add_parser('qdms', help='regulation -> reasoning -> impacted policy/control -> human approval -> QDMS action (qdms.py)')
+    qdms.add_argument('action', choices=['export', 'approve'])
+    qdms.add_argument('--profile', help='export: a pilot profile id')
+    qdms.add_argument('--similarities', help='export: a recorded similarity table to replay')
+    qdms.add_argument('--adjudications', action='append', default=[], help='export: a recorded adjudication file to replay; repeat to name several')
+    qdms.add_argument('--decision', action='append', default=[], help='export: also a stored board decision (TR:KURUL_KARARI:...); repeat to name several')
+    qdms.add_argument('--addressee', action='append', default=[], help='export: a legal entity the decisions bind (also: LegalEntity.bound_by_decisions)')
+    qdms.add_argument('--decisions-root', help='export: decision store root (default: the packaged store)')
+    qdms.add_argument('--all', action='store_true', help='export: also the covered, automatic rows')
+    qdms.add_argument('--export', help='approve: the export.json to apply the approvals to')
+    qdms.add_argument('--approvals', help='approve: the filled approvals file (approvals-template.json with decisions)')
+    qdms.add_argument('--out', required=True, help='the output directory (must not exist, or be empty)')
     changes = commands.add_parser('changes', help='clauses amended since a date, their duties and whom they reach')
     changes.add_argument('--regulation', required=True)
     changes.add_argument('--since', required=True, help='ISO date; amendment notes dated on or after it are read')
@@ -318,7 +369,7 @@ def main(argv=None):
     ai_parser.add_argument('--similarities', help='evaluate: a recorded similarity table; scores the selective pipeline')
     ai_parser.add_argument('--adjudications', action='append', default=[], help='evaluate: a recorded adjudication file; repeat to name several')
     ai_parser.add_argument('--wrong', action='store_true', help='evaluate: list every wrong result with its layer')
-    for sub_parser in (corpus, obligations, gaps, assess, changes, ai_parser, decisions):
+    for sub_parser in (corpus, obligations, gaps, assess, changes, ai_parser, decisions, qdms):
         sub_parser.add_argument('--root', default=str(CORPUS), help='corpus directory (default: the packaged corpus)')
     for sub_parser in (obligations, gaps, ai_parser):
         sub_parser.add_argument('--article', action='append', default=[], help='article number; repeat to name several')
