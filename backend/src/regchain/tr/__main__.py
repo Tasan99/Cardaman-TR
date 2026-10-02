@@ -12,6 +12,9 @@ decisions        a stored board decision (tr/decisions.py: text, items, duties);
 qdms export      the gap rows of a profile (sector engines, and --decision layers) as QDMS change requests: JSON, CSV, an approvals
                  template; every action stays DRAFT until a person approves its row
 qdms approve     apply a filled approvals file to an export: approved rows' actions become READY_FOR_QDMS (ready-actions.json)
+questions        the missing company facts the applicability reviews wait on, one question per entity (or product) and fact
+answer           answer them (--interactive in the terminal, or --answers FILE); the answers are applied to a copy of the profile
+                 and only the evaluations they affect run again; writes answers.json, answered-profile.json, reassess.json
 ai units         the reading units of some articles (what a model is given)
 ai compare       rule reader against a recorded model reading: agreement, and the layer of every disagreement
 ai evaluate      BEVERAGE_TR_DEV_V2 (developer labels, INDICATIVE): tasks, contrast pairs, wrong results by layer
@@ -72,7 +75,10 @@ def apply_verified(store: CorpusStore, path: Path = DATA / 'regulations.json') -
 
 
 def _profile(registry: Registry, profile_id: str):
-    from .profile import load_pilot_profiles
+    """A pilot profile by id, or a profile file (an answered profile written by `answer`) by its path."""
+    from .profile import load_pilot_profiles, load_profile
+    if profile_id.endswith('.json') and Path(profile_id).exists():
+        return load_profile(json.loads(Path(profile_id).read_text(encoding='utf-8')), registry.vocabulary)
     profiles = {p.profile_id: p for p in load_pilot_profiles(registry.vocabulary).values()}
     if profile_id not in profiles:
         raise SystemExit(f'unknown profile {profile_id}; known: {sorted(profiles)}')
@@ -202,6 +208,45 @@ def _domain(args, store: CorpusStore) -> int:
             _print({k: v for k, v in payload.items() if k != 'rows'})
         else:
             _print(payload)
+        return 0
+    if args.command in ('questions', 'answer'):
+        from . import questions as pq
+        from .compare import load_register
+        from .engines import ExpertServices, assess_by_engine
+        profile = _profile(registry, args.profile)
+        services = ExpertServices.recorded(args.similarities, [Path(p) for p in args.adjudications], registry, store)
+        if args.command == 'questions':
+            result = assess_by_engine(profile, services, load_register(profile.profile_id))
+            reviews = {r.review_id: r for report in result['reports'].values() for r in report.applicability_reviews}
+            found = pq.profile_questions(profile, list(reviews.values()), registry.vocabulary)
+            Path(args.out).write_text(json.dumps([x.model_dump(mode='json') for x in found], ensure_ascii=False, indent=1), encoding='utf-8')
+            _print([{'question_id': x.question_id, 'asked': len(x.asked), 'blocked_reviews': len(x.blocked_reviews), 'prompt': x.prompt_tr}
+                    for x in found])
+            return 0
+        out = Path(args.out)
+        if out.exists() and any(out.iterdir()):
+            raise SystemExit(f'{out} is not empty')
+        asked = [pq.Question.model_validate(x) for x in json.loads(Path(args.questions).read_text(encoding='utf-8'))]
+        if args.interactive:
+            answers = pq.ask_interactively(asked)
+        elif args.answers:
+            answers = [pq.Answer.model_validate(x) for x in json.loads(Path(args.answers).read_text(encoding='utf-8'))]
+        else:
+            raise SystemExit('answer needs --interactive or --answers')
+        if not answers:
+            raise SystemExit('no question was answered')
+        new, applied = pq.apply_answers(profile, answers, asked, registry.vocabulary)
+        from .engines import engines_for
+        obligations = {o.obligation_id: o for engine, _ in engines_for(new, services) for o in engine.obligations()}
+        result = pq.reassess(profile, new, list(obligations.values()), load_register(profile.profile_id), registry, store,
+                             services.table, services.adjudicator)
+        out.mkdir(parents=True, exist_ok=True)
+        (out / 'answers.json').write_text(json.dumps([a.model_dump(mode='json') for a in answers], ensure_ascii=False, indent=1), encoding='utf-8')
+        (out / 'answered-profile.json').write_text(json.dumps(new.model_dump(mode='json'), ensure_ascii=False, indent=1), encoding='utf-8')
+        (out / 'reassess.json').write_text(json.dumps({'applied': applied, **result}, ensure_ascii=False, indent=1), encoding='utf-8')
+        _print({'applied': applied, 'summary': result['summary'], 'affected_entities': result['affected_entities'],
+                'affected_products': result['affected_products'], 'files': [str(out / n) for n in ('answers.json', 'answered-profile.json', 'reassess.json')],
+                'next': f'python -m regchain.tr qdms export --profile {out / "answered-profile.json"} ... re-exports with the answers'})
         return 0
     if args.command == 'qdms':
         from . import qdms as q
@@ -341,6 +386,19 @@ def main(argv=None):
     decisions.add_argument('--similarities', help='a recorded similarity table to replay')
     decisions.add_argument('--adjudications', action='append', default=[], help='a recorded adjudication file to replay; repeat to name several')
     decisions.add_argument('--out', help='write the full result (rows included) to this file and print the run record')
+    questions = commands.add_parser('questions', help='the missing company facts the applicability reviews wait on (questions.py)')
+    questions.add_argument('--profile', required=True, help='a pilot profile id, or a profile file')
+    questions.add_argument('--similarities')
+    questions.add_argument('--adjudications', action='append', default=[])
+    questions.add_argument('--out', required=True, help='questions.json to write')
+    answer = commands.add_parser('answer', help='answer the profile questions once; the affected evaluations run again (questions.py)')
+    answer.add_argument('--profile', required=True, help='a pilot profile id, or a profile file')
+    answer.add_argument('--questions', required=True, help='questions.json written by `questions`')
+    answer.add_argument('--answers', help='a file of answers (list of {question_id, present, list_complete, answered_by, answered_at, basis})')
+    answer.add_argument('--interactive', action='store_true', help='ask in the terminal')
+    answer.add_argument('--similarities')
+    answer.add_argument('--adjudications', action='append', default=[])
+    answer.add_argument('--out', required=True, help='the output directory (must not exist, or be empty)')
     qdms = commands.add_parser('qdms', help='regulation -> reasoning -> impacted policy/control -> human approval -> QDMS action (qdms.py)')
     qdms.add_argument('action', choices=['export', 'approve'])
     qdms.add_argument('--profile', help='export: a pilot profile id')
@@ -370,7 +428,7 @@ def main(argv=None):
     ai_parser.add_argument('--similarities', help='evaluate: a recorded similarity table; scores the selective pipeline')
     ai_parser.add_argument('--adjudications', action='append', default=[], help='evaluate: a recorded adjudication file; repeat to name several')
     ai_parser.add_argument('--wrong', action='store_true', help='evaluate: list every wrong result with its layer')
-    for sub_parser in (corpus, obligations, gaps, assess, changes, ai_parser, decisions, qdms):
+    for sub_parser in (corpus, obligations, gaps, assess, changes, ai_parser, decisions, qdms, questions, answer):
         sub_parser.add_argument('--root', default=str(CORPUS), help='corpus directory (default: the packaged corpus)')
     for sub_parser in (obligations, gaps, ai_parser):
         sub_parser.add_argument('--article', action='append', default=[], help='article number; repeat to name several')

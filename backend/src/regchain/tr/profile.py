@@ -103,6 +103,18 @@ class LegalEntity(Strict):
     bound_by_decisions: list[str] = []
     # True when entity_classes, activity_classes and licenses are all stated in full.
     profile_complete: bool = False
+    # One dimension stated complete (or open) on its own, e.g. by the answer to a profile question (tr/questions.py):
+    # None follows profile_complete. facts_basis says, per field, who stated it and on what basis.
+    activities_complete: bool | None = None
+    entity_classes_complete: bool | None = None
+    licenses_complete: bool | None = None
+    facts_basis: dict[str, str] = {}
+
+    def complete(self, dimension: str) -> bool:
+        """Whether the list of one dimension is stated in full: its own flag, else the general profile flag."""
+        own = {'activity_classes': self.activities_complete, 'entity_classes': self.entity_classes_complete,
+               'license_classes': self.licenses_complete}[dimension]
+        return self.profile_complete if own is None else own
 
 
 class Group(Strict):
@@ -287,9 +299,9 @@ def to_company(profile: EnterpriseProfile, entity_id: str, vocab: Vocabulary) ->
     return Company(
         id=f'{profile.profile_id}/{entity.entity_id}', name=entity.name, version=profile.version, synthetic=profile.synthetic,
         jurisdictions=['Türkiye'],
-        activities=_stated([vocab.label('activity_classes', a) for a in entity.activity_classes], entity.profile_complete),
+        activities=_stated([vocab.label('activity_classes', a) for a in entity.activity_classes], entity.complete('activity_classes')),
         licences=_stated([vocab.label('license_classes', l.license_class) for l in entity.licenses if l.status == 'HELD'],
-                         entity.profile_complete),
+                         entity.complete('license_classes')),
         products=_stated(products, profile.products_complete),
         customer_types=customers_of(entity, vocab),
         description=f'{entity.name}: {classes or "sınıfı belirtilmemiş"} ({profile.group.name} grubu).')
@@ -344,7 +356,7 @@ def policy_covers(policy: PolicyScope, profile: EnterpriseProfile, level: str, t
         return {'covers': covers, 'reason': reason}
     if level == 'LEGAL_ENTITY':
         entity = profile.entity(target_id)
-        have, complete = set(entity.activity_classes), entity.profile_complete
+        have, complete = set(entity.activity_classes), entity.complete('activity_classes')
     else:
         facility = profile.facility(target_id)
         have, complete = set(facility.activity_classes), facility.activities_complete

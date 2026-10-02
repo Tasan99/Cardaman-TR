@@ -118,6 +118,16 @@
    "recorded_on": "3caea6b",
    "recorded_at": "2026-10-02",
    "note": "3 Oct 2026: a passive prohibition about the consumer (\"... zorunda bırakılamaz\", \"... talep edilemez\") binds the business"
+  },
+  "tr-routing-v2": {
+   "family": "routing",
+   "files": [
+    "routing.py"
+   ],
+   "sha256": "8d23343cf93ecfe62b7b4a9a901994138e7c7e6978ded00d8eebd986b0600aa1",
+   "recorded_on": "314bded",
+   "recorded_at": "2026-10-02",
+   "note": "3 Oct 2026: tr-routing-v2 - a dimension stated complete on its own (activities_complete, entity_classes_complete, licenses_complete) decides before the general profile flag"
   }
  }
 }

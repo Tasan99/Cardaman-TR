@@ -34,7 +34,7 @@ CODE_OF = {'entity_classes': 'ENTITY', 'activity_classes': 'ACTIVITY', 'facility
 GATE_STATUS = {'YES': 'MATCH', 'NO': 'MISMATCH', 'UNKNOWN': 'UNDETERMINED'}
 PRODUCT_DIMENSIONS = ('product_classes', 'product_attributes')
 # The label of the routing rules (gates, Kleene facts, channel completeness): recorded in data/rule_versions.json.
-ROUTING_RULES_VERSION = 'tr-routing-v1'
+ROUTING_RULES_VERSION = 'tr-routing-v2'
 
 
 class PackSelection(Strict):
@@ -154,11 +154,11 @@ def _channel_facts(entity, profile=None) -> tuple[set, bool, list[str]]:
 def _entity_facts(entity, profile=None):
     licences_open = any(l.status == 'UNKNOWN' for l in entity.licenses)
     channels, channels_complete, _ = _channel_facts(entity, profile)
-    return {'entity_classes': (set(entity.entity_classes), entity.profile_complete),
-            'activity_classes': (set(entity.activity_classes), entity.profile_complete),
+    return {'entity_classes': (set(entity.entity_classes), entity.complete('entity_classes')),
+            'activity_classes': (set(entity.activity_classes), entity.complete('activity_classes')),
             'sales_channels': (channels, channels_complete),
             'license_classes': ({l.license_class for l in entity.licenses if l.status == 'HELD'},
-                                entity.profile_complete and not licences_open)}
+                                entity.complete('license_classes') and not licences_open)}
 
 
 def _entity_conflicts(entity, profile) -> dict[str, list[str]]:
