@@ -90,6 +90,9 @@ class LegalEntity(Strict):
     licenses: list[License] = []
     product_ids: list[str] = []
     sales_channels: list[str] = []
+    # The board decisions (tr/decisions.py ids, TR:KURUL_KARARI:...) this entity is an addressee of, as the company states
+    # them: a decision's duties bind these entities and no other.
+    bound_by_decisions: list[str] = []
     # True when entity_classes, activity_classes and licenses are all stated in full.
     profile_complete: bool = False
 

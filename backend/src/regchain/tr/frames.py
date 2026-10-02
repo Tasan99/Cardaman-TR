@@ -177,8 +177,15 @@ NEGATIVE_NECESSITATIVE = re.compile(r'[%s]+(?:mamalı|memeli)(?:dır|dir)(?:lar|
 ABILITY_NEGATIVE = re.compile(r'[%s]+(?:amaz|emez)(?:lar|ler)?$' % LETTERS)
 AORIST_NEGATIVE = re.compile(r'[%s]+(?:maz|mez)(?:lar|ler)?$' % LETTERS)
 ABILITY = re.compile(r'[%s]+(?:abilir|ebilir)(?:ler|lar)?$' % LETTERS)
+# A commitment is written in the future ("... açık tutacaktır", "... bağlamayacaktır") or as an undertaking ("... sunmayı
+# taahhüt eder", "... yapmayacağını taahhüt eder"): the wording of board decisions, not of regulations.
+FUTURE = re.compile(r'[%s]+(?:acak|ecek)(?:tır|tir)(?:lar|ler)?$' % LETTERS)
+FUTURE_NEGATIVE = re.compile(r'[%s]+(?:mayacak|meyecek)(?:tır|tir)(?:lar|ler)?$' % LETTERS)
+COMMITMENT = re.compile(r'(?<![%s])taahhüt (?:eder(?:ler)?|etmektedir(?:ler)?|etmiştir|etmişlerdir)$' % LETTERS)
+COMMITTED_NEGATIVE = re.compile(r'(?:mayacağı|meyeceği)(?:nı|ni)\s+taahhüt')
 AORIST = re.compile(r'[%s]{2,}(?:[ıiuü]r|[ae]r)(?:lar|ler)?$' % LETTERS)
-PASSIVE = re.compile(r'(?:[ıiuü]l|[ıiuü]n|[aeıioöuü]n|len|lan)(?:amaz|emez|maz|mez|[ıiuü]r|malıdır|melidir|mamalıdır|memelidir|abilir|ebilir)(?:lar|ler)?$')
+PASSIVE = re.compile(r'(?:[ıiuü]l|[ıiuü]n|[aeıioöuü]n|len|lan)(?:amaz|emez|maz|mez|[ıiuü]r|malıdır|melidir|mamalıdır|memelidir|abilir|ebilir|'
+                     r'acaktır|ecektir|mayacaktır|meyecektir)(?:lar|ler)?$')
 # A negative that characterises rather than forbids: "kapsamaz" is scope, "değerlendirilmez" / "sayılmaz" is a legal reading.
 NOT_A_DUTY = re.compile(r'^(?:kapsamaz|değerlendirilmez|sayılmaz|kabul edilmez(?:ler)?|aranmaz|uygulanmaz|gerekmez|oluşturmaz|'
                         r'kaldırmaz|etkilemez|doğurmaz|taşımaz|bulunmaz|düzenlenmez|verilemez ve)$')
@@ -197,7 +204,7 @@ REFERENCED_TEXT = re.compile(r'((?:[A-ZÇĞİÖŞÜ][%s]+,? (?:(?:ve|ile|veya) )
                              % (LETTERS, LETTERS, LETTERS, LETTERS))
 DELEGATION_VERB = re.compile(r'(?<![%s])(?:belirlenir|belirlenebilir|düzenlenir|yönetilir|yayımlanır|ilan edilir|tespit edilir|karar verilir|'
                              r'verilebilir|verilir|yapılır|yapılabilir|denetlenir|yürütülür|alınır|değerlendirilir|bildirilir|iptal edilir|'
-                             r'onaylanır|yetkilidir|sorumlu ve yetkilidir|görevlidir)(?![%s])' % (LETTERS, LETTERS))
+                             r'onaylanır|yetkilidir|sorumlu ve yetkilidir|görevlidir|gözden geçirilir|incelenir|izlenir)(?![%s])' % (LETTERS, LETTERS))
 # "Mesafe şartı, satış belgesinin verildiği tarih itibarıyla aranır.": when a condition stated elsewhere is assessed
 # (CONDITION_SUBJECT below; "... aynı renkte olma şartı aranır" states the condition itself and stays a duty).
 # "Bira hacmen alkol miktarlarına göre dörde ayrılır:": a classification, whatever its passive aorist looks like.
@@ -305,6 +312,12 @@ def _modality(folded: str) -> tuple[str | None, str, bool]:
         return 'MUST', (MUST_WORDS.search(phrase) or MUST_WORDS.search(word)).group(), False
     if MAY_WORDS.search(phrase):
         return 'MAY', MAY_WORDS.search(phrase).group(), passive
+    if COMMITMENT.search(phrase):
+        return ('MUST_NOT' if COMMITTED_NEGATIVE.search(tail[-80:]) else 'MUST'), phrase, False
+    if FUTURE_NEGATIVE.search(word):
+        return 'MUST_NOT', word, passive
+    if FUTURE.search(word):
+        return 'MUST', word, passive
     if NEGATIVE_NECESSITATIVE.search(word):
         return 'MUST_NOT', word, passive
     if NECESSITATIVE.search(word):
@@ -332,7 +345,7 @@ def _plain_active_aorist(marker: str, passive: bool) -> bool:
     """A duty that rests on a bare active aorist ("karşılarlar", "talep eder") and on no duty word."""
     word = marker.split(' (')[0].split()[-1] if marker else ''
     return bool(word) and not passive and bool(AORIST.search(word)) and not MUST_WORDS.search(marker) \
-        and not NECESSITATIVE.search(word) and word not in EXISTENTIAL
+        and not NECESSITATIVE.search(word) and word not in EXISTENTIAL and not FUTURE.search(word) and not COMMITMENT.search(marker)
 
 
 def _plural_agreement(marker: str) -> bool:

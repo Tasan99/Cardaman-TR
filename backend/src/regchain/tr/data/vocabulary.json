@@ -6,7 +6,8 @@
     "SAGLIK": "Sağlık Bakanlığı",
     "CEVRE_SEHIRCILIK": "Çevre, Şehircilik ve İklim Değişikliği Bakanlığı",
     "HAZINE_MALIYE": "Hazine ve Maliye Bakanlığı",
-    "TBMM": "Türkiye Büyük Millet Meclisi (kanun koyucu)"
+    "TBMM": "Türkiye Büyük Millet Meclisi (kanun koyucu)",
+    "REKABET": "Rekabet Kurumu"
   },
   "sector_tags": {
     "BEVERAGE": "içecek",

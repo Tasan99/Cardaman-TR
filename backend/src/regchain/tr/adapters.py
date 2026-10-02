@@ -50,6 +50,11 @@ INSTITUTIONS = {
     'RESMI_GAZETE': Institution(institution_id='RESMI_GAZETE', title_tr='Resmî Gazete',
                                 hosts=frozenset({'www.resmigazete.gov.tr', 'resmigazete.gov.tr'}),
                                 default_authority='BINDING'),
+    # Board decisions (kurul kararları) bind their addressee: the second-phase DECISION_PRECEDENT layer, read by
+    # tr/decisions.py for the entities a profile names, never through a sector pack.
+    'REKABET': Institution(institution_id='REKABET', title_tr='Rekabet Kurumu',
+                           hosts=frozenset({'www.rekabet.gov.tr', 'rekabet.gov.tr'}),
+                           default_authority='DECISION_PRECEDENT'),
 }
 
 

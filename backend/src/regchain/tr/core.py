@@ -150,8 +150,9 @@ class RegulationMeta(Strict):
                              f'not {self.binding_status}')
         if self.binding_status == 'BINDING' and self.interprets:
             raise ValueError(f'{self.regulation_id}: binding text does not interpret other text')
-        if self.binding_status != 'BINDING' and not self.interprets:
+        if self.binding_status == 'OFFICIAL_GUIDANCE' and not self.interprets:
             raise ValueError(f'{self.regulation_id}: {self.binding_status} must name the binding text it interprets')
+        # A board decision creates duties of its own for its addressee under its legal basis; it interprets no catalogued text.
         if self.metadata_status == 'UNVERIFIED' and not self.verification_note.strip():
             raise ValueError(f'{self.regulation_id}: an UNVERIFIED entry must say what is still to be verified')
         if self.effective_date is None and self.effective_status != 'UNKNOWN':

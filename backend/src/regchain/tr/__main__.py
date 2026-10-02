@@ -8,6 +8,7 @@ obligations      the clause-level obligations of a stored regulation; with --pro
 gaps             obligation -> policy -> control -> evidence -> gap for a pilot profile and its (synthetic) register;
                  with --engine, joined with the model judgements of recorded engine runs for the same entity
 changes          the clauses an amendment touched since a date, the duties they carry and, with --profile, whom they reach
+decisions        a stored board decision (tr/decisions.py: text, items, duties); with --profile, bound to its addressee entities and assessed
 ai units         the reading units of some articles (what a model is given)
 ai compare       rule reader against a recorded model reading: agreement, and the layer of every disagreement
 ai evaluate      BEVERAGE_TR_DEV_V2 (developer labels, INDICATIVE): tasks, contrast pairs, wrong results by layer
@@ -166,6 +167,38 @@ def _domain(args, store: CorpusStore) -> int:
         else:
             _print(payload)
         return 0
+    if args.command == 'decisions':
+        from .decisions import DECISIONS, DecisionStore, assess_decision, decision_applicability, decision_obligations
+        decisions = DecisionStore(Path(args.decisions_root) if args.decisions_root else DECISIONS)
+        if args.decision not in decisions.decision_ids():
+            raise SystemExit(f'no stored decision {args.decision}; stored: {decisions.decision_ids()}')
+        record = decisions.record(args.decision)
+        if not args.profile:
+            frames, obligations = decision_obligations(record, decisions, registry)
+            _print({'decision': record.model_dump(mode='json'), 'items': len(decisions.sections(record.decision_id)),
+                    'frames': [{'ref': f.ref, 'kind': f.kind, 'modality': f.modality, 'marker': f.marker, 'text': f.text} for f in frames],
+                    'duties': [_obligation_row(o) for o in obligations]})
+            return 0
+        from .compare import load_register
+        from .engines import ExpertServices
+        profile = _profile(registry, args.profile)
+        services = ExpertServices.recorded(args.similarities, [Path(p) for p in args.adjudications], registry, store)
+        report, assessments, run = assess_decision(record, profile, registry, store, decisions, load_register(profile.profile_id),
+                                                   services.table, services.adjudicator, named=args.addressee)
+        applicability = [{'ref': o.provision_ref, 'entity': d.target_id, 'status': d.status, 'reasons': d.reason_codes}
+                         for o, d in decision_applicability(record, profile, registry, store, decisions, named=args.addressee)]
+        rows = [{'ref': r.provision_ref, 'target': r.target_id, 'status': r.mapping.status, 'document_coverage': r.document_coverage,
+                 'coverage_basis': r.coverage_basis, 'decision': a.decision, 'review_reasons': a.review_reasons, 'proposal': a.proposal,
+                 'applicability_basis': a.applicability_basis, 'duty': r.quote, 'statements': [(s.passage_id, s.relation, s.quote) for s in r.readings
+                                                                                              if s.relation != 'UNRELATED']}
+                for r, a in zip(report.rows, assessments)]
+        payload = {'profile_id': profile.profile_id, 'run': run.model_dump(mode='json'), 'applicability': applicability, 'rows': rows}
+        if args.out:
+            Path(args.out).write_text(json.dumps(payload, ensure_ascii=False, indent=1), encoding='utf-8')
+            _print({k: v for k, v in payload.items() if k != 'rows'})
+        else:
+            _print(payload)
+        return 0
     if args.command == 'changes':
         from datetime import date
         from .change import impact, note_changes
@@ -260,6 +293,14 @@ def main(argv=None):
     assess.add_argument('--adjudications', action='append', default=[], help='a recorded adjudication file to replay; repeat to name several')
     assess.add_argument('--all', action='store_true', help='also list the covered, automatic rows')
     assess.add_argument('--out', help='write the full result (rows included) to this file and print the engine summaries')
+    decisions = commands.add_parser('decisions', help='a stored board decision (tr/decisions.py) read for its addressee entities, beside the packs')
+    decisions.add_argument('--decision', required=True, help='decision id (TR:KURUL_KARARI:...), or omit --profile to list what is stored')
+    decisions.add_argument('--profile', help='a pilot profile id')
+    decisions.add_argument('--addressee', action='append', default=[], help='a legal entity the decision binds (also: LegalEntity.bound_by_decisions)')
+    decisions.add_argument('--decisions-root', help='decision store root (default: the packaged store, data/decisions)')
+    decisions.add_argument('--similarities', help='a recorded similarity table to replay')
+    decisions.add_argument('--adjudications', action='append', default=[], help='a recorded adjudication file to replay; repeat to name several')
+    decisions.add_argument('--out', help='write the full result (rows included) to this file and print the run record')
     changes = commands.add_parser('changes', help='clauses amended since a date, their duties and whom they reach')
     changes.add_argument('--regulation', required=True)
     changes.add_argument('--since', required=True, help='ISO date; amendment notes dated on or after it are read')
@@ -277,7 +318,7 @@ def main(argv=None):
     ai_parser.add_argument('--similarities', help='evaluate: a recorded similarity table; scores the selective pipeline')
     ai_parser.add_argument('--adjudications', action='append', default=[], help='evaluate: a recorded adjudication file; repeat to name several')
     ai_parser.add_argument('--wrong', action='store_true', help='evaluate: list every wrong result with its layer')
-    for sub_parser in (corpus, obligations, gaps, assess, changes, ai_parser):
+    for sub_parser in (corpus, obligations, gaps, assess, changes, ai_parser, decisions):
         sub_parser.add_argument('--root', default=str(CORPUS), help='corpus directory (default: the packaged corpus)')
     for sub_parser in (obligations, gaps, ai_parser):
         sub_parser.add_argument('--article', action='append', default=[], help='article number; repeat to name several')
