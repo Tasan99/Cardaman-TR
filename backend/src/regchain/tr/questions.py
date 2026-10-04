@@ -45,6 +45,7 @@ class Question(Strict):
     stated: list[str]
     stated_complete: bool
     asked: list[dict]                       # [{'value', 'label'}]: what the waiting duties ask about and the profile does not state
+    stated_labels: list[str] = []           # the stated values as the company reads them
     blocked_reviews: list[str]
     prompt_tr: str
 
@@ -90,12 +91,14 @@ def profile_questions(profile, reviews, vocabulary) -> list[Question]:
         reviews = sorted({review.review_id for review, _ in items})
         name = getattr(target, 'name', target_id)
         what = FIELD_TR[field]
-        prompt = (f"{name} ({target_id}): {what} bilgisi eksik. Profilde: {', '.join(stated) or '—'} "
+        shown = [vocabulary.label(kind, v) if v in getattr(vocabulary, kind) else v for v in stated]
+        prompt = (f"{name} ({target_id}): {what} bilgisi eksik. Profilde: {', '.join(shown) or '—'} "
                   f"({'liste tam' if complete else 'liste tam değil'}). Bu bilgi {len(reviews)} değerlendirmeyi bekletiyor. "
                   f"Aşağıdakilerden hangileri var ve liste bu cevapla tam mı?")
+        labels = [vocabulary.label(kind, v) if v in getattr(vocabulary, kind) else v for v in stated]
         out.append(Question(question_id=f'{level}:{target_id}:{gate}', target_level=level, target_id=target_id, target_name=name, gate=gate,
                             field=field, complete_field=complete_field, vocabulary=kind, stated=stated, stated_complete=complete,
-                            asked=asked, blocked_reviews=reviews, prompt_tr=prompt))
+                            asked=asked, stated_labels=labels, blocked_reviews=reviews, prompt_tr=prompt))
     return out
 
 
@@ -201,7 +204,7 @@ def write_questionnaire(questions: list[Question], path) -> int:
                           'soru': f'Bu {what} var mı? (E/H)', 'deger_kodu': item['value'], 'deger': item['label'], 'cevap': '',
                           'cevaplayan': '', 'dayanak': '', 'tarih': ''})
         lines.append({'question_id': question.question_id, 'satir': 'LISTE_TAM', 'sirket_veya_urun': f'{question.target_name} ({question.target_id})',
-                      'soru': (f"Profildeki {what} listesi ({', '.join(question.stated) or '—'}) ile yukarıda E dedikleriniz tam liste mi? (E/H) "
+                      'soru': (f"Profildeki {what} listesi ({', '.join(question.stated_labels or question.stated) or '—'}) ile yukarıda E dedikleriniz tam liste mi? (E/H) "
                                f"— {len(question.blocked_reviews)} değerlendirme bu cevabı bekliyor"),
                       'deger_kodu': '', 'deger': '', 'cevap': '', 'cevaplayan': '', 'dayanak': '', 'tarih': ''})
     with Path(path).open('w', encoding='utf-8-sig', newline='') as handle:

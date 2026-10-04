@@ -32,7 +32,7 @@ from .compare import GapReport, Register, ownership
 
 EXPORT_FORMAT = 'cardaman-tr-qdms-export/1'
 APPROVALS_FORMAT = 'cardaman-tr-qdms-approvals/1'
-QDMS_RULES_VERSION = 'tr-qdms-v3'
+QDMS_RULES_VERSION = 'tr-qdms-v4'
 # What each gap action asks the QDMS to open.
 QDMS_ACTION = {
     'UPDATE_DOCUMENT': ('DOCUMENT_CHANGE_REQUEST', 'REVISE_CONFLICTING_STATEMENT'),
@@ -394,7 +394,7 @@ def group_reviews(items: list[QdmsApplicabilityItem]) -> tuple[list[QdmsApplicab
         else:
             gates = ', '.join(key[5])
             question = (f"{children[0].entity['target_name']} ({children[0].entity['target_id']}): {CAUSE_TR.get(cause, cause)} "
-                        f"({gates}); {len(children)} değerlendirme bekliyor. Profil sorusu olarak cevaplanır (questions / answer).")
+                        f"({gates}); {len(children)} değerlendirme bekliyor. Şirketten profil bilgisi istenir (profil anketi).")
         qdms_type = REVIEW_ACTION.get(kind, ('APPLICABILITY_REVIEW_TASK', department))[0]
         action = QdmsAction(action_id=f'{task_id}:1', qdms_type=qdms_type, change=kind, department=department,
                             department_tr=departments.get(department, department), why=[cause], priority='MEDIUM')

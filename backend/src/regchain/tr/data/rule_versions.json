@@ -138,6 +138,16 @@
    "recorded_on": "7acf3e7",
    "recorded_at": "2026-10-04",
    "note": "4 Oct 2026: tr-qdms-v3 - applicability records grouped under parent review tasks (children keep decision and evidence; action and approval on the task)"
+  },
+  "tr-qdms-v4": {
+   "family": "qdms",
+   "files": [
+    "qdms.py"
+   ],
+   "sha256": "872e0e0c7e989b0b571275bd8e416b6d0780fdf23d722de74eb90a6d2312311d",
+   "recorded_on": "7ff89fa",
+   "recorded_at": "2026-10-04",
+   "note": "4 Oct 2026: tr-qdms-v4 - company-facing task wording (no command names)"
   }
  }
 }
