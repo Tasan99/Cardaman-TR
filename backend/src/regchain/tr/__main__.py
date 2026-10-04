@@ -13,7 +13,7 @@ qdms export      the gap rows of a profile (sector engines, and --decision layer
                  template; every action stays DRAFT until a person approves its row
 qdms approve     apply a filled approvals file to an export: approved rows' actions become READY_FOR_QDMS (ready-actions.json)
 questions        the missing company facts the applicability reviews wait on, one question per entity (or product) and fact
-answer           answer them (--interactive in the terminal, or --answers FILE); the answers are applied to a copy of the profile
+answer           answer them (--answers questionnaire.csv filled by the company, a JSON file, or --interactive); applied to a copy of the profile
                  and only the evaluations they affect run again; writes answers.json, answered-profile.json, reassess.json
 ai units         the reading units of some articles (what a model is given)
 ai compare       rule reader against a recorded model reading: agreement, and the layer of every disagreement
@@ -220,8 +220,12 @@ def _domain(args, store: CorpusStore) -> int:
             reviews = {r.review_id: r for report in result['reports'].values() for r in report.applicability_reviews}
             found = pq.profile_questions(profile, list(reviews.values()), registry.vocabulary)
             Path(args.out).write_text(json.dumps([x.model_dump(mode='json') for x in found], ensure_ascii=False, indent=1), encoding='utf-8')
-            _print([{'question_id': x.question_id, 'asked': len(x.asked), 'blocked_reviews': len(x.blocked_reviews), 'prompt': x.prompt_tr}
-                    for x in found])
+            sheet = Path(args.out).with_name('questionnaire.csv')
+            lines = pq.write_questionnaire(found, sheet)
+            _print({'questions': [{'question_id': x.question_id, 'asked': len(x.asked), 'blocked_reviews': len(x.blocked_reviews),
+                                   'prompt': x.prompt_tr} for x in found],
+                    'questionnaire': str(sheet), 'lines_to_fill': lines,
+                    'next': 'the company fills questionnaire.csv; then: answer --questions questions.json --answers questionnaire.csv'})
             return 0
         out = Path(args.out)
         if out.exists() and any(out.iterdir()):
@@ -229,6 +233,8 @@ def _domain(args, store: CorpusStore) -> int:
         asked = [pq.Question.model_validate(x) for x in json.loads(Path(args.questions).read_text(encoding='utf-8'))]
         if args.interactive:
             answers = pq.ask_interactively(asked)
+        elif args.answers and args.answers.lower().endswith('.csv'):
+            answers = pq.read_questionnaire(Path(args.answers), asked)
         elif args.answers:
             answers = [pq.Answer.model_validate(x) for x in json.loads(Path(args.answers).read_text(encoding='utf-8'))]
         else:

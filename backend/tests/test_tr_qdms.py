@@ -153,7 +153,7 @@ class FileTests(unittest.TestCase):
             self.assertEqual({l['action_state'] for l in lines if l['action_type']}, {'DRAFT'})
             self.assertEqual(json.loads(paths['ready'].read_text(encoding='utf-8')), [])
             template = json.loads(paths['template'].read_text(encoding='utf-8'))
-            self.assertEqual(len(template['entries']), len(result.rows) + len(result.applicability_reviews))
+            self.assertEqual(len(template['entries']), len(result.rows) + len(result.review_tasks))
             self.assertEqual(qdms.load_approvals(paths['template']).entries, [])
             template['entries'][0].update({'decision': 'APPROVED', 'approver': 'kalite.muduru', 'decided_at': '2026-10-02T14:00:00+00:00'})
             filled = Path(directory) / 'filled.json'
@@ -196,35 +196,102 @@ class UnknownApplicabilityTests(unittest.TestCase):
                         self.assertIn('required', fact, item.row_id)
                         self.assertIn('complete', fact, item.row_id)
             self.assertTrue(item.uncertainty['source_evidence']['quote'])
-            self.assertEqual([a.qdms_type for a in item.required_actions][0] in ('PROFILE_DATA_REQUEST', 'APPLICABILITY_REVIEW_TASK'), True)
-            self.assertEqual({a.state for a in item.required_actions}, {'DRAFT'})
+            self.assertEqual(item.required_actions, [])                         # grouped: the action is the task's
+            self.assertTrue(item.task_id)
             self.assertEqual(item.human_approval.status, 'PENDING')
-        self.assertNotIn('NONCONFORMITY', {a.qdms_type for r in result.applicability_reviews for a in r.required_actions})
-        self.assertNotIn('DOCUMENT_CHANGE_REQUEST', {a.qdms_type for r in result.applicability_reviews for a in r.required_actions})
+        task_actions = [a for task in result.review_tasks for a in task.required_actions]
+        self.assertTrue(task_actions)
+        self.assertEqual({a.qdms_type for a in task_actions} - {'PROFILE_DATA_REQUEST', 'APPLICABILITY_REVIEW_TASK'}, set())
+        self.assertEqual({a.state for a in task_actions}, {'DRAFT'})
         self.assertEqual(qdms.ready_actions(result), [])
 
-    def test_the_review_section_is_written_and_approved_like_the_rows(self):
+    def test_the_review_section_is_written_and_approved_through_its_tasks(self):
         result = export()
         item = result.applicability_reviews[0]
+        task = next(t for t in result.review_tasks if t.task_id == item.task_id)
         with tempfile.TemporaryDirectory() as directory:
             paths = qdms.write(result, Path(directory))
             with paths['reviews_csv'].open(encoding='utf-8-sig', newline='') as handle:
                 lines = list(csv.DictReader(handle, delimiter=';'))
             self.assertEqual(len(lines), len(result.applicability_reviews))
             self.assertEqual({l['applicability'] for l in lines}, {'UNKNOWN'})
-            self.assertEqual(qdms.load_export(paths['json']).applicability_reviews, result.applicability_reviews)
-        approved, problems = qdms.apply_approvals(result, qdms.Approvals.model_validate(
+            self.assertEqual({l['task_id'] for l in lines}, {t.task_id for t in result.review_tasks})
+            with paths['tasks_csv'].open(encoding='utf-8-sig', newline='') as handle:
+                self.assertEqual(len(list(csv.DictReader(handle, delimiter=';'))), len(result.review_tasks))
+            loaded = qdms.load_export(paths['json'])
+            self.assertEqual((loaded.applicability_reviews, loaded.review_tasks), (result.applicability_reviews, result.review_tasks))
+        # a child record is decided through its task, never alone
+        _, problems = qdms.apply_approvals(result, qdms.Approvals.model_validate(
             {'format': qdms.APPROVALS_FORMAT, 'profile_id': BREWER.profile_id, 'entries': [entry(item, 'APPROVED')]}))
+        self.assertEqual([p['problem'] for p in problems], ['APPROVE_THE_TASK'])
+        approved, problems = qdms.apply_approvals(result, qdms.Approvals.model_validate(
+            {'format': qdms.APPROVALS_FORMAT, 'profile_id': BREWER.profile_id,
+             'entries': [{'row_id': task.task_id, 'fingerprint': task.fingerprint, 'decision': 'APPROVED', 'approver': 'hukuk.sorumlusu',
+                          'decided_at': '2026-10-04T10:00:00+00:00', 'note': 'test'}]}))
         self.assertEqual(problems, [])
         ready = qdms.ready_actions(approved)
-        self.assertEqual([a['row_id'] for a in ready], [item.row_id])
+        self.assertEqual([a['row_id'] for a in ready], [task.task_id])
         self.assertIn(ready[0]['qdms_type'], ('PROFILE_DATA_REQUEST', 'APPLICABILITY_REVIEW_TASK'))
+        children = [c for c in approved.applicability_reviews if c.task_id == task.task_id]
+        self.assertEqual({c.human_approval.status for c in children}, {'APPROVED'})
+        self.assertTrue(all(c.human_approval.note.startswith(f'via {task.task_id}') for c in children))
+        others = [c for c in approved.applicability_reviews if c.task_id != task.task_id]
+        self.assertEqual({c.human_approval.status for c in others} - {'PENDING'}, set())
 
     def test_the_analysis_statistics_count_them(self):
         from regchain.tr.adjudicate import assess_profile as assess
         _, _, stats = assess(BREWER, OBLIGATIONS, REGISTER, REGISTRY, STORE)
         self.assertEqual(stats['applicability_unknown'], len(REPORT.applicability_reviews))
         self.assertEqual(sum(stats['applicability_unknown_by_type'].values()), stats['applicability_unknown'])
+
+
+class GroupingTests(unittest.TestCase):
+    """The UNKNOWN records under parent review tasks (step 4 of the 3 October plan): one task per source question of one
+    article, or per company fact of one target; every record a child with its own decision and evidence."""
+
+    def setUp(self):
+        self.result = export()
+        self.tasks = {t.task_id: t for t in self.result.review_tasks}
+
+    def test_every_record_is_the_child_of_exactly_one_task(self):
+        children = [c for t in self.result.review_tasks for c in t.child_ids]
+        self.assertEqual(sorted(children), sorted(r.row_id for r in self.result.applicability_reviews))
+        self.assertEqual(len(children), len(set(children)))
+        for record in self.result.applicability_reviews:
+            self.assertIn(record.row_id, self.tasks[record.task_id].child_ids)
+        self.assertLessEqual(len(self.tasks), sum(t.topics for t in self.tasks.values()))
+        self.assertLessEqual(sum(t.topics for t in self.tasks.values()), len(self.result.applicability_reviews))
+        self.assertEqual(self.result.summary['review_tasks'], len(self.tasks))
+
+    def test_a_task_never_mixes_causes_departments_or_subjects(self):
+        by_id = {r.row_id: r for r in self.result.applicability_reviews}
+        for task in self.tasks.values():
+            records = [by_id[c] for c in task.child_ids]
+            self.assertEqual({r.uncertainty['review_type'] for r in records}, {task.review_type})
+            self.assertEqual({qdms.review_cause(r) for r in records}, {task.cause})
+            if task.review_type == 'CLARIFY_REGULATORY_SCOPE':
+                self.assertEqual(len({r.provision['provision_ref'].split('/')[0] for r in records}), 1)   # one article
+            else:
+                self.assertEqual(len({r.entity['target_id'] for r in records}), 1)                       # one target
+            self.assertEqual(len(task.required_actions), 1)
+            self.assertEqual(task.due_date, None)
+
+    def test_the_children_keep_their_decision_and_evidence(self):
+        ungrouped = {f'APPLICABILITY:{r.review_id}': r for r in REPORT.applicability_reviews}
+        for record in self.result.applicability_reviews:
+            source = ungrouped[record.row_id]
+            self.assertEqual(record.applicability['reason_codes'], source.reason_codes)
+            self.assertEqual(record.uncertainty['missing_facts'], source.missing_facts)
+            self.assertEqual(record.uncertainty['company_evidence'], source.company_evidence)
+            self.assertEqual(record.uncertainty['source_evidence'], source.source_evidence)
+            self.assertEqual(record.provision['quote'], source.quote)
+
+    def test_a_changed_child_makes_its_task_approval_stale(self):
+        task = next(iter(self.tasks.values()))
+        record = next(r for r in self.result.applicability_reviews if r.task_id == task.task_id)
+        changed = record.model_copy(update={'fingerprint': '0' * 64})
+        regrouped, tasks = qdms.group_reviews([changed if r.row_id == record.row_id else r for r in self.result.applicability_reviews])
+        self.assertNotEqual(next(t for t in tasks if t.task_id == task.task_id).fingerprint, task.fingerprint)
 
 
 class LedgerTests(unittest.TestCase):

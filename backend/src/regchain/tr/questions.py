@@ -183,6 +183,70 @@ def _count(values) -> dict:
     return dict(sorted(out.items()))
 
 
+# The questionnaire a company fills (CSV, UTF-8 with BOM, ';'): one line per value asked (E/H), and per question one
+# line for whether the list is complete, with who answered, the basis and the date. A question left blank is not answered.
+QUESTIONNAIRE_COLUMNS = ['question_id', 'satir', 'sirket_veya_urun', 'soru', 'deger_kodu', 'deger', 'cevap', 'cevaplayan', 'dayanak', 'tarih']
+YES, NO = {'E', 'EVET', 'Y', 'YES', 'X', '1'}, {'H', 'HAYIR', 'N', 'NO', '0'}
+
+
+def write_questionnaire(questions: list[Question], path) -> int:
+    """Write the questionnaire; returns the number of lines to fill."""
+    import csv
+    from pathlib import Path
+    lines = []
+    for question in questions:
+        what = FIELD_TR[question.field]
+        for item in question.asked:
+            lines.append({'question_id': question.question_id, 'satir': 'DEGER', 'sirket_veya_urun': f'{question.target_name} ({question.target_id})',
+                          'soru': f'Bu {what} var mı? (E/H)', 'deger_kodu': item['value'], 'deger': item['label'], 'cevap': '',
+                          'cevaplayan': '', 'dayanak': '', 'tarih': ''})
+        lines.append({'question_id': question.question_id, 'satir': 'LISTE_TAM', 'sirket_veya_urun': f'{question.target_name} ({question.target_id})',
+                      'soru': (f"Profildeki {what} listesi ({', '.join(question.stated) or '—'}) ile yukarıda E dedikleriniz tam liste mi? (E/H) "
+                               f"— {len(question.blocked_reviews)} değerlendirme bu cevabı bekliyor"),
+                      'deger_kodu': '', 'deger': '', 'cevap': '', 'cevaplayan': '', 'dayanak': '', 'tarih': ''})
+    with Path(path).open('w', encoding='utf-8-sig', newline='') as handle:
+        writer = csv.DictWriter(handle, fieldnames=QUESTIONNAIRE_COLUMNS, delimiter=';')
+        writer.writeheader()
+        writer.writerows(lines)
+    return len(lines)
+
+
+def read_questionnaire(path, questions: list[Question]) -> list[Answer]:
+    """The answers of a filled questionnaire. A question with no value answered and no completeness answer is skipped;
+    an answered question needs who answered and the basis; a cell other than E/H is refused with its line."""
+    import csv
+    from pathlib import Path
+    by_id = {q.question_id: q for q in questions}
+    with Path(path).open(encoding='utf-8-sig', newline='') as handle:
+        rows = list(csv.DictReader(handle, delimiter=';'))
+    grouped: dict[str, list[tuple[int, dict]]] = {}
+    for number, row in enumerate(rows, 2):
+        if row.get('question_id') not in by_id:
+            raise AnswerError(f'line {number}: no question {row.get("question_id")!r}')
+        grouped.setdefault(row['question_id'], []).append((number, row))
+    answers = []
+    for question_id, lines in grouped.items():
+        present, complete, who, basis, when = [], None, '', '', ''
+        for number, row in lines:
+            cell = (row.get('cevap') or '').strip().upper()
+            if cell and cell not in YES | NO:
+                raise AnswerError(f'line {number}: answer {row.get("cevap")!r} is not E or H')
+            if row.get('satir') == 'DEGER':
+                if cell in YES:
+                    present.append(row['deger_kodu'].strip())
+            elif row.get('satir') == 'LISTE_TAM':
+                complete = True if cell in YES else False if cell in NO else None
+                who, basis, when = (row.get('cevaplayan') or '').strip(), (row.get('dayanak') or '').strip(), (row.get('tarih') or '').strip()
+        answered_values = any((row.get('cevap') or '').strip() for _, row in lines if row.get('satir') == 'DEGER')
+        if not answered_values and complete is None:
+            continue
+        if not who or not basis:
+            raise AnswerError(f'{question_id}: answered without who answered (cevaplayan) or the basis (dayanak)')
+        answers.append(Answer(question_id=question_id, present=present, list_complete=bool(complete), answered_by=who,
+                              answered_at=when or datetime.now().astimezone().isoformat(timespec='seconds'), basis=basis))
+    return answers
+
+
 def ask_interactively(questions: list[Question], input_fn=input, output=None) -> list[Answer]:
     """Ask the questions in the terminal: who answers (once), then for each question the numbers of the values present
     (empty for none), whether the list is complete, and the basis. 's' skips a question."""

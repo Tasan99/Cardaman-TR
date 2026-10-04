@@ -99,6 +99,68 @@ class ReassessTests(unittest.TestCase):
             self.assertEqual(row['target_id'], 'NONALC-BRAND')
 
 
+class QuestionnaireTests(unittest.TestCase):
+    """The company fills the questions in a questionnaire (CSV); the filled file is read back as answers."""
+
+    def setUp(self):
+        import tempfile
+        from pathlib import Path
+        self.questions = q.profile_questions(BOTTLER, REPORT.applicability_reviews, REGISTRY.vocabulary)
+        self.brand = next(x for x in self.questions if x.target_id == 'NONALC-BRAND' and x.gate == 'ACTIVITY_CLASS')
+        self.directory = tempfile.TemporaryDirectory()
+        self.sheet = Path(self.directory.name) / 'questionnaire.csv'
+        self.lines = q.write_questionnaire(self.questions, self.sheet)
+
+    def tearDown(self):
+        self.directory.cleanup()
+
+    def rows(self):
+        import csv
+        with self.sheet.open(encoding='utf-8-sig', newline='') as handle:
+            return list(csv.DictReader(handle, delimiter=';'))
+
+    def fill(self, rows):
+        import csv
+        with self.sheet.open('w', encoding='utf-8-sig', newline='') as handle:
+            writer = csv.DictWriter(handle, fieldnames=q.QUESTIONNAIRE_COLUMNS, delimiter=';')
+            writer.writeheader()
+            writer.writerows(rows)
+
+    def test_one_line_per_value_and_one_completeness_line_per_question(self):
+        rows = self.rows()
+        self.assertEqual(len(rows), self.lines)
+        self.assertEqual(len(rows), sum(len(x.asked) + 1 for x in self.questions))
+        self.assertEqual(sum(r['satir'] == 'LISTE_TAM' for r in rows), len(self.questions))
+        self.assertEqual(q.read_questionnaire(self.sheet, self.questions), [])            # a blank questionnaire answers nothing
+
+    def test_a_filled_questionnaire_is_read_back_as_answers(self):
+        rows = self.rows()
+        first = self.brand.asked[0]['value']
+        for row in rows:
+            if row['question_id'] == self.brand.question_id:
+                if row['satir'] == 'DEGER':
+                    row['cevap'] = 'E' if row['deger_kodu'] == first else 'H'
+                else:
+                    row.update({'cevap': 'E', 'cevaplayan': 'marka.uyum', 'dayanak': 'faaliyet belgesi 2026', 'tarih': '2026-10-04'})
+        self.fill(rows)
+        answers = q.read_questionnaire(self.sheet, self.questions)
+        self.assertEqual([(a.question_id, a.present, a.list_complete, a.answered_by, a.basis) for a in answers],
+                         [(self.brand.question_id, [first], True, 'marka.uyum', 'faaliyet belgesi 2026')])
+
+    def test_an_answer_without_who_or_basis_or_with_another_mark_is_refused(self):
+        rows = self.rows()
+        brand_rows = [r for r in rows if r['question_id'] == self.brand.question_id]
+        brand_rows[0]['cevap'] = 'E'
+        self.fill(rows)
+        with self.assertRaises(q.AnswerError):
+            q.read_questionnaire(self.sheet, self.questions)                              # no cevaplayan / dayanak
+        brand_rows[0]['cevap'] = 'belki'
+        brand_rows[-1].update({'cevaplayan': 'x', 'dayanak': 'y'})
+        self.fill(rows)
+        with self.assertRaises(q.AnswerError):
+            q.read_questionnaire(self.sheet, self.questions)                              # neither E nor H
+
+
 class InteractiveTests(unittest.TestCase):
     def test_answers_from_the_terminal(self):
         questions = q.profile_questions(BOTTLER, REPORT.applicability_reviews, REGISTRY.vocabulary)

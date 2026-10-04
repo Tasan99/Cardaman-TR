@@ -11,6 +11,9 @@ in it can be carried out before a person approves its row.
                     RETURNED (DRAFT, with the note); an approval names the row's fingerprint, and an approval of a row whose
                     reasoning changed since (another coverage, status, action or statement) is refused as STALE
   ready_actions     only the actions of approved rows: what may be handed to the QDMS
+  group_reviews     the UNKNOWN applicability records under parent review tasks: one task per (source question, cause,
+                    article) or (company fact, target, missing gates); every record stays a child with its own decision
+                    and evidence; the action and the approval belong to the task
 
 The action vocabulary is generic (document change request, control definition, evidence request, review task,
 nonconformity); mapping it onto a given QDMS product's import format is the integrator's step and is not done here.
@@ -29,7 +32,7 @@ from .compare import GapReport, Register, ownership
 
 EXPORT_FORMAT = 'cardaman-tr-qdms-export/1'
 APPROVALS_FORMAT = 'cardaman-tr-qdms-approvals/1'
-QDMS_RULES_VERSION = 'tr-qdms-v2'
+QDMS_RULES_VERSION = 'tr-qdms-v3'
 # What each gap action asks the QDMS to open.
 QDMS_ACTION = {
     'UPDATE_DOCUMENT': ('DOCUMENT_CHANGE_REQUEST', 'REVISE_CONFLICTING_STATEMENT'),
@@ -105,6 +108,37 @@ class QdmsApplicabilityItem(Strict):
     applicability: dict
     uncertainty: dict
     coverage_assessed: bool = False
+    required_actions: list[QdmsAction] = []    # empty once grouped: the action is the parent task's
+    human_approval: Approval = Approval()
+    task_id: str | None = None                 # the parent review task
+
+
+CAUSE_TR = {'SOURCE_NO_ADDRESSEE_STATUTE': 'kanun hükmü kimi bağladığını söylemiyor',
+            'SOURCE_NO_ADDRESSEE': 'hüküm kimi bağladığını söylemiyor',
+            'SOURCE_ACTOR_WORD_WITHOUT_CLASS': 'hüküm bir taraf adlandırıyor, sözlükte sınıfı yok',
+            'SOURCE_PRODUCT_SCOPE_MIXED': 'liste maddesi birden çok ürün sınıfını karıştırıyor',
+            'SOURCE_NOT_GROUNDED': 'hükmün metni saklı sürümde birebir bulunamadı',
+            'COMPANY_FACT_MISSING': 'şirket bilgisi eksik', 'COMPANY_FACT_CONFLICT': 'şirket bilgisi çelişkili'}
+
+
+class QdmsReviewTask(Strict):
+    """One question a person answers once for many applicability records: whom a clause of one article binds (Legal),
+    or a missing company fact of one target (whoever keeps the profile). The children keep their own decision and
+    evidence; approving the task decides them together, and only the task's action goes to the QDMS."""
+    task_id: str
+    fingerprint: str                           # the task's key and its children's fingerprints
+    review_type: str
+    cause: str
+    department: str
+    department_tr: str
+    due_date: str | None = None                # none is stated today; tasks with different due dates are never merged
+    question_tr: str
+    regulation_ids: list[str]
+    clauses: list[str]
+    entities: list[str]
+    targets: list[str]
+    topics: int                                # distinct review topics (a clause, or a company fact) under the task
+    child_ids: list[str]
     required_actions: list[QdmsAction]
     human_approval: Approval = Approval()
 
@@ -120,6 +154,7 @@ class QdmsExport(Strict):
                  'satırlar karar değildir.')
     rows: list[QdmsRow]
     applicability_reviews: list[QdmsApplicabilityItem] = []
+    review_tasks: list[QdmsReviewTask] = []
     # Where every analysis row and every UNKNOWN decision went: {'pack', 'row_id', 'outcome', 'reason'}.
     ledger: list[dict] = []
     summary: dict = {}
@@ -267,10 +302,11 @@ def export_rows(profile, register: Register, registry, reports: dict[str, GapRep
             exported[qrow.row_id] = qrow
             ledger.append({'pack': pack, 'row_id': qrow.row_id, 'outcome': 'EXPORTED' if first is None else 'EXPORTED_PACKS_DISAGREE',
                            'reason': qrow.policy_status['mapping_status']})
-    rows, items = list(exported.values()), list(reviews.values())
+    rows = list(exported.values())
+    items, tasks = group_reviews(list(reviews.values()))
     return QdmsExport(profile_id=profile.profile_id, register_synthetic=register.synthetic, register_period=register.period,
-                      generated_at=generated_at or datetime.now().astimezone(), rows=rows, applicability_reviews=items, ledger=ledger,
-                      summary=summarise(rows, items, ledger))
+                      generated_at=generated_at or datetime.now().astimezone(), rows=rows, applicability_reviews=items,
+                      review_tasks=tasks, ledger=ledger, summary=summarise(rows, items, ledger, tasks))
 
 
 def applicability_item(review, profile, registry, pack: str | None, source_layer: str = 'REGULATION') -> QdmsApplicabilityItem:
@@ -302,6 +338,78 @@ def applicability_item(review, profile, registry, pack: str | None, source_layer
                                  uncertainty=uncertainty, required_actions=[action])
 
 
+def review_cause(item: QdmsApplicabilityItem) -> str:
+    """Why a record is undecided, from what it already carries: the review type, the clause's flags, the kind of text."""
+    kind = item.uncertainty['review_type']
+    if kind == 'COMPLETE_PROFILE_FACT':
+        return 'COMPANY_FACT_MISSING'
+    if kind == 'RESOLVE_PROFILE_CONFLICT':
+        return 'COMPANY_FACT_CONFLICT'
+    if kind == 'CHECK_SOURCE_GROUNDING':
+        return 'SOURCE_NOT_GROUNDED'
+    flags = item.uncertainty.get('source_evidence', {}).get('flags', [])
+    if 'PRODUCT_SCOPE_MIXED' in flags:
+        return 'SOURCE_PRODUCT_SCOPE_MIXED'
+    if 'ACTOR_UNMAPPED' in flags:
+        return 'SOURCE_ACTOR_WORD_WITHOUT_CLASS'
+    return 'SOURCE_NO_ADDRESSEE_STATUTE' if item.provision['regulation_id'].startswith('TR:KANUN:') else 'SOURCE_NO_ADDRESSEE'
+
+
+def _task_key(item: QdmsApplicabilityItem) -> tuple:
+    kind, cause = item.uncertainty['review_type'], review_cause(item)
+    department = REVIEW_ACTION.get(kind, ('', 'COMPLIANCE'))[1]
+    if kind in ('CLARIFY_REGULATORY_SCOPE', 'CHECK_SOURCE_GROUNDING'):
+        # a source question: the same for every entity; read in its article
+        return (kind, cause, department, None, item.provision['provision_ref'].split('/')[0])
+    gates = tuple(sorted({g['gate'] for g in item.uncertainty['missing_facts'] if g['gate'] != 'EXCEPTIONS'})) or ('EXCEPTIONS_ONLY',)
+    return (kind, cause, department, None, f"{item.entity['target_level']}:{item.entity['target_id']}", gates)
+
+
+def _topic_key(item: QdmsApplicabilityItem):
+    if item.uncertainty['review_type'] in ('CLARIFY_REGULATORY_SCOPE', 'CHECK_SOURCE_GROUNDING'):
+        return item.row_id.split(':')[1]                     # the clause (obligation id)
+    return _task_key(item)
+
+
+def group_reviews(items: list[QdmsApplicabilityItem]) -> tuple[list[QdmsApplicabilityItem], list[QdmsReviewTask]]:
+    """(the records, each pointing at its task and without an action of its own; the parent tasks). Records are grouped
+    only when they share the review type, the cause, the department, the due date and the subject (an article for a
+    source question, a target and its missing gates for a company fact)."""
+    departments = ownership()['departments']
+    groups: dict[tuple, list[QdmsApplicabilityItem]] = {}
+    for item in items:
+        groups.setdefault(_task_key(item), []).append(item)
+    tasks, task_of = [], {}
+    for key, children in sorted(groups.items(), key=lambda kv: [str(k) for k in kv[0]]):
+        kind, cause, department, due = key[0], key[1], key[2], key[3]
+        task_id = 'TASK:' + _digest([str(k) for k in key])[:16]
+        clauses = sorted({c.provision['provision_ref'] for c in children})
+        entities = sorted({e for c in children for e in c.entity['entity_ids']})
+        targets = sorted({c.entity['target_id'] for c in children})
+        regulations = sorted({c.provision['regulation_id'] for c in children})
+        if kind in ('CLARIFY_REGULATORY_SCOPE', 'CHECK_SOURCE_GROUNDING'):
+            title = children[0].provision.get('title') or regulations[0]
+            question = (f"{key[4]} ({title}): {len(clauses)} hüküm için {CAUSE_TR.get(cause, cause)}. Muhatabı yalnız metinden "
+                        f"belirleyin; {len(targets)} hedef bu cevabı bekliyor.")
+        else:
+            gates = ', '.join(key[5])
+            question = (f"{children[0].entity['target_name']} ({children[0].entity['target_id']}): {CAUSE_TR.get(cause, cause)} "
+                        f"({gates}); {len(children)} değerlendirme bekliyor. Profil sorusu olarak cevaplanır (questions / answer).")
+        qdms_type = REVIEW_ACTION.get(kind, ('APPLICABILITY_REVIEW_TASK', department))[0]
+        action = QdmsAction(action_id=f'{task_id}:1', qdms_type=qdms_type, change=kind, department=department,
+                            department_tr=departments.get(department, department), why=[cause], priority='MEDIUM')
+        fingerprint = _digest({'key': [str(k) for k in key], 'children': sorted(c.fingerprint for c in children)})
+        tasks.append(QdmsReviewTask(task_id=task_id, fingerprint=fingerprint, review_type=kind, cause=cause, department=department,
+                                    department_tr=departments.get(department, department), due_date=due, question_tr=question,
+                                    regulation_ids=regulations, clauses=clauses, entities=entities, targets=targets,
+                                    topics=len({_topic_key(c) for c in children}), child_ids=[c.row_id for c in children],
+                                    required_actions=[action]))
+        for child in children:
+            task_of[child.row_id] = task_id
+    grouped = [item.model_copy(update={'task_id': task_of[item.row_id], 'required_actions': []}) for item in items]
+    return grouped, tasks
+
+
 def _refingerprint(row: QdmsRow) -> str:
     return _digest({'provision': row.provision, 'applicability': row.applicability, 'reason': row.reason, 'policy': row.policy_status,
                     'actions': [a.model_dump(mode='json', exclude={'state'}) for a in row.required_actions]})
@@ -313,13 +421,14 @@ def merge(first: QdmsExport, second: QdmsExport) -> QdmsExport:
         raise ValueError('exports of different profiles or register periods are not merged')
     rows = [*first.rows, *[r for r in second.rows if r.row_id not in {x.row_id for x in first.rows}]]
     seen = {x.row_id for x in first.applicability_reviews}
-    reviews = [*first.applicability_reviews, *[r for r in second.applicability_reviews if r.row_id not in seen]]
+    reviews, tasks = group_reviews([*first.applicability_reviews, *[r for r in second.applicability_reviews if r.row_id not in seen]])
     ledger = [*first.ledger, *second.ledger]
-    return first.model_copy(update={'rows': rows, 'applicability_reviews': reviews, 'ledger': ledger, 'summary': summarise(rows, reviews, ledger),
+    return first.model_copy(update={'rows': rows, 'applicability_reviews': reviews, 'review_tasks': tasks, 'ledger': ledger,
+                                    'summary': summarise(rows, reviews, ledger, tasks),
                                     'register_synthetic': first.register_synthetic or second.register_synthetic})
 
 
-def summarise(rows: list[QdmsRow], reviews=(), ledger=()) -> dict:
+def summarise(rows: list[QdmsRow], reviews=(), ledger=(), tasks=()) -> dict:
     def count(values):
         out: dict[str, int] = {}
         for value in values:
@@ -332,9 +441,12 @@ def summarise(rows: list[QdmsRow], reviews=(), ledger=()) -> dict:
             'actions_by_department': count(a.department for a in actions),
             'applicability_reviews': len(reviews), 'applicability_reviews_by_type': count(r.uncertainty['review_type'] for r in reviews),
             'applicability_reviews_by_approval': count(r.human_approval.status for r in reviews),
-            'applicability_actions_by_state': count(a.state for r in reviews for a in r.required_actions),
+            'review_topics': sum(t.topics for t in tasks), 'review_tasks': len(tasks),
+            'review_tasks_by_cause': count(t.cause for t in tasks), 'review_tasks_by_department': count(t.department for t in tasks),
+            'review_tasks_by_approval': count(t.human_approval.status for t in tasks),
+            'applicability_actions_by_state': count(a.state for t in tasks for a in t.required_actions),
             'ready_for_qdms': sum(a.state == 'READY_FOR_QDMS' for a in actions)
-            + sum(a.state == 'READY_FOR_QDMS' for r in reviews for a in r.required_actions),
+            + sum(a.state == 'READY_FOR_QDMS' for t in tasks for a in t.required_actions),
             'ledger': count(entry['outcome'] for entry in ledger)}
 
 
@@ -361,11 +473,10 @@ def approvals_template(export: QdmsExport) -> dict:
                          'policy_status': r.policy_status['mapping_status'], 'decision_of_cardaman': r.reason['decision'],
                          'actions': [f'{a.qdms_type}/{a.change} -> {a.department}' for a in r.required_actions]}
                         for r in export.rows]
-            + [{'row_id': r.row_id, 'fingerprint': r.fingerprint, 'decision': '', 'approver': '', 'decided_at': '', 'note': '',
-                'kind': 'APPLICABILITY_REVIEW', 'provision_ref': r.provision['provision_ref'], 'entity_ids': r.entity['entity_ids'],
-                'review_type': r.uncertainty['review_type'], 'missing': [g['gate'] for g in r.uncertainty['missing_facts']],
-                'actions': [f'{a.qdms_type}/{a.change} -> {a.department}' for a in r.required_actions]}
-               for r in export.applicability_reviews]}
+            + [{'row_id': t.task_id, 'fingerprint': t.fingerprint, 'decision': '', 'approver': '', 'decided_at': '', 'note': '',
+                'kind': 'REVIEW_TASK', 'question': t.question_tr, 'cause': t.cause, 'clauses': len(t.clauses), 'children': len(t.child_ids),
+                'actions': [f'{a.qdms_type}/{a.change} -> {a.department}' for a in t.required_actions]}
+               for t in export.review_tasks]}
 
 
 def apply_approvals(export: QdmsExport, approvals: Approvals) -> tuple[QdmsExport, list[dict]]:
@@ -373,11 +484,14 @@ def apply_approvals(export: QdmsExport, approvals: Approvals) -> tuple[QdmsExpor
     fingerprint is the one the reviewer saw; anything else is reported and leaves the row PENDING."""
     if approvals.profile_id != export.profile_id:
         raise ValueError(f'approvals for {approvals.profile_id}, export of {export.profile_id}')
-    by_id = {r.row_id: r for r in [*export.rows, *export.applicability_reviews]}
+    by_id = {r.row_id: r for r in export.rows} | {t.task_id: t for t in export.review_tasks}
+    children = {c.row_id: c.task_id for c in export.applicability_reviews}
     problems, decided = [], {}
     for entry in approvals.entries:
         row = by_id.get(entry.row_id)
-        if row is None:
+        if row is None and entry.row_id in children:
+            problems.append({'row_id': entry.row_id, 'problem': 'APPROVE_THE_TASK', 'detail': f'the record belongs to {children[entry.row_id]}'})
+        elif row is None:
             problems.append({'row_id': entry.row_id, 'problem': 'UNKNOWN_ROW'})
         elif entry.fingerprint != row.fingerprint:
             problems.append({'row_id': entry.row_id, 'problem': 'STALE_APPROVAL',
@@ -386,24 +500,29 @@ def apply_approvals(export: QdmsExport, approvals: Approvals) -> tuple[QdmsExpor
             problems.append({'row_id': entry.row_id, 'problem': 'DECIDED_TWICE'})
         else:
             decided[entry.row_id] = entry
-    def decide(row):
-        entry = decided.get(row.row_id)
+    def decide(row, key):
+        entry = decided.get(key)
         if entry is None:
             return row
         state = {'APPROVED': 'READY_FOR_QDMS', 'REJECTED': 'CANCELLED', 'RETURNED': 'DRAFT'}[entry.decision]
         return row.model_copy(update={
             'human_approval': Approval(status=entry.decision, approver=entry.approver, decided_at=entry.decided_at, note=entry.note),
             'required_actions': [a.model_copy(update={'state': state}) for a in row.required_actions]})
-    rows = [decide(r) for r in export.rows]
-    reviews = [decide(r) for r in export.applicability_reviews]
-    return export.model_copy(update={'rows': rows, 'applicability_reviews': reviews,
-                                     'summary': summarise(rows, reviews, export.ledger)}), problems
+    rows = [decide(r, r.row_id) for r in export.rows]
+    tasks = [decide(t, t.task_id) for t in export.review_tasks]
+    # a child takes its task's decision; its own decision and evidence are unchanged
+    by_task = {t.task_id: t for t in tasks}
+    reviews = [c.model_copy(update={'human_approval': by_task[c.task_id].human_approval.model_copy(
+                   update={'note': f"via {c.task_id}" + (f': {by_task[c.task_id].human_approval.note}' if by_task[c.task_id].human_approval.note else '')})})
+               if c.task_id in decided else c for c in export.applicability_reviews]
+    return export.model_copy(update={'rows': rows, 'applicability_reviews': reviews, 'review_tasks': tasks,
+                                     'summary': summarise(rows, reviews, export.ledger, tasks)}), problems
 
 
 def ready_actions(export: QdmsExport) -> list[dict]:
     """The actions a QDMS may open: those of approved rows only, each with the row it comes from."""
     out = []
-    for row in [*export.rows, *export.applicability_reviews]:
+    for row in export.rows:
         if row.human_approval.status != 'APPROVED':
             continue
         for action in row.required_actions:
@@ -412,6 +531,15 @@ def ready_actions(export: QdmsExport) -> list[dict]:
                             'provision_ref': row.provision['provision_ref'], 'regulation_id': row.provision['regulation_id'],
                             'approver': row.human_approval.approver, 'approved_at': row.human_approval.decided_at.isoformat()
                             if row.human_approval.decided_at else None})
+    for task in export.review_tasks:
+        if task.human_approval.status != 'APPROVED':
+            continue
+        for action in task.required_actions:
+            if action.state == 'READY_FOR_QDMS':
+                out.append({**action.model_dump(mode='json'), 'row_id': task.task_id, 'question': task.question_tr, 'entity_ids': task.entities,
+                            'clauses': task.clauses, 'regulation_ids': task.regulation_ids, 'children': len(task.child_ids),
+                            'approver': task.human_approval.approver, 'approved_at': task.human_approval.decided_at.isoformat()
+                            if task.human_approval.decided_at else None})
     return out
 
 
@@ -450,10 +578,21 @@ def csv_rows(export: QdmsExport) -> list[dict]:
     return out
 
 
-REVIEW_CSV_COLUMNS = ['row_id', 'source_layer', 'packs', 'entity_id', 'entity_name', 'target_level', 'target_id', 'regulation_id',
+REVIEW_CSV_COLUMNS = ['row_id', 'task_id', 'source_layer', 'packs', 'entity_id', 'entity_name', 'target_level', 'target_id', 'regulation_id',
                       'regulation_title', 'provision_ref', 'version_id', 'provision_quote', 'applicability', 'reason_codes', 'review_type',
-                      'missing_facts', 'company_evidence', 'grounded', 'action_type', 'action_department', 'action_state', 'approval_status',
-                      'approver', 'approved_at', 'fingerprint']
+                      'missing_facts', 'company_evidence', 'grounded', 'approval_status', 'approver', 'approved_at', 'fingerprint']
+TASK_CSV_COLUMNS = ['task_id', 'review_type', 'cause', 'department', 'due_date', 'question', 'regulation_ids', 'clauses', 'entities', 'targets',
+                    'topics', 'children', 'action_type', 'action_state', 'approval_status', 'approver', 'approved_at', 'fingerprint']
+
+
+def task_csv_rows(export: QdmsExport) -> list[dict]:
+    return [{'task_id': t.task_id, 'review_type': t.review_type, 'cause': t.cause, 'department': t.department_tr, 'due_date': t.due_date or '',
+             'question': t.question_tr, 'regulation_ids': '; '.join(t.regulation_ids), 'clauses': '; '.join(t.clauses),
+             'entities': '; '.join(t.entities), 'targets': '; '.join(t.targets), 'topics': t.topics, 'children': len(t.child_ids),
+             'action_type': t.required_actions[0].qdms_type, 'action_state': t.required_actions[0].state,
+             'approval_status': t.human_approval.status, 'approver': t.human_approval.approver or '',
+             'approved_at': t.human_approval.decided_at.isoformat() if t.human_approval.decided_at else '', 'fingerprint': t.fingerprint}
+            for t in export.review_tasks]
 
 
 def review_csv_rows(export: QdmsExport) -> list[dict]:
@@ -463,26 +602,28 @@ def review_csv_rows(export: QdmsExport) -> list[dict]:
                           f"{' conflicts=' + str(g['conflicts']) if g.get('conflicts') else ''}" for g in items)
     out = []
     for r in export.applicability_reviews:
-        action = r.required_actions[0]
-        out.append({'row_id': r.row_id, 'source_layer': r.source_layer, 'packs': '; '.join(r.packs), 'entity_id': '; '.join(r.entity['entity_ids']),
+        out.append({'row_id': r.row_id, 'task_id': r.task_id or '', 'source_layer': r.source_layer, 'packs': '; '.join(r.packs), 'entity_id': '; '.join(r.entity['entity_ids']),
                     'entity_name': r.entity['entity_name'], 'target_level': r.entity['target_level'], 'target_id': r.entity['target_id'],
                     'regulation_id': r.provision['regulation_id'], 'regulation_title': r.provision['title'], 'provision_ref': r.provision['provision_ref'],
                     'version_id': r.provision['version_id'], 'provision_quote': r.provision['quote'], 'applicability': 'UNKNOWN',
                     'reason_codes': '; '.join(r.applicability['reason_codes']), 'review_type': r.uncertainty['review_type'],
                     'missing_facts': gates(r.uncertainty['missing_facts']), 'company_evidence': gates(r.uncertainty['company_evidence']),
-                    'grounded': r.uncertainty['source_evidence'].get('grounded'), 'action_type': action.qdms_type,
-                    'action_department': action.department_tr, 'action_state': action.state, 'approval_status': r.human_approval.status,
+                    'grounded': r.uncertainty['source_evidence'].get('grounded'), 'approval_status': r.human_approval.status,
                     'approver': r.human_approval.approver or '',
                     'approved_at': r.human_approval.decided_at.isoformat() if r.human_approval.decided_at else '', 'fingerprint': r.fingerprint})
     return out
 
 
 def write(export: QdmsExport, directory: Path) -> dict[str, Path]:
-    """export.json, export.csv and applicability-reviews.csv (UTF-8 with BOM, for a spreadsheet), approvals-template.json,
-    ready-actions.json."""
+    """export.json; export.csv, review-tasks.csv and applicability-reviews.csv (UTF-8 with BOM, for a spreadsheet; one line
+    per action, per review task, per child record); approvals-template.json; ready-actions.json."""
     directory.mkdir(parents=True, exist_ok=True)
     paths = {'json': directory / 'export.json', 'csv': directory / 'export.csv', 'reviews_csv': directory / 'applicability-reviews.csv',
-             'template': directory / 'approvals-template.json', 'ready': directory / 'ready-actions.json'}
+             'tasks_csv': directory / 'review-tasks.csv', 'template': directory / 'approvals-template.json', 'ready': directory / 'ready-actions.json'}
+    with paths['tasks_csv'].open('w', encoding='utf-8-sig', newline='') as handle:
+        writer = csv.DictWriter(handle, fieldnames=TASK_CSV_COLUMNS, delimiter=';')
+        writer.writeheader()
+        writer.writerows(task_csv_rows(export))
     with paths['reviews_csv'].open('w', encoding='utf-8-sig', newline='') as handle:
         writer = csv.DictWriter(handle, fieldnames=REVIEW_CSV_COLUMNS, delimiter=';')
         writer.writeheader()

@@ -25,7 +25,7 @@ elif kind == 'evaluate':
 elif kind == 'qdms':
     s = data['summary']
     print({k: s.get(k) for k in ('rows', 'by_policy_status', 'by_decision', 'actions', 'actions_by_state', 'ready_for_qdms',
-                                  'applicability_reviews', 'applicability_reviews_by_type')})
+                                  'applicability_reviews', 'applicability_reviews_by_type', 'review_topics', 'review_tasks', 'review_tasks_by_cause')})
 elif kind == 'live':
     s = data.get('selective', {})
     print({k: s.get(k) for k in ('rows', 'escalated_rows', 'adjudications', 'calls_failed', 'calls_without_thinking', 'decision_review_rows', 'model_ms_per_call', 'model_ms_per_obligation')})

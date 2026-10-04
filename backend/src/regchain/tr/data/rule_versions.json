@@ -128,6 +128,16 @@
    "recorded_on": "314bded",
    "recorded_at": "2026-10-02",
    "note": "3 Oct 2026: tr-routing-v2 - a dimension stated complete on its own (activities_complete, entity_classes_complete, licenses_complete) decides before the general profile flag"
+  },
+  "tr-qdms-v3": {
+   "family": "qdms",
+   "files": [
+    "qdms.py"
+   ],
+   "sha256": "05eafd1e508f483789556bff5cb9ae81ead063aaa2fab54a7bc69002767aa103",
+   "recorded_on": "7acf3e7",
+   "recorded_at": "2026-10-04",
+   "note": "4 Oct 2026: tr-qdms-v3 - applicability records grouped under parent review tasks (children keep decision and evidence; action and approval on the task)"
   }
  }
 }
