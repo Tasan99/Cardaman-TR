@@ -42,7 +42,7 @@ from .profile import EnterpriseProfile, PolicyScope, policy_covers, product_alco
 DATA = Path(__file__).resolve().parent / 'data'
 REGISTERS = DATA / 'pilot_policies'
 OWNERSHIP = DATA / 'ownership.json'
-COMPARE_RULES_VERSION = 'tr-compare-rules-v4'
+COMPARE_RULES_VERSION = 'tr-compare-rules-v5'
 Relation = Literal['SUPPORTS', 'PARTIAL', 'CONFLICTS', 'UNRELATED', 'UNCLEAR']
 STATEMENT = re.compile(r'^\s*(\d{1,3})\.\s+(?=\S)')
 SALE_FAMILY = frozenset(SALES)
@@ -558,6 +558,43 @@ def deadlines(text: str) -> dict[str, float]:
     return out
 
 
+# A deadline governs an act of handing something over to someone: what is handed over, to whom, by when. Two texts with the
+# same kind of deadline, the same recipient authority, such an act and a shared word of what is handed over are about the
+# same thing, however differently the rest is worded (4 October 2026: COVH-16 was related only through a similarity table).
+HANDING_OVER = re.compile(r'(?<![%s])(?:bildir|ilet|intikal|sunul|sunar|sunma|sunmak|gönder|teslim|raporla|beyan|ver(?:il|ir|mek|me))' % LETTERS)
+TIME_STEMS = frozenset({'ayın', 'eden', 'takip', 'günü', 'kadar', 'sonra', 'önce', 'içind', 'içeri', 'hafta', 'aylık', 'yıllı', 'mesai',
+                        'bitim', 'süres', 'tarih', 'tarihi', 'itiba', 'günde', 'günlü'})
+
+
+def _recipients(lex, folded: str) -> set[int]:
+    """The authorities a text hands something to (dative or locative: "Kuruma", "Bakanlığa"), by lexicon pattern."""
+    out = set()
+    for index, pattern in enumerate(lex.authorities):
+        for match in pattern.finditer(folded):
+            end = match.end()
+            while end < len(folded) and folded[end].isalpha():
+                end += 1
+            word = folded[match.start():end]
+            if word.endswith(('a', 'e', 'ya', 'ye', 'na', 'ne', 'da', 'de', 'ta', 'te')) and not word.endswith(('ca', 'ce', 'ça', 'çe')):
+                out.add(index)
+    return out
+
+
+def deadline_subject(frame: Frame, policy: Frame, wanted: set[str], offered: set[str]) -> str:
+    """'SAME' when both texts hand something over, to the same authority, and share a word of what is handed over (not the
+    authority, not a word of time); 'DIFFERENT_OBJECT' when they share the authority and the act but not that word;
+    'NONE' otherwise."""
+    lex = lexicon()
+    duty, given = fold(blank_notes(frame.text)), fold(blank_notes(policy.text))
+    if not (HANDING_OVER.search(duty) and HANDING_OVER.search(given)):
+        return 'NONE'
+    if not _recipients(lex, duty) & _recipients(lex, given):
+        return 'NONE'
+    authority_stems = {s for s in wanted & offered if any(p.match(s) for p in lex.authorities)}
+    objects = (wanted & offered) - TIME_STEMS - authority_stems
+    return 'SAME' if objects else 'DIFFERENT_OBJECT'
+
+
 LIMIT_VERB = re.compile(r'(?:geçemez|aşamaz|geçmez|aşmaz|düşürülmez|düşemez|çıkamaz|çıkarılamaz|olamaz)\s*\.?\s*$')
 
 
@@ -718,13 +755,21 @@ def _relate_frame(duty: ExtractedObligation, policy: Frame, vocabulary, similari
             return ('CONFLICTS', ['POLICY_NEGATES_DUTY'], detail) if negates else ('UNRELATED', ['OTHER_SUBJECT'], detail)
         if any(q.attribute is None for q in limits):
             return 'UNCLEAR', ['LIMIT_ATTRIBUTE_UNRESOLVED'], detail
-    # -- a later deadline is a weaker rule: read on a statement the wording relates, or one a recorded similarity does -----
+    # -- a later deadline is a weaker rule: read on a statement the wording relates, the structure of the deadline relates
+    # (same recipient, an act of handing over, a shared word of what is handed over), or a recorded similarity relates ----
     due, given = deadlines(frame.text), deadlines(policy.text)
     late = [kind for kind in due if kind in given and given[kind] > due[kind]]
-    if late and not negative_duty and policy.modality == 'MUST' and common >= 2 \
-            and (overlap >= 0.5 or (similarity is not None and similarity >= SEMANTIC_RELEVANCE)):
-        detail['deadline'] = {'kind': late[0], 'duty': due[late[0]], 'policy': given[late[0]]}
-        return 'CONFLICTS', ['DEADLINE_LATER'], detail
+    if late and not negative_duty and policy.modality == 'MUST':
+        structure = deadline_subject(frame, policy, wanted, offered)
+        basis = 'WORDING' if overlap >= 0.5 else 'STRUCTURE' if structure == 'SAME' else \
+            'SIMILARITY' if similarity is not None and similarity >= SEMANTIC_RELEVANCE else None
+        if common >= 2 and basis:
+            detail['deadline'] = {'kind': late[0], 'duty': due[late[0]], 'policy': given[late[0]], 'basis': basis}
+            return 'CONFLICTS', ['DEADLINE_LATER'], detail
+        if structure == 'DIFFERENT_OBJECT':
+            # the same authority and the same act, a later date, nothing in common about what is handed over: a person decides
+            detail['deadline'] = {'kind': late[0], 'duty': due[late[0]], 'policy': given[late[0]], 'basis': 'UNRESOLVED'}
+            return 'UNCLEAR', ['DEADLINE_SUBJECT_UNRESOLVED'], detail
     # -- an outright ban of the same act(s), whatever its words ------------------------------------------------------------
     # a qualifier of the statement that the duty does not have narrows it; one the duty has too ("tüketiciye dönük") does not
     narrower = bool(policy_places - duty_places) or policy.conditions or policy.quantities \

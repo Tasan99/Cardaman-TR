@@ -237,10 +237,25 @@ class ElementReadingTests(unittest.TestCase):
         # COVH-16: the by-law says the 20th of the following month; the SOP says the 25th
         report = obligation('TR:YONETMELIK:ALKOL_IC_DIS_TICARET', 'Yönetmelik 6203 md. 15/f.2')
         late = self.importer_statement('SOP-LOG-12#2')
-        self.assertEqual(relate(report, late, REGISTRY.vocabulary).relation, 'UNRELATED')       # the words alone do not relate them
         result = relate(report, late, REGISTRY.vocabulary, similarity=0.75)
         self.assertEqual((result.relation, result.reasons), ('CONFLICTS', ['DEADLINE_LATER']))
         self.assertEqual(result.detail['deadline'], {'kind': 'DAY_OF_MONTH', 'duty': 20.0, 'policy': 25.0})
+
+    def test_a_later_deadline_is_read_on_the_elements_it_governs_without_a_similarity_table(self):
+        # 4 October: the same deadline kind, the same recipient authority ("Kuruma"), an act of handing over (intikal
+        # ettirmek / iletilir) and a shared word of what is handed over ("satış") relate the two, whatever the table says
+        report = obligation('TR:YONETMELIK:ALKOL_IC_DIS_TICARET', 'Yönetmelik 6203 md. 15/f.2')
+        result = relate(report, self.importer_statement('SOP-LOG-12#2'), REGISTRY.vocabulary)
+        self.assertEqual((result.relation, result.reasons), ('CONFLICTS', ['DEADLINE_LATER']))
+        self.assertEqual(result.detail['deadline']['basis'], 'STRUCTURE')
+        # the same authority and act but nothing in common about what is handed over: not decided by rule
+        other = relate(report, statement("Her ayın personel bildirimleri, takip eden ayın 25'ine kadar Kuruma iletilir."), REGISTRY.vocabulary)
+        self.assertEqual((other.relation, other.reasons), ('UNCLEAR', ['DEADLINE_SUBJECT_UNRESOLVED']))
+        # an earlier deadline is no weaker rule, and a statement to someone else is not about the Authority's report
+        earlier = relate(report, statement("Her ayın satış verileri, takip eden ayın 15'ine kadar Kuruma elektronik ortamda iletilir."), REGISTRY.vocabulary)
+        self.assertNotEqual(earlier.relation, 'CONFLICTS')
+        elsewhere = relate(report, statement("Her ayın satış verileri, takip eden ayın 25'ine kadar bölge müdürüne iletilir."), REGISTRY.vocabulary)
+        self.assertNotEqual(elsewhere.relation, 'CONFLICTS')
         # the same similarity never makes a statement cover anything by itself
         self.assertEqual(relate(report, self.importer_statement('SOP-LOG-12#3'), REGISTRY.vocabulary, similarity=0.9).relation, 'UNRELATED')
         from regchain.tr.compare import deadlines

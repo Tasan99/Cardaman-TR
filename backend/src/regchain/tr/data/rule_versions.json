@@ -148,6 +148,16 @@
    "recorded_on": "7ff89fa",
    "recorded_at": "2026-10-04",
    "note": "4 Oct 2026: tr-qdms-v4 - company-facing task wording (no command names)"
+  },
+  "tr-compare-rules-v5": {
+   "family": "compare",
+   "files": [
+    "compare.py"
+   ],
+   "sha256": "3b8cdce333edd713995fe8f9f60586f58b18316459018ddb5da612ecf02f78ec",
+   "recorded_on": "8e52683",
+   "recorded_at": "2026-10-04",
+   "note": "4 Oct 2026: tr-compare-rules-v5 - a later deadline is related on the elements it governs (same deadline kind, same recipient authority, an act of handing over, a shared word of what is handed over); same authority and act without a shared object is UNCLEAR"
   }
  }
 }
