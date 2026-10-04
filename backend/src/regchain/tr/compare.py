@@ -42,7 +42,7 @@ from .profile import EnterpriseProfile, PolicyScope, policy_covers, product_alco
 DATA = Path(__file__).resolve().parent / 'data'
 REGISTERS = DATA / 'pilot_policies'
 OWNERSHIP = DATA / 'ownership.json'
-COMPARE_RULES_VERSION = 'tr-compare-rules-v5'
+COMPARE_RULES_VERSION = 'tr-compare-rules-v6'
 Relation = Literal['SUPPORTS', 'PARTIAL', 'CONFLICTS', 'UNRELATED', 'UNCLEAR']
 STATEMENT = re.compile(r'^\s*(\d{1,3})\.\s+(?=\S)')
 SALE_FAMILY = frozenset(SALES)
@@ -566,18 +566,16 @@ TIME_STEMS = frozenset({'ayın', 'eden', 'takip', 'günü', 'kadar', 'sonra', '�
                         'bitim', 'süres', 'tarih', 'tarihi', 'itiba', 'günde', 'günlü'})
 
 
-def _recipients(lex, folded: str) -> set[int]:
-    """The authorities a text hands something to (dative or locative: "Kuruma", "Bakanlığa"), by lexicon pattern."""
-    out = set()
-    for index, pattern in enumerate(lex.authorities):
-        for match in pattern.finditer(folded):
-            end = match.end()
-            while end < len(folded) and folded[end].isalpha():
-                end += 1
-            word = folded[match.start():end]
-            if word.endswith(('a', 'e', 'ya', 'ye', 'na', 'ne', 'da', 'de', 'ta', 'te')) and not word.endswith(('ca', 'ce', 'ça', 'çe')):
-                out.add(index)
-    return out
+# An authority as the recipient: its root with a dative or locative ending ("Kuruma", "Bakanlığa", "il müdürlüğüne",
+# "yetkili mercie"). The lexicon's authority patterns end at a word boundary after the bare or genitive form, so they do
+# not see "Kuruma" (found on the 4 October self-test: the structured deadline never fired).
+RECIPIENT = re.compile(r'(?<![%s])(kurum|kurul|bakanlı[kğ]|ajans|il müdürlü[kğ]|genel müdürlü[kğ]|valili[kğ]|belediye|yetkili merci|'
+                       r'yetkili makam|idare)(?:a|e|ya|ye|na|ne|ına|ine|una|üne|da|de|ta|te|nda|nde)(?![%s])' % (LETTERS, LETTERS))
+
+
+def _recipients(lex, folded: str) -> set[str]:
+    """The authorities a text hands something to, by root."""
+    return {m.group(1).replace('ğ', 'k') for m in RECIPIENT.finditer(folded)}
 
 
 def deadline_subject(frame: Frame, policy: Frame, wanted: set[str], offered: set[str]) -> str:

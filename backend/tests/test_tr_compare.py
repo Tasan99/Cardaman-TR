@@ -239,7 +239,8 @@ class ElementReadingTests(unittest.TestCase):
         late = self.importer_statement('SOP-LOG-12#2')
         result = relate(report, late, REGISTRY.vocabulary, similarity=0.75)
         self.assertEqual((result.relation, result.reasons), ('CONFLICTS', ['DEADLINE_LATER']))
-        self.assertEqual(result.detail['deadline'], {'kind': 'DAY_OF_MONTH', 'duty': 20.0, 'policy': 25.0})
+        self.assertEqual({k: result.detail['deadline'][k] for k in ('kind', 'duty', 'policy')}, {'kind': 'DAY_OF_MONTH', 'duty': 20.0, 'policy': 25.0})
+        self.assertIn(result.detail['deadline']['basis'], ('STRUCTURE', 'SIMILARITY'))
 
     def test_a_later_deadline_is_read_on_the_elements_it_governs_without_a_similarity_table(self):
         # 4 October: the same deadline kind, the same recipient authority ("Kuruma"), an act of handing over (intikal

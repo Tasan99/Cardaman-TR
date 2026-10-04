@@ -158,6 +158,16 @@
    "recorded_on": "8e52683",
    "recorded_at": "2026-10-04",
    "note": "4 Oct 2026: tr-compare-rules-v5 - a later deadline is related on the elements it governs (same deadline kind, same recipient authority, an act of handing over, a shared word of what is handed over); same authority and act without a shared object is UNCLEAR"
+  },
+  "tr-compare-rules-v6": {
+   "family": "compare",
+   "files": [
+    "compare.py"
+   ],
+   "sha256": "a71c384383a152fb1e69a6e7c88a4de179757b48cfdb795c292b666982b90472",
+   "recorded_on": "29193e1",
+   "recorded_at": "2026-10-04",
+   "note": "4 Oct 2026: tr-compare-rules-v6 - recipient authority found by root + dative/locative ending (the lexicon's boundary patterns do not see 'Kuruma'; v5 never fired the structured deadline)"
   }
  }
 }
