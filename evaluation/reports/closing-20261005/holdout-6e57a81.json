@@ -1,0 +1,1200 @@
+{
+ "commit": "6e57a81",
+ "dataset": "BEVERAGE_TR_DEV_V2 0.4.0",
+ "table_model": "bge-m3:latest@7907646426070047a77226ac3e684fbbe8410524f7b4a74d02837e43f2146bab",
+ "splits": {
+  "DEV": {
+   "n": 45,
+   "correct": {
+    "score_coverage": 36,
+    "rules_no_table": 36,
+    "rules_with_table": 36
+   },
+   "cases": {
+    "COV-01": {
+     "ref": "Kanun 4250 md. 6/f.1/c.1",
+     "target": "ALC-INT-ACT-BEER-ADS",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "COVERED",
+     "rules_no_table": "COVERED",
+     "rules_with_table": "COVERED"
+    },
+    "COV-02": {
+     "ref": "Kanun 4250 md. 6/f.1/c.4",
+     "target": "ALC-INT-BREWING",
+     "expected": [
+      "CONTRADICTED"
+     ],
+     "score_coverage": "CONTRADICTED",
+     "rules_no_table": "CONTRADICTED",
+     "rules_with_table": "CONTRADICTED"
+    },
+    "COV-03": {
+     "ref": "Kanun 4250 md. 6/f.2",
+     "target": "ALC-INT-BREWING",
+     "expected": [
+      "CONTRADICTED"
+     ],
+     "score_coverage": "CONTRADICTED",
+     "rules_no_table": "CONTRADICTED",
+     "rules_with_table": "CONTRADICTED"
+    },
+    "COV-04": {
+     "ref": "Kanun 4250 md. 6/f.3",
+     "target": "ALC-INT-SALES",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "COVERED",
+     "rules_no_table": "COVERED",
+     "rules_with_table": "COVERED"
+    },
+    "COV-05": {
+     "ref": "Kanun 4250 md. 6/f.4/c.1",
+     "target": "ALC-INT-BREWING",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "COVERED",
+     "rules_no_table": "COVERED",
+     "rules_with_table": "COVERED"
+    },
+    "COV-06": {
+     "ref": "Kanun 4250 md. 6/f.5/c.1",
+     "target": "ALC-INT-SALES",
+     "expected": [
+      "PARTIALLY_COVERED"
+     ],
+     "score_coverage": "PARTIALLY_COVERED",
+     "rules_no_table": "PARTIALLY_COVERED",
+     "rules_with_table": "PARTIALLY_COVERED"
+    },
+    "COV-07": {
+     "ref": "Kanun 4250 md. 6/f.5/c.2",
+     "target": "ALC-INT-SALES",
+     "expected": [
+      "NOT_COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COV-08": {
+     "ref": "Kanun 4250 md. 6/f.5/c.3",
+     "target": "ALC-INT-SALES",
+     "expected": [
+      "CONTRADICTED"
+     ],
+     "score_coverage": "CONTRADICTED",
+     "rules_no_table": "CONTRADICTED",
+     "rules_with_table": "CONTRADICTED"
+    },
+    "COV-09": {
+     "ref": "Kanun 4250 md. 6/f.7",
+     "target": "ALC-INT-SALES",
+     "expected": [
+      "NOT_COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COV-10": {
+     "ref": "Kanun 4250 md. 6/f.8/c.1",
+     "target": "ALC-INT-LAGER",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "COVERED",
+     "rules_no_table": "COVERED",
+     "rules_with_table": "COVERED"
+    },
+    "COV-11": {
+     "ref": "Kanun 4250 md. 6/f.9/c.1",
+     "target": "ALC-INT-ACT-AF-BRAND",
+     "expected": [
+      "CONTRADICTED"
+     ],
+     "score_coverage": "CONTRADICTED",
+     "rules_no_table": "CONTRADICTED",
+     "rules_with_table": "CONTRADICTED"
+    },
+    "COV-12": {
+     "ref": "Kanun 4250 md. 6/f.10",
+     "target": "ALC-INT-AF",
+     "expected": [
+      "PARTIALLY_COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COV-13": {
+     "ref": "Yönetmelik 23282 md. 9/f.1/b.i",
+     "target": "ALC-INT-LAGER",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "COVERED",
+     "rules_no_table": "COVERED",
+     "rules_with_table": "COVERED"
+    },
+    "COV-14": {
+     "ref": "Yönetmelik 14646 md. 6/f.1/b.e",
+     "target": "ALC-INT-SALES",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COV-15": {
+     "ref": "Yönetmelik 14646 md. 6/f.1/b.g/c.1",
+     "target": "ALC-INT-SALES",
+     "expected": [
+      "COVERED",
+      "PARTIALLY_COVERED"
+     ],
+     "score_coverage": "PARTIALLY_COVERED",
+     "rules_no_table": "PARTIALLY_COVERED",
+     "rules_with_table": "PARTIALLY_COVERED"
+    },
+    "COV-16": {
+     "ref": "Yönetmelik 14646 md. 6/f.1/b.f/c.2",
+     "target": "ALC-INT-SALES",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COV-17": {
+     "ref": "Yönetmelik 38745 md. 10/f.1/b.ç",
+     "target": "ALC-INT-BREWING",
+     "expected": [
+      "PARTIALLY_COVERED"
+     ],
+     "score_coverage": "PARTIALLY_COVERED",
+     "rules_no_table": "PARTIALLY_COVERED",
+     "rules_with_table": "PARTIALLY_COVERED"
+    },
+    "COV-18": {
+     "ref": "Yönetmelik 38745 md. 10/f.1/b.b",
+     "target": "ALC-INT-BREWING",
+     "expected": [
+      "PARTIALLY_COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COV-19": {
+     "ref": "Yönetmelik 34147 md. 8/f.1/b.b",
+     "target": "ALC-INT-BREWING",
+     "expected": [
+      "NOT_COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COV-20": {
+     "ref": "Tebliğ 23706 md. 5/f.1/b.b",
+     "target": "NONALC-ENERGY",
+     "expected": [
+      "CONTRADICTED"
+     ],
+     "score_coverage": "CONTRADICTED",
+     "rules_no_table": "CONTRADICTED",
+     "rules_with_table": "CONTRADICTED"
+    },
+    "COV-21": {
+     "ref": "Tebliğ 23706 md. 5/f.1/b.c",
+     "target": "NONALC-ENERGY",
+     "expected": [
+      "PARTIALLY_COVERED"
+     ],
+     "score_coverage": "PARTIALLY_COVERED",
+     "rules_no_table": "PARTIALLY_COVERED",
+     "rules_with_table": "PARTIALLY_COVERED"
+    },
+    "COV-22": {
+     "ref": "Tebliğ 23706 md. 5/f.1/b.ç/c.1",
+     "target": "NONALC-ENERGY",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "COVERED",
+     "rules_no_table": "COVERED",
+     "rules_with_table": "COVERED"
+    },
+    "COV-23": {
+     "ref": "Tebliğ 23706 md. 11/f.2",
+     "target": "NONALC-ACT-ENERGY-ONLINE-ADS",
+     "expected": [
+      "PARTIALLY_COVERED"
+     ],
+     "score_coverage": "PARTIALLY_COVERED",
+     "rules_no_table": "PARTIALLY_COVERED",
+     "rules_with_table": "PARTIALLY_COVERED"
+    },
+    "COV-24": {
+     "ref": "Tebliğ 23706 md. 11/f.3",
+     "target": "NONALC-ONLINE",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "COVERED",
+     "rules_no_table": "COVERED",
+     "rules_with_table": "COVERED"
+    },
+    "COV-25": {
+     "ref": "Tebliğ 23706 md. 11/f.4/c.2",
+     "target": "NONALC-ACT-ENERGY-ONLINE-ADS",
+     "expected": [
+      "NOT_COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COV-26": {
+     "ref": "Tebliğ 23706 md. 12/f.1/b.a",
+     "target": "NONALC-ENERGY",
+     "expected": [
+      "PARTIALLY_COVERED"
+     ],
+     "score_coverage": "PARTIALLY_COVERED",
+     "rules_no_table": "PARTIALLY_COVERED",
+     "rules_with_table": "PARTIALLY_COVERED"
+    },
+    "COV-27": {
+     "ref": "Tebliğ 23706 md. 12/f.1/b.b",
+     "target": "NONALC-ENERGY",
+     "expected": [
+      "NOT_COVERED",
+      "PARTIALLY_COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COV-28": {
+     "ref": "Tebliğ 23706 md. 12/f.1/b.c",
+     "target": "NONALC-ENERGY",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "COVERED",
+     "rules_no_table": "COVERED",
+     "rules_with_table": "COVERED"
+    },
+    "COV-29": {
+     "ref": "Tebliğ 11376 md. 5/f.1/b.c",
+     "target": "NONALC-COLA",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "COVERED",
+     "rules_no_table": "COVERED",
+     "rules_with_table": "COVERED"
+    },
+    "COV-30": {
+     "ref": "Tebliğ 11376 md. 11/f.1/b.h/c.1",
+     "target": "NONALC-COLA",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "PARTIALLY_COVERED",
+     "rules_no_table": "PARTIALLY_COVERED",
+     "rules_with_table": "PARTIALLY_COVERED"
+    },
+    "COV-31": {
+     "ref": "Tebliğ 11376 md. 11/f.1/b.b/c.1",
+     "target": "NONALC-COLA",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "COVERED",
+     "rules_no_table": "COVERED",
+     "rules_with_table": "COVERED"
+    },
+    "COV-32": {
+     "ref": "Yönetmelik 23282 md. 9/f.1/b.a",
+     "target": "NONALC-COLA",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "COVERED",
+     "rules_no_table": "COVERED",
+     "rules_with_table": "COVERED"
+    },
+    "COV-33": {
+     "ref": "Yönetmelik 23282 md. 9/f.1/b.b",
+     "target": "NONALC-COLA",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "COVERED",
+     "rules_no_table": "COVERED",
+     "rules_with_table": "COVERED"
+    },
+    "COV-34": {
+     "ref": "Yönetmelik 23282 md. 9/f.1/b.d",
+     "target": "NONALC-COLA",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "COVERED",
+     "rules_no_table": "COVERED",
+     "rules_with_table": "COVERED"
+    },
+    "COV-35": {
+     "ref": "Yönetmelik 23282 md. 9/f.1/b.e",
+     "target": "NONALC-COLA",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "COVERED",
+     "rules_no_table": "COVERED",
+     "rules_with_table": "COVERED"
+    },
+    "COV-36": {
+     "ref": "Yönetmelik 23282 md. 9/f.1/b.g",
+     "target": "NONALC-COLA",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "COVERED",
+     "rules_no_table": "COVERED",
+     "rules_with_table": "COVERED"
+    },
+    "COV-37": {
+     "ref": "Yönetmelik 23282 md. 9/f.1/b.h",
+     "target": "NONALC-COLA",
+     "expected": [
+      "NOT_COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COV-38": {
+     "ref": "Yönetmelik 23282 md. 9/f.1/b.j",
+     "target": "NONALC-COLA",
+     "expected": [
+      "NOT_COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COV-39": {
+     "ref": "Yönetmelik 38745 md. 10/f.1/b.ç",
+     "target": "NONALC-BOTTLING",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "COVERED",
+     "rules_no_table": "COVERED",
+     "rules_with_table": "COVERED"
+    },
+    "COV-40": {
+     "ref": "Yönetmelik 34147 md. 8/f.1/b.b",
+     "target": "NONALC-BOTTLING",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "PARTIALLY_COVERED",
+     "rules_no_table": "PARTIALLY_COVERED",
+     "rules_with_table": "PARTIALLY_COVERED"
+    },
+    "COV-41": {
+     "ref": "Yönetmelik 34147 md. 8/f.1/b.a",
+     "target": "NONALC-BOTTLING",
+     "expected": [
+      "COVERED",
+      "PARTIALLY_COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COV-42": {
+     "ref": "Yönetmelik 7510 md. 34/f.2/c.2",
+     "target": "NONALC-WATER",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "COVERED",
+     "rules_no_table": "COVERED",
+     "rules_with_table": "COVERED"
+    },
+    "COV-43": {
+     "ref": "Yönetmelik 7510 md. 17/f.1",
+     "target": "NONALC-BOTTLING",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "PARTIALLY_COVERED",
+     "rules_no_table": "PARTIALLY_COVERED",
+     "rules_with_table": "PARTIALLY_COVERED"
+    },
+    "COV-44": {
+     "ref": "Yönetmelik 20435 md. 24/A/f.1",
+     "target": "NONALC-ACT-COLA-ADS",
+     "expected": [
+      "PARTIALLY_COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COV-45": {
+     "ref": "Tebliğ 23706 md. 11/f.2",
+     "target": "NONALC-BOTTLING",
+     "expected": [
+      "PARTIALLY_COVERED"
+     ],
+     "score_coverage": "PARTIALLY_COVERED",
+     "rules_no_table": "PARTIALLY_COVERED",
+     "rules_with_table": "PARTIALLY_COVERED"
+    }
+   }
+  },
+  "HOLDOUT": {
+   "n": 28,
+   "correct": {
+    "score_coverage": 19,
+    "rules_no_table": 19,
+    "rules_with_table": 19
+   },
+   "cases": {
+    "COVH-01": {
+     "ref": "Kanun 4250 md. 6/f.1/c.1",
+     "target": "ALC-IMP-ACT-BEER-ADS",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "COVERED",
+     "rules_no_table": "COVERED",
+     "rules_with_table": "COVERED"
+    },
+    "COVH-02": {
+     "ref": "Kanun 4250 md. 6/f.1/c.4",
+     "target": "ALC-IMP-BREWING",
+     "expected": [
+      "CONTRADICTED"
+     ],
+     "score_coverage": "CONTRADICTED",
+     "rules_no_table": "CONTRADICTED",
+     "rules_with_table": "CONTRADICTED"
+    },
+    "COVH-03": {
+     "ref": "Kanun 4250 md. 6/f.2",
+     "target": "ALC-IMP-TRADING",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "COVERED",
+     "rules_no_table": "COVERED",
+     "rules_with_table": "COVERED"
+    },
+    "COVH-04": {
+     "ref": "Kanun 4250 md. 6/f.2",
+     "target": "ALC-IMP-BREWING",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "COVERED",
+     "rules_no_table": "COVERED",
+     "rules_with_table": "COVERED"
+    },
+    "COVH-05": {
+     "ref": "Kanun 4250 md. 6/f.4/c.1",
+     "target": "ALC-IMP-BREWING",
+     "expected": [
+      "COVERED",
+      "PARTIALLY_COVERED"
+     ],
+     "score_coverage": "PARTIALLY_COVERED",
+     "rules_no_table": "PARTIALLY_COVERED",
+     "rules_with_table": "PARTIALLY_COVERED"
+    },
+    "COVH-06": {
+     "ref": "Kanun 4250 md. 6/f.8/c.1",
+     "target": "ALC-IMP-PILSNER",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COVH-07": {
+     "ref": "Kanun 4250 md. 6/f.8/c.3",
+     "target": "ALC-IMP-TRADING",
+     "expected": [
+      "COVERED",
+      "PARTIALLY_COVERED"
+     ],
+     "score_coverage": "PARTIALLY_COVERED",
+     "rules_no_table": "PARTIALLY_COVERED",
+     "rules_with_table": "PARTIALLY_COVERED"
+    },
+    "COVH-08": {
+     "ref": "Yönetmelik 23282 md. 9/f.1/b.i",
+     "target": "ALC-IMP-WHISKY",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "COVERED",
+     "rules_no_table": "COVERED",
+     "rules_with_table": "COVERED"
+    },
+    "COVH-09": {
+     "ref": "Yönetmelik 23282 md. 9/f.1/b.a",
+     "target": "ALC-IMP-PILSNER",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "COVERED",
+     "rules_no_table": "COVERED",
+     "rules_with_table": "COVERED"
+    },
+    "COVH-10": {
+     "ref": "Yönetmelik 23282 md. 9/f.1/b.d",
+     "target": "ALC-IMP-PILSNER",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "COVERED",
+     "rules_no_table": "COVERED",
+     "rules_with_table": "COVERED"
+    },
+    "COVH-11": {
+     "ref": "Yönetmelik 23282 md. 9/f.1/b.g",
+     "target": "ALC-IMP-PILSNER",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "COVERED",
+     "rules_no_table": "COVERED",
+     "rules_with_table": "COVERED"
+    },
+    "COVH-12": {
+     "ref": "Yönetmelik 23282 md. 9/f.1/b.h",
+     "target": "ALC-IMP-WHISKY",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "COVERED",
+     "rules_no_table": "COVERED",
+     "rules_with_table": "COVERED"
+    },
+    "COVH-13": {
+     "ref": "Yönetmelik 23282 md. 9/f.1/b.e",
+     "target": "ALC-IMP-PILSNER",
+     "expected": [
+      "NOT_COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COVH-14": {
+     "ref": "Yönetmelik 23282 md. 9/f.1/b.c",
+     "target": "ALC-IMP-PILSNER",
+     "expected": [
+      "NOT_COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COVH-15": {
+     "ref": "Yönetmelik 6203 md. 9/f.3",
+     "target": "ALC-IMP-TRADING",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COVH-16": {
+     "ref": "Yönetmelik 6203 md. 15/f.2",
+     "target": "ALC-IMP-TRADING",
+     "expected": [
+      "CONTRADICTED"
+     ],
+     "score_coverage": "CONTRADICTED",
+     "rules_no_table": "CONTRADICTED",
+     "rules_with_table": "CONTRADICTED"
+    },
+    "COVH-17": {
+     "ref": "Yönetmelik 6203 md. 9/f.2",
+     "target": "ALC-IMP-TRADING",
+     "expected": [
+      "COVERED",
+      "PARTIALLY_COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COVH-18": {
+     "ref": "Yönetmelik 6203 md. 9/f.1",
+     "target": "ALC-IMP-TRADING",
+     "expected": [
+      "NOT_COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COVH-19": {
+     "ref": "Yönetmelik 14646 md. 22/f.2/c.1",
+     "target": "ALC-IMP-TRADING",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COVH-20": {
+     "ref": "Yönetmelik 14646 md. 22/f.5/b.b/c.1",
+     "target": "ALC-IMP-TRADING",
+     "expected": [
+      "CONTRADICTED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COVH-21": {
+     "ref": "Yönetmelik 14646 md. 22/f.4/c.2",
+     "target": "ALC-IMP-TRADING",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COVH-22": {
+     "ref": "Yönetmelik 14646 md. 22/f.5/b.c",
+     "target": "ALC-IMP-TRADING",
+     "expected": [
+      "NOT_COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COVH-23": {
+     "ref": "Yönetmelik 14646 md. 22/f.5/b.a",
+     "target": "ALC-IMP-TRADING",
+     "expected": [
+      "NOT_COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COVH-24": {
+     "ref": "Yönetmelik 38745 md. 10/f.1/b.ç",
+     "target": "ALC-IMP-BREWING",
+     "expected": [
+      "PARTIALLY_COVERED",
+      "COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COVH-25": {
+     "ref": "Yönetmelik 38745 md. 10/f.1/b.b",
+     "target": "ALC-IMP-BREWING",
+     "expected": [
+      "NOT_COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COVH-26": {
+     "ref": "Yönetmelik 34147 md. 8/f.1/b.b",
+     "target": "ALC-IMP-TRADING",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COVH-27": {
+     "ref": "Yönetmelik 34147 md. 8/f.1/b.c",
+     "target": "ALC-IMP-BREWING",
+     "expected": [
+      "COVERED",
+      "PARTIALLY_COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COVH-28": {
+     "ref": "Yönetmelik 34147 md. 8/f.1/b.a",
+     "target": "ALC-IMP-BREWING",
+     "expected": [
+      "NOT_COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    }
+   }
+  },
+  "VALIDATION": {
+   "n": 42,
+   "correct": {
+    "score_coverage": 22,
+    "rules_no_table": 22,
+    "rules_with_table": 22
+   },
+   "cases": {
+    "COVV-01": {
+     "ref": "Tebliğ 11376 md. 5/f.1/b.d",
+     "target": "NONALC-COLA",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "COVERED",
+     "rules_no_table": "COVERED",
+     "rules_with_table": "COVERED"
+    },
+    "COVV-02": {
+     "ref": "Tebliğ 11376 md. 5/f.1/b.ç",
+     "target": "NONALC-COLA",
+     "expected": [
+      "CONTRADICTED"
+     ],
+     "score_coverage": "CONTRADICTED",
+     "rules_no_table": "CONTRADICTED",
+     "rules_with_table": "CONTRADICTED"
+    },
+    "COVV-03": {
+     "ref": "Tebliğ 11376 md. 5/f.1/b.b",
+     "target": "NONALC-ICED-TEA",
+     "expected": [
+      "PARTIALLY_COVERED"
+     ],
+     "score_coverage": "PARTIALLY_COVERED",
+     "rules_no_table": "PARTIALLY_COVERED",
+     "rules_with_table": "PARTIALLY_COVERED"
+    },
+    "COVV-04": {
+     "ref": "Tebliğ 11376 md. 5/f.1/b.a",
+     "target": "NONALC-COLA-ZERO",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "COVERED",
+     "rules_no_table": "COVERED",
+     "rules_with_table": "COVERED"
+    },
+    "COVV-05": {
+     "ref": "Tebliğ 23706 md. 5/f.1/b.g",
+     "target": "NONALC-ENERGY",
+     "expected": [
+      "NOT_COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COVV-06": {
+     "ref": "Tebliğ 23706 md. 13/f.1/c.2",
+     "target": "NONALC-ENERGY",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "COVERED",
+     "rules_no_table": "COVERED",
+     "rules_with_table": "COVERED"
+    },
+    "COVV-07": {
+     "ref": "Tebliğ 23706 md. 5/f.1/b.e",
+     "target": "NONALC-ENERGY-MAX",
+     "expected": [
+      "CONTRADICTED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COVV-08": {
+     "ref": "Yönetmelik 40154 md. 5/f.2/b.c",
+     "target": "NONALC-COLA",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COVV-09": {
+     "ref": "Yönetmelik 40154 md. 5/f.2/b.a",
+     "target": "NONALC-JUICE",
+     "expected": [
+      "PARTIALLY_COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COVV-10": {
+     "ref": "Yönetmelik 40154 md. 5/f.2/b.b",
+     "target": "NONALC-COLA",
+     "expected": [
+      "NOT_COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COVV-11": {
+     "ref": "Yönetmelik 23282 md. 7/f.1/b.b",
+     "target": "NONALC-WATER",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COVV-12": {
+     "ref": "Kanun 6502 md. 10/f.3/c.3",
+     "target": "NONALC-BOTTLING",
+     "expected": [
+      "CONTRADICTED"
+     ],
+     "score_coverage": "CONTRADICTED",
+     "rules_no_table": "CONTRADICTED",
+     "rules_with_table": "CONTRADICTED"
+    },
+    "COVV-13": {
+     "ref": "Kanun 6502 md. 9/f.1",
+     "target": "NONALC-ONLINE",
+     "expected": [
+      "COVERED",
+      "PARTIALLY_COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COVV-14": {
+     "ref": "Yönetmelik 38745 md. 5/f.1/c.3",
+     "target": "NONALC-BOTTLING",
+     "expected": [
+      "COVERED",
+      "PARTIALLY_COVERED"
+     ],
+     "score_coverage": "COVERED",
+     "rules_no_table": "COVERED",
+     "rules_with_table": "COVERED"
+    },
+    "COVV-15": {
+     "ref": "Yönetmelik 38745 md. 5/f.2/c.1",
+     "target": "NONALC-BOTTLING",
+     "expected": [
+      "PARTIALLY_COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COVV-16": {
+     "ref": "Yönetmelik 15594 md. 6/f.5",
+     "target": "NONALC-BOTTLING",
+     "expected": [
+      "CONTRADICTED"
+     ],
+     "score_coverage": "CONTRADICTED",
+     "rules_no_table": "CONTRADICTED",
+     "rules_with_table": "CONTRADICTED"
+    },
+    "COVV-17": {
+     "ref": "Yönetmelik 15594 md. 6/f.4/c.3",
+     "target": "NONALC-BOTTLING",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "COVERED",
+     "rules_no_table": "COVERED",
+     "rules_with_table": "COVERED"
+    },
+    "COVV-18": {
+     "ref": "Yönetmelik 15592 md. 6/f.1/b.c",
+     "target": "NONALC-DISTRIBUTION",
+     "expected": [
+      "NOT_COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COVV-19": {
+     "ref": "Yönetmelik 7510 md. 16/f.1/b.c",
+     "target": "NONALC-WATER",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COVV-20": {
+     "ref": "Yönetmelik 20237 md. 5/f.1/b.g",
+     "target": "NONALC-ONLINE",
+     "expected": [
+      "PARTIALLY_COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COVV-21": {
+     "ref": "Kanun 6502 md. 6/f.1",
+     "target": "NONALC-SALES",
+     "expected": [
+      "NOT_COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COVV-22": {
+     "ref": "Yönetmelik 20435 md. 5/f.1/b.ç",
+     "target": "NONALC-BRAND",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "COVERED",
+     "rules_no_table": "COVERED",
+     "rules_with_table": "COVERED"
+    },
+    "COVV-23": {
+     "ref": "Yönetmelik 20435 md. 5/f.1/b.g",
+     "target": "NONALC-BRAND",
+     "expected": [
+      "PARTIALLY_COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COVV-24": {
+     "ref": "Yönetmelik 14646 md. 20/f.5",
+     "target": "ALC-INT-ACT-TRADE-PROMO",
+     "expected": [
+      "CONTRADICTED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COVV-25": {
+     "ref": "Yönetmelik 14646 md. 20/f.3/c.2",
+     "target": "ALC-INT-ACT-BEER-ADS",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COVV-26": {
+     "ref": "Tebliğ 10474 md. 5/f.1/b.d",
+     "target": "ALC-INT-LAGER",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "COVERED",
+     "rules_no_table": "COVERED",
+     "rules_with_table": "COVERED"
+    },
+    "COVV-27": {
+     "ref": "Tebliğ 10474 md. 5/f.1/b.c",
+     "target": "ALC-INT-DARK",
+     "expected": [
+      "CONTRADICTED"
+     ],
+     "score_coverage": "CONTRADICTED",
+     "rules_no_table": "CONTRADICTED",
+     "rules_with_table": "CONTRADICTED"
+    },
+    "COVV-28": {
+     "ref": "Tebliğ 10474 md. 5/f.1/b.ç/c.1",
+     "target": "ALC-INT-LAGER",
+     "expected": [
+      "PARTIALLY_COVERED"
+     ],
+     "score_coverage": "PARTIALLY_COVERED",
+     "rules_no_table": "PARTIALLY_COVERED",
+     "rules_with_table": "PARTIALLY_COVERED"
+    },
+    "COVV-29": {
+     "ref": "Tebliğ 10474 md. 5/f.1/b.e",
+     "target": "ALC-INT-LOW",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COVV-30": {
+     "ref": "Tebliğ 10474 md. 9/f.1",
+     "target": "ALC-INT-LAGER",
+     "expected": [
+      "NOT_COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COVV-31": {
+     "ref": "Yönetmelik 6207 md. 10/f.1",
+     "target": "ALC-INT-LAGER",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COVV-32": {
+     "ref": "Yönetmelik 6207 md. 11/f.1",
+     "target": "ALC-INT-DARK",
+     "expected": [
+      "PARTIALLY_COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COVV-33": {
+     "ref": "Yönetmelik 6207 md. 9/f.1/c.2",
+     "target": "ALC-INT-LAGER",
+     "expected": [
+      "NOT_COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COVV-34": {
+     "ref": "Yönetmelik 6203 md. 5/f.2",
+     "target": "ALC-INT-EXPORT",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "PARTIALLY_COVERED",
+     "rules_no_table": "PARTIALLY_COVERED",
+     "rules_with_table": "PARTIALLY_COVERED"
+    },
+    "COVV-35": {
+     "ref": "Kanun 6502 md. 10/f.3/c.1",
+     "target": "ALC-INT-SALES",
+     "expected": [
+      "COVERED",
+      "PARTIALLY_COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COVV-36": {
+     "ref": "Kanun 6502 md. 6/f.1",
+     "target": "ALC-INT-SALES",
+     "expected": [
+      "COVERED",
+      "PARTIALLY_COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COVV-37": {
+     "ref": "Yönetmelik 38745 md. 5/f.1/c.3",
+     "target": "ALC-INT-BREWING",
+     "expected": [
+      "NOT_COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COVV-38": {
+     "ref": "Yönetmelik 15594 md. 6/f.5",
+     "target": "ALC-INT-BREWING",
+     "expected": [
+      "COVERED",
+      "PARTIALLY_COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COVV-39": {
+     "ref": "Yönetmelik 15592 md. 6/f.1/b.ç",
+     "target": "ALC-INT-BREWING",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COVV-40": {
+     "ref": "Yönetmelik 20435 md. 5/f.1/b.e",
+     "target": "ALC-INT-HOLDING",
+     "expected": [
+      "NOT_COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    },
+    "COVV-41": {
+     "ref": "Yönetmelik 40154 md. 5/f.2/b.c",
+     "target": "ALC-INT-AF",
+     "expected": [
+      "COVERED"
+     ],
+     "score_coverage": "PARTIALLY_COVERED",
+     "rules_no_table": "PARTIALLY_COVERED",
+     "rules_with_table": "PARTIALLY_COVERED"
+    },
+    "COVV-42": {
+     "ref": "Yönetmelik 23282 md. 7/f.1/b.b",
+     "target": "ALC-INT-LAGER",
+     "expected": [
+      "NOT_COVERED"
+     ],
+     "score_coverage": "NOT_COVERED",
+     "rules_no_table": "NOT_COVERED",
+     "rules_with_table": "NOT_COVERED"
+    }
+   }
+  }
+ }
+}

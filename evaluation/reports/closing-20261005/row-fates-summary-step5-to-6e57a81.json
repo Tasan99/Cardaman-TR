@@ -1,0 +1,63 @@
+{
+ "old_commit": "29193e1",
+ "new_commit": "6e57a81",
+ "profiles": {
+  "tr-bev-pilot-alcohol-import": {
+   "fates": {
+    "KEPT": 2101
+   },
+   "raw_rows_by_pack": {
+    "BEVERAGE_ALCOHOL_TR": {
+     "old": 2101,
+     "new": 2101
+    }
+   },
+   "unique_duty_target_old": 2101,
+   "unique_duty_target_new": 2101,
+   "qdms_outcomes_of_new_rows": {
+    "": 2101
+   }
+  },
+  "tr-bev-pilot-alcohol-integrated": {
+   "fates": {
+    "KEPT": 5664
+   },
+   "raw_rows_by_pack": {
+    "BEVERAGE_ALCOHOL_TR": {
+     "old": 3211,
+     "new": 3211
+    },
+    "BEVERAGE_NON_ALCOHOL_TR": {
+     "old": 2453,
+     "new": 2453
+    }
+   },
+   "unique_duty_target_old": 3211,
+   "unique_duty_target_new": 3211,
+   "qdms_outcomes_of_new_rows": {
+    "": 5664
+   }
+  },
+  "tr-bev-pilot-non-alcohol-bottler": {
+   "fates": {
+    "KEPT": 3399
+   },
+   "raw_rows_by_pack": {
+    "BEVERAGE_NON_ALCOHOL_TR": {
+     "old": 3399,
+     "new": 3399
+    }
+   },
+   "unique_duty_target_old": 3399,
+   "unique_duty_target_new": 3399,
+   "qdms_outcomes_of_new_rows": {
+    "": 3399
+   }
+  }
+ },
+ "total_fates": {
+  "KEPT": 11164
+ },
+ "raw_rows_old": 11164,
+ "raw_rows_new": 11164
+}
