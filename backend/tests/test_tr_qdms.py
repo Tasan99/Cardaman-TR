@@ -128,6 +128,48 @@ class ApprovalTests(unittest.TestCase):
             {'format': qdms.APPROVALS_FORMAT, 'profile_id': BREWER.profile_id, 'entries': [entry(row, 'APPROVED')]}))
         self.assertEqual([p['problem'] for p in problems], ['STALE_APPROVAL'])
 
+    def test_an_approval_does_not_survive_a_change_of_who_must_act(self):
+        """A product duty is the business of every entity that handles the product: when the profile gives the product to
+        one more entity, the approval given before names a set of companies the reviewer never saw."""
+        row = next(r for r in self.rows if r.entity['target_level'] == 'PRODUCT')
+        product = row.entity['target_id']
+        outsider = next(e for e in BREWER.legal_entities if product not in e.product_ids)
+        widened = BREWER.model_copy(update={'legal_entities': [
+            e.model_copy(update={'product_ids': [*e.product_ids, product]}) if e.entity_id == outsider.entity_id else e
+            for e in BREWER.legal_entities]})
+        newer = qdms.export_rows(widened, REGISTER, REGISTRY, {'BEVERAGE_ALCOHOL_TR': REPORT}, {'BEVERAGE_ALCOHOL_TR': ASSESSMENTS},
+                                 generated_at=WHEN, store=STORE)
+        moved = next(r for r in newer.rows if r.row_id == row.row_id)
+        self.assertEqual(set(moved.entity['entity_ids']), {*row.entity['entity_ids'], outsider.entity_id})
+        result, problems = qdms.apply_approvals(newer, qdms.Approvals.model_validate(
+            {'format': qdms.APPROVALS_FORMAT, 'profile_id': BREWER.profile_id, 'entries': [entry(row, 'APPROVED')]}))
+        self.assertEqual([p['problem'] for p in problems], ['STALE_APPROVAL'])
+        self.assertEqual(qdms.ready_actions(result), [])
+        # a review record of the product, and through it its task, changes with the entities too
+        review = REPORT.applicability_reviews[0].model_copy(update={'level': 'PRODUCT', 'target_id': product, 'entity_id': None})
+        before, after = (qdms.applicability_item(review, profile, REGISTRY, 'P') for profile in (BREWER, widened))
+        self.assertNotEqual(before.entity['entity_ids'], after.entity['entity_ids'])
+        self.assertNotEqual(before.fingerprint, after.fingerprint)
+        self.assertNotEqual(qdms.group_reviews([before])[1][0].fingerprint, qdms.group_reviews([after])[1][0].fingerprint)
+
+    def test_an_approval_does_not_survive_a_change_of_the_evidence_it_rests_on(self):
+        row = next(r for r in self.rows if r.evidence['evidence'])
+        evidence_id = row.evidence['evidence'][0]['evidence_id']
+        register = REGISTER.model_copy(update={'evidence': [e.model_copy(update={'in_period': False}) if e.evidence_id == evidence_id else e
+                                                            for e in REGISTER.evidence]})
+        newer = qdms.export_rows(BREWER, register, REGISTRY, {'BEVERAGE_ALCOHOL_TR': REPORT}, {'BEVERAGE_ALCOHOL_TR': ASSESSMENTS},
+                                 generated_at=WHEN, store=STORE)
+        moved = next(r for r in newer.rows if r.row_id == row.row_id)
+        self.assertFalse(next(e for e in moved.evidence['evidence'] if e['evidence_id'] == evidence_id)['in_period'])
+        _, problems = qdms.apply_approvals(newer, qdms.Approvals.model_validate(
+            {'format': qdms.APPROVALS_FORMAT, 'profile_id': BREWER.profile_id, 'entries': [entry(row, 'APPROVED')]}))
+        self.assertEqual([p['problem'] for p in problems], ['STALE_APPROVAL'])
+        # the register's period alone is not evidence: a row that rests on none keeps its approval
+        bare = next(r for r in self.rows if not r.evidence['evidence'])
+        relabelled = qdms.export_rows(BREWER, REGISTER.model_copy(update={'period': '2099Q1'}), REGISTRY, {'BEVERAGE_ALCOHOL_TR': REPORT},
+                                      {'BEVERAGE_ALCOHOL_TR': ASSESSMENTS}, generated_at=WHEN, store=STORE)
+        self.assertEqual(next(r for r in relabelled.rows if r.row_id == bare.row_id).fingerprint, bare.fingerprint)
+
     def test_unknown_rows_double_decisions_and_another_profile_are_refused(self):
         row = self.rows[0]
         _, problems = self.apply([{**entry(row, 'APPROVED'), 'row_id': 'yok:yok'}, entry(row, 'APPROVED'), entry(row, 'REJECTED')])

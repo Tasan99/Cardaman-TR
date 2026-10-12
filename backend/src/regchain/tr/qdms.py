@@ -9,7 +9,8 @@ in it can be carried out before a person approves its row.
   export_rows       gap rows + assessments -> QdmsRow, every action DRAFT, approval PENDING
   apply_approvals   a reviewer's approvals file -> rows APPROVED (actions READY_FOR_QDMS), REJECTED (CANCELLED) or
                     RETURNED (DRAFT, with the note); an approval names the row's fingerprint, and an approval of a row whose
-                    reasoning changed since (another coverage, status, action or statement) is refused as STALE
+                    reasoning changed since (another coverage, status, action, statement, entity that must act or evidence)
+                    is refused as STALE
   ready_actions     only the actions of approved rows: what may be handed to the QDMS
   group_reviews     the UNKNOWN applicability records under parent review tasks: one task per (source question, cause,
                     article) or (company fact, target, missing gates); every record stays a child with its own decision
@@ -32,7 +33,7 @@ from .compare import GapReport, Register, ownership
 
 EXPORT_FORMAT = 'cardaman-tr-qdms-export/1'
 APPROVALS_FORMAT = 'cardaman-tr-qdms-approvals/1'
-QDMS_RULES_VERSION = 'tr-qdms-v4'
+QDMS_RULES_VERSION = 'tr-qdms-v5'
 # What each gap action asks the QDMS to open.
 QDMS_ACTION = {
     'UPDATE_DOCUMENT': ('DOCUMENT_CHANGE_REQUEST', 'REVISE_CONFLICTING_STATEMENT'),
@@ -71,7 +72,7 @@ class Approval(Strict):
 
 class QdmsRow(Strict):
     row_id: str
-    fingerprint: str                           # what an approval is bound to: the reasoning and the actions of this row
+    fingerprint: str                           # what an approval is bound to: who must act, the reasoning, the evidence, the actions
     source_layer: Literal['REGULATION', 'DECISION']
     pack: str | None = None
     packs: list[str] = []                      # every pack whose analysis produced this row (a shared module: several)
@@ -246,8 +247,7 @@ def export_row(row, assessment, profile, register: Register, registry, pack: str
                                   why=list(action.get('why') or []), priority='HIGH' if review and row.mapping.status == 'CONTRADICTED'
                                   else PRIORITY.get(row.mapping.status, 'MEDIUM')))
     row_id = f'{row.obligation_id}:{row.target_id}'
-    fingerprint = _digest({'provision': provision, 'applicability': applicability, 'reason': reason, 'policy': policy,
-                           'actions': [a.model_dump(mode='json', exclude={'state'}) for a in actions]})
+    fingerprint = _row_fingerprint(entity, provision, applicability, reason, policy, evidence, actions)
     return QdmsRow(row_id=row_id, fingerprint=fingerprint, source_layer=source_layer, pack=pack, entity=entity, provision=provision,
                    applicability=applicability, reason=reason, impacted_process=impacted, policy_status=policy,
                    required_actions=actions, evidence=evidence)
@@ -331,7 +331,7 @@ def applicability_item(review, profile, registry, pack: str | None, source_layer
     action = QdmsAction(action_id=f'{review.review_id}:applicability', qdms_type=qdms_type, change=review.review_type, department=department,
                         department_tr=departments.get(department, department), target=None,
                         why=[*review.reason_codes, *(g['gate'] for g in review.missing_facts)], priority='MEDIUM')
-    fingerprint = _digest({'provision': provision, 'applicability': applicability, 'uncertainty': uncertainty,
+    fingerprint = _digest({'entities': sorted(entity_ids), 'provision': provision, 'applicability': applicability, 'uncertainty': uncertainty,
                            'action': action.model_dump(mode='json', exclude={'state'})})
     return QdmsApplicabilityItem(row_id=f'APPLICABILITY:{review.review_id}', fingerprint=fingerprint, source_layer=source_layer,
                                  packs=[pack] if pack else [], entity=entity, provision=provision, applicability=applicability,
@@ -410,9 +410,18 @@ def group_reviews(items: list[QdmsApplicabilityItem]) -> tuple[list[QdmsApplicab
     return grouped, tasks
 
 
+def _row_fingerprint(entity: dict, provision: dict, applicability: dict, reason: dict, policy: dict, evidence: dict, actions) -> str:
+    """What an approval of a row is bound to: who must act (the entities), the provision and its stored version, the
+    applicability, the reasoning, the policy status, the evidence the decision rests on (not the register's period label)
+    and the actions. A change of any of them makes an earlier approval stale."""
+    return _digest({'entities': sorted(entity.get('entity_ids') or []), 'provision': provision, 'applicability': applicability,
+                    'reason': reason, 'policy': policy,
+                    'evidence': {'evidence': evidence.get('evidence') or [], 'product_findings': evidence.get('product_findings') or []},
+                    'actions': [a.model_dump(mode='json', exclude={'state'}) for a in actions]})
+
+
 def _refingerprint(row: QdmsRow) -> str:
-    return _digest({'provision': row.provision, 'applicability': row.applicability, 'reason': row.reason, 'policy': row.policy_status,
-                    'actions': [a.model_dump(mode='json', exclude={'state'}) for a in row.required_actions]})
+    return _row_fingerprint(row.entity, row.provision, row.applicability, row.reason, row.policy_status, row.evidence, row.required_actions)
 
 
 def merge(first: QdmsExport, second: QdmsExport) -> QdmsExport:
