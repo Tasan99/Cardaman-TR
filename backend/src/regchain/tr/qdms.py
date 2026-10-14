@@ -9,10 +9,12 @@ in it can be carried out before a person approves its row.
   export_rows       gap rows + assessments -> QdmsRow, every action DRAFT, approval PENDING
   apply_approvals   reviewers' approvals files -> rows APPROVED (actions READY_FOR_QDMS), REJECTED (CANCELLED) or
                     RETURNED (DRAFT, with the note); an approval names the row's fingerprint, and an approval of a row whose
-                    reasoning changed since (another coverage, status, action, statement, entity that must act or evidence)
-                    is refused as STALE. Nothing in export.json is trusted: every fingerprint is recomputed from the content
-                    beside it (an edited row is EXPORT_MODIFIED) and every decision comes from the files given, the latest
-                    holding and the earlier kept as its history; a file that decides a row two ways is refused whole
+                    reasoning changed since (another coverage, status, action, statement, entity that must act, impacted
+                    process or evidence) is refused as STALE. No row, record or task of export.json is taken on trust: every
+                    fingerprint is recomputed from the content beside it (an edited row is EXPORT_MODIFIED) and every
+                    decision, and every earlier decision kept as its history, comes from the files given, the latest
+                    holding; a file that decides a row two ways is refused whole. What no fingerprint covers is provenance
+                    and decides nothing: a row's pack(s), its register period label, and the export's header and ledger
   ready_actions     only the actions of approved rows: what may be handed to the QDMS
   group_reviews     the UNKNOWN applicability records under parent review tasks: one task per (source question, cause,
                     article) or (company fact, target, missing gates); every record stays a child with its own decision
@@ -24,19 +26,20 @@ nonconformity); mapping it onto a given QDMS product's import format is the inte
 import csv
 import hashlib
 import json
+import re
 from collections import Counter
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Literal
 
-from pydantic import AwareDatetime, Field, PrivateAttr, ValidationError
+from pydantic import AwareDatetime, Field, PrivateAttr, ValidationError, field_validator
 
 from ..pilot.schema import Strict
 from .compare import GapReport, Register, ownership
 
 EXPORT_FORMAT = 'cardaman-tr-qdms-export/1'
 APPROVALS_FORMAT = 'cardaman-tr-qdms-approvals/1'
-QDMS_RULES_VERSION = 'tr-qdms-v6'
+QDMS_RULES_VERSION = 'tr-qdms-v7'
 # What each gap action asks the QDMS to open.
 QDMS_ACTION = {
     'UPDATE_DOCUMENT': ('DOCUMENT_CHANGE_REQUEST', 'REVISE_CONFLICTING_STATEMENT'),
@@ -84,7 +87,7 @@ class Approval(Strict):
 
 class QdmsRow(Strict):
     row_id: str
-    fingerprint: str                           # what an approval is bound to: who must act, the reasoning, the evidence, the actions
+    fingerprint: str                           # what an approval is bound to: who must act, the reasoning, the impacted process, the evidence, the actions
     source_layer: Literal['REGULATION', 'DECISION']
     pack: str | None = None
     packs: list[str] = []                      # every pack whose analysis produced this row (a shared module: several)
@@ -259,7 +262,7 @@ def export_row(row, assessment, profile, register: Register, registry, pack: str
                                   why=list(action.get('why') or []), priority='HIGH' if review and row.mapping.status == 'CONTRADICTED'
                                   else PRIORITY.get(row.mapping.status, 'MEDIUM')))
     row_id = f'{row.obligation_id}:{row.target_id}'
-    fingerprint = _row_fingerprint(entity, provision, applicability, reason, policy, evidence, actions)
+    fingerprint = _row_fingerprint(entity, provision, applicability, reason, impacted, policy, evidence, actions, source_layer)
     return QdmsRow(row_id=row_id, fingerprint=fingerprint, source_layer=source_layer, pack=pack, entity=entity, provision=provision,
                    applicability=applicability, reason=reason, impacted_process=impacted, policy_status=policy,
                    required_actions=actions, evidence=evidence)
@@ -340,7 +343,7 @@ def applicability_item(review, profile, registry, pack: str | None, source_layer
     uncertainty = {'review_type': review.review_type, 'why': REVIEW_TYPES.get(review.review_type, ''), 'missing_facts': review.missing_facts,
                    'company_evidence': review.company_evidence, 'source_evidence': review.source_evidence}
     action = _review_action(review.review_id, review.review_type, review.reason_codes, review.missing_facts, departments)
-    fingerprint = _record_fingerprint(entity_ids, provision, applicability, uncertainty, action)
+    fingerprint = _record_fingerprint(entity, source_layer, provision, applicability, uncertainty, action)
     return QdmsApplicabilityItem(row_id=f'APPLICABILITY:{review.review_id}', fingerprint=fingerprint, source_layer=source_layer,
                                  packs=[pack] if pack else [], entity=entity, provision=provision, applicability=applicability,
                                  uncertainty=uncertainty, required_actions=[action])
@@ -353,10 +356,12 @@ def _review_action(review_id: str, review_type: str, reason_codes: list, missing
                       why=[*reason_codes, *(g['gate'] for g in missing_facts)], priority='MEDIUM')
 
 
-def _record_fingerprint(entity_ids: list, provision: dict, applicability: dict, uncertainty: dict, action: QdmsAction) -> str:
-    """What a review record's part of a task approval is bound to: who must act, the provision and its stored version,
-    why the applicability is open (the facts missing and known, the source evidence) and the action it asks for."""
-    return _digest({'entities': sorted(entity_ids), 'provision': provision, 'applicability': applicability, 'uncertainty': uncertainty,
+def _record_fingerprint(entity: dict, source_layer: str, provision: dict, applicability: dict, uncertainty: dict, action: QdmsAction) -> str:
+    """What a review record's part of a task approval is bound to: who must act (and the target as written), the layer,
+    the provision and its stored version, why the applicability is open (the facts missing and known, the source
+    evidence) and the action it asks for."""
+    return _digest({'entities': sorted(entity['entity_ids']), 'entity': {k: v for k, v in entity.items() if k != 'entity_ids'},
+                    'layer': source_layer, 'provision': provision, 'applicability': applicability, 'uncertainty': uncertainty,
                     'action': action.model_dump(mode='json', exclude={'state'})})
 
 
@@ -365,7 +370,7 @@ def _refingerprint_record(item: QdmsApplicabilityItem, departments: dict) -> str
     applicability_item built it)."""
     action = _review_action(item.row_id.removeprefix('APPLICABILITY:'), item.uncertainty['review_type'], item.applicability['reason_codes'],
                             item.uncertainty['missing_facts'], departments)
-    return _record_fingerprint(item.entity['entity_ids'], item.provision, item.applicability, item.uncertainty, action)
+    return _record_fingerprint(item.entity, item.source_layer, item.provision, item.applicability, item.uncertainty, action)
 
 
 def review_cause(item: QdmsApplicabilityItem) -> str:
@@ -401,11 +406,12 @@ def _topic_key(item: QdmsApplicabilityItem):
     return _task_key(item)
 
 
-def group_reviews(items: list[QdmsApplicabilityItem]) -> tuple[list[QdmsApplicabilityItem], list[QdmsReviewTask]]:
+def group_reviews(items: list[QdmsApplicabilityItem], departments: dict | None = None) -> tuple[list[QdmsApplicabilityItem], list[QdmsReviewTask]]:
     """(the records, each pointing at its task and without an action of its own; the parent tasks). Records are grouped
     only when they share the review type, the cause, the department, the due date and the subject (an article for a
-    source question, a target and its missing gates for a company fact)."""
-    departments = ownership()['departments']
+    source question, a target and its missing gates for a company fact). The department labels are the packaged ones
+    unless given."""
+    departments = ownership()['departments'] if departments is None else departments
     groups: dict[tuple, list[QdmsApplicabilityItem]] = {}
     for item in items:
         groups.setdefault(_task_key(item), []).append(item)
@@ -440,18 +446,22 @@ def group_reviews(items: list[QdmsApplicabilityItem]) -> tuple[list[QdmsApplicab
     return grouped, tasks
 
 
-def _row_fingerprint(entity: dict, provision: dict, applicability: dict, reason: dict, policy: dict, evidence: dict, actions) -> str:
-    """What an approval of a row is bound to: who must act (the entities), the provision and its stored version, the
-    applicability, the reasoning, the policy status, the evidence the decision rests on (not the register's period label)
-    and the actions. A change of any of them makes an earlier approval stale."""
-    return _digest({'entities': sorted(entity.get('entity_ids') or []), 'provision': provision, 'applicability': applicability,
-                    'reason': reason, 'policy': policy,
+def _row_fingerprint(entity: dict, provision: dict, applicability: dict, reason: dict, impacted: dict, policy: dict, evidence: dict,
+                     actions, source_layer: str) -> str:
+    """What an approval of a row is bound to: who must act (the entities, and the target as written: its names, level and
+    products), the layer, the provision and its stored version, the applicability, the reasoning, the impacted process
+    (departments, documents, controls), the policy status, the evidence the decision rests on (not the register's period
+    label) and the actions. A change of any of them makes an earlier approval stale."""
+    return _digest({'entities': sorted(entity.get('entity_ids') or []), 'entity': {k: v for k, v in entity.items() if k != 'entity_ids'},
+                    'layer': source_layer, 'provision': provision, 'applicability': applicability, 'reason': reason,
+                    'impacted_process': impacted, 'policy': policy,
                     'evidence': {'evidence': evidence.get('evidence') or [], 'product_findings': evidence.get('product_findings') or []},
                     'actions': [a.model_dump(mode='json', exclude={'state'}) for a in actions]})
 
 
 def _refingerprint(row: QdmsRow) -> str:
-    return _row_fingerprint(row.entity, row.provision, row.applicability, row.reason, row.policy_status, row.evidence, row.required_actions)
+    return _row_fingerprint(row.entity, row.provision, row.applicability, row.reason, row.impacted_process, row.policy_status, row.evidence,
+                            row.required_actions, row.source_layer)
 
 
 def merge(first: QdmsExport, second: QdmsExport) -> QdmsExport:
@@ -489,13 +499,36 @@ def summarise(rows: list[QdmsRow], reviews=(), ledger=(), tasks=()) -> dict:
             'ledger': count(entry['outcome'] for entry in ledger)}
 
 
+DECIDED_AT_WRITTEN_OUT = re.compile(r'\d{4}-\d{2}-\d{2}[Tt _]\d{2}:\d{2}')
+CLOCK_ALLOWANCE = timedelta(hours=1)           # a reviewer's clock a little ahead of the one approve runs on
+
+
 class ApprovalEntry(Strict):
     row_id: str
     fingerprint: str
     decision: Literal['APPROVED', 'REJECTED', 'RETURNED']
     approver: str = Field(min_length=1)
-    decided_at: AwareDatetime                  # with its UTC offset: decisions of several files are ordered by it
+    decided_at: AwareDatetime                  # when it was decided, with its UTC offset: decisions of several files are ordered by it
     note: str = ''
+
+    @field_validator('decided_at', mode='before')
+    @classmethod
+    def _written_out(cls, value):
+        """A number, or a string of digits, would be read as seconds since 1970: a spreadsheet's date serial (46307 for
+        12 October 2026) would rank as 1970 and lose to every other decision. Only a date and time written out is read."""
+        if isinstance(value, datetime) or (isinstance(value, str) and DECIDED_AT_WRITTEN_OUT.match(value)):
+            return value
+        raise ValueError(f'{value!r} is not a date and time written out; a number is not read as a date')
+
+    @field_validator('decided_at')
+    @classmethod
+    def _not_after_this_run(cls, value: datetime) -> datetime:
+        """A decision is dated when it was made: a time after this run (a mistyped year, a wrong UTC offset) would outrank
+        every decision made later, and a later rejection would only be filed under its history."""
+        now = datetime.now(timezone.utc)
+        if value > now + CLOCK_ALLOWANCE:
+            raise ValueError(f'{value.isoformat()} is later than this run ({now.isoformat(timespec="minutes")}); a decision is dated when it was made')
+        return value
 
 
 class Approvals(Strict):
@@ -529,15 +562,23 @@ def _task_content(task: QdmsReviewTask) -> dict:
 
 def modified_ids(export: QdmsExport) -> set[str]:
     """The rows, records and tasks of an export whose content no longer gives what was exported. export.json is a plain
-    file anyone can edit between export and approve, so nothing in it is taken on trust: every row fingerprint is
-    recomputed from the row, every record fingerprint from the record, and the tasks are grouped again from the
-    records that hold; a task that differs from its regrouping (its question, entities, children or action), a record
-    that points at another task, and an id that appears twice are modified too."""
-    departments = ownership()['departments']
+    file anyone can edit between export and approve, so no row, record or task in it is taken on trust: every row
+    fingerprint is recomputed from the row, every record fingerprint from the record, and the tasks are grouped again
+    from the records that hold; a task that differs from its regrouping (its question, entities, children or action), a
+    record that points at another task, a row or record whose fingerprint cannot be computed from what it holds, and an
+    id that appears twice are modified too. The check is the content against itself: department labels are the ones the
+    export was written with (its tasks'), so a label changed in the packaged ownership data since is not an edit."""
+    departments = ownership()['departments'] | {t.department: t.department_tr for t in export.review_tasks}
     modified: set[str] = set()
     for ids in ([r.row_id for r in export.rows], [t.task_id for t in export.review_tasks], [c.row_id for c in export.applicability_reviews]):
         modified |= {i for i, n in Counter(ids).items() if n > 1}
-    modified |= {r.row_id for r in export.rows if _refingerprint(r) != r.fingerprint}
+    for row in export.rows:
+        try:
+            fingerprint = _refingerprint(row)
+        except (KeyError, TypeError, AttributeError, ValueError):
+            fingerprint = None
+        if fingerprint != row.fingerprint:
+            modified.add(row.row_id)
     intact = []
     for record in export.applicability_reviews:
         try:
@@ -549,7 +590,7 @@ def modified_ids(export: QdmsExport) -> set[str]:
         else:
             intact.append(record)
     try:
-        regrouped, tasks = group_reviews(intact)
+        regrouped, tasks = group_reviews(intact, departments)
     except (KeyError, TypeError, AttributeError, ValueError, IndexError):
         regrouped, tasks = [], []
     expected = {t.task_id: t for t in tasks}
@@ -569,7 +610,7 @@ def apply_approvals(export: QdmsExport, approvals: 'Approvals | list[Approvals]'
     still gives its fingerprint (else EXPORT_MODIFIED) and only while that fingerprint is the one the reviewer saw (else
     STALE_APPROVAL). One file gives one decision per row: a file that decides a row two ways is refused whole. Across
     files the latest decision (decided_at) holds and the earlier ones are kept as its history; a decision written in the
-    export that no file given makes is reported and leaves its row PENDING."""
+    export, or an earlier one written in its history, that no file given makes is reported and leaves its row PENDING."""
     files = [approvals] if isinstance(approvals, Approvals) else list(approvals)
     for file in files:
         if file.profile_id != export.profile_id:
@@ -624,19 +665,26 @@ def apply_approvals(export: QdmsExport, approvals: 'Approvals | list[Approvals]'
             decided[key] = (entries[-1], entries[:-1])
     problems += [{'row_id': key, 'problem': 'DECIDED_TWICE', 'detail': detail} for key, detail in twice.items()]
 
-    def made_here(approval: Approval, key: str) -> bool:
-        return any((e.decision, e.approver, e.decided_at, e.note) == (approval.status, approval.approver, approval.decided_at, approval.note)
+    def made_here(decision: 'Approval | PastDecision', key: str) -> bool:
+        return any((e.decision, e.approver, e.decided_at, e.note) == (decision.status, decision.approver, decision.decided_at, decision.note)
                    for e in given.get(key, []))
     for key, item in [*((r.row_id, r) for r in export.rows), *((t.task_id, t) for t in export.review_tasks)]:
         written = item.human_approval
         if key in modified or (written.status == 'PENDING' and all(a.state == 'DRAFT' for a in item.required_actions)):
             continue
         if written.status == 'PENDING' or not made_here(written, key):
-            problems.append({'row_id': key, 'problem': 'DECISION_NOT_IN_APPROVALS',
-                             'detail': f'export.json says {written.status} with actions '
-                                       f"{sorted({a.state for a in item.required_actions})}, and no approvals file of this run makes that "
-                                       'decision; give every file of the row again (or review it again). The row stays PENDING'})
-            decided.pop(key, None)
+            detail = (f'export.json says {written.status} with actions {sorted({a.state for a in item.required_actions})}, and no approvals '
+                      'file of this run makes that decision; give every file of the row again (or review it again). The row stays PENDING')
+        else:
+            lost = [h for h in written.history if not made_here(h, key)]
+            if not lost:
+                continue
+            # the earlier decisions are the row's audit trail: a run given only the latest file must not drop them
+            detail = (f"export.json keeps {len(lost)} earlier decision(s) of the row that no approvals file of this run makes "
+                      f"({'; '.join(f'{h.status} by {h.approver} at {h.decided_at.isoformat()}' for h in lost)}); a decision's history is "
+                      'never dropped: give every file of the row again. The row stays PENDING')
+        problems.append({'row_id': key, 'problem': 'DECISION_NOT_IN_APPROVALS', 'detail': detail})
+        decided.pop(key, None)
     state = {'APPROVED': 'READY_FOR_QDMS', 'REJECTED': 'CANCELLED', 'RETURNED': 'DRAFT'}
 
     def decide(item, key):
@@ -787,7 +835,7 @@ def _said(error: ValidationError) -> str:
     """A pydantic error as one line a reviewer can act on: field: what is wrong."""
     said = '; '.join(f"{'.'.join(str(p) for p in e['loc']) or 'file'}: {e['msg']}" for e in error.errors()[:5])
     if any('decided_at' in e['loc'] for e in error.errors()):
-        said += ' (decided_at is a date and time with its UTC offset, e.g. 2026-10-12T10:00:00+03:00)'
+        said += ' (decided_at is the date and time the decision was made, with its UTC offset, e.g. 2026-10-12T10:00:00+03:00)'
     return said
 
 
@@ -802,12 +850,31 @@ def _read_json(path: Path):
         raise ValueError(f'{path}: not valid JSON ({error.msg}, line {error.lineno} column {error.colno})') from None
 
 
+def _unreadable(export: QdmsExport) -> str | None:
+    """The first row, record or task that the export's own writers cannot read (a hand edit that broke its shape: a key
+    removed, a null among the ids), by its place and id; None when every one can be written."""
+    for kind, items, read in (('rows', export.rows, csv_rows), ('applicability_reviews', export.applicability_reviews, review_csv_rows),
+                              ('review_tasks', export.review_tasks, task_csv_rows)):
+        for position, item in enumerate(items):
+            try:
+                read(export.model_copy(update={kind: [item]}))
+            except (KeyError, TypeError, AttributeError, ValueError, IndexError) as error:
+                return f"{kind}[{position}] ({getattr(item, 'row_id', None) or item.task_id}) cannot be read ({type(error).__name__}: {error})"
+    return None
+
+
 def load_export(path: Path) -> QdmsExport:
+    """An export.json as written by `qdms export` (or by `qdms approve`). One whose rows, records or tasks its own writers
+    cannot read is refused whole, as one of another shape is: export again."""
     path = Path(path)
     try:
-        return QdmsExport.model_validate(_read_json(path))
+        export = QdmsExport.model_validate(_read_json(path))
     except ValidationError as error:
         raise ValueError(f'{path}: not a QDMS export: {_said(error)}') from None
+    unreadable = _unreadable(export)
+    if unreadable:
+        raise ValueError(f'{path}: not a QDMS export as written: {unreadable}; export again')
+    return export
 
 
 def load_approvals(path: Path) -> Approvals:

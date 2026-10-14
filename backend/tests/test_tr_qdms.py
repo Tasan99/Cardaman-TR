@@ -7,12 +7,13 @@ import io
 import json
 import tempfile
 import unittest
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from unittest import mock
 
 from regchain.tr import qdms
 from regchain.tr.adjudicate import assess_profile
-from regchain.tr.compare import load_register
+from regchain.tr.compare import ProductFinding, load_register
 from regchain.tr.corpus import CorpusStore
 from regchain.tr.extraction import extract_regulation
 from regchain.tr.packs import Registry
@@ -181,6 +182,16 @@ class ApprovalTests(unittest.TestCase):
         relabelled = qdms.export_rows(BREWER, REGISTER.model_copy(update={'period': '2099Q1'}), REGISTRY, {'BEVERAGE_ALCOHOL_TR': REPORT},
                                       {'BEVERAGE_ALCOHOL_TR': ASSESSMENTS}, generated_at=WHEN, store=STORE)
         self.assertEqual(next(r for r in relabelled.rows if r.row_id == bare.row_id).fingerprint, bare.fingerprint)
+        # a product finding is evidence too: a row that gains one is reviewed again
+        finding = ProductFinding(product_id='P-X', attribute='ALCOHOL_BY_VOLUME', stated=9.0, limit=5.0, comparator='<=', unit='%',
+                                 result='EXCEEDS_LIMIT', quote='sentetik')
+        report = REPORT.model_copy(update={'rows': [r.model_copy(update={'product_findings': [finding]})
+                                                    if f'{r.obligation_id}:{r.target_id}' == bare.row_id else r for r in REPORT.rows]})
+        found = qdms.export_rows(BREWER, REGISTER, REGISTRY, {'BEVERAGE_ALCOHOL_TR': report}, {'BEVERAGE_ALCOHOL_TR': ASSESSMENTS},
+                                 generated_at=WHEN, store=STORE)
+        self.assertEqual(next(r for r in found.rows if r.row_id == bare.row_id).evidence['product_findings'], [finding.model_dump(mode='json')])
+        _, problems = qdms.apply_approvals(found, approvals(entry(bare, 'APPROVED')))
+        self.assertEqual([p['problem'] for p in problems], ['STALE_APPROVAL'])
 
     def test_unknown_rows_double_decisions_and_another_profile_are_refused(self):
         row = self.rows[0]
@@ -235,7 +246,19 @@ class ApprovalGateTests(unittest.TestCase):
                      'passage_id': 'P-X', 'document_id': 'D-X', 'relation': 'SUPPORTS', 'reasons': [], 'quote': 'eklenen ifade'}]}),
                  'who must act': lambda r: r['entity'].update({'entity_ids': [*r['entity']['entity_ids'], 'ALC-INT-MALT']}),
                  'the evidence': lambda r: r['evidence'].update({'evidence': [{'evidence_id': 'EV-X', 'control_id': 'CTL-X', 'evidence_type': 'X',
-                                                                              'period': '2026Q3', 'in_period': True}]})}
+                                                                              'period': '2026Q3', 'in_period': True}]}),
+                 'a product finding': lambda r: r['evidence'].update({'product_findings': [{
+                     'product_id': 'P-X', 'attribute': 'ALCOHOL_BY_VOLUME', 'stated': 9.0, 'limit': 5.0, 'comparator': '<=', 'unit': '%',
+                     'result': 'EXCEEDS_LIMIT', 'quote': 'eklenen bulgu'}]}),
+                 'who must act, not an id': lambda r: r['entity'].update({'entity_ids': [None, *r['entity']['entity_ids']]}),
+                 # written next to APPROVED in export.csv, the spreadsheet a QDMS imports
+                 'the entity name': lambda r: r['entity'].update({'entity_name': 'Baska Sirket A.S.'}),
+                 'the target': lambda r: r['entity'].update({'target_id': 'BASKA-HEDEF'}),
+                 'the products': lambda r: r['entity'].update({'products': ['BASKA-URUN']}),
+                 'the impacted controls': lambda r: r['impacted_process'].update({'controls': [
+                     {'control_id': 'CTL-SAHTE', 'description': 'eklendi', 'owner_department': 'SALES'}]}),
+                 'the impacted departments': lambda r: r['impacted_process'].update({'departments_tr': ['Satış']}),
+                 'the layer': lambda r: r.update({'source_layer': 'DECISION'})}
         for name, edit in edits.items():
             with self.subTest(name):
                 data = copy.deepcopy(self.data)
@@ -269,9 +292,15 @@ class ApprovalGateTests(unittest.TestCase):
                      'missing_facts': [*d['applicability_reviews'][index]['uncertainty']['missing_facts'], {'gate': 'ACTIVITY_CLASS', 'status': 'UNKNOWN'}]}),
                  'a record\'s entity': lambda d: d['applicability_reviews'][index]['entity'].update({'entity_ids': ['ALC-INT-MALT']}),
                  'a record moved to another task': lambda d: d['applicability_reviews'][index].update({'task_id': other.task_id}),
+                 'a record\'s entity name': lambda d: d['applicability_reviews'][index]['entity'].update({'entity_name': 'Baska Sirket A.S.'}),
+                 'a record\'s layer': lambda d: d['applicability_reviews'][index].update({'source_layer': 'DECISION'}),
+                 'a record given an action of its own': lambda d: d['applicability_reviews'][index].update({
+                     'required_actions': copy.deepcopy(d['review_tasks'][0]['required_actions'])}),
+                 'a record whose fingerprint cannot be computed': lambda d: d['applicability_reviews'][index]['applicability'].pop('reason_codes'),
                  'the task\'s action': lambda d: d['review_tasks'][0]['required_actions'][0].update({'qdms_type': 'NONCONFORMITY'}),
                  'the task\'s question': lambda d: d['review_tasks'][0].update({'question_tr': 'baska bir soru'}),
-                 'the task\'s entities': lambda d: d['review_tasks'][0].update({'entities': ['ALC-INT-MALT']})}
+                 'the task\'s entities': lambda d: d['review_tasks'][0].update({'entities': ['ALC-INT-MALT']}),
+                 'the task\'s department label': lambda d: d['review_tasks'][0].update({'department_tr': 'Satış'})}
         for name, edit in edits.items():
             with self.subTest(name):
                 data = copy.deepcopy(self.data)
@@ -281,6 +310,76 @@ class ApprovalGateTests(unittest.TestCase):
                 self.assertEqual({p['problem'] for p in problems}, {'EXPORT_MODIFIED'})
                 self.assertEqual(qdms.ready_actions(result), [])
                 self.assertEqual({c.human_approval.status for c in result.applicability_reviews}, {'PENDING'})
+
+    def test_an_edited_record_moved_under_another_approved_task_takes_no_decision(self):
+        task, other = self.export.review_tasks[0], self.export.review_tasks[1]
+        data = copy.deepcopy(self.data)
+        record = next(c for c in data['applicability_reviews'] if c['task_id'] == task.task_id)
+        record['uncertainty']['company_evidence'] = []
+        record['task_id'] = other.task_id
+        result, problems = qdms.apply_approvals(qdms.QdmsExport.model_validate(data), approvals(task_entry(other, 'APPROVED')))
+        self.assertIn((record['row_id'], 'EXPORT_MODIFIED'), [(p['row_id'], p['problem']) for p in problems])
+        self.assertEqual({a['row_id'] for a in qdms.ready_actions(result)}, {other.task_id})
+        statuses = {c.row_id: c.human_approval.status for c in result.applicability_reviews}
+        self.assertEqual(statuses.pop(record['row_id']), 'PENDING')
+        self.assertEqual({statuses[c] for c in other.child_ids}, {'APPROVED'})
+
+    def test_a_department_label_changed_since_export_is_not_an_edit_of_the_export(self):
+        """The Turkish department labels come from the packaged ownership data. A label changed there between export and
+        approve is not an edit of export.json: the export is checked against its own content, with the labels it was
+        written with (a new export carries the new labels and new fingerprints)."""
+        task, row = self.export.review_tasks[0], self.export.rows[0]
+        real = qdms.ownership
+
+        def relabelled():
+            data = real()
+            data['departments'] = {code: f'{label} (yeni)' for code, label in data['departments'].items()}
+            return data
+        with mock.patch.object(qdms, 'ownership', relabelled):
+            result, problems = qdms.apply_approvals(qdms.QdmsExport.model_validate(self.data),
+                                                    approvals(task_entry(task, 'APPROVED'), entry(row, 'APPROVED')))
+        self.assertEqual(problems, [])
+        self.assertEqual({a['row_id'] for a in qdms.ready_actions(result)}, {task.task_id, row.row_id})
+
+    def test_an_approve_output_given_only_its_latest_file_keeps_its_history(self):
+        """The earlier decisions of a row are its audit trail: approving an approve output again with only the file of
+        the latest decision must not drop the earlier ones without a word."""
+        row = self.export.rows[0]
+        first = approvals({**entry(row, 'REJECTED'), 'approver': 'hukuk', 'decided_at': '2026-10-10T09:00:00+03:00'})
+        second = approvals({**entry(row, 'APPROVED'), 'approver': 'kalite', 'decided_at': '2026-10-12T09:00:00+03:00'})
+        once, problems = qdms.apply_approvals(self.export, [first, second])
+        self.assertEqual(problems, [])
+        self.assertEqual([(h.status, h.approver) for h in once.rows[0].human_approval.history], [('REJECTED', 'hukuk')])
+        with tempfile.TemporaryDirectory() as directory:
+            reread = qdms.load_export(qdms.write(once, Path(directory))['json'])
+        alone, problems = qdms.apply_approvals(reread, second)
+        self.assertEqual([(p['row_id'], p['problem']) for p in problems], [(row.row_id, 'DECISION_NOT_IN_APPROVALS')])
+        self.assertIn('REJECTED', problems[0]['detail'])
+        self.assertEqual(alone.rows[0].human_approval.status, 'PENDING')
+        self.assertEqual(qdms.ready_actions(alone), [])
+        # given every file again, the decision and its history stand
+        again, problems = qdms.apply_approvals(reread, [second, first])
+        self.assertEqual(problems, [])
+        self.assertEqual([(h.status, h.approver) for h in again.rows[0].human_approval.history], [('REJECTED', 'hukuk')])
+        self.assertEqual({a['row_id'] for a in qdms.ready_actions(again)}, {row.row_id})
+
+    def test_a_mistyped_decision_time_cannot_outrank_a_later_rejection(self):
+        """Decisions of several files are ordered by decided_at. The review's repro: an approval whose year was mistyped
+        (2062 for 2026) outranked every later decision, and a rejection whose time was typed as a spreadsheet date serial
+        (46307) was read as 1970; either way a later rejection went to the history and the row was READY with no problem."""
+        row = self.export.rows[0]
+        approved = {**entry(row, 'APPROVED'), 'approver': 'satis', 'decided_at': '2026-10-01T09:00:00+03:00'}
+        rejected = {**entry(row, 'REJECTED'), 'approver': 'hukuk', 'decided_at': '2026-10-13T09:00:00+03:00'}
+        for name, (one, two) in {'an approval dated 2062': ({**approved, 'decided_at': '2062-10-01T09:00:00+03:00'}, rejected),
+                                 'a rejection dated as a date serial': (approved, {**rejected, 'decided_at': '46307'}),
+                                 'a rejection dated as a number': (approved, {**rejected, 'decided_at': 46307})}.items():
+            with self.subTest(name), self.assertRaises(ValueError):
+                qdms.apply_approvals(self.export, [approvals(one), approvals(two)])
+        # written as it was made, the later rejection holds
+        result, problems = qdms.apply_approvals(self.export, [approvals(approved), approvals(rejected)])
+        self.assertEqual(problems, [])
+        self.assertEqual((result.rows[0].human_approval.status, result.rows[0].human_approval.approver), ('REJECTED', 'hukuk'))
+        self.assertEqual(qdms.ready_actions(result), [])
 
     def test_an_approve_output_is_approved_again_only_from_its_files(self):
         first, second = self.export.rows[0], self.export.rows[1]
@@ -317,6 +416,11 @@ class ApprovalGateTests(unittest.TestCase):
         self.assertEqual([(p['row_id'], p['problem']) for p in problems], [(row.row_id, 'DECIDED_TWICE')])
         self.assertEqual(qdms.ready_actions(result), [])
         self.assertEqual(result.rows[0].human_approval.status, 'PENDING')
+        # nor does one file that gives the row the same decision twice at different times: the later is not taken
+        result, problems = qdms.apply_approvals(self.export, approvals(entry(row, 'APPROVED'), {
+            **entry(row, 'APPROVED'), 'approver': 'baska', 'decided_at': '2026-10-03T13:00:00+00:00'}))
+        self.assertEqual([(p['row_id'], p['problem']) for p in problems], [(row.row_id, 'DECIDED_TWICE')])
+        self.assertEqual(qdms.ready_actions(result), [])
 
     def test_a_later_file_overrides_a_decision_only_with_a_newer_date_and_keeps_it(self):
         row = self.export.rows[0]
@@ -406,6 +510,34 @@ class FileTests(unittest.TestCase):
                 self.assertIn(expected, str(unreadable.exception))
                 self.assertIn(name, str(unreadable.exception))
 
+    def test_a_decision_time_that_is_a_number_or_later_than_the_run_is_refused_and_named(self):
+        """decided_at orders the decisions of several files, so it is the time the decision was made, written out: a number
+        (a spreadsheet's date serial, a Unix time) would be read as seconds since 1970, and a time after the run (a
+        mistyped year, a wrong UTC offset) would outrank every decision made later."""
+        result = export()
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            template = json.loads(qdms.write(result, root / 'export')['template'].read_text(encoding='utf-8'))
+            position = len(template['entries']) - 1
+            soon = (datetime.now(timezone.utc) + timedelta(minutes=20)).isoformat()      # a clock a little ahead is no typo
+            cases = {'serial': ('46307', True), 'number': (46307, True), 'unix-text': ('1760263200', True), 'fraction': (46307.5, True),
+                     'future-year': ('2062-10-12T10:00:00+03:00', True), 'tomorrow': ((datetime.now(timezone.utc) + timedelta(days=1)).isoformat(), True),
+                     'soon': (soon, False), 'space': ('2026-10-12 10:00:00+03:00', False)}
+            for name, (value, refused) in cases.items():
+                filled = copy.deepcopy(template)
+                filled['entries'][position].update({'decision': 'APPROVED', 'approver': 'kalite.muduru', 'decided_at': value})
+                path = root / f'{name}.json'
+                path.write_text(json.dumps(filled, ensure_ascii=False), encoding='utf-8')
+                with self.subTest(name):
+                    if not refused:
+                        self.assertEqual([e.row_id for e in qdms.load_approvals(path).entries], [template['entries'][position]['row_id']])
+                        continue
+                    with self.assertRaises(ValueError) as named:
+                        qdms.load_approvals(path)
+                    self.assertIn(f'entries[{position}]', str(named.exception))
+                    self.assertIn(template['entries'][position]['row_id'], str(named.exception))
+                    self.assertIn('decided_at', str(named.exception))
+
 
 class ApproveCommandTests(unittest.TestCase):
     """`qdms approve` on files: a refused approvals file is a message and exit 2 with nothing written, not a traceback."""
@@ -447,7 +579,11 @@ class ApproveCommandTests(unittest.TestCase):
         legacy = self.filled((0, 'APPROVED'))
         legacy['entries'][0]['approver'] = 'kalite.müdürü'
         extra = {**self.filled((0, 'APPROVED')), 'yorum': 'ek alan'}
+        future, serial = self.filled((0, 'APPROVED')), self.filled((0, 'REJECTED'))
+        future['entries'][0]['decided_at'], serial['entries'][0]['decided_at'] = '2062-10-02T14:00:00+00:00', '46307'
         cases = {'conflicting': (json.dumps(conflicting).encode('utf-8'), self.template['entries'][0]['row_id']),
+                 'future': (json.dumps(future).encode('utf-8'), 'entries[0]'),
+                 'serial': (json.dumps(serial).encode('utf-8'), 'entries[0]'),
                  'extra-key': (json.dumps(extra).encode('utf-8'), 'yorum'),
                  'blank': (json.dumps(self.template).encode('utf-8'), 'no decision'),
                  'broken': (b'{"format": ', 'JSON'),
@@ -488,6 +624,29 @@ class ApproveCommandTests(unittest.TestCase):
         problems = json.loads((out / 'approval-problems.json').read_text(encoding='utf-8'))
         self.assertEqual([(p['row_id'], p['problem']) for p in problems], [(forged['row_id'], 'DECISION_NOT_IN_APPROVALS')])
         self.assertEqual(json.loads(printed)['summary']['by_approval'].get('APPROVED'), 1)
+
+    def test_an_export_json_edited_out_of_shape_exits_2_and_writes_nothing(self):
+        """The review's repro: a null among a row's entity ids crashed approve with a traceback (exit 1). An export.json
+        whose rows, records or tasks its own writers cannot read is refused whole, named by place and id."""
+        data = json.loads(self.paths['json'].read_text(encoding='utf-8'))
+        broken = {'a null entity id': lambda d: d['rows'][0]['entity'].update({'entity_ids': [None, *d['rows'][0]['entity']['entity_ids']]}),
+                  'a record without its reason codes': lambda d: d['applicability_reviews'][0]['applicability'].pop('reason_codes'),
+                  'a task without its action': lambda d: d['review_tasks'][0].update({'required_actions': []})}
+        for (name, edit), (place, ident) in zip(broken.items(), (('rows[0]', data['rows'][0]['row_id']),
+                                                                ('applicability_reviews[0]', data['applicability_reviews'][0]['row_id']),
+                                                                ('review_tasks[0]', data['review_tasks'][0]['task_id']))):
+            with self.subTest(name):
+                edited = copy.deepcopy(data)
+                edit(edited)
+                path = self.root / f'out-of-shape-{place[:4]}.json'
+                path.write_text(json.dumps(edited, ensure_ascii=False), encoding='utf-8')
+                code, printed, message, out = self.approve(f'out-of-shape-{place[:4]}', json.dumps(self.filled((0, 'APPROVED'))).encode('utf-8'),
+                                                           export_json=path)
+                self.assertEqual(code, 2)
+                self.assertIn(place, message)
+                self.assertIn(ident, message)
+                self.assertNotIn('Traceback', message)
+                self.assertFalse(out.exists())
 
 
 class UnknownApplicabilityTests(unittest.TestCase):

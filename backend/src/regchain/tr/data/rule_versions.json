@@ -221,6 +221,16 @@
    "recorded_on": "8f94f6f",
    "recorded_at": "2026-10-14",
    "note": "12 Oct 2026: tr-qdms-v6 - qdms approve recomputes every row, record and task fingerprint from export.json and takes decisions only from the approvals files given (states in the export are not trusted); a file deciding a row two ways is refused; across files the latest decided_at holds, earlier decisions kept as history; decided_at needs a UTC offset; fingerprint values unchanged from v5"
+  },
+  "tr-qdms-v7": {
+   "family": "qdms",
+   "files": [
+    "qdms.py"
+   ],
+   "sha256": "358e833a9345d9e906bd1a2f0b25cf9001ba081e7bbb9c93bf399d07b5435587",
+   "recorded_on": "a38fc79",
+   "recorded_at": "2026-10-14",
+   "note": "12 Oct 2026: tr-qdms-v7 - review fixes: decided_at must be a date and time written out (no number/epoch) and not later than the run; row fingerprints also cover the entity as written, the impacted process and the layer, record fingerprints the entity as written and the layer (every fingerprint changes); a history decision no file makes is DECISION_NOT_IN_APPROVALS; an unreadable row is EXPORT_MODIFIED and load_export refuses an export its writers cannot read; modified_ids checks with the export's own department labels"
   }
  }
 }
