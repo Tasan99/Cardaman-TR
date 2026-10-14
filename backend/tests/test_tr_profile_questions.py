@@ -76,6 +76,12 @@ class QuestionTests(unittest.TestCase):
         with self.assertRaises(ValueError):                                            # who answered is required
             answer(self.brand, [], by='')
 
+    def test_questions_of_another_profile_are_refused_naming_the_profile(self):
+        other = {p.profile_id: p for p in load_pilot_profiles(REGISTRY.vocabulary).values()}['tr-bev-pilot-alcohol-integrated']
+        with self.assertRaises(q.AnswerError) as caught:                               # NONALC-BRAND is not an entity of it
+            q.apply_answers(other, [answer(self.brand, [])], self.questions, REGISTRY.vocabulary)
+        self.assertIn('tr-bev-pilot-alcohol-integrated', str(caught.exception))
+
 
 class ReassessTests(unittest.TestCase):
     def test_only_the_affected_evaluations_run_again(self):
@@ -160,6 +166,132 @@ class QuestionnaireTests(unittest.TestCase):
         with self.assertRaises(q.AnswerError):
             q.read_questionnaire(self.sheet, self.questions)                              # neither E nor H
 
+    # The sheet comes back from Excel on a Turkish Windows, or from another spreadsheet program.
+
+    def filled(self):
+        """The brand question answered: its first value E, the others H, the list complete; who and basis in Turkish."""
+        rows = self.rows()
+        first = self.brand.asked[0]['value']
+        for row in rows:
+            if row['question_id'] == self.brand.question_id:
+                if row['satir'] == 'DEGER':
+                    row['cevap'] = 'E' if row['deger_kodu'] == first else 'H'
+                else:
+                    row.update({'cevap': 'E', 'cevaplayan': 'Ayşe Yılmaz (Uyum Müdürü)', 'dayanak': 'faaliyet belgesi; şirket sözleşmesi',
+                                'tarih': '2026-10-04'})
+        return rows
+
+    def expected(self):
+        return [(self.brand.question_id, [self.brand.asked[0]['value']], True, 'Ayşe Yılmaz (Uyum Müdürü)', '2026-10-04',
+                 'faaliyet belgesi; şirket sözleşmesi')]
+
+    def save(self, rows, encoding='utf-8-sig', delimiter=';', columns=None):
+        """The rows as a program saves them: its encoding, its separator, the columns it kept."""
+        import csv
+        text = io.StringIO()
+        writer = csv.DictWriter(text, fieldnames=columns or q.QUESTIONNAIRE_COLUMNS, delimiter=delimiter, extrasaction='ignore',
+                                lineterminator='\r\n')
+        writer.writeheader()
+        writer.writerows(rows)
+        self.sheet.write_bytes(text.getvalue().encode(encoding))
+
+    def read(self):
+        return [(a.question_id, a.present, a.list_complete, a.answered_by, a.answered_at, a.basis)
+                for a in q.read_questionnaire(self.sheet, self.questions)]
+
+    def test_an_excel_save_on_a_turkish_windows_is_read_like_the_written_sheet(self):
+        # Excel 'CSV (virgülle ayrılmış)' on a Turkish Windows: Windows-1254 with ';' (',' on another list separator);
+        # 'CSV UTF-8': UTF-8 with a BOM; 'Unicode metin': UTF-16 with a BOM and TABs; Google Sheets, LibreOffice: UTF-8 with ','
+        rows, expected = self.filled(), self.expected()
+        for encoding, delimiter in [('utf-8-sig', ';'), ('utf-8', ';'), ('cp1254', ';'), ('cp1254', ','), ('utf-16', '\t'),
+                                    ('utf-8', ','), ('utf-8-sig', '\t')]:
+            with self.subTest(encoding=encoding, delimiter=delimiter):
+                self.save(rows, encoding, delimiter)
+                self.assertEqual(self.read(), expected)
+
+    def test_a_file_that_is_no_known_text_is_refused_saying_how_to_save_it(self):
+        self.save(self.filled(), 'cp1254')
+        self.sheet.write_bytes(self.sheet.read_bytes() + b'\x81')            # 0x81: neither UTF-8 nor a Windows-1254 letter
+        with self.assertRaises(q.AnswerError) as caught:
+            q.read_questionnaire(self.sheet, self.questions)
+        self.assertIn('CSV UTF-8', str(caught.exception))
+        self.sheet.write_bytes(b'PK\x03\x04' + bytes(range(256)))               # an Excel workbook (.xlsx is a zip file)
+        with self.assertRaises(q.AnswerError) as caught:
+            q.read_questionnaire(self.sheet, self.questions)
+        self.assertIn('CSV UTF-8', str(caught.exception))
+
+    def test_a_missing_column_is_refused_naming_it_and_the_columns_found(self):
+        rows = self.filled()
+        for missing in (['question_id'], ['satir'], ['deger_kodu'], ['cevap'], ['cevaplayan', 'dayanak']):
+            with self.subTest(missing=missing):
+                kept = [c for c in q.QUESTIONNAIRE_COLUMNS if c not in missing]
+                self.save(rows, columns=kept)
+                with self.assertRaises(q.AnswerError) as caught:
+                    q.read_questionnaire(self.sheet, self.questions)
+                self.assertIn(f"missing columns: {', '.join(missing)} (found: {', '.join(kept)})", str(caught.exception))
+
+    def test_lines_excel_leaves_blank_and_a_retyped_header_do_not_change_the_answers(self):
+        rows, expected = self.filled(), self.expected()
+        blank = dict.fromkeys(q.QUESTIONNAIRE_COLUMNS, '')
+        self.save([*rows, blank, blank])                                        # ';;;;;;;;;' lines below the data
+        self.assertEqual(self.read(), expected)
+        self.save(rows)
+        text = self.sheet.read_bytes().decode('utf-8-sig')
+        self.sheet.write_bytes(text.replace(';cevap;', '; Cevap ;', 1).encode('utf-8-sig'))
+        self.assertEqual(self.read(), expected)
+
+    def test_e_and_h_are_read_in_their_turkish_spellings(self):
+        expected = self.expected()
+        for yes, no in [('e', 'h'), ('Evet', 'Hayır'), ('evet', 'hayır'), ('EVET', 'HAYIR'), ('EVET', 'HAYİR'), (' E ', 'hayir')]:
+            with self.subTest(yes=yes, no=no):
+                rows = self.filled()
+                for row in rows:
+                    row['cevap'] = {'E': yes, 'H': no}.get(row['cevap'], row['cevap'])
+                self.save(rows)
+                self.assertEqual(self.read(), expected)
+
+    def test_a_value_left_blank_is_still_not_named_by_the_answer(self):
+        # unchanged by the import fixes: blank is not an answer, and with the list stated complete the value is absent
+        rows = self.filled()
+        for row in rows:
+            if row['question_id'] == self.brand.question_id and row['satir'] == 'DEGER' and row['cevap'] == 'H':
+                row['cevap'] = ''
+        self.save(rows, 'cp1254')
+        self.assertEqual(self.read(), self.expected())
+
+    def test_contradictory_duplicate_rows_are_refused_naming_their_lines(self):
+        rows = self.filled()
+        lines = [n for n, row in enumerate(rows, 2) if row['question_id'] == self.brand.question_id]
+        value, complete = rows[lines[0] - 2], rows[lines[-1] - 2]
+        copied = len(rows) + 2
+        self.save([*rows, {**value, 'cevap': 'H'}])                              # the same value E on one line, H on another
+        with self.assertRaises(q.AnswerError) as caught:
+            q.read_questionnaire(self.sheet, self.questions)
+        self.assertIn(value['deger_kodu'], str(caught.exception))
+        self.assertRegex(str(caught.exception), rf'\bline {lines[0]}\b')
+        self.assertRegex(str(caught.exception), rf'\bline {copied}\b')
+        self.save([*rows, {**complete, 'cevap': 'H', 'cevaplayan': 'Mehmet Demir', 'dayanak': 'sözlü teyit'}])   # two completeness answers
+        with self.assertRaises(q.AnswerError) as caught:
+            q.read_questionnaire(self.sheet, self.questions)
+        self.assertRegex(str(caught.exception), rf'\bline {lines[-1]}\b')
+        self.assertRegex(str(caught.exception), rf'\bline {copied}\b')
+
+    def test_an_exact_duplicate_row_is_read_once(self):
+        rows = self.filled()
+        brand = [row for row in rows if row['question_id'] == self.brand.question_id]
+        blank_copy = {**brand[-1], 'cevap': '', 'cevaplayan': '', 'dayanak': '', 'tarih': ''}
+        self.save([*rows, dict(brand[0]), dict(brand[-1]), {**brand[0], 'cevap': ''}, blank_copy])   # copied as they are, or left blank
+        self.assertEqual(self.read(), self.expected())
+
+    def test_a_line_kind_other_than_DEGER_or_LISTE_TAM_is_refused_with_its_line(self):
+        rows = self.filled()
+        number = next(n for n, row in enumerate(rows, 2) if row['question_id'] == self.brand.question_id)
+        rows[number - 2]['satir'] = 'DEĞER'
+        self.save(rows)
+        with self.assertRaises(q.AnswerError) as caught:
+            q.read_questionnaire(self.sheet, self.questions)
+        self.assertRegex(str(caught.exception), rf'\bline {number}\b')
+
 
 class InteractiveTests(unittest.TestCase):
     def test_answers_from_the_terminal(self):
@@ -175,6 +307,141 @@ class InteractiveTests(unittest.TestCase):
         self.assertEqual((answers[0].question_id, answers[0].present, answers[0].list_complete, answers[0].answered_by),
                          (brand.question_id, [brand.asked[0]['value']], True, 'uyum.sorumlusu'))
         self.assertIn('NONALC-BRAND', out.getvalue())
+
+
+class CommandLineTests(unittest.TestCase):
+    """`python -m regchain.tr questions / answer` as a company runs them: a refused input is one line on stderr with exit
+    code 2 (no traceback), a filled questionnaire is never overwritten, and the output is UTF-8 whatever the code page."""
+
+    def setUp(self):
+        import json
+        import tempfile
+        from pathlib import Path
+        self.directory = tempfile.TemporaryDirectory()
+        self.folder = Path(self.directory.name)
+        questions = q.profile_questions(BOTTLER, REPORT.applicability_reviews, REGISTRY.vocabulary)
+        self.questions = self.folder / 'questions.json'
+        self.questions.write_text(json.dumps([x.model_dump(mode='json') for x in questions], ensure_ascii=False), encoding='utf-8')
+        self.sheet = self.folder / 'questionnaire.csv'
+        q.write_questionnaire(questions, self.sheet)
+
+    def tearDown(self):
+        self.directory.cleanup()
+
+    def cli(self, *argv):
+        import contextlib
+        from regchain.tr.__main__ import main
+        err = io.StringIO()
+        with contextlib.redirect_stderr(err), contextlib.redirect_stdout(io.StringIO()):
+            code = main([str(a) for a in argv])
+        return code, err.getvalue()
+
+    def sheet_text(self, mark):
+        """The written questionnaire with its first question answered `mark` on its first value, as text with ';'."""
+        import csv
+        with self.sheet.open(encoding='utf-8-sig', newline='') as handle:
+            rows = list(csv.DictReader(handle, delimiter=';'))
+        rows[0]['cevap'] = mark
+        rows[next(n for n, r in enumerate(rows) if r['satir'] == 'LISTE_TAM')].update({'cevaplayan': 'Ayşe Yılmaz', 'dayanak': 'faaliyet belgesi'})
+        text = io.StringIO()
+        writer = csv.DictWriter(text, fieldnames=q.QUESTIONNAIRE_COLUMNS, delimiter=';', lineterminator='\r\n')
+        writer.writeheader()
+        writer.writerows(rows)
+        return text.getvalue()
+
+    def test_questions_does_not_overwrite_a_questionnaire_unless_forced(self):
+        from unittest import mock
+        filled = 'question_id;satir;cevap;cevaplayan\r\nX;LISTE_TAM;E;Ayşe Yılmaz\r\n'.encode('utf-8-sig')
+        self.sheet.write_bytes(filled)
+        self.questions.unlink()
+        command = ['questions', '--profile', BOTTLER.profile_id, '--out', self.questions]
+        with mock.patch('regchain.tr.engines.assess_by_engine', return_value={'reports': {}}) as assess:
+            code, err = self.cli(*command)
+            self.assertEqual(code, 2)
+            self.assertEqual(len(err.strip().splitlines()), 1, err)
+            self.assertIn(str(self.sheet), err)
+            self.assertIn('--force', err)
+            self.assertEqual(self.sheet.read_bytes(), filled)                  # the company's answers are kept
+            self.assertFalse(self.questions.exists())
+            assess.assert_not_called()                                         # refused before the assessment runs
+            self.sheet.unlink()
+            self.questions.write_text('[]', encoding='utf-8')                  # questions.json alone is not overwritten either
+            self.assertEqual(self.cli(*command)[0], 2)
+            self.assertFalse(self.sheet.exists())
+            self.sheet.write_bytes(filled)
+            code, err = self.cli(*command, '--force')
+            self.assertEqual((code, err), (0, ''))
+            self.assertNotEqual(self.sheet.read_bytes(), filled)
+
+    def test_answer_refuses_a_bad_input_in_one_line_with_exit_code_2(self):
+        marked = self.folder / 'excel.csv'
+        marked.write_bytes(self.sheet_text('Var').encode('cp1254'))            # Excel 'CSV (virgülle ayrılmış)', Turkish Windows
+        unicode_text = self.folder / 'excel.txt'
+        unicode_text.write_bytes(self.sheet_text('Var').replace(';', '\t').encode('utf-16'))   # Excel 'Unicode metin'
+        answered = self.folder / 'answered.csv'
+        answered.write_bytes(self.sheet_text('E').encode('cp1254'))
+        workbook = self.folder / 'questionnaire.xlsx'
+        workbook.write_bytes(b'PK\x03\x04' + bytes(range(256)))
+        lines = self.sheet_text('E').split('\r\n')
+        twice = self.folder / 'twice.csv'                                      # its first value answered E, then again H below
+        twice.write_bytes('\r\n'.join([*lines[:-1], lines[1].replace(';E;', ';H;', 1), '']).encode('utf-8-sig'))
+        broken = self.folder / 'profile.json'
+        broken.write_text('{"profile_id": "company"}', encoding='utf-8')     # a profile file that is not a whole profile
+        other = 'tr-bev-pilot-alcohol-integrated'
+        cases = [('a mark other than E/H', BOTTLER.profile_id, self.questions, marked, "'Var'"),
+                 ('the same, saved as Unicode text', BOTTLER.profile_id, self.questions, unicode_text, "'Var'"),
+                 ('an Excel workbook', BOTTLER.profile_id, self.questions, workbook, 'CSV UTF-8'),
+                 ('a value answered E and H', BOTTLER.profile_id, self.questions, twice, 'contradictory lines'),
+                 ('no questions file', BOTTLER.profile_id, self.folder / 'none.json', answered, 'none.json'),
+                 ('a questionnaire given as the questions', BOTTLER.profile_id, self.sheet, answered, 'questionnaire.csv'),
+                 ('a profile file that is no profile', broken, self.questions, answered, 'validation error'),
+                 ('questions of another profile', other, self.questions, answered, other)]
+        for number, (name, profile_id, questions, answers, expected) in enumerate(cases):
+            with self.subTest(name):
+                out = self.folder / f'out-{number}'
+                code, err = self.cli('answer', '--profile', profile_id, '--questions', questions, '--answers', answers, '--out', out)
+                self.assertEqual(code, 2, err)
+                self.assertEqual(len(err.strip().splitlines()), 1, err)
+                self.assertTrue(err.startswith('answer: '), err)
+                self.assertIn(expected, err)
+                self.assertFalse(out.exists())
+
+    def test_a_programming_error_in_answer_keeps_its_traceback(self):
+        from unittest import mock
+        answered = self.folder / 'answered.csv'
+        answered.write_bytes(self.sheet_text('E').encode('utf-8-sig'))
+        with mock.patch.object(q, 'apply_answers', side_effect=KeyError('a bug, not an input')):
+            with self.assertRaises(KeyError):                                  # not turned into a refused input
+                self.cli('answer', '--profile', BOTTLER.profile_id, '--questions', self.questions, '--answers', answered,
+                         '--out', self.folder / 'out')
+
+    def test_an_answers_file_saved_with_a_bom_is_read(self):
+        import json
+        brand = next(x for x in q.profile_questions(BOTTLER, REPORT.applicability_reviews, REGISTRY.vocabulary)
+                     if x.target_id == 'NONALC-BRAND' and x.gate == 'ACTIVITY_CLASS')
+        answers = [answer(brand, []).model_dump(mode='json')]
+        path = self.folder / 'answers.json'
+        path.write_bytes(json.dumps(answers, ensure_ascii=False).encode('utf-8-sig'))      # Notepad's 'UTF-8 with BOM'
+        self.assertEqual([a.model_dump(mode='json') for a in q.load_list(path, q.Answer, 'answers')], answers)
+
+    def test_output_redirected_to_a_file_is_utf8_without_python_utf8_mode(self):
+        import json
+        import os
+        import subprocess
+        import sys
+        from pathlib import Path
+        source = str(Path(q.__file__).resolve().parents[2])
+        environment = {k: v for k, v in os.environ.items() if k not in ('PYTHONUTF8', 'PYTHONIOENCODING')}
+        for name, extra in [('the code page of this machine', {}), ('a Turkish Windows code page', {'PYTHONIOENCODING': 'cp1254'})]:
+            with self.subTest(name):
+                path = self.folder / f'status-{len(extra)}.json'
+                with path.open('wb') as handle:
+                    done = subprocess.run([sys.executable, '-m', 'regchain.tr', 'corpus', 'status'], stdout=handle, stderr=subprocess.PIPE,
+                                          env={**environment, **extra, 'PYTHONPATH': source}, timeout=300)
+                self.assertEqual(done.returncode, 0, done.stderr.decode('utf-8', 'replace')[-400:])
+                text = path.read_bytes().decode('utf-8')
+                self.assertIn('İ', text)
+                self.assertTrue(json.loads(text))
 
 
 if __name__ == '__main__':

@@ -117,6 +117,9 @@ def apply_answers(profile, answers: list[Answer], questions: list[Question], voc
         if unknown:
             raise AnswerError(f'{answer.question_id}: {unknown} are not {question.vocabulary} of the vocabulary')
         pool = entities if question.target_level == 'LEGAL_ENTITY' else products
+        if question.target_id not in pool:
+            raise AnswerError(f'{answer.question_id}: {question.target_id} is not in profile {profile.profile_id}; '
+                              f'the questions were written for another profile')
         target = pool[question.target_id]
         values = list(dict.fromkeys([*getattr(target, question.field), *answer.present]))
         basis = f'{answer.answered_by} {answer.answered_at}: {answer.basis}'
@@ -188,8 +191,61 @@ def _count(values) -> dict:
 
 # The questionnaire a company fills (CSV, UTF-8 with BOM, ';'): one line per value asked (E/H), and per question one
 # line for whether the list is complete, with who answered, the basis and the date. A question left blank is not answered.
+# It is read back as Excel saves it on a Turkish Windows: UTF-8 (with or without a BOM), UTF-16 with a BOM ('Unicode metin'),
+# or Windows-1254 ('CSV (virgülle ayrılmış)'), with ';', ',' or TAB between the cells.
 QUESTIONNAIRE_COLUMNS = ['question_id', 'satir', 'sirket_veya_urun', 'soru', 'deger_kodu', 'deger', 'cevap', 'cevaplayan', 'dayanak', 'tarih']
+REQUIRED_COLUMNS = ['question_id', 'satir', 'deger_kodu', 'cevap', 'cevaplayan', 'dayanak']
 YES, NO = {'E', 'EVET', 'Y', 'YES', 'X', '1'}, {'H', 'HAYIR', 'N', 'NO', '0'}
+SAVE_AS = 'save it in Excel as "CSV UTF-8 (virgülle ayrılmış)"'
+
+
+def _mark(cell) -> str:
+    """An E/H cell as typed, spaces, case and the Turkish dotted or dotless i aside: 'e', 'Evet', 'hayır', 'HAYİR' -> E, EVET, HAYIR."""
+    return (cell or '').strip().replace('İ', 'I').replace('ı', 'I').upper().replace('\u0307', '')
+
+
+def _questionnaire_text(path) -> str:
+    """The text of a saved questionnaire. Without a BOM, bytes that are not UTF-8 are read as Windows-1254 (strictly: a byte
+    that code page does not define is refused). A workbook, or text in any other encoding, is refused saying how to save it."""
+    import codecs
+    from pathlib import Path
+    raw = Path(path).read_bytes()
+    if raw.startswith((b'PK\x03\x04', b'\xd0\xcf\x11\xe0')):
+        raise AnswerError(f'{path} is an Excel workbook, not a questionnaire file; {SAVE_AS}')
+    if raw.startswith((codecs.BOM_UTF16_LE, codecs.BOM_UTF16_BE)):
+        encodings = ['utf-16']
+    elif raw.startswith(codecs.BOM_UTF8):
+        encodings = ['utf-8-sig']
+    else:
+        encodings = ['utf-8', 'cp1254']
+    for encoding in encodings:
+        try:
+            return raw.decode(encoding)
+        except UnicodeDecodeError:
+            continue
+    raise AnswerError(f'{path} is not UTF-8, UTF-16 or Windows-1254 text; {SAVE_AS}')
+
+
+def load_list(path, model, what: str) -> list:
+    """A JSON list of `model` records (questions.json, an answers file), UTF-8 with or without a BOM. Anything else is refused
+    naming the file."""
+    import json
+    from pathlib import Path
+    from pydantic import ValidationError
+    try:
+        data = json.loads(Path(path).read_text(encoding='utf-8-sig'))
+    except ValueError as exc:                                                   # not UTF-8, not JSON
+        raise AnswerError(f'{path} is not a JSON list of {what} ({exc})') from None
+    if not isinstance(data, list):
+        raise AnswerError(f'{path} is not a JSON list of {what}')
+    out = []
+    for number, item in enumerate(data):
+        try:
+            out.append(model.model_validate(item))
+        except ValidationError as exc:
+            error = exc.errors()[0]
+            raise AnswerError(f"{path} is not a JSON list of {what} (item {number}: {'.'.join(map(str, error['loc']))}: {error['msg']})") from None
+    return out
 
 
 def write_questionnaire(questions: list[Question], path) -> int:
@@ -215,38 +271,66 @@ def write_questionnaire(questions: list[Question], path) -> int:
 
 
 def read_questionnaire(path, questions: list[Question]) -> list[Answer]:
-    """The answers of a filled questionnaire. A question with no value answered and no completeness answer is skipped;
-    an answered question needs who answered and the basis; a cell other than E/H is refused with its line."""
+    """The answers of a filled questionnaire, as Excel or another program saved it. A question with no value answered and
+    no completeness answer is skipped; an answered question needs who answered and the basis. Refused, with their lines: a
+    header without the columns read, a cell other than E/H (Evet/Hayır in any case), a line other than DEGER/LISTE_TAM,
+    a value answered both E and H, two different completeness answers of one question. A line copied as it is is read once;
+    a line with every cell blank is skipped."""
     import csv
-    from pathlib import Path
+    import io
     by_id = {q.question_id: q for q in questions}
-    with Path(path).open(encoding='utf-8-sig', newline='') as handle:
-        rows = list(csv.DictReader(handle, delimiter=';'))
-    grouped: dict[str, list[tuple[int, dict]]] = {}
-    for number, row in enumerate(rows, 2):
-        if row.get('question_id') not in by_id:
-            raise AnswerError(f'line {number}: no question {row.get("question_id")!r}')
-        grouped.setdefault(row['question_id'], []).append((number, row))
-    answers = []
+    text = _questionnaire_text(path)
+    header = text.split('\n', 1)[0]
+    reader = csv.DictReader(io.StringIO(text, newline=''), delimiter=max((';', ',', '\t'), key=header.count))
+    found = [(name or '').strip().lower() for name in reader.fieldnames or []]
+    missing = [c for c in REQUIRED_COLUMNS if c not in found]
+    if missing:
+        raise AnswerError(f"{path}: missing columns: {', '.join(missing)} (found: {', '.join(found)}); "
+                          f"the questionnaire has {';'.join(QUESTIONNAIRE_COLUMNS)}")
+    reader.fieldnames = found
+    grouped: dict[str, list[tuple[int, str, str, dict]]] = {}
+    for number, row in enumerate(reader, 2):
+        if not any((v or '').strip() for v in [*(v for k, v in row.items() if k is not None), *(row.get(None) or [])]):
+            continue                                                            # only separators: a line Excel left behind
+        question_id = (row.get('question_id') or '').strip()
+        if question_id not in by_id:
+            raise AnswerError(f'line {number}: no question {question_id!r}')
+        kind = (row.get('satir') or '').strip().upper()
+        if kind not in ('DEGER', 'LISTE_TAM'):
+            raise AnswerError(f'line {number}: satir {row.get("satir")!r} is neither DEGER nor LISTE_TAM')
+        cell = _mark(row.get('cevap'))
+        if cell and cell not in YES | NO:
+            raise AnswerError(f'line {number}: answer {row.get("cevap")!r} is not E or H')
+        grouped.setdefault(question_id, []).append((number, kind, cell, row))
+    read, conflicts = {}, []
     for question_id, lines in grouped.items():
-        present, complete, who, basis, when = [], None, '', '', ''
-        for number, row in lines:
-            cell = (row.get('cevap') or '').strip().upper()
-            if cell and cell not in YES | NO:
-                raise AnswerError(f'line {number}: answer {row.get("cevap")!r} is not E or H')
-            if row.get('satir') == 'DEGER':
-                if cell in YES:
-                    present.append(row['deger_kodu'].strip())
-            elif row.get('satir') == 'LISTE_TAM':
-                complete = True if cell in YES else False if cell in NO else None
-                who, basis, when = (row.get('cevaplayan') or '').strip(), (row.get('dayanak') or '').strip(), (row.get('tarih') or '').strip()
-        answered_values = any((row.get('cevap') or '').strip() for _, row in lines if row.get('satir') == 'DEGER')
-        if not answered_values and complete is None:
+        values: dict[str, tuple[int, bool]] = {}        # value code -> (the first line answering it, E)
+        completeness: dict[tuple, int] = {}             # (E/H/None, who, basis, date) of a LISTE_TAM line -> its first line
+        for number, kind, cell, row in lines:
+            if kind == 'DEGER' and cell:
+                code = (row.get('deger_kodu') or '').strip()
+                first, yes = values.setdefault(code, (number, cell in YES))
+                if yes != (cell in YES):
+                    conflicts.append(f"{question_id} {code}: line {first} {'E' if yes else 'H'}, line {number} {'H' if yes else 'E'}")
+            elif kind == 'LISTE_TAM':
+                given = (True if cell in YES else False if cell in NO else None,
+                         *((row.get(column) or '').strip() for column in ('cevaplayan', 'dayanak', 'tarih')))
+                if given != (None, '', '', ''):
+                    completeness.setdefault(given, number)
+        if len(completeness) > 1:
+            conflicts.append(f'{question_id} LISTE_TAM: ' + ', '.join(
+                f"line {number} ({'E' if a[0] else 'H' if a[0] is False else '-'}; {'; '.join(a[1:])})" for a, number in completeness.items()))
+        read[question_id] = (values, next(iter(completeness), (None, '', '', '')))
+    if conflicts:                                       # never resolved by line order: the company says which line holds
+        raise AnswerError('contradictory lines (keep one line per value and one LISTE_TAM line per question): ' + ' | '.join(conflicts))
+    answers = []
+    for question_id, (values, (complete, who, basis, when)) in read.items():
+        if not values and complete is None:
             continue
         if not who or not basis:
             raise AnswerError(f'{question_id}: answered without who answered (cevaplayan) or the basis (dayanak)')
-        answers.append(Answer(question_id=question_id, present=present, list_complete=bool(complete), answered_by=who,
-                              answered_at=when or datetime.now().astimezone().isoformat(timespec='seconds'), basis=basis))
+        answers.append(Answer(question_id=question_id, present=[code for code, (_, yes) in values.items() if yes], list_complete=bool(complete),
+                              answered_by=who, answered_at=when or datetime.now().astimezone().isoformat(timespec='seconds'), basis=basis))
     return answers
 
 

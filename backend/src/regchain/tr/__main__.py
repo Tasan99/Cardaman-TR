@@ -214,47 +214,59 @@ def _domain(args, store: CorpusStore) -> int:
         from . import questions as pq
         from .compare import load_register
         from .engines import ExpertServices, assess_by_engine
-        profile = _profile(registry, args.profile)
-        services = ExpertServices.recorded(args.similarities, [Path(p) for p in args.adjudications], registry, store)
+        from .profile import ProfileError
         if args.command == 'questions':
-            result = assess_by_engine(profile, services, load_register(profile.profile_id))
-            reviews = {r.review_id: r for report in result['reports'].values() for r in report.applicability_reviews}
-            found = pq.profile_questions(profile, list(reviews.values()), registry.vocabulary)
-            Path(args.out).write_text(json.dumps([x.model_dump(mode='json') for x in found], ensure_ascii=False, indent=1), encoding='utf-8')
-            sheet = Path(args.out).with_name('questionnaire.csv')
-            lines = pq.write_questionnaire(found, sheet)
-            _print({'questions': [{'question_id': x.question_id, 'asked': len(x.asked), 'blocked_reviews': len(x.blocked_reviews),
-                                   'prompt': x.prompt_tr} for x in found],
-                    'questionnaire': str(sheet), 'lines_to_fill': lines,
-                    'next': 'the company fills questionnaire.csv; then: answer --questions questions.json --answers questionnaire.csv'})
+            existing = [str(p) for p in (Path(args.out), Path(args.out).with_name('questionnaire.csv')) if p.exists()]
+            if existing and not args.force:                   # a questionnaire may already hold the company's answers
+                sys.stderr.write(f'questions: {" and ".join(existing)} already exist{"s" if len(existing) == 1 else ""} and may hold '
+                                 f'the company\'s answers; choose another --out folder, or pass --force to overwrite\n')
+                return 2
+        try:
+            profile = _profile(registry, args.profile)
+            services = ExpertServices.recorded(args.similarities, [Path(p) for p in args.adjudications], registry, store)
+            if args.command == 'questions':
+                result = assess_by_engine(profile, services, load_register(profile.profile_id))
+                reviews = {r.review_id: r for report in result['reports'].values() for r in report.applicability_reviews}
+                found = pq.profile_questions(profile, list(reviews.values()), registry.vocabulary)
+                Path(args.out).write_text(json.dumps([x.model_dump(mode='json') for x in found], ensure_ascii=False, indent=1), encoding='utf-8')
+                sheet = Path(args.out).with_name('questionnaire.csv')
+                lines = pq.write_questionnaire(found, sheet)
+                _print({'questions': [{'question_id': x.question_id, 'asked': len(x.asked), 'blocked_reviews': len(x.blocked_reviews),
+                                       'prompt': x.prompt_tr} for x in found],
+                        'questionnaire': str(sheet), 'lines_to_fill': lines,
+                        'next': 'the company fills questionnaire.csv; then: answer --questions questions.json --answers questionnaire.csv'})
+                return 0
+            out = Path(args.out)
+            if out.exists() and any(out.iterdir()):
+                raise SystemExit(f'{out} is not empty')
+            asked = pq.load_list(Path(args.questions), pq.Question, 'questions (the questions.json `questions` wrote)')
+            if args.interactive:
+                answers = pq.ask_interactively(asked)
+            elif args.answers and Path(args.answers).suffix.lower() != '.json':
+                answers = pq.read_questionnaire(Path(args.answers), asked)     # the questionnaire as saved: .csv, or .txt (Unicode metin)
+            elif args.answers:
+                answers = pq.load_list(Path(args.answers), pq.Answer, 'answers')
+            else:
+                raise SystemExit('answer needs --interactive or --answers')
+            if not answers:
+                raise SystemExit('no question was answered')
+            new, applied = pq.apply_answers(profile, answers, asked, registry.vocabulary)
+            from .engines import engines_for
+            obligations = {o.obligation_id: o for engine, _ in engines_for(new, services) for o in engine.obligations()}
+            result = pq.reassess(profile, new, list(obligations.values()), load_register(profile.profile_id), registry, store,
+                                 services.table, services.adjudicator)
+            out.mkdir(parents=True, exist_ok=True)
+            (out / 'answers.json').write_text(json.dumps([a.model_dump(mode='json') for a in answers], ensure_ascii=False, indent=1), encoding='utf-8')
+            (out / 'answered-profile.json').write_text(json.dumps(new.model_dump(mode='json'), ensure_ascii=False, indent=1), encoding='utf-8')
+            (out / 'reassess.json').write_text(json.dumps({'applied': applied, **result}, ensure_ascii=False, indent=1), encoding='utf-8')
+            _print({'applied': applied, 'summary': result['summary'], 'affected_entities': result['affected_entities'],
+                    'affected_products': result['affected_products'], 'files': [str(out / n) for n in ('answers.json', 'answered-profile.json', 'reassess.json')],
+                    'next': f'python -m regchain.tr qdms export --profile {out / "answered-profile.json"} ... re-exports with the answers'})
             return 0
-        out = Path(args.out)
-        if out.exists() and any(out.iterdir()):
-            raise SystemExit(f'{out} is not empty')
-        asked = [pq.Question.model_validate(x) for x in json.loads(Path(args.questions).read_text(encoding='utf-8'))]
-        if args.interactive:
-            answers = pq.ask_interactively(asked)
-        elif args.answers and args.answers.lower().endswith('.csv'):
-            answers = pq.read_questionnaire(Path(args.answers), asked)
-        elif args.answers:
-            answers = [pq.Answer.model_validate(x) for x in json.loads(Path(args.answers).read_text(encoding='utf-8'))]
-        else:
-            raise SystemExit('answer needs --interactive or --answers')
-        if not answers:
-            raise SystemExit('no question was answered')
-        new, applied = pq.apply_answers(profile, answers, asked, registry.vocabulary)
-        from .engines import engines_for
-        obligations = {o.obligation_id: o for engine, _ in engines_for(new, services) for o in engine.obligations()}
-        result = pq.reassess(profile, new, list(obligations.values()), load_register(profile.profile_id), registry, store,
-                             services.table, services.adjudicator)
-        out.mkdir(parents=True, exist_ok=True)
-        (out / 'answers.json').write_text(json.dumps([a.model_dump(mode='json') for a in answers], ensure_ascii=False, indent=1), encoding='utf-8')
-        (out / 'answered-profile.json').write_text(json.dumps(new.model_dump(mode='json'), ensure_ascii=False, indent=1), encoding='utf-8')
-        (out / 'reassess.json').write_text(json.dumps({'applied': applied, **result}, ensure_ascii=False, indent=1), encoding='utf-8')
-        _print({'applied': applied, 'summary': result['summary'], 'affected_entities': result['affected_entities'],
-                'affected_products': result['affected_products'], 'files': [str(out / n) for n in ('answers.json', 'answered-profile.json', 'reassess.json')],
-                'next': f'python -m regchain.tr qdms export --profile {out / "answered-profile.json"} ... re-exports with the answers'})
-        return 0
+        except (pq.AnswerError, ProfileError, OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+            message = ' '.join(line.strip() for line in str(exc).splitlines() if line.strip())
+            sys.stderr.write(f'{args.command}: {message}\n')                  # a refused input: one line, no traceback
+            return 2
     if args.command == 'qdms':
         from . import qdms as q
         out = Path(args.out)
@@ -369,6 +381,11 @@ def _ai(args, store: CorpusStore) -> int:
 
 
 def main(argv=None):
+    import codecs
+    for stream in (sys.stdout, sys.stderr):           # UTF-8 output whatever the code page of a redirect or a pipe (cp1252, cp1254)
+        encoding = getattr(stream, 'encoding', None)
+        if encoding and hasattr(stream, 'reconfigure') and codecs.lookup(encoding).name != 'utf-8':
+            stream.reconfigure(encoding='utf-8', errors=stream.errors)
     parser = argparse.ArgumentParser(prog='python -m regchain.tr', description='Cardaman TR: official-source corpus and beverage packs')
     commands = parser.add_subparsers(dest='command', required=True)
     corpus = commands.add_parser('corpus', help='the official-source corpus')
@@ -407,11 +424,13 @@ def main(argv=None):
     questions.add_argument('--profile', required=True, help='a pilot profile id, or a profile file')
     questions.add_argument('--similarities')
     questions.add_argument('--adjudications', action='append', default=[])
-    questions.add_argument('--out', required=True, help='questions.json to write')
+    questions.add_argument('--out', required=True, help='questions.json to write (questionnaire.csv is written beside it)')
+    questions.add_argument('--force', action='store_true', help='overwrite an existing questions.json or questionnaire.csv')
     answer = commands.add_parser('answer', help='answer the profile questions once; the affected evaluations run again (questions.py)')
     answer.add_argument('--profile', required=True, help='a pilot profile id, or a profile file')
     answer.add_argument('--questions', required=True, help='questions.json written by `questions`')
-    answer.add_argument('--answers', help='a file of answers (list of {question_id, present, list_complete, answered_by, answered_at, basis})')
+    answer.add_argument('--answers', help='the filled questionnaire (.csv as Excel saves it, or .txt saved as Unicode text), or a .json '
+                                          'list of {question_id, present, list_complete, answered_by, answered_at, basis}')
     answer.add_argument('--interactive', action='store_true', help='ask in the terminal')
     answer.add_argument('--similarities')
     answer.add_argument('--adjudications', action='append', default=[])
