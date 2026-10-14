@@ -195,7 +195,7 @@ def _count(values) -> dict:
 # or Windows-1254 ('CSV (virgülle ayrılmış)'), with ';', ',' or TAB between the cells.
 QUESTIONNAIRE_COLUMNS = ['question_id', 'satir', 'sirket_veya_urun', 'soru', 'deger_kodu', 'deger', 'cevap', 'cevaplayan', 'dayanak', 'tarih']
 REQUIRED_COLUMNS = ['question_id', 'satir', 'deger_kodu', 'cevap', 'cevaplayan', 'dayanak']
-YES, NO = {'E', 'EVET', 'Y', 'YES', 'X', '1'}, {'H', 'HAYIR', 'N', 'NO', '0'}
+YES, NO = {'E', 'EVET', 'YES', 'X', '1'}, {'H', 'HAYIR', 'NO', '0'}   # not Y/N: to 'var mı?' a Turkish 'Y' may be 'Yok'
 SAVE_AS = 'save it in Excel as "CSV UTF-8 (virgülle ayrılmış)"'
 
 
@@ -248,6 +248,14 @@ def load_list(path, model, what: str) -> list:
     return out
 
 
+def is_json_list(path) -> bool:
+    """Whether a file holds a JSON list (an answers file, whatever its name) rather than a questionnaire: its first character,
+    a UTF-8 BOM and blanks aside, is '['. A questionnaire starts with its header."""
+    import codecs
+    from pathlib import Path
+    return Path(path).read_bytes().removeprefix(codecs.BOM_UTF8).lstrip().startswith(b'[')
+
+
 def write_questionnaire(questions: list[Question], path) -> int:
     """Write the questionnaire; returns the number of lines to fill."""
     import csv
@@ -273,9 +281,9 @@ def write_questionnaire(questions: list[Question], path) -> int:
 def read_questionnaire(path, questions: list[Question]) -> list[Answer]:
     """The answers of a filled questionnaire, as Excel or another program saved it. A question with no value answered and
     no completeness answer is skipped; an answered question needs who answered and the basis. Refused, with their lines: a
-    header without the columns read, a cell other than E/H (Evet/Hayır in any case), a line other than DEGER/LISTE_TAM,
-    a value answered both E and H, two different completeness answers of one question. A line copied as it is is read once;
-    a line with every cell blank is skipped."""
+    header without the columns read, or with one of them twice; a cell other than E/H (Evet/Hayır in any case; not Y/N); a
+    line other than DEGER/LISTE_TAM; a value answered both E and H; two different completeness answers of one question. A
+    line copied as it is is read once; a line with every cell blank is skipped."""
     import csv
     import io
     by_id = {q.question_id: q for q in questions}
@@ -283,6 +291,9 @@ def read_questionnaire(path, questions: list[Question]) -> list[Answer]:
     header = text.split('\n', 1)[0]
     reader = csv.DictReader(io.StringIO(text, newline=''), delimiter=max((';', ',', '\t'), key=header.count))
     found = [(name or '').strip().lower() for name in reader.fieldnames or []]
+    repeated = sorted({c for c in found if c in QUESTIONNAIRE_COLUMNS and found.count(c) > 1})
+    if repeated:                                        # csv would keep the last of them: which one holds is the company's call
+        raise AnswerError(f"{path}: columns given more than once: {', '.join(repeated)} (found: {', '.join(found)}); keep one of each")
     missing = [c for c in REQUIRED_COLUMNS if c not in found]
     if missing:
         raise AnswerError(f"{path}: missing columns: {', '.join(missing)} (found: {', '.join(found)}); "
@@ -353,7 +364,7 @@ def ask_interactively(questions: list[Question], input_fn=input, output=None) ->
         except (ValueError, IndexError):
             output.write('   geçersiz numara; soru atlandı\n')
             continue
-        complete = input_fn('Liste bu cevapla tam mı? (e/h): ').strip().lower() in ('e', 'evet', 'y', 'yes')
+        complete = input_fn('Liste bu cevapla tam mı? (e/h): ').strip().lower() in ('e', 'evet', 'yes')     # 'y' may be 'yok'
         basis = input_fn('Dayanak (belge / kişi / kayıt): ').strip() or 'belirtilmedi'
         answers.append(Answer(question_id=question.question_id, present=present, list_complete=complete, answered_by=answered_by,
                               answered_at=datetime.now().astimezone().isoformat(timespec='seconds'), basis=basis))

@@ -24,6 +24,18 @@ from .semantic import SimilarityTable
 ENGINES_VERSION = 'tr-engines-v1'
 
 
+class RecordError(ValueError):
+    """A recorded file (similarities, adjudications) that cannot be read; the message names the file."""
+
+
+def _read_record(path, load):
+    try:
+        return load(path)
+    except ValueError as exc:                                   # not UTF-8, not JSON, not that format
+        message = str(exc)
+        raise RecordError(message if str(path) in message else f'{path}: {message}') from exc
+
+
 class ExpertServices:
     """What every sector engine uses and none owns: the texts, the vocabulary, the recorded similarities, the
     adjudicator and the verification. One instance per run."""
@@ -37,11 +49,11 @@ class ExpertServices:
 
     @classmethod
     def recorded(cls, similarities: Path | None = None, adjudications: list[Path] = (), registry=None, store=None) -> 'ExpertServices':
-        """Services that replay a recorded run: no model is asked."""
+        """Services that replay a recorded run: no model is asked. A file that cannot be read is refused naming it."""
         records = {}
         for path in adjudications:
-            records.update(load_adjudications(path)[1])
-        table = SimilarityTable.load(similarities) if similarities else None
+            records.update(_read_record(path, load_adjudications)[1])
+        table = _read_record(similarities, SimilarityTable.load) if similarities else None
         return cls(registry, store, table, Adjudicator(recorded=records))
 
 

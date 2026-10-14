@@ -219,6 +219,7 @@ class QuestionnaireTests(unittest.TestCase):
         with self.assertRaises(q.AnswerError) as caught:
             q.read_questionnaire(self.sheet, self.questions)
         self.assertIn('CSV UTF-8', str(caught.exception))
+        self.assertIn('Excel workbook', str(caught.exception))                 # said as a workbook, not as unknown text
 
     def test_a_missing_column_is_refused_naming_it_and_the_columns_found(self):
         rows = self.filled()
@@ -229,6 +230,20 @@ class QuestionnaireTests(unittest.TestCase):
                 with self.assertRaises(q.AnswerError) as caught:
                     q.read_questionnaire(self.sheet, self.questions)
                 self.assertIn(f"missing columns: {', '.join(missing)} (found: {', '.join(kept)})", str(caught.exception))
+
+    def test_a_column_given_twice_is_refused_naming_it(self):
+        # headers are read whatever their case, and csv keeps the last of two columns of one name: a column the company
+        # added ('CEVAP' with last year's answers, a blank 'Cevap', a 'Cevaplayan' of who typed the line) would silently
+        # replace its answers or who answered
+        rows = self.filled()
+        for added, cell in [('CEVAP', lambda row: {'E': 'H', 'H': 'E'}.get(row['cevap'], 'E')), ('Cevap', lambda row: ''),
+                            ('Cevaplayan', lambda row: 'stajyer'), (' Dayanak ', lambda row: 'geçen yılın formu')]:
+            with self.subTest(added=added):
+                self.save([{**row, added: cell(row) if row['question_id'] == self.brand.question_id else ''} for row in rows],
+                          columns=[*q.QUESTIONNAIRE_COLUMNS, added])
+                with self.assertRaises(q.AnswerError) as caught:
+                    q.read_questionnaire(self.sheet, self.questions)
+                self.assertIn(f'columns given more than once: {added.strip().lower()} ', str(caught.exception))
 
     def test_lines_excel_leaves_blank_and_a_retyped_header_do_not_change_the_answers(self):
         rows, expected = self.filled(), self.expected()
@@ -249,6 +264,20 @@ class QuestionnaireTests(unittest.TestCase):
                     row['cevap'] = {'E': yes, 'H': no}.get(row['cevap'], row['cevap'])
                 self.save(rows)
                 self.assertEqual(self.read(), expected)
+
+    def test_a_one_letter_y_or_n_is_refused_with_its_line(self):
+        # the sheet asks E/H; to 'var mı?' a Turkish 'Y' may be 'Yok' (absent): read as yes, it named the value present
+        # and the list complete. Y and N are refused like 'V', 'Var' and 'Yok'; the company writes E or H.
+        for mark in ('Y', 'y', 'N'):
+            for kind in ('DEGER', 'LISTE_TAM'):
+                with self.subTest(mark=mark, kind=kind):
+                    rows = self.filled()
+                    number = next(n for n, row in enumerate(rows, 2) if row['question_id'] == self.brand.question_id and row['satir'] == kind)
+                    rows[number - 2]['cevap'] = mark
+                    self.save(rows)
+                    with self.assertRaises(q.AnswerError) as caught:
+                        q.read_questionnaire(self.sheet, self.questions)
+                    self.assertRegex(str(caught.exception), rf'\bline {number}\b')
 
     def test_a_value_left_blank_is_still_not_named_by_the_answer(self):
         # unchanged by the import fixes: blank is not an answer, and with the list stated complete the value is absent
@@ -275,6 +304,11 @@ class QuestionnaireTests(unittest.TestCase):
             q.read_questionnaire(self.sheet, self.questions)
         self.assertRegex(str(caught.exception), rf'\bline {lines[-1]}\b')
         self.assertRegex(str(caught.exception), rf'\bline {copied}\b')
+        unsigned = [{**row, 'cevaplayan': '', 'dayanak': ''} if row is complete else row for row in rows]
+        self.save([*unsigned, {**value, 'cevap': 'H'}])                          # contradictory and without who or basis
+        with self.assertRaises(q.AnswerError) as caught:
+            q.read_questionnaire(self.sheet, self.questions)
+        self.assertIn('contradictory lines', str(caught.exception))              # the contradiction is named first
 
     def test_an_exact_duplicate_row_is_read_once(self):
         rows = self.filled()
@@ -307,6 +341,14 @@ class InteractiveTests(unittest.TestCase):
         self.assertEqual((answers[0].question_id, answers[0].present, answers[0].list_complete, answers[0].answered_by),
                          (brand.question_id, [brand.asked[0]['value']], True, 'uyum.sorumlusu'))
         self.assertIn('NONALC-BRAND', out.getvalue())
+
+    def test_y_at_the_terminal_does_not_state_the_list_complete(self):
+        # the prompt asks e/h; a Turkish 'y' may be 'yok': the list is left open, as for any answer other than e/evet/yes
+        questions = q.profile_questions(BOTTLER, REPORT.applicability_reviews, REGISTRY.vocabulary)
+        brand = next(x for x in questions if x.target_id == 'NONALC-BRAND' and x.gate == 'ACTIVITY_CLASS')
+        lines = iter(['uyum.sorumlusu', '1', 'y', 'faaliyet listesi'])
+        answers = q.ask_interactively([brand], input_fn=lambda prompt='': next(lines), output=io.StringIO())
+        self.assertEqual([(a.present, a.list_complete) for a in answers], [([brand.asked[0]['value']], False)])
 
 
 class CommandLineTests(unittest.TestCase):
@@ -406,6 +448,61 @@ class CommandLineTests(unittest.TestCase):
                 self.assertIn(expected, err)
                 self.assertFalse(out.exists())
 
+    def test_a_bad_profile_similarities_or_adjudications_file_is_refused_naming_it(self):
+        # up to five files on one command line: the refusal says which one is bad
+        import json
+        answered = self.folder / 'answered.csv'
+        answered.write_bytes(self.sheet_text('E').encode('utf-8-sig'))
+        not_json = self.folder / 'similarities.json'
+        not_json.write_text('{"format": ', encoding='utf-8')
+        other_format = self.folder / 'similarities-other.json'
+        other_format.write_text('{"format": "x"}', encoding='utf-8')
+        adjudications_bom = self.folder / 'adjudicate-bom.jsonl'
+        adjudications_bom.write_bytes('{"format": "x"}\n'.encode('utf-8-sig'))
+        adjudications_other = self.folder / 'adjudicate-other.jsonl'
+        adjudications_other.write_text('{"format": "x"}\n', encoding='utf-8')
+        profile_text = json.dumps(BOTTLER.model_dump(mode='json'), ensure_ascii=False)
+        profile_bom = self.folder / 'answered-profile.json'
+        profile_bom.write_bytes(profile_text.encode('utf-8-sig'))
+        profile_cp1254 = self.folder / 'profile-cp1254.json'
+        profile_cp1254.write_bytes(profile_text.encode('cp1254'))
+        self.assertNotEqual(profile_cp1254.read_bytes(), profile_text.encode('utf-8'))   # its Turkish letters are not UTF-8
+        command = ['answer', '--questions', self.questions, '--answers', answered]
+        cases = [('similarities not JSON', not_json, [*command, '--profile', BOTTLER.profile_id, '--similarities', not_json]),
+                 ('similarities of another format', other_format, [*command, '--profile', BOTTLER.profile_id, '--similarities', other_format]),
+                 ('adjudications with a BOM', adjudications_bom, [*command, '--profile', BOTTLER.profile_id, '--adjudications', adjudications_bom]),
+                 ('adjudications of another format', adjudications_other,
+                  [*command, '--profile', BOTTLER.profile_id, '--adjudications', adjudications_other]),
+                 ('a profile file with a BOM', profile_bom, [*command, '--profile', profile_bom]),
+                 ('a profile file in Windows-1254', profile_cp1254, [*command, '--profile', profile_cp1254]),
+                 ('questions: similarities not JSON', not_json, ['questions', '--profile', BOTTLER.profile_id, '--similarities', not_json])]
+        for number, (name, bad, argv) in enumerate(cases):
+            with self.subTest(name):
+                out = self.folder / f'out-{number}'
+                code, err = self.cli(*argv, '--out', out / 'questions.json' if argv[0] == 'questions' else out)
+                self.assertEqual(code, 2, err)
+                self.assertEqual(len(err.strip().splitlines()), 1, err)
+                self.assertTrue(err.startswith(f'{argv[0]}: '), err)
+                self.assertIn(str(bad), err)
+                self.assertFalse(out.exists())
+
+    def test_an_answers_list_saved_under_another_name_is_read_as_answers(self):
+        # Notepad names a file .txt when no extension is typed: a JSON answers list is read as one, whatever the name
+        import json
+        from unittest import mock
+        brand = next(x for x in q.profile_questions(BOTTLER, REPORT.applicability_reviews, REGISTRY.vocabulary)
+                     if x.target_id == 'NONALC-BRAND' and x.gate == 'ACTIVITY_CLASS')
+        answers = [answer(brand, []).model_dump(mode='json')]
+        for name in ('answers.txt', 'answers'):
+            with self.subTest(name):
+                path = self.folder / name
+                path.write_bytes(('\r\n ' + json.dumps(answers, ensure_ascii=False)).encode('utf-8-sig'))
+                with mock.patch.object(q, 'apply_answers', side_effect=KeyError('stop once the answers are read')) as applied:
+                    with self.assertRaises(KeyError):
+                        self.cli('answer', '--profile', BOTTLER.profile_id, '--questions', self.questions, '--answers', path,
+                                 '--out', self.folder / f'out-{name}')
+                self.assertEqual([a.model_dump(mode='json') for a in applied.call_args.args[1]], answers)
+
     def test_a_programming_error_in_answer_keeps_its_traceback(self):
         from unittest import mock
         answered = self.folder / 'answered.csv'
@@ -432,6 +529,8 @@ class CommandLineTests(unittest.TestCase):
         from pathlib import Path
         source = str(Path(q.__file__).resolve().parents[2])
         environment = {k: v for k, v in os.environ.items() if k not in ('PYTHONUTF8', 'PYTHONIOENCODING')}
+        refused = self.folder / 'refused.csv'
+        refused.write_bytes(self.sheet_text('Varış').encode('utf-8-sig'))
         for name, extra in [('the code page of this machine', {}), ('a Turkish Windows code page', {'PYTHONIOENCODING': 'cp1254'})]:
             with self.subTest(name):
                 path = self.folder / f'status-{len(extra)}.json'
@@ -442,6 +541,14 @@ class CommandLineTests(unittest.TestCase):
                 text = path.read_bytes().decode('utf-8')
                 self.assertIn('İ', text)
                 self.assertTrue(json.loads(text))
+            with self.subTest(name, stream='stderr'):                          # a refused input is written to stderr: UTF-8 too
+                path = self.folder / f'refused-{len(extra)}.txt'
+                with path.open('wb') as handle:
+                    done = subprocess.run([sys.executable, '-m', 'regchain.tr', 'answer', '--profile', BOTTLER.profile_id, '--questions',
+                                           str(self.questions), '--answers', str(refused), '--out', str(self.folder / 'out')],
+                                          stdout=subprocess.DEVNULL, stderr=handle, env={**environment, **extra, 'PYTHONPATH': source}, timeout=300)
+                self.assertEqual(done.returncode, 2, path.read_bytes()[-400:])
+                self.assertIn("answer 'Varış' is not E or H", path.read_bytes().decode('utf-8'))
 
 
 if __name__ == '__main__':

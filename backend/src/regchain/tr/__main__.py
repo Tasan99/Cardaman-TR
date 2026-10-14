@@ -77,9 +77,12 @@ def apply_verified(store: CorpusStore, path: Path = DATA / 'regulations.json') -
 
 def _profile(registry: Registry, profile_id: str):
     """A pilot profile by id, or a profile file (an answered profile written by `answer`) by its path."""
-    from .profile import load_pilot_profiles, load_profile
+    from .profile import ProfileError, load_pilot_profiles, load_profile
     if profile_id.endswith('.json') and Path(profile_id).exists():
-        return load_profile(json.loads(Path(profile_id).read_text(encoding='utf-8')), registry.vocabulary)
+        try:
+            return load_profile(json.loads(Path(profile_id).read_text(encoding='utf-8')), registry.vocabulary)
+        except ValueError as exc:                                     # not UTF-8, not JSON, not a profile: the error names the file
+            raise ProfileError(f'{profile_id}: {exc}') from exc
     profiles = {p.profile_id: p for p in load_pilot_profiles(registry.vocabulary).values()}
     if profile_id not in profiles:
         raise SystemExit(f'unknown profile {profile_id}; known: {sorted(profiles)}')
@@ -213,7 +216,7 @@ def _domain(args, store: CorpusStore) -> int:
     if args.command in ('questions', 'answer'):
         from . import questions as pq
         from .compare import load_register
-        from .engines import ExpertServices, assess_by_engine
+        from .engines import ExpertServices, RecordError, assess_by_engine
         from .profile import ProfileError
         if args.command == 'questions':
             existing = [str(p) for p in (Path(args.out), Path(args.out).with_name('questionnaire.csv')) if p.exists()]
@@ -242,10 +245,10 @@ def _domain(args, store: CorpusStore) -> int:
             asked = pq.load_list(Path(args.questions), pq.Question, 'questions (the questions.json `questions` wrote)')
             if args.interactive:
                 answers = pq.ask_interactively(asked)
-            elif args.answers and Path(args.answers).suffix.lower() != '.json':
-                answers = pq.read_questionnaire(Path(args.answers), asked)     # the questionnaire as saved: .csv, or .txt (Unicode metin)
+            elif args.answers and (Path(args.answers).suffix.lower() == '.json' or pq.is_json_list(args.answers)):
+                answers = pq.load_list(Path(args.answers), pq.Answer, 'answers')     # .json, or a JSON list saved as .txt or with no extension
             elif args.answers:
-                answers = pq.load_list(Path(args.answers), pq.Answer, 'answers')
+                answers = pq.read_questionnaire(Path(args.answers), asked)     # the questionnaire as saved: .csv, or .txt (Unicode metin)
             else:
                 raise SystemExit('answer needs --interactive or --answers')
             if not answers:
@@ -263,7 +266,7 @@ def _domain(args, store: CorpusStore) -> int:
                     'affected_products': result['affected_products'], 'files': [str(out / n) for n in ('answers.json', 'answered-profile.json', 'reassess.json')],
                     'next': f'python -m regchain.tr qdms export --profile {out / "answered-profile.json"} ... re-exports with the answers'})
             return 0
-        except (pq.AnswerError, ProfileError, OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+        except (pq.AnswerError, ProfileError, RecordError, OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
             message = ' '.join(line.strip() for line in str(exc).splitlines() if line.strip())
             sys.stderr.write(f'{args.command}: {message}\n')                  # a refused input: one line, no traceback
             return 2
@@ -429,8 +432,8 @@ def main(argv=None):
     answer = commands.add_parser('answer', help='answer the profile questions once; the affected evaluations run again (questions.py)')
     answer.add_argument('--profile', required=True, help='a pilot profile id, or a profile file')
     answer.add_argument('--questions', required=True, help='questions.json written by `questions`')
-    answer.add_argument('--answers', help='the filled questionnaire (.csv as Excel saves it, or .txt saved as Unicode text), or a .json '
-                                          'list of {question_id, present, list_complete, answered_by, answered_at, basis}')
+    answer.add_argument('--answers', help='the filled questionnaire (.csv as Excel saves it, or .txt saved as Unicode text), or a JSON '
+                                          'list (.json or any other name) of {question_id, present, list_complete, answered_by, answered_at, basis}')
     answer.add_argument('--interactive', action='store_true', help='ask in the terminal')
     answer.add_argument('--similarities')
     answer.add_argument('--adjudications', action='append', default=[])
