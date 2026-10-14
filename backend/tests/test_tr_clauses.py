@@ -8,7 +8,7 @@ import unittest
 from regchain.tr.clauses import Clause, blank_notes, clause_at, sentence_spans, split_clauses
 from regchain.tr.corpus import CorpusStore
 from regchain.tr.facts import alcoholic_from, source_facts
-from regchain.tr.frames import fold, frames_of, lexicon
+from regchain.tr.frames import fold, frame_of, frames_of, lexicon
 
 STORE = CorpusStore()
 
@@ -217,6 +217,102 @@ class FrameTests(unittest.TestCase):
             if activity['class'] not in ('SALE', 'LABELLING', 'EMPLOYMENT'):
                 self.assertEqual(vocabulary.unknown('activity_classes', [activity['class']]), [], activity['class'])
         self.assertEqual(vocabulary.unknown('activity_classes', data['sale_activities']), [])
+
+
+def clause_frame(text, regulation_id='TR:TEBLIG:TGK_ENERJI_ICECEKLERI'):
+    """The frame of a synthetic clause (a rule fixture, not law)."""
+    return frame_of(Clause(ref='Tebliğ 99001 md. 1/f.1', label='Tebliğ 99001 md. 1', fikra=1, start=0, end=len(text), text=text,
+                           reading=text), regulation_id)
+
+
+class NumberReadingTests(unittest.TestCase):
+    """Numbers as Turkish texts write them (review of 12 October 2026). One reader of numbers in words: "on dört" is
+    fourteen, not four, and a closed compound ("onbeş", "kırkbeş", "yüzseksen") is the same number. One reader of
+    numbers in digits: "," is the decimal mark, "." before exactly three digits separates thousands ("1.000.000"), any
+    other "." between digits is a decimal point ("%94.8", "0.5 mg/L"), as the corpus itself writes them."""
+
+    def test_a_number_in_words_is_read_whole_spaced_or_closed(self):
+        from regchain.tr.frames import word_numbers
+        for text, value in (('on dört', 14), ('yirmi beş', 25), ('yüz yirmi', 120), ('iki yüz kırk beş', 245), ('bin', 1000),
+                            ('on beş bin', 15000), ('onbeş', 15), ('oniki', 12), ('onsekiz', 18), ('kırkbeş', 45), ('yüzseksen', 180),
+                            ('yirmidört', 24), ('dörtyüz', 400), ('altmış', 60), ('altı', 6), ('seksen', 80), ('sekiz', 8)):
+            with self.subTest(text=text):
+                self.assertEqual([value for _, _, value in word_numbers(text)], [value])
+
+    def test_a_number_before_a_suffixed_word_is_read_and_an_ordinal_or_a_lookalike_is_no_number(self):
+        from regchain.tr.frames import word_numbers
+        self.assertEqual(word_numbers('on dört günlük süre içinde'), [(0, 7, 14)])
+        self.assertEqual(word_numbers('bu süre her halükarda otuz günü geçemez'), [(22, 26, 30)])
+        self.assertEqual(word_numbers('On beş gün içinde'), [(0, 6, 15)])
+        for text in ('on beşinci gün', 'onbeşinci gün', 'onay tarihi', 'birlikte', 'ikinci', 'yüzde', 'yüz yüze görüşme', 'bir yüzey',
+                     'bir iki gün', 'on on gün'):
+            with self.subTest(text=text):
+                self.assertEqual(word_numbers(text), [])
+
+    def test_a_point_before_three_digits_separates_thousands_and_any_other_point_is_a_decimal_point(self):
+        for text, value, unit in (('Kalıntı en fazla 0.5 mg/L olabilir.', 0.5, 'mg/L'), ('Kalıntı en fazla 0,5 mg/L olabilir.', 0.5, 'mg/L'),
+                                  ('Etil alkol miktarı en çok 1.5 g/L olmalıdır.', 1.5, 'g/L'),
+                                  ('Distilat en fazla %94.8 alkole kadar distile edilir.', 94.8, '%'),
+                                  ('Distilat en fazla %94,8 alkole kadar distile edilir.', 94.8, '%'),
+                                  ('Sülfat en fazla 2.800 mg/L olabilir.', 2800.0, 'mg/L'), ('Kapasite en az 1.000 litre olmalıdır.', 1000.0, 'L'),
+                                  ('Kapasite en az 1.000.000 litre olmalıdır.', 1000000.0, 'L'),
+                                  ('Kapasite en az 10.000,5 litre olmalıdır.', 10000.5, 'L')):
+            with self.subTest(text=text):
+                self.assertEqual([(q.value, q.unit) for q in clause_frame(text).quantities], [(value, unit)])
+
+    def test_a_date_is_still_no_quantity(self):
+        self.assertEqual([(q.value, q.unit) for q in clause_frame('01.06.2026 tarihinden itibaren kapasite en az 5 litre olmalıdır.').quantities],
+                         [(5.0, 'L')])
+        self.assertEqual(clause_frame('Bu Tebliğ 01.06.2026 tarihinde yürürlüğe girer.').quantities, [])
+
+    def test_the_limit_and_the_product_condition_of_one_number_agree(self):
+        warning = clause_frame('Hacmen % 0.5’ten fazla alkol içeren ürünlerde uyarı yer almalıdır.')
+        self.assertEqual([q.value for q in warning.quantities], [0.5])
+        self.assertEqual([c.predicate for c in warning.conditions if c.predicate], [{'fact': 'product.abv_percent', 'op': 'gt', 'value': 0.5}])
+        self.assertEqual([(q.attribute, q.value, q.comparator) for q in clause_frame('pH değeri 3.5’i geçemez.').quantities], [('ph', 3.5, 'le')])
+
+    def test_yuzde_before_digits_is_the_percent_sign(self):
+        written = clause_frame('Hacmen yüzde 0,5’ten fazla alkol içeren ürünlerde uyarı yer almalıdır.')
+        self.assertEqual([(q.value, q.unit, q.comparator) for q in written.quantities], [(0.5, '%', 'gt')])
+        self.assertEqual([c.predicate for c in written.conditions if c.predicate], [{'fact': 'product.abv_percent', 'op': 'gt', 'value': 0.5}])
+        self.assertEqual([(q.attribute, q.value, q.unit, q.comparator) for q in clause_frame('Meyve oranı en az yüzde 10 olmalıdır.').quantities],
+                         [('fruit_percent', 10.0, '%', 'ge')])
+        # before a number in words the stored texts write it only in tobacco quotas, company shares and penalties: a quota read
+        # as a limit would make the tobacco quota of Kanun 4733 a product rule of beer, wine and spirits
+        quota = frames('TR:KANUN:4733', 'Kanun 4733 md. Geçici 9')['f.1/c.1']
+        self.assertIn('yüzde onyedi', quota.text)
+        self.assertEqual(quota.quantities, [])
+
+    def test_a_distance_in_words_is_read_whole(self):
+        distance = clause_frame('Okullar ile satış yeri arasında en az iki yüz elli metre mesafe bulunmalıdır.')
+        self.assertEqual([(q.value, q.unit, q.comparator) for q in distance.quantities], [(250.0, 'm', 'ge')])
+        statute = frames('TR:KANUN:4250', 'Kanun 4250 md. 9')['f.2/c.1']
+        self.assertEqual([(q.attribute, q.value, q.unit, q.comparator) for q in statute.quantities], [('distance_m', 100.0, 'm', 'ge')])
+        # a size in words is no distance and stays unread, as before ("İmlahane duvarlarının ... en az iki metre yükseklikte")
+        walls = frames('TR:YONETMELIK:INSANI_TUKETIM_SULAR', 'Yönetmelik 7510 md. 28')['f.4']
+        self.assertIn('iki metre yükseklikte', walls.text)
+        self.assertEqual(walls.quantities, [])
+
+    def test_the_corpus_limits_written_with_a_decimal_point_or_in_thousands(self):
+        whisky = frames('TR:YONETMELIK:ALKOL_TESIS_TEKNIK_SARTLAR', 'Yönetmelik 6207 md. 15')
+        for ref in ('f.2/b.e', 'f.5/b.a'):
+            self.assertEqual([(q.attribute, q.value, q.comparator) for q in whisky[ref].quantities], [('abv_percent', 94.8, 'le')])
+        capacity = frames('TR:YONETMELIK:ALKOL_TESIS_TEKNIK_SARTLAR', 'Yönetmelik 6207 md. 9')['f.1/c.1']
+        self.assertEqual([(q.value, q.unit) for q in capacity.quantities], [(1000000.0, 'L')])
+        chlorine = frames('TR:YONETMELIK:INSANI_TUKETIM_SULAR', 'Yönetmelik 7510 md. 10')['f.5/c.1']
+        self.assertEqual([(q.value, q.unit) for q in chlorine.quantities], [(0.5, 'mg/L')])
+
+    def test_the_age_of_a_minor_in_digits_is_the_age_in_words(self):
+        for text in ('Alkollü içkiler 18 yaşını doldurmamış kişilere satılamaz.', 'Alkollü içkiler on sekiz yaşını doldurmamış kişilere satılamaz.',
+                     'Alkollü içkiler 18 yaşından küçüklere satılamaz.', 'Alkollü içkiler onsekiz yaşından küçüklere satılamaz.',
+                     'Alkollü içkiler 18 yaş altı kişilere satılamaz.', 'Alkollü içkiler on sekiz yaş altı kişilere satılamaz.'):
+            with self.subTest(text=text):
+                self.assertEqual([m.id for m in clause_frame(text, 'TR:KANUN:4250').counterparties], ['MINOR'])
+        # an adult, and a number that only ends in 18, are no minor
+        for other in ('Alkollü içkiler 18 yaşını doldurmuş kişilere satılabilir.', 'Alkollü içkiler 18 yaşından büyüklere satılabilir.',
+                      'Alkollü içkiler 118 yaş altı kişilere satılamaz.'):
+            with self.subTest(text=other):
+                self.assertEqual(clause_frame(other, 'TR:KANUN:4250').counterparties, [])
 
 
 class SourceFactTests(unittest.TestCase):

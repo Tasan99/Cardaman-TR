@@ -381,6 +381,105 @@ class BottlerGapTests(unittest.TestCase):
                 self.assertEqual(next(p.text for p in BOTTLER_REGISTER.passages if p.passage_id == seen.passage_id), seen.quote)
 
 
+class NumberComparisonTests(unittest.TestCase):
+    """Numbers in the comparer (review of 12 October 2026): a deadline in words is read whole ("on dört gün" is fourteen
+    days, not four), an hour is the 24th part of a day, a clause with two deadlines keeps both, and a decimal point is a
+    decimal point. The statements are synthetic."""
+    DISTANCE_SALES = 'TR:YONETMELIK:MESAFELI_SOZLESMELER'
+    WATER = 'TR:YONETMELIK:INSANI_TUKETIM_SULAR'
+    FACILITIES = 'TR:YONETMELIK:ALKOL_TESIS_TEKNIK_SARTLAR'
+    ENERGY = 'TR:TEBLIG:TGK_ENERJI_ICECEKLERI'
+
+    def test_a_deadline_in_words_is_read_whole_and_an_hour_is_part_of_a_day(self):
+        from regchain.tr.compare import deadline_values, deadlines
+        for text, days in (('on dört gün içinde', 14), ('yirmi beş gün içinde', 25), ('yüz yirmi gün içinde', 120), ('on iki ay içinde', 360),
+                           ('onbeş gün içinde', 15), ('kırkbeş gün içerisinde', 45), ('yüzseksen gün içinde', 180), ('onsekiz ay içinde', 540),
+                           ('24 saat içinde', 1), ('yirmi dört saat içinde', 1), ('72 saat içinde', 3), ('12 saat içerisinde', 0.5)):
+            with self.subTest(text=text):
+                self.assertEqual(deadlines(text), {'WITHIN_DAYS': days})
+        self.assertEqual(deadlines('on beşinci gün içinde'), {})                 # an ordinal is no count, as before
+        both = 'İşletme sahibi en geç 24 saat içinde Müdürlüğe bilgi verir ve en geç bir hafta içinde Müdürlüğe müracaat eder.'
+        self.assertEqual(deadline_values(both), {'WITHIN_DAYS': [(1.0, 'saat'), (7.0, 'hafta')]})
+
+    def test_a_later_deadline_is_decided_only_where_every_reading_of_which_answers_which_agrees(self):
+        from regchain.tr.compare import later_deadline
+        hour, week = (1.0, 'saat'), (7.0, 'hafta')
+        self.assertEqual(later_deadline([hour, week], [(3.0, 'gün'), week]), ('LATER', (hour, (3.0, 'gün'))))
+        self.assertEqual(later_deadline([hour, week], [hour, week]), ('NOT_LATER', None))
+        self.assertEqual(later_deadline([hour, week], [week])[0], 'UNRESOLVED')         # the week alone may answer either
+        self.assertEqual(later_deadline([hour, week], [(10.0, 'gün')]), ('LATER', (week, (10.0, 'gün'))))
+        self.assertEqual(later_deadline([hour, week], [hour]), ('NOT_LATER', None))
+        self.assertEqual(later_deadline([(14.0, 'gün')], [(3.0, 'gün'), (14.0, 'gün')]), ('NOT_LATER', None))
+        self.assertEqual(later_deadline([(14.0, 'gün')], [(3.0, 'gün'), (20.0, 'gün')])[0], 'UNRESOLVED')
+        # no hour is counted in working days; a working day keeps the 1.4 days it has always counted against days
+        self.assertEqual(later_deadline([(1.0, 'saat')], [(1.4, 'iş günü')])[0], 'UNRESOLVED')
+        self.assertEqual(later_deadline([(5.0, 'gün')], [(7.0, 'iş günü')])[0], 'LATER')
+
+    def test_the_fourteen_days_of_the_refund_duty_are_fourteen(self):
+        # Yönetmelik 20237 md. 12/f.1: "... on dört gün içinde ... iade etmekle yükümlüdür" was read as four days, so the legal
+        # fourteen in digits was a later deadline, and twenty-five days ("yirmi beş" read as five) was not
+        refund = obligation(self.DISTANCE_SALES, 'Yönetmelik 20237 md. 12/f.1/c.1')
+        said = 'Satıcı, iade edilen malın taşıyıcıya teslim edildiği tarihten itibaren {} içinde tahsil edilen tüm ödemeleri iade etmekle yükümlüdür.'
+        for days in ('14 gün', '10 gün', 'on dört gün'):
+            with self.subTest(days=days):
+                self.assertNotEqual(relate(refund, statement(said.format(days)), REGISTRY.vocabulary).relation, 'CONFLICTS')
+        for days, value in (('20 gün', 20.0), ('yirmi beş gün', 25.0), ('onbeş gün', 15.0)):
+            with self.subTest(days=days):
+                late = relate(refund, statement(said.format(days)), REGISTRY.vocabulary)
+                self.assertEqual((late.relation, late.reasons), ('CONFLICTS', ['DEADLINE_LATER']))
+                self.assertEqual((late.detail['deadline']['duty'], late.detail['deadline']['policy']), (14.0, value))
+
+    def test_a_deadline_written_as_a_closed_compound_is_compared(self):
+        # Yönetmelik 6207 md. 21/f.3: "İzin bedelleri, ... kırkbeş gün içerisinde Kurum hesabına yatırılır."
+        fees = obligation(self.FACILITIES, 'Yönetmelik 6207 md. 21/f.3/c.1')
+        late = relate(fees, statement('İzin bedelleri, tebliğ tarihinden itibaren 90 gün içerisinde Kurum hesabına yatırılır.'), REGISTRY.vocabulary)
+        self.assertEqual((late.relation, late.reasons, late.detail['deadline']['duty']), ('CONFLICTS', ['DEADLINE_LATER'], 45.0))
+        timely = relate(fees, statement('İzin bedelleri, tebliğ tarihinden itibaren 30 gün içerisinde Kurum hesabına yatırılır.'), REGISTRY.vocabulary)
+        self.assertEqual(timely.relation, 'SUPPORTS')
+
+    def test_a_24_hour_duty_is_not_read_as_the_week_of_the_next_duty_in_its_clause(self):
+        # Yönetmelik 7510 md. 35/f.6: "... en geç 24 saat içinde Müdürlüğe bilgi verilir ve ... en geç bir hafta içinde yeni mesul
+        # müdüre ait müracaat Müdürlüğe yapılır." Only the week was read, so three days for the 24-hour notice covered the duty.
+        notice = obligation(self.WATER, 'Yönetmelik 7510 md. 35/f.6/c.1')
+        lead = 'Mesul müdürün görevinden ayrılması durumunda işletme sahibi tarafından '
+        week = 'ayrılış tarihinden itibaren en geç bir hafta içinde yeni mesul müdüre ait müracaat Müdürlüğe yapılır.'
+        stated = relate(notice, statement(lead + 'en geç 24 saat içinde Müdürlüğe bilgi verilir ve ' + week), REGISTRY.vocabulary)
+        self.assertEqual(stated.relation, 'SUPPORTS')
+        late = relate(notice, statement(lead + 'en geç 3 gün içinde Müdürlüğe bilgi verilir ve ' + week), REGISTRY.vocabulary)
+        self.assertEqual((late.relation, late.reasons), ('CONFLICTS', ['DEADLINE_LATER']))
+        self.assertEqual((late.detail['deadline']['duty'], late.detail['deadline']['policy']), (1.0, 3.0))
+        # one deadline against two: whether it is late depends on which of the two it answers, and a person decides
+        for text in (lead + week, lead + 'en geç 72 saat içinde Müdürlüğe bilgi verilir.'):
+            with self.subTest(text=text):
+                alone = relate(notice, statement(text), REGISTRY.vocabulary)
+                self.assertEqual((alone.relation, alone.reasons), ('UNCLEAR', ['DEADLINE_UNRESOLVED']))
+
+    def test_a_limit_written_with_a_decimal_point_is_the_same_limit(self):
+        ethanol = obligation(self.ENERGY, 'Tebliğ 23706 md. 5/f.1/b.ç/c.2')                     # en fazla 3,0 g/L
+        for value in ('1.5', '1,5'):
+            with self.subTest(value=value):
+                stricter = relate(ethanol, statement(f'Son ürüne taşınan etil alkol miktarı en çok {value} g/L olur.'), REGISTRY.vocabulary)
+                self.assertEqual((stricter.relation, stricter.detail['quantities'][0]['policy']), ('SUPPORTS', 1.5))
+        caffeine = obligation(self.ENERGY, 'Tebliğ 23706 md. 5/f.1/b.b')                       # 150 mg/L’den fazla olamaz
+        below = relate(caffeine, statement('Enerji içeceğinde toplam kafein miktarı 149.5 mg/L’den fazla olamaz.'), REGISTRY.vocabulary)
+        self.assertEqual((below.relation, below.detail['quantities'][0]['policy']), ('SUPPORTS', 149.5))
+        # the whisky distillate of Yönetmelik 6207 md. 15 is distilled to at most %94.8, not 948: a weaker %96,0 is no support
+        whisky = obligation(self.FACILITIES, 'Yönetmelik 6207 md. 15/f.2/b.e')
+        weaker = relate(whisky, statement('Viski distilatı üretiminde mayşe distilasyon ünitesinde en fazla %96,0 alkole kadar distile edilir.'),
+                        REGISTRY.vocabulary)
+        self.assertEqual((weaker.relation, weaker.reasons), ('CONFLICTS', ['LIMIT_WEAKER']))
+        self.assertEqual({k: weaker.detail['quantities'][0][k] for k in ('duty', 'policy')}, {'duty': 94.8, 'policy': 96.0})
+
+    def test_a_minor_written_in_digits_is_the_minor_of_the_statute(self):
+        sale = obligation('TR:KANUN:4250', 'Kanun 4250 md. 6/f.3')                              # on sekiz yaşını doldurmamış
+        for who in ('18 yaşını doldurmamış kişilere', 'onsekiz yaşından küçüklere'):
+            with self.subTest(who=who):
+                said = relate(sale, statement(f'Satış noktalarımızda {who} alkollü içki satışı yapılamaz.'), REGISTRY.vocabulary)
+                self.assertEqual((said.relation, said.reasons), ('SUPPORTS', ['ACT_AND_PARTY_MATCH']))
+        adults = relate(sale, statement('Satış noktalarımızda 18 yaşını doldurmuş kişilere alkollü içki satışı yapılamaz.'), REGISTRY.vocabulary)
+        self.assertEqual(adults.relation, 'UNRELATED')
+
+
 class WholeCorpusTests(unittest.TestCase):
     """What the comparer said outside the labelled cases when it was run on every stored text (30 September 2026): 44
     contradicted rows and 4 product nonconformities for the brewer; 17 of the rows (advertising by-law, consumer law) and all 4

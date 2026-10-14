@@ -30,7 +30,7 @@ from .clauses import Clause, blank_notes, split_clauses
 
 LEXICON = Path(__file__).resolve().parent / 'data' / 'lexicon.json'
 LETTERS = 'a-zçğıöşüâîû'
-FRAME_RULES_VERSION = 'tr-frames-v3'
+FRAME_RULES_VERSION = 'tr-frames-v4'
 
 FrameKind = Literal['OBLIGATION', 'PROHIBITION', 'PERMISSION', 'EXCEPTION', 'DEFINITION', 'SCOPE', 'REFERENCE', 'DELEGATION',
                     'ENFORCEMENT', 'OTHER']
@@ -248,25 +248,100 @@ TRANSITIONAL = re.compile(r'md\. Geçici ')
 NON_DUTY_HEADINGS = (('tanım', 'DEFINITION'), ('amaç', 'SCOPE'), ('kapsam', 'SCOPE'), ('dayanak', 'OTHER'), ('yürürlük', 'OTHER'),
                      ('yürütme', 'OTHER'), ('ceza', 'ENFORCEMENT'), ('yaptırım', 'ENFORCEMENT'), ('avrupa birliği', 'OTHER'),
                      ('kısaltma', 'DEFINITION'))
+# -- numbers: one reader for the rule reader and the comparer (review of 12 October 2026) ------------------------------
+# In digits, ',' is the decimal mark; '.' before exactly three digits, in one group or more, separates thousands ("2.800",
+# "1.000.000", "10.000,5"); any other '.' between digits is a decimal point, as the corpus and company documents also write
+# it ("%94.8", "0.5 mg/L", "1.5 g/L"). No number starts inside another, so a date ("01.06.2026") gives none.
+NUMBER = r'(?<![\d.,])(\d{1,3}(?:\.\d{3})+(?!\d)(?:,\d+)?|\d+(?:[.,]\d+)?)'
+THOUSANDS = re.compile(r'\d{1,3}(?:\.\d{3})+')
+# In words: a run of number words, spaced or closed ("on dört", "iki yüz kırk beş", "onbeş", "yüzseksen"), is one number.
+# A run the next word goes on with a number word and a suffix is an ordinal or a case form ("on beşinci", "yüz yüze") and
+# is no count, as the deadline reader has always left ordinals; a word that only begins like one ("onay", "birlikte",
+# "yüzde") is no number word.
+UNIT_WORDS = {'bir': 1, 'iki': 2, 'üç': 3, 'dört': 4, 'beş': 5, 'altı': 6, 'yedi': 7, 'sekiz': 8, 'dokuz': 9}
+TEN_WORDS = {'on': 10, 'yirmi': 20, 'otuz': 30, 'kırk': 40, 'elli': 50, 'altmış': 60, 'yetmiş': 70, 'seksen': 80, 'doksan': 90}
+NUMBER_TOKEN = '(?:%s)' % '|'.join(sorted([*UNIT_WORDS, *TEN_WORDS, 'yüz', 'bin'], key=len, reverse=True))
+WORD_NUMBER = r'(?<![%s])%s+(?![%s])(?:\s+%s+(?![%s]))*' % (LETTERS, NUMBER_TOKEN, LETTERS, NUMBER_TOKEN, LETTERS)
+_WORD_NUMBER = re.compile(WORD_NUMBER)
+_GOES_ON = re.compile(r'\s+%s' % NUMBER_TOKEN)
+# A limit written in words: a distance in metres, where the clause speaks of one ("en az yüz metre mesafe", "iki yüz elli
+# metre yakınında"). A size in words ("en az iki metre yükseklikte") stays unread, as before: extraction takes a limit that
+# is no distance for a property of the product, and the walls of a bottling plant would become a rule of the water it bottles.
+WORD_UNIT = re.compile(r'\s+(metre)')
+DISTANCE = re.compile(r'(?<![%s])(?:mesafe|yakın|uzak)' % LETTERS)
+
+
+def number_value(digits: str) -> float:
+    """A number written in digits: "0,5" and "0.5" are 0.5, "2.800" is 2800, "1.000.000" a million, "10.000,5" 10000.5."""
+    if ',' in digits:
+        return float(digits.replace('.', '').replace(',', '.'))
+    if THOUSANDS.fullmatch(digits):
+        return float(digits.replace('.', ''))
+    return float(digits)
+
+
+def word_value(words: str) -> float | None:
+    """A run of number words: "on dört" 14, "iki yüz kırk beş" 245, "on beş bin" 15000; None when the words make no
+    number ("bir iki", "on on")."""
+    folded = fold(words)
+    tokens = re.findall(NUMBER_TOKEN, folded)
+    if ''.join(tokens) != re.sub(r'\s+', '', folded):
+        return None
+    position = 0
+
+    def group() -> int | None:                     # [unit] yüz, ten, unit: one number below a thousand
+        nonlocal position
+        start, value = position, 0
+        if position + 1 < len(tokens) and tokens[position] in UNIT_WORDS and tokens[position + 1] == 'yüz':
+            value, position = UNIT_WORDS[tokens[position]] * 100, position + 2
+        elif position < len(tokens) and tokens[position] == 'yüz':
+            value, position = 100, position + 1
+        if position < len(tokens) and tokens[position] in TEN_WORDS:
+            value, position = value + TEN_WORDS[tokens[position]], position + 1
+        if position < len(tokens) and tokens[position] in UNIT_WORDS:
+            value, position = value + UNIT_WORDS[tokens[position]], position + 1
+        return value if position > start else None
+
+    value = group()
+    if position < len(tokens) and tokens[position] == 'bin':
+        position += 1
+        value = (value or 1) * 1000 + (group() or 0)
+    return float(value) if value is not None and position == len(tokens) else None
+
+
+def word_numbers(text: str) -> list[tuple[int, int, float]]:
+    """(start, end, value) of every number a text writes in words."""
+    folded = fold(text)
+    out = []
+    for match in _WORD_NUMBER.finditer(folded):
+        if _GOES_ON.match(folded, match.end()):
+            continue
+        value = word_value(match.group())
+        if value is not None:
+            out.append((match.start(), match.end(), value))
+    return out
+
+
 # Units a beverage text states limits in; the engine's quantity parser knows durations, money and percent only.
-NUMBER = r'(\d+(?:[.,]\d+)?)'
 UNITS = (('mg/l', 'mg/L'), ('g/l', 'g/L'), ('mg/kg', 'mg/kg'), ('ml', 'ml'), ('mm', 'mm'), ('metre', 'm'), ('litre', 'L'))
-QUANTITY = re.compile(r'(?:%%\s*%s)|(?:%s\s*(mg/l|g/l|mg/kg|ml(?![%s])|mm(?![%s])|metre|litre))' % (NUMBER, NUMBER, LETTERS, LETTERS))
+# "%0,5", "% 0.5", "yüzde 0,5": the percent sign written as a sign or as a word. "yüzde" before a number in words is left
+# unread: the stored texts write it so only in tobacco quotas, company shares and penalties ("yüzde onyedi", "yüzde beş"),
+# and a quota read as a limit makes Kanun 4733 md. Geçici 9 a product rule of beer, wine and spirits.
+QUANTITY = re.compile(r'(?:(?:%%|(?<![%s])yüzde)\s*%s)|(?:%s\s*(mg/l|g/l|mg/kg|ml(?![%s])|mm(?![%s])|metre|litre))'
+                      % (LETTERS, NUMBER, NUMBER, LETTERS, LETTERS))
 # "pH değeri >3,8 - ≤ 4,8", "pH 4,8’i geçemez": a unitless property, read with its own name as the unit.
 PH = re.compile(r'(?<![%s])ph(?:\s+değeri)?\s*(?:>|≥|<|≤|=)?\s*%s(?:\s*[-–]\s*(?:>|≥|<|≤)?\s*%s)?' % (LETTERS, NUMBER, NUMBER))
 # A property named before its number ("kinin miktarı ... 85 mg/L", "karbondioksit miktarı en az 2 g/L") is the attribute of
 # that limit where the lexicon names none; two texts share it when they share the property word.
 PROPERTY_BEFORE = re.compile(r'([%s]{3,})\s+(?:miktarı|oranı|değeri|derecesi|içeriği)' % LETTERS)
 GENERIC_LIMIT_WORDS = frozenset({'alkol', 'bileşen', 'madde', 'ürün', 'gıda', 'toplam', 'net'})
-WORD_NUMBERS = {'yüz': 100.0, 'iki yüz': 200.0, 'beş yüz': 500.0, 'bin': 1000.0, 'elli': 50.0}
-WORD_QUANTITY = re.compile(r'(?<![%s])(yüz|iki yüz|beş yüz|bin|elli)\s+(metre)' % LETTERS)
 ATTRIBUTES = (('kafein', 'caffeine_mg_per_l', 'mg/L'), ('taurin', 'taurine_mg_per_l', 'mg/L'), ('inositol', 'inositol_mg_per_l', 'mg/L'),
               ('glukoronolakton', 'glucuronolactone_mg_per_l', 'mg/L'), ('etil alkol', 'ethanol_g_per_l', 'g/L'),
               ('meyve oranı', 'fruit_percent', '%'), ('karbondioksit', 'co2_percent', '%'), ('malt', 'malt_percent', '%'),
               ('alkol', 'abv_percent', '%'), ('mesafe', 'distance_m', 'm'), ('punto', 'font_x_height_mm', 'mm'),
               ('x-yüksekliğ', 'font_x_height_mm', 'mm'))
 PROPERTY_OF_PRODUCT = re.compile(r'\s*[’\']?\s*(?:den|dan|ten|tan)\s+(?:fazla|az|düşük)(?:\s+[%s]+)?\s+(?:olan|içeren)(?:\s+ürün[%s]*)?' % (LETTERS, LETTERS))
-ABV_CONDITION = re.compile(r'hacmen\s*%%\s*%s\s*[’\']?\s*(?:(den|dan|ten|tan)\s+fazla|(ve\s+daha\s+fazla)|(ve\s+(?:daha\s+)?(?:az|düşük))|'
+ABV_CONDITION = re.compile(r'hacmen\s*(?:%%|yüzde)\s*%s\s*[’\']?\s*(?:(den|dan|ten|tan)\s+fazla|(ve\s+daha\s+fazla)|(ve\s+(?:daha\s+)?(?:az|düşük))|'
                            r'(den|dan|ten|tan)\s+(?:az|düşük))\s+alkol' % NUMBER)
 CLOCK = re.compile(r'\d{1,2}[:.]\d{2}\s*(?:ila|ile|-|–)\s*\d{1,2}[:.]\d{2}(?:\s+saatleri\s+arasında)?')
 EXPORT_ONLY = re.compile(r'ihraç amaçlı|ihraç edilmek (?:üzere|amacıyla)|ihracat amacıyla|ihracat amacı ile')
@@ -468,9 +543,12 @@ def _actors(lex: Lexicon, folded: str, text: str, base: int, where: str, active:
 
 def _quantities(folded: str, text: str, base: int) -> list[Quantity]:
     out = []
-    matches = [(m.start(), m.end(), float((m.group(1) or m.group(2)).replace('.', '').replace(',', '.')) if (m.group(1) or m.group(2)) else 0.0,
-                '%' if m.group(1) else dict(UNITS)[m.group(3)]) for m in QUANTITY.finditer(folded)]
-    matches += [(m.start(), m.end(), WORD_NUMBERS[m.group(1)], 'm') for m in WORD_QUANTITY.finditer(folded)]
+    matches = [(m.start(), m.end(), number_value(m.group(1) or m.group(2)), '%' if m.group(1) else dict(UNITS)[m.group(3)])
+               for m in QUANTITY.finditer(folded)]
+    for start, end, value in word_numbers(folded) if DISTANCE.search(folded) else ():
+        unit = WORD_UNIT.match(folded, end)
+        if unit:
+            matches.append((start, unit.end(), value, 'm'))
     for start, end, value, unit in sorted(matches):
         before, after = folded[max(0, start - 60):start], folded[end:end + 40]
         if re.match(r'\s*[’\']?\s*(?:den|dan|ten|tan)\s+fazla\s+(?:ola(?:maz|mayacak)|kullanıla(?:maz)|içere(?:mez))', after) \
@@ -514,16 +592,16 @@ def _quantities(folded: str, text: str, base: int) -> list[Quantity]:
         span = folded[match.start():match.end()]
         after = folded[match.end():match.end() + 30]
         if high:                                   # a range: the lower bound and the upper bound
-            out.append(Quantity(attribute='ph', value=float(low.replace(',', '.')), unit='pH', comparator='ge' if '>' in span.split(low)[0] + '≥' else 'ge',
+            out.append(Quantity(attribute='ph', value=number_value(low), unit='pH', comparator='ge' if '>' in span.split(low)[0] + '≥' else 'ge',
                                 text=text[match.start():match.end()], start=base + match.start(), end=base + match.end(), role='LIMIT'))
-            out.append(Quantity(attribute='ph', value=float(high.replace(',', '.')), unit='pH', comparator='le',
+            out.append(Quantity(attribute='ph', value=number_value(high), unit='pH', comparator='le',
                                 text=text[match.start():match.end()], start=base + match.start(), end=base + match.end(), role='LIMIT'))
             continue
         head = span[:span.rfind(low)]
         comparator = 'le' if ('≤' in head or '<' in head or re.match(r'\s*[’\']?\s*(?:i|ı|u|ü|yi|yı|yu|yü)?\s*(?:geçemez|aşamaz|geçmez|aşmaz)', after)) \
             else 'ge' if ('≥' in head or '>' in head or re.search(r'en az\s*$', folded[:match.start()]) or re.match(r'\s*[’\']?\s*(?:nin|nın|in|ın)\s+altın', after)) else 'eq'
         if comparator != 'eq':
-            out.append(Quantity(attribute='ph', value=float(low.replace(',', '.')), unit='pH', comparator=comparator,
+            out.append(Quantity(attribute='ph', value=number_value(low), unit='pH', comparator=comparator,
                                 text=text[match.start():match.end()], start=base + match.start(), end=base + match.end(), role='LIMIT'))
     return out
 
@@ -541,7 +619,7 @@ def _segment(folded: str, position: int) -> tuple[int, int]:
 def _conditions(lex: Lexicon, folded: str, text: str, base: int, frame_places, frame_counterparties, quantities=()) -> list[Condition]:
     out = []
     for match in ABV_CONDITION.finditer(folded):
-        value = float(match.group(1).replace(',', '.'))
+        value = number_value(match.group(1))
         op = 'gt' if match.group(2) else 'ge' if match.group(3) else 'le' if match.group(4) else 'lt'
         out.append(Condition(kind='PRODUCT_ATTRIBUTE', quote=text[match.start():match.end()], start=base + match.start(),
                              end=base + match.end(), predicate={'fact': 'product.abv_percent', 'op': op, 'value': value}))

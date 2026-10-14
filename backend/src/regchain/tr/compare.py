@@ -34,7 +34,7 @@ from ..pilot.schema import Strict
 from .clauses import blank_notes, split_clauses
 from .corpus import CorpusStore
 from .extraction import MARKETING, SALES, ExtractedObligation, governing, predicate_segments
-from .frames import LETTERS, WORD, Frame, _modality, fold, frame_of, lexicon
+from .frames import LETTERS, WORD, WORD_NUMBER, Frame, _modality, fold, frame_of, lexicon, word_value
 from .mapping import Control, DocumentCoverage, DocumentType, EvidenceItem, ObligationMapping, map_obligation
 from .packs import Registry
 from .profile import EnterpriseProfile, PolicyScope, policy_covers, product_alcohol
@@ -42,7 +42,7 @@ from .profile import EnterpriseProfile, PolicyScope, policy_covers, product_alco
 DATA = Path(__file__).resolve().parent / 'data'
 REGISTERS = DATA / 'pilot_policies'
 OWNERSHIP = DATA / 'ownership.json'
-COMPARE_RULES_VERSION = 'tr-compare-rules-v6'
+COMPARE_RULES_VERSION = 'tr-compare-rules-v7'
 Relation = Literal['SUPPORTS', 'PARTIAL', 'CONFLICTS', 'UNRELATED', 'UNCLEAR']
 STATEMENT = re.compile(r'^\s*(\d{1,3})\.\s+(?=\S)')
 SALE_FAMILY = frozenset(SALES)
@@ -536,26 +536,63 @@ def particular_relation(frame: Frame, policy: Frame) -> list[str] | None:
 
 
 DAY_OF_MONTH = re.compile(r'ayın\s+(?:en\s+geç\s+)?(\d{1,2})\s*(?:[’\']?\s*[%s]{1,5})?\s*(?:gün[%s]*\s+)?(?:mesai\s+bitimine\s+)?kadar' % (LETTERS, LETTERS))
-COUNT_WORDS = {'bir': 1, 'iki': 2, 'üç': 3, 'dört': 4, 'beş': 5, 'altı': 6, 'yedi': 7, 'sekiz': 8, 'dokuz': 9, 'on': 10, 'on beş': 15,
-               'yirmi': 20, 'otuz': 30, 'kırk beş': 45, 'altmış': 60, 'doksan': 90}
-WITHIN = re.compile(r'(?<![%s])(\d{1,3}|%s)\s+(iş günü|gün|hafta|ay|yıl)\s+(?:içinde|içerisinde)'
-                    % (LETTERS, '|'.join(sorted(COUNT_WORDS, key=len, reverse=True))))
-DAYS_OF = {'iş günü': 1.4, 'gün': 1, 'hafta': 7, 'ay': 30, 'yıl': 365}
+# The count in digits or in words, read by the rule reader's number reader ("on dört", "kırkbeş", "yirmi dört": frames).
+WITHIN = re.compile(r'(?<![%s\d.,])(\d{1,3}|%s)\s+(iş günü|gün|hafta|ay|yıl|saat)\s+(?:içinde|içerisinde)' % (LETTERS, WORD_NUMBER))
+# An hour is the 24th part of a day. A working day keeps the 1.4 days it has always counted (five are a week); an hour is
+# never counted in working days, nor a working day in hours (later_deadline).
+DAYS_OF = {'iş günü': 1.4, 'gün': 1, 'hafta': 7, 'ay': 30, 'yıl': 365, 'saat': 1 / 24}
 
 
-def deadlines(text: str) -> dict[str, float]:
-    """The time a text gives for its act: {'DAY_OF_MONTH': 20} ("takip eden ayın en geç 20 nci günü ... kadar"),
-    {'WITHIN_DAYS': 90} ("üç ay içerisinde")."""
+def deadline_values(text: str) -> dict[str, list[tuple[float, str]]]:
+    """Every time a text gives for its acts, by kind, as (days, unit) in the order of the text: "... en geç 24 saat içinde
+    Müdürlüğe bilgi verilir ve ... en geç bir hafta içinde ... müracaat Müdürlüğe yapılır" is {'WITHIN_DAYS': [(1.0, 'saat'),
+    (7.0, 'hafta')]} (review of 12 October 2026: only the first was read, and a 24-hour duty was read as a week)."""
     folded = fold(blank_notes(text))
     out = {}
     day = DAY_OF_MONTH.search(folded)
     if day:
-        out['DAY_OF_MONTH'] = float(day.group(1))
-    within = WITHIN.search(folded)
-    if within:
-        count = COUNT_WORDS.get(within.group(1)) or float(within.group(1))
-        out['WITHIN_DAYS'] = count * DAYS_OF[within.group(2)]
+        out['DAY_OF_MONTH'] = [(float(day.group(1)), 'ayın günü')]
+    for within in WITHIN.finditer(folded):
+        count = float(within.group(1)) if within.group(1).isdigit() else word_value(within.group(1))
+        if count is not None:
+            out.setdefault('WITHIN_DAYS', []).append((count * DAYS_OF[within.group(2)], within.group(2)))
     return out
+
+
+def deadlines(text: str) -> dict[str, float]:
+    """The time a text gives for its act, the shortest of each kind: {'DAY_OF_MONTH': 20} ("takip eden ayın en geç 20 nci
+    günü ... kadar"), {'WITHIN_DAYS': 90} ("üç ay içerisinde")."""
+    return {kind: min(days for days, _ in values) for kind, values in deadline_values(text).items()}
+
+
+def _later(duty: tuple[float, str], policy: tuple[float, str]) -> bool | None:
+    """Whether a statement's deadline gives more time than a duty's; None between hours and working days."""
+    if {duty[1], policy[1]} == {'saat', 'iş günü'}:
+        return None
+    return policy[0] > duty[0]
+
+
+def later_deadline(due: list[tuple[float, str]], given: list[tuple[float, str]]) -> tuple[str, tuple | None]:
+    """('LATER', (duty, statement)) when the statement gives more time than the duty however its deadlines answer the
+    duty's; ('UNRESOLVED', (duty, statement)) when that depends on which of them answers which; ('NOT_LATER', None).
+    As many deadlines as the duty's answer them from the shortest up ("3 gün ... bir hafta" is late against "24 saat ...
+    bir hafta"); fewer may answer any of them ("bir hafta" alone against "24 saat ... bir hafta" is not decided), and of
+    more, any may be the one that answers."""
+    duty, given = sorted(due), sorted(given)
+    count = min(len(duty), len(given))
+    if len(duty) == len(given):
+        best = worst = list(zip(duty, given))
+    elif len(given) < len(duty):
+        best, worst = list(zip(duty[-count:], given)), list(zip(duty[:count], given))
+    else:
+        best, worst = list(zip(duty, given[:count])), list(zip(duty, given[-count:]))
+    for pair in best:
+        if _later(*pair):
+            return 'LATER', pair
+    for pair in worst:
+        if _later(*pair) is not False:
+            return 'UNRESOLVED', pair
+    return 'NOT_LATER', None
 
 
 # A deadline governs an act of handing something over to someone: what is handed over, to whom, by when. Two texts with the
@@ -755,18 +792,25 @@ def _relate_frame(duty: ExtractedObligation, policy: Frame, vocabulary, similari
             return 'UNCLEAR', ['LIMIT_ATTRIBUTE_UNRESOLVED'], detail
     # -- a later deadline is a weaker rule: read on a statement the wording relates, the structure of the deadline relates
     # (same recipient, an act of handing over, a shared word of what is handed over), or a recorded similarity relates ----
-    due, given = deadlines(frame.text), deadlines(policy.text)
-    late = [kind for kind in due if kind in given and given[kind] > due[kind]]
-    if late and not negative_duty and policy.modality == 'MUST':
+    due, given = deadline_values(frame.text), deadline_values(policy.text)
+    timing = {kind: later_deadline(due[kind], given[kind]) for kind in due if kind in given}
+    late = [kind for kind, (verdict, _) in timing.items() if verdict == 'LATER']
+    undecided = [kind for kind, (verdict, _) in timing.items() if verdict == 'UNRESOLVED']
+    if (late or undecided) and not negative_duty and policy.modality == 'MUST':
         structure = deadline_subject(frame, policy, wanted, offered)
         basis = 'WORDING' if overlap >= 0.5 else 'STRUCTURE' if structure == 'SAME' else \
             'SIMILARITY' if similarity is not None and similarity >= SEMANTIC_RELEVANCE else None
+        kind = (late or undecided)[0]
+        (duty_days, _), (policy_days, _) = timing[kind][1]
         if common >= 2 and basis:
-            detail['deadline'] = {'kind': late[0], 'duty': due[late[0]], 'policy': given[late[0]], 'basis': basis}
-            return 'CONFLICTS', ['DEADLINE_LATER'], detail
+            detail['deadline'] = {'kind': kind, 'duty': duty_days, 'policy': policy_days, 'basis': basis}
+            if late:
+                return 'CONFLICTS', ['DEADLINE_LATER'], detail
+            # a statement whose deadline may answer the duty's shorter one or its longer one: a person decides
+            return 'UNCLEAR', ['DEADLINE_UNRESOLVED'], detail
         if structure == 'DIFFERENT_OBJECT':
             # the same authority and the same act, a later date, nothing in common about what is handed over: a person decides
-            detail['deadline'] = {'kind': late[0], 'duty': due[late[0]], 'policy': given[late[0]], 'basis': 'UNRESOLVED'}
+            detail['deadline'] = {'kind': kind, 'duty': duty_days, 'policy': policy_days, 'basis': 'UNRESOLVED'}
             return 'UNCLEAR', ['DEADLINE_SUBJECT_UNRESOLVED'], detail
     # -- an outright ban of the same act(s), whatever its words ------------------------------------------------------------
     # a qualifier of the statement that the duty does not have narrows it; one the duty has too ("tüketiciye dönük") does not
@@ -844,6 +888,11 @@ def _relate_frame(duty: ExtractedObligation, policy: Frame, vocabulary, similari
     detail['missing'] = missing
     if missing or reasons:
         return 'PARTIAL', reasons + missing, detail
+    if undecided and not negative_duty and policy.modality == 'MUST':
+        # every element stated, but whether the statement's deadline is later depends on which of the duty's it answers
+        (duty_days, _), (policy_days, _) = timing[undecided[0]][1]
+        detail['deadline'] = {'kind': undecided[0], 'duty': duty_days, 'policy': policy_days, 'basis': 'UNRESOLVED'}
+        return 'UNCLEAR', ['DEADLINE_UNRESOLVED'], detail
     basis = 'ACT_AND_POLARITY_MATCH' if worded else 'OUTRIGHT_BAN_OF_THE_ACT' if outright \
         else 'PARTICULAR_STATED' if particular is not None else 'ACT_AND_PARTY_MATCH' if same_party else 'LIMIT_STATED'
     return 'SUPPORTS', [basis] + (['LIMIT_SAME_OR_STRICTER'] if detail.get('quantities') else []), detail

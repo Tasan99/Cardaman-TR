@@ -98,7 +98,7 @@
     {"id": "TELEVISION", "pattern": "televizyon[a-zçğıöşü]*"}
   ],
   "counterparties": [
-    {"id": "MINOR", "pattern": "on ?sekiz yaşını doldurmamış|on sekiz yaşından küçük[a-zçğıöşü]*|18 yaş(?:ından)? (?:altı|küçük)[a-zçğıöşü]*"},
+    {"id": "MINOR", "pattern": "(?:on ?sekiz|(?<![0-9])18) (?:yaşını doldurmamış|yaş(?:ından)? (?:altı|küçük)[a-zçğıöşü]*)"},
     {"id": "CONSUMER", "pattern": "tüketici[a-zçğıöşü]*|son tüketici[a-zçğıöşü]*"}
   ],
   "exception_markers": "hariç olmak üzere|hariç(?![a-zçğıöşü])|haricinde(?:ki)?|(?:kapsamı|haller|hâller|durumlar|ürünler|bunlar|olanlar|tanımı)[a-zçğıöşü]* dışında(?:ki| kalan)?(?![a-zçğıöşü])|dışındadır|saklı kalmak (?:kaydıyla|üzere)|uygulanmaz|aranmaz|muaf[a-zçğıöşü]*|istisna[a-zçğıöşü]*|zorunlu değildir|kapsamaz|kapsamı dışında[a-zçğıöşü]*",

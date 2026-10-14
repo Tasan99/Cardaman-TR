@@ -168,6 +168,39 @@
    "recorded_on": "29193e1",
    "recorded_at": "2026-10-04",
    "note": "4 Oct 2026: tr-compare-rules-v6 - recipient authority found by root + dative/locative ending (the lexicon's boundary patterns do not see 'Kuruma'; v5 never fired the structured deadline)"
+  },
+  "tr-frames-v4": {
+   "family": "frames",
+   "files": [
+    "frames.py",
+    "clauses.py",
+    "data/lexicon.json"
+   ],
+   "sha256": "23082111478fb156748b76dd4462b8ba5c34aa5b51437254beb7a9385f997e52",
+   "recorded_on": "b664a9f",
+   "recorded_at": "2026-10-14",
+   "note": "12 Oct 2026: tr-frames-v4 / tr-scope-rules-v3 / tr-compare-rules-v7 - one number reader (frames.number_value, word_value, word_numbers): compound and closed number words ('on dört' 14, 'kırkbeş' 45, 'iki yüz elli metre' 250; ordinals unread), ',' decimal mark and '.' thousands only before groups of three digits ('%94.8', '0.5 mg/L', '1.000.000 litre'), 'yüzde' before digits as '%'; MINOR also in digits ('18 yaşını doldurmamış', 'onsekiz yaşından küçük', 'on sekiz yaş altı'; scope label for the lexicon); deadlines in hours (1 gün = 24 saat, never against working days), every deadline of a clause read, a later deadline decided only where every pairing agrees, else UNCLEAR DEADLINE_UNRESOLVED"
+  },
+  "tr-scope-rules-v3": {
+   "family": "scope",
+   "files": [
+    "extraction.py",
+    "data/lexicon.json"
+   ],
+   "sha256": "ec272ec04ecd779a0feab7451d90607db7a8dc041690df06cb2e25b3a272e4c2",
+   "recorded_on": "b664a9f",
+   "recorded_at": "2026-10-14",
+   "note": "12 Oct 2026: tr-frames-v4 / tr-scope-rules-v3 / tr-compare-rules-v7 - one number reader (frames.number_value, word_value, word_numbers): compound and closed number words ('on dört' 14, 'kırkbeş' 45, 'iki yüz elli metre' 250; ordinals unread), ',' decimal mark and '.' thousands only before groups of three digits ('%94.8', '0.5 mg/L', '1.000.000 litre'), 'yüzde' before digits as '%'; MINOR also in digits ('18 yaşını doldurmamış', 'onsekiz yaşından küçük', 'on sekiz yaş altı'; scope label for the lexicon); deadlines in hours (1 gün = 24 saat, never against working days), every deadline of a clause read, a later deadline decided only where every pairing agrees, else UNCLEAR DEADLINE_UNRESOLVED"
+  },
+  "tr-compare-rules-v7": {
+   "family": "compare",
+   "files": [
+    "compare.py"
+   ],
+   "sha256": "14e77f7fdf9cea0b849f8de9fcb7e3f41d5a3f2cedeca9f3b1894b7112a43e7f",
+   "recorded_on": "b664a9f",
+   "recorded_at": "2026-10-14",
+   "note": "12 Oct 2026: tr-frames-v4 / tr-scope-rules-v3 / tr-compare-rules-v7 - one number reader (frames.number_value, word_value, word_numbers): compound and closed number words ('on dört' 14, 'kırkbeş' 45, 'iki yüz elli metre' 250; ordinals unread), ',' decimal mark and '.' thousands only before groups of three digits ('%94.8', '0.5 mg/L', '1.000.000 litre'), 'yüzde' before digits as '%'; MINOR also in digits ('18 yaşını doldurmamış', 'onsekiz yaşından küçük', 'on sekiz yaş altı'; scope label for the lexicon); deadlines in hours (1 gün = 24 saat, never against working days), every deadline of a clause read, a later deadline decided only where every pairing agrees, else UNCLEAR DEADLINE_UNRESOLVED"
   }
  }
 }
