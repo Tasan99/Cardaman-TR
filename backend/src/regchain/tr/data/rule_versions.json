@@ -211,6 +211,16 @@
    "recorded_on": "b664a9f",
    "recorded_at": "2026-10-12",
    "note": "12 Oct 2026: tr-qdms-v5 - row and child fingerprints cover the entities that must act; row fingerprints cover the evidence the decision rests on (evidence records and product findings, not the register period label); every fingerprint changes, approvals made under v4 become stale"
+  },
+  "tr-qdms-v6": {
+   "family": "qdms",
+   "files": [
+    "qdms.py"
+   ],
+   "sha256": "427e4a34b57b865bc111d5ab99db14e234d6d7aa8aaf2447077e86ea2ac79e91",
+   "recorded_on": "8f94f6f",
+   "recorded_at": "2026-10-14",
+   "note": "12 Oct 2026: tr-qdms-v6 - qdms approve recomputes every row, record and task fingerprint from export.json and takes decisions only from the approvals files given (states in the export are not trusted); a file deciding a row two ways is refused; across files the latest decided_at holds, earlier decisions kept as history; decided_at needs a UTC offset; fingerprint values unchanged from v5"
   }
  }
 }

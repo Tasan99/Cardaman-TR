@@ -7,10 +7,12 @@ approval. Nothing is sent anywhere: the export is a pair of files (JSON, and CSV
 in it can be carried out before a person approves its row.
 
   export_rows       gap rows + assessments -> QdmsRow, every action DRAFT, approval PENDING
-  apply_approvals   a reviewer's approvals file -> rows APPROVED (actions READY_FOR_QDMS), REJECTED (CANCELLED) or
+  apply_approvals   reviewers' approvals files -> rows APPROVED (actions READY_FOR_QDMS), REJECTED (CANCELLED) or
                     RETURNED (DRAFT, with the note); an approval names the row's fingerprint, and an approval of a row whose
                     reasoning changed since (another coverage, status, action, statement, entity that must act or evidence)
-                    is refused as STALE
+                    is refused as STALE. Nothing in export.json is trusted: every fingerprint is recomputed from the content
+                    beside it (an edited row is EXPORT_MODIFIED) and every decision comes from the files given, the latest
+                    holding and the earlier kept as its history; a file that decides a row two ways is refused whole
   ready_actions     only the actions of approved rows: what may be handed to the QDMS
   group_reviews     the UNKNOWN applicability records under parent review tasks: one task per (source question, cause,
                     article) or (company fact, target, missing gates); every record stays a child with its own decision
@@ -22,18 +24,19 @@ nonconformity); mapping it onto a given QDMS product's import format is the inte
 import csv
 import hashlib
 import json
+from collections import Counter
 from datetime import datetime
 from pathlib import Path
 from typing import Literal
 
-from pydantic import Field
+from pydantic import AwareDatetime, Field, PrivateAttr, ValidationError
 
 from ..pilot.schema import Strict
 from .compare import GapReport, Register, ownership
 
 EXPORT_FORMAT = 'cardaman-tr-qdms-export/1'
 APPROVALS_FORMAT = 'cardaman-tr-qdms-approvals/1'
-QDMS_RULES_VERSION = 'tr-qdms-v5'
+QDMS_RULES_VERSION = 'tr-qdms-v6'
 # What each gap action asks the QDMS to open.
 QDMS_ACTION = {
     'UPDATE_DOCUMENT': ('DOCUMENT_CHANGE_REQUEST', 'REVISE_CONFLICTING_STATEMENT'),
@@ -62,12 +65,21 @@ class QdmsAction(Strict):
     state: ActionState = 'DRAFT'
 
 
+class PastDecision(Strict):
+    """An earlier decision on a row that a later one replaced: kept, never overwritten."""
+    status: Literal['APPROVED', 'REJECTED', 'RETURNED']
+    approver: str
+    decided_at: datetime
+    note: str = ''
+
+
 class Approval(Strict):
     required: bool = True
     status: ApprovalStatus = 'PENDING'
     approver: str | None = None
     decided_at: datetime | None = None
     note: str = ''
+    history: list[PastDecision] = []           # the earlier decisions of the approvals files, oldest first
 
 
 class QdmsRow(Strict):
@@ -327,15 +339,33 @@ def applicability_item(review, profile, registry, pack: str | None, source_layer
     applicability = {'status': 'UNKNOWN', 'reason_codes': review.reason_codes}
     uncertainty = {'review_type': review.review_type, 'why': REVIEW_TYPES.get(review.review_type, ''), 'missing_facts': review.missing_facts,
                    'company_evidence': review.company_evidence, 'source_evidence': review.source_evidence}
-    qdms_type, department = REVIEW_ACTION.get(review.review_type, ('APPLICABILITY_REVIEW_TASK', 'COMPLIANCE'))
-    action = QdmsAction(action_id=f'{review.review_id}:applicability', qdms_type=qdms_type, change=review.review_type, department=department,
-                        department_tr=departments.get(department, department), target=None,
-                        why=[*review.reason_codes, *(g['gate'] for g in review.missing_facts)], priority='MEDIUM')
-    fingerprint = _digest({'entities': sorted(entity_ids), 'provision': provision, 'applicability': applicability, 'uncertainty': uncertainty,
-                           'action': action.model_dump(mode='json', exclude={'state'})})
+    action = _review_action(review.review_id, review.review_type, review.reason_codes, review.missing_facts, departments)
+    fingerprint = _record_fingerprint(entity_ids, provision, applicability, uncertainty, action)
     return QdmsApplicabilityItem(row_id=f'APPLICABILITY:{review.review_id}', fingerprint=fingerprint, source_layer=source_layer,
                                  packs=[pack] if pack else [], entity=entity, provision=provision, applicability=applicability,
                                  uncertainty=uncertainty, required_actions=[action])
+
+
+def _review_action(review_id: str, review_type: str, reason_codes: list, missing_facts: list, departments: dict) -> QdmsAction:
+    qdms_type, department = REVIEW_ACTION.get(review_type, ('APPLICABILITY_REVIEW_TASK', 'COMPLIANCE'))
+    return QdmsAction(action_id=f'{review_id}:applicability', qdms_type=qdms_type, change=review_type, department=department,
+                      department_tr=departments.get(department, department), target=None,
+                      why=[*reason_codes, *(g['gate'] for g in missing_facts)], priority='MEDIUM')
+
+
+def _record_fingerprint(entity_ids: list, provision: dict, applicability: dict, uncertainty: dict, action: QdmsAction) -> str:
+    """What a review record's part of a task approval is bound to: who must act, the provision and its stored version,
+    why the applicability is open (the facts missing and known, the source evidence) and the action it asks for."""
+    return _digest({'entities': sorted(entity_ids), 'provision': provision, 'applicability': applicability, 'uncertainty': uncertainty,
+                    'action': action.model_dump(mode='json', exclude={'state'})})
+
+
+def _refingerprint_record(item: QdmsApplicabilityItem, departments: dict) -> str:
+    """The fingerprint of a grouped record from its own content (its action, given to the task, is rebuilt as
+    applicability_item built it)."""
+    action = _review_action(item.row_id.removeprefix('APPLICABILITY:'), item.uncertainty['review_type'], item.applicability['reason_codes'],
+                            item.uncertainty['missing_facts'], departments)
+    return _record_fingerprint(item.entity['entity_ids'], item.provision, item.applicability, item.uncertainty, action)
 
 
 def review_cause(item: QdmsApplicabilityItem) -> str:
@@ -464,7 +494,7 @@ class ApprovalEntry(Strict):
     fingerprint: str
     decision: Literal['APPROVED', 'REJECTED', 'RETURNED']
     approver: str = Field(min_length=1)
-    decided_at: datetime
+    decided_at: AwareDatetime                  # with its UTC offset: decisions of several files are ordered by it
     note: str = ''
 
 
@@ -472,6 +502,7 @@ class Approvals(Strict):
     format: Literal['cardaman-tr-qdms-approvals/1']
     profile_id: str
     entries: list[ApprovalEntry]
+    _source: str = PrivateAttr(default='the approvals file')   # the path it was read from, for messages
 
 
 def approvals_template(export: QdmsExport) -> dict:
@@ -488,42 +519,147 @@ def approvals_template(export: QdmsExport) -> dict:
                for t in export.review_tasks]}
 
 
-def apply_approvals(export: QdmsExport, approvals: Approvals) -> tuple[QdmsExport, list[dict]]:
-    """(the export with the approvals applied, problems). An entry is applied only to its row and only while the row's
-    fingerprint is the one the reviewer saw; anything else is reported and leaves the row PENDING."""
-    if approvals.profile_id != export.profile_id:
-        raise ValueError(f'approvals for {approvals.profile_id}, export of {export.profile_id}')
+def _task_content(task: QdmsReviewTask) -> dict:
+    """A task as grouping makes it: without its approval and the state of its action, which only approvals set."""
+    content = task.model_dump(mode='json', exclude={'human_approval'})
+    for action in content['required_actions']:
+        action.pop('state', None)
+    return content
+
+
+def modified_ids(export: QdmsExport) -> set[str]:
+    """The rows, records and tasks of an export whose content no longer gives what was exported. export.json is a plain
+    file anyone can edit between export and approve, so nothing in it is taken on trust: every row fingerprint is
+    recomputed from the row, every record fingerprint from the record, and the tasks are grouped again from the
+    records that hold; a task that differs from its regrouping (its question, entities, children or action), a record
+    that points at another task, and an id that appears twice are modified too."""
+    departments = ownership()['departments']
+    modified: set[str] = set()
+    for ids in ([r.row_id for r in export.rows], [t.task_id for t in export.review_tasks], [c.row_id for c in export.applicability_reviews]):
+        modified |= {i for i, n in Counter(ids).items() if n > 1}
+    modified |= {r.row_id for r in export.rows if _refingerprint(r) != r.fingerprint}
+    intact = []
+    for record in export.applicability_reviews:
+        try:
+            fingerprint = _refingerprint_record(record, departments)
+        except (KeyError, TypeError, AttributeError, ValueError):
+            fingerprint = None
+        if fingerprint != record.fingerprint or record.required_actions or record.row_id in modified:
+            modified.add(record.row_id)
+        else:
+            intact.append(record)
+    try:
+        regrouped, tasks = group_reviews(intact)
+    except (KeyError, TypeError, AttributeError, ValueError, IndexError):
+        regrouped, tasks = [], []
+    expected = {t.task_id: t for t in tasks}
+    task_of = {c.row_id: c.task_id for c in regrouped}
+    for record in intact:
+        if record.task_id != task_of.get(record.row_id):
+            modified |= {record.row_id, task_of.get(record.row_id) or record.row_id}
+    modified |= {t.task_id for t in export.review_tasks
+                 if t.task_id not in expected or _task_content(t) != _task_content(expected[t.task_id])}
+    return modified
+
+
+def apply_approvals(export: QdmsExport, approvals: 'Approvals | list[Approvals]') -> tuple[QdmsExport, list[dict]]:
+    """(the export with the approvals applied, problems). Decisions come only from the approvals files given (one, or
+    several: every file of the row's history), never from an approval or action state already written in the export:
+    every row and task starts PENDING / DRAFT again. An entry is applied only to its row, only while the row's content
+    still gives its fingerprint (else EXPORT_MODIFIED) and only while that fingerprint is the one the reviewer saw (else
+    STALE_APPROVAL). One file gives one decision per row: a file that decides a row two ways is refused whole. Across
+    files the latest decision (decided_at) holds and the earlier ones are kept as its history; a decision written in the
+    export that no file given makes is reported and leaves its row PENDING."""
+    files = [approvals] if isinstance(approvals, Approvals) else list(approvals)
+    for file in files:
+        if file.profile_id != export.profile_id:
+            raise ValueError(f'approvals for {file.profile_id}, export of {export.profile_id}')
+    if export.rules_version != QDMS_RULES_VERSION:
+        raise ValueError(f'the export was written under {export.rules_version} and this is {QDMS_RULES_VERSION}: its fingerprints cannot be '
+                         f'checked; export again and review the new export')
+    for file in files:
+        decisions: dict[str, set[str]] = {}
+        for entry in file.entries:
+            decisions.setdefault(entry.row_id, set()).add(entry.decision)
+        conflicting = sorted(i for i, d in decisions.items() if len(d) > 1)
+        if conflicting:
+            more = f' and {len(conflicting) - 50} more' if len(conflicting) > 50 else ''
+            raise ValueError(f'{file._source} decides {len(conflicting)} row(s) or task(s) two ways (APPROVED/REJECTED/RETURNED); one file gives '
+                             f'one decision per row, so nothing was applied: correct {", ".join(conflicting[:50])}{more}')
     by_id = {r.row_id: r for r in export.rows} | {t.task_id: t for t in export.review_tasks}
     children = {c.row_id: c.task_id for c in export.applicability_reviews}
-    problems, decided = [], {}
-    for entry in approvals.entries:
-        row = by_id.get(entry.row_id)
-        if row is None and entry.row_id in children:
-            problems.append({'row_id': entry.row_id, 'problem': 'APPROVE_THE_TASK', 'detail': f'the record belongs to {children[entry.row_id]}'})
-        elif row is None:
-            problems.append({'row_id': entry.row_id, 'problem': 'UNKNOWN_ROW'})
-        elif entry.fingerprint != row.fingerprint:
-            problems.append({'row_id': entry.row_id, 'problem': 'STALE_APPROVAL',
-                             'detail': 'the row changed after it was reviewed; review it again'})
-        elif entry.row_id in decided:
-            problems.append({'row_id': entry.row_id, 'problem': 'DECIDED_TWICE'})
-        else:
-            decided[entry.row_id] = entry
-    def decide(row, key):
-        entry = decided.get(key)
-        if entry is None:
-            return row
-        state = {'APPROVED': 'READY_FOR_QDMS', 'REJECTED': 'CANCELLED', 'RETURNED': 'DRAFT'}[entry.decision]
-        return row.model_copy(update={
-            'human_approval': Approval(status=entry.decision, approver=entry.approver, decided_at=entry.decided_at, note=entry.note),
-            'required_actions': [a.model_copy(update={'state': state}) for a in row.required_actions]})
+    modified = modified_ids(export)
+    problems = [{'row_id': i, 'problem': 'EXPORT_MODIFIED',
+                 'detail': 'export.json was changed after export: this content does not give the fingerprint it carries; export again and review'}
+                for i in dict.fromkeys([*(r.row_id for r in export.rows), *(c.row_id for c in export.applicability_reviews),
+                                        *(t.task_id for t in export.review_tasks)]) if i in modified]
+    given: dict[str, list[ApprovalEntry]] = {}
+    twice: dict[str, str] = {}
+    for file in files:
+        seen: dict[str, ApprovalEntry] = {}
+        for entry in file.entries:
+            row = by_id.get(entry.row_id)
+            if row is None and entry.row_id in children:
+                problems.append({'row_id': entry.row_id, 'problem': 'APPROVE_THE_TASK', 'detail': f'the record belongs to {children[entry.row_id]}'})
+            elif entry.row_id in modified:
+                continue                                         # reported above
+            elif row is None:
+                problems.append({'row_id': entry.row_id, 'problem': 'UNKNOWN_ROW'})
+            elif entry.fingerprint != row.fingerprint:
+                problems.append({'row_id': entry.row_id, 'problem': 'STALE_APPROVAL',
+                                 'detail': 'the row changed after it was reviewed; review it again'})
+            elif entry.row_id in seen and seen[entry.row_id] != entry:
+                twice.setdefault(entry.row_id, 'one approvals file decides the row more than once; nothing was decided')
+            elif entry not in given.setdefault(entry.row_id, []):
+                seen[entry.row_id] = entry
+                given[entry.row_id].append(entry)
+            else:
+                seen[entry.row_id] = entry
+    decided: dict[str, tuple[ApprovalEntry, list[ApprovalEntry]]] = {}
+    for key, entries in given.items():
+        entries = sorted(entries, key=lambda e: e.decided_at)
+        if key not in twice and len(entries) > 1 and entries[-2].decided_at == entries[-1].decided_at:
+            twice[key] = 'two decisions of the row carry the same time, so neither is the later one; nothing was decided'
+        if key not in twice:
+            decided[key] = (entries[-1], entries[:-1])
+    problems += [{'row_id': key, 'problem': 'DECIDED_TWICE', 'detail': detail} for key, detail in twice.items()]
+
+    def made_here(approval: Approval, key: str) -> bool:
+        return any((e.decision, e.approver, e.decided_at, e.note) == (approval.status, approval.approver, approval.decided_at, approval.note)
+                   for e in given.get(key, []))
+    for key, item in [*((r.row_id, r) for r in export.rows), *((t.task_id, t) for t in export.review_tasks)]:
+        written = item.human_approval
+        if key in modified or (written.status == 'PENDING' and all(a.state == 'DRAFT' for a in item.required_actions)):
+            continue
+        if written.status == 'PENDING' or not made_here(written, key):
+            problems.append({'row_id': key, 'problem': 'DECISION_NOT_IN_APPROVALS',
+                             'detail': f'export.json says {written.status} with actions '
+                                       f"{sorted({a.state for a in item.required_actions})}, and no approvals file of this run makes that "
+                                       'decision; give every file of the row again (or review it again). The row stays PENDING'})
+            decided.pop(key, None)
+    state = {'APPROVED': 'READY_FOR_QDMS', 'REJECTED': 'CANCELLED', 'RETURNED': 'DRAFT'}
+
+    def decide(item, key):
+        if key not in decided:
+            return item.model_copy(update={'human_approval': Approval(),
+                                           'required_actions': [a.model_copy(update={'state': 'DRAFT'}) for a in item.required_actions]})
+        latest, earlier = decided[key]
+        return item.model_copy(update={
+            'human_approval': Approval(status=latest.decision, approver=latest.approver, decided_at=latest.decided_at, note=latest.note,
+                                       history=[PastDecision(status=e.decision, approver=e.approver, decided_at=e.decided_at, note=e.note)
+                                                for e in earlier]),
+            'required_actions': [a.model_copy(update={'state': state[latest.decision]}) for a in item.required_actions]})
     rows = [decide(r, r.row_id) for r in export.rows]
     tasks = [decide(t, t.task_id) for t in export.review_tasks]
     # a child takes its task's decision; its own decision and evidence are unchanged
-    by_task = {t.task_id: t for t in tasks}
-    reviews = [c.model_copy(update={'human_approval': by_task[c.task_id].human_approval.model_copy(
-                   update={'note': f"via {c.task_id}" + (f': {by_task[c.task_id].human_approval.note}' if by_task[c.task_id].human_approval.note else '')})})
-               if c.task_id in decided else c for c in export.applicability_reviews]
+    by_task = {t.task_id: t for t in tasks if t.task_id in decided}
+
+    def via(child):
+        task = by_task.get(child.task_id)
+        if task is None or child.row_id in modified:
+            return Approval()
+        return task.human_approval.model_copy(update={'note': f'via {task.task_id}' + (f': {task.human_approval.note}' if task.human_approval.note else '')})
+    reviews = [c.model_copy(update={'human_approval': via(c)}) for c in export.applicability_reviews]
     return export.model_copy(update={'rows': rows, 'applicability_reviews': reviews, 'review_tasks': tasks,
                                      'summary': summarise(rows, reviews, export.ledger, tasks)}), problems
 
@@ -647,13 +783,56 @@ def write(export: QdmsExport, directory: Path) -> dict[str, Path]:
     return paths
 
 
+def _said(error: ValidationError) -> str:
+    """A pydantic error as one line a reviewer can act on: field: what is wrong."""
+    said = '; '.join(f"{'.'.join(str(p) for p in e['loc']) or 'file'}: {e['msg']}" for e in error.errors()[:5])
+    if any('decided_at' in e['loc'] for e in error.errors()):
+        said += ' (decided_at is a date and time with its UTC offset, e.g. 2026-10-12T10:00:00+03:00)'
+    return said
+
+
+def _read_json(path: Path):
+    """A JSON file written by hand or re-saved by an editor: UTF-8 with or without a BOM; anything else is refused with
+    a message that names the file, not a traceback."""
+    try:
+        return json.loads(path.read_text(encoding='utf-8-sig'))
+    except UnicodeDecodeError as error:
+        raise ValueError(f'{path}: not UTF-8 text (byte {error.start}); save it as UTF-8') from None
+    except json.JSONDecodeError as error:
+        raise ValueError(f'{path}: not valid JSON ({error.msg}, line {error.lineno} column {error.colno})') from None
+
+
 def load_export(path: Path) -> QdmsExport:
-    return QdmsExport.model_validate(json.loads(Path(path).read_text(encoding='utf-8')))
+    path = Path(path)
+    try:
+        return QdmsExport.model_validate(_read_json(path))
+    except ValidationError as error:
+        raise ValueError(f'{path}: not a QDMS export: {_said(error)}') from None
 
 
 def load_approvals(path: Path) -> Approvals:
-    data = json.loads(Path(path).read_text(encoding='utf-8'))
+    """A filled approvals file (approvals-template.json with decisions). Entries still blank in the template are not
+    decisions; a bad entry is named by its place in the file (entries[N], as an editor counts the template's entries)
+    and its row."""
+    path = Path(path)
+    data = _read_json(path)
+    if not isinstance(data, dict) or not isinstance(data.get('entries', []), list):
+        raise ValueError(f'{path}: not an approvals file (an object with format, profile_id and a list of entries)')
     keep = set(ApprovalEntry.model_fields)
-    # entries still blank in the template are not decisions
-    data['entries'] = [{k: v for k, v in e.items() if k in keep} for e in data.get('entries', []) if e.get('decision')]
-    return Approvals.model_validate(data)
+    entries = []
+    for position, raw in enumerate(data.get('entries', [])):
+        if not isinstance(raw, dict):
+            raise ValueError(f'{path}: entries[{position}] is not an entry object')
+        if not raw.get('decision'):
+            continue
+        try:
+            entries.append(ApprovalEntry.model_validate({k: v for k, v in raw.items() if k in keep}))
+        except ValidationError as error:
+            raise ValueError(f"{path}: entries[{position}] ({raw.get('row_id', 'no row_id')}): {_said(error)}") from None
+    try:
+        approvals = Approvals.model_validate({**data, 'entries': []})
+    except ValidationError as error:
+        raise ValueError(f'{path}: not an approvals file: {_said(error)}') from None
+    approvals = approvals.model_copy(update={'entries': entries})
+    approvals._source = str(path)
+    return approvals

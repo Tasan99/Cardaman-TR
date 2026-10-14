@@ -11,7 +11,8 @@ changes          the clauses an amendment touched since a date, the duties they 
 decisions        a stored board decision (tr/decisions.py: text, items, duties); with --profile, bound to its addressee entities and assessed
 qdms export      the gap rows of a profile (sector engines, and --decision layers) as QDMS change requests: JSON, CSV, an approvals
                  template; every action stays DRAFT until a person approves its row
-qdms approve     apply a filled approvals file to an export: approved rows' actions become READY_FOR_QDMS (ready-actions.json)
+qdms approve     apply filled approvals files to an export: approved rows' actions become READY_FOR_QDMS (ready-actions.json);
+                 every fingerprint is recomputed from export.json and every decision comes from the files given
 questions        the missing company facts the applicability reviews wait on, one question per entity (or product) and fact
 answer           answer them (--answers questionnaire.csv filled by the company, a JSON file, or --interactive); applied to a copy of the profile
                  and only the evaluations they affect run again; writes answers.json, answered-profile.json, reassess.json
@@ -262,10 +263,20 @@ def _domain(args, store: CorpusStore) -> int:
         if args.action == 'approve':
             if not args.export or not args.approvals:
                 raise SystemExit('approve needs --export and --approvals')
-            export, problems = q.apply_approvals(q.load_export(Path(args.export)), q.load_approvals(Path(args.approvals)))
+            try:
+                export = q.load_export(Path(args.export))
+                files = [q.load_approvals(Path(path)) for path in args.approvals]
+                blank = [path for path, file in zip(args.approvals, files) if not file.entries]
+                if blank:
+                    raise ValueError(f"{blank[0]}: no decision filled in (every entry's decision is blank); nothing was approved")
+                export, problems = q.apply_approvals(export, files)
+            except (OSError, ValueError) as error:          # a refused input: a message and exit 2, nothing written
+                print(f'qdms approve: {error}', file=sys.stderr)
+                return 2
             paths = q.write(export, out)
             (out / 'approval-problems.json').write_text(json.dumps(problems, ensure_ascii=False, indent=1), encoding='utf-8')
-            _print({'summary': export.summary, 'problems': problems, 'files': {k: str(v) for k, v in paths.items()}})
+            _print({'decisions_read': sum(len(file.entries) for file in files), 'summary': export.summary, 'problems': problems,
+                    'files': {k: str(v) for k, v in paths.items()}})
             return 1 if problems else 0
         if not args.profile:
             raise SystemExit('export needs --profile')
@@ -415,7 +426,9 @@ def main(argv=None):
     qdms.add_argument('--decisions-root', help='export: decision store root (default: the packaged store)')
     qdms.add_argument('--all', action='store_true', help='export: also the covered, automatic rows')
     qdms.add_argument('--export', help='approve: the export.json to apply the approvals to')
-    qdms.add_argument('--approvals', help='approve: the filled approvals file (approvals-template.json with decisions)')
+    qdms.add_argument('--approvals', action='append', default=[],
+                      help='approve: a filled approvals file (approvals-template.json with decisions); repeat to name several. '
+                           'Decisions come only from these files, never from export.json: give every earlier file again')
     qdms.add_argument('--out', required=True, help='the output directory (must not exist, or be empty)')
     changes = commands.add_parser('changes', help='clauses amended since a date, their duties and whom they reach')
     changes.add_argument('--regulation', required=True)
